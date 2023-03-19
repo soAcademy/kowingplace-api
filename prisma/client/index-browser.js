@@ -89,6 +89,82 @@ Prisma.NullTypes = {
 // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 function makeEnum(x) { return x; }
 
+exports.Prisma.BookRoomScalarFieldEnum = makeEnum({
+  id: 'id',
+  branchToRoomId: 'branchToRoomId',
+  startTime: 'startTime',
+  roomRateId: 'roomRateId',
+  status: 'status',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
+exports.Prisma.BranchScalarFieldEnum = makeEnum({
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  location: 'location',
+  tel: 'tel',
+  picture: 'picture',
+  userInternalId: 'userInternalId'
+});
+
+exports.Prisma.BranchToRoomScalarFieldEnum = makeEnum({
+  id: 'id',
+  branchId: 'branchId',
+  roomId: 'roomId',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
+exports.Prisma.FacilityScalarFieldEnum = makeEnum({
+  id: 'id',
+  name: 'name',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
+exports.Prisma.FacilityToRoomScalarFieldEnum = makeEnum({
+  id: 'id',
+  roomId: 'roomId',
+  facilityId: 'facilityId',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
+exports.Prisma.OpenCloseScalarFieldEnum = makeEnum({
+  id: 'id',
+  open: 'open',
+  close: 'close',
+  allDay: 'allDay',
+  branchId: 'branchId',
+  day: 'day',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
+exports.Prisma.QueryMode = makeEnum({
+  default: 'default',
+  insensitive: 'insensitive'
+});
+
+exports.Prisma.RoomRateScalarFieldEnum = makeEnum({
+  id: 'id',
+  price: 'price',
+  time: 'time',
+  roomId: 'roomId',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
+exports.Prisma.RoomScalarFieldEnum = makeEnum({
+  id: 'id',
+  name: 'name',
+  capacity: 'capacity',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
 exports.Prisma.SortOrder = makeEnum({
   asc: 'asc',
   desc: 'desc'
@@ -101,13 +177,38 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.UserScalarFieldEnum = makeEnum({
-  id: 'id'
+exports.Prisma.UserExternalScalarFieldEnum = makeEnum({
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  tel: 'tel',
+  password: 'password',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
+exports.Prisma.UserInternalScalarFieldEnum = makeEnum({
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  tel: 'tel',
+  password: 'password',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
 });
 
 
 exports.Prisma.ModelName = makeEnum({
-  User: 'User'
+  UserExternal: 'UserExternal',
+  Branch: 'Branch',
+  UserInternal: 'UserInternal',
+  Room: 'Room',
+  RoomRate: 'RoomRate',
+  Facility: 'Facility',
+  FacilityToRoom: 'FacilityToRoom',
+  BranchToRoom: 'BranchToRoom',
+  BookRoom: 'BookRoom',
+  OpenClose: 'OpenClose'
 });
 
 /**

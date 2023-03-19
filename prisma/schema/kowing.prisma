@@ -1,3 +1,112 @@
-model User {
-  id Int @id @default(autoincrement())
+model UserExternal {
+  id       Int      @id @default(autoincrement())
+  name     String
+  email    String
+  tel      Int
+  password String
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 }
+
+model Branch {
+  id             Int            @id @default(autoincrement())
+  name           String
+  description    String
+  location       String
+  tel            Int
+  picture        String
+  userInternal   UserInternal   @relation(fields: [userInternalId], references: [id])
+  userInternalId Int
+  BranchToRoom   BranchToRoom[] //*
+  OpenClose      OpenClose[] //.....
+}
+
+model UserInternal {
+  id       Int      @id @default(autoincrement())
+  name     String
+  email    String
+  tel      Int
+  password String
+  Branch   Branch[] //*
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+model Room {
+  id             Int              @id @default(autoincrement())
+  name           String
+  capacity       Int
+  createAt       DateTime         @default(now())
+  updateAt       DateTime         @updatedAt
+  RoomPrice      RoomRate[]
+  FacilityToRoom FacilityToRoom[]
+  BranchToRoom   BranchToRoom[]
+}
+
+model RoomRate {
+  id       Int        @id @default(autoincrement())
+  price    Int
+  time     DateTime
+  room     Room       @relation(fields: [roomId], references: [id])
+  roomId   Int
+  createAt DateTime   @default(now())
+  updateAt DateTime   @updatedAt
+  BookRoom BookRoom[]
+}
+
+model Facility {
+  id             Int              @id @default(autoincrement())
+  name           String
+  createAt       DateTime         @default(now())
+  updateAt       DateTime         @updatedAt
+  FacilityToRoom FacilityToRoom[]
+}
+
+model FacilityToRoom {
+  id         Int      @id @default(autoincrement())
+  room       Room     @relation(fields: [roomId], references: [id])
+  roomId     Int
+  facilities Facility @relation(fields: [facilityId], references: [id])
+  facilityId Int
+  createAt   DateTime @default(now())
+  updateAt   DateTime @updatedAt
+}
+
+model BranchToRoom {
+  id       Int        @id @default(autoincrement())
+  branch   Branch     @relation(fields: [branchId], references: [id])
+  branchId Int
+  room     Room       @relation(fields: [roomId], references: [id])
+  roomId   Int
+  createAt DateTime   @default(now())
+  updateAt DateTime   @updatedAt
+  BookRoom BookRoom[]
+}
+
+model BookRoom {
+  id             Int          @id @default(autoincrement())
+  branchToRoom   BranchToRoom @relation(fields: [branchToRoomId], references: [id])
+  branchToRoomId Int
+  startTime      DateTime
+  roomRate       RoomRate     @relation(fields: [roomRateId], references: [id])
+  roomRateId     Int
+  status         String
+  createAt       DateTime     @default(now())
+  updateAt       DateTime     @updatedAt
+}
+
+model OpenClose {
+  id       Int      @id @default(autoincrement())
+  open     DateTime
+  close    DateTime
+  allDay   Boolean
+  branch   Branch   @relation(fields: [branchId], references: [id])
+  branchId Int
+  day      Int
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+//how do we should the data about 24 hours for filter in the frontend
+//check the many to many again 
+//should we have to focus on the Co-working can have many branch in this website
