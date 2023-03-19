@@ -184,7 +184,8 @@ exports.Prisma.UserExternalScalarFieldEnum = makeEnum({
   tel: 'tel',
   password: 'password',
   createAt: 'createAt',
-  updateAt: 'updateAt'
+  updateAt: 'updateAt',
+  bookRoomId: 'bookRoomId'
 });
 
 exports.Prisma.UserInternalScalarFieldEnum = makeEnum({

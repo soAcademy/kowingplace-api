@@ -1,11 +1,13 @@
 model UserExternal {
-  id       Int      @id @default(autoincrement())
-  name     String
-  email    String
-  tel      Int
-  password String
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String
+  tel        Int
+  password   String
+  bookRoom   BookRoom @relation(fields: [bookRoomId], references: [id])
+  createAt   DateTime @default(now())
+  updateAt   DateTime @updatedAt
+  bookRoomId Int
 }
 
 model Branch {
@@ -84,15 +86,16 @@ model BranchToRoom {
 }
 
 model BookRoom {
-  id             Int          @id @default(autoincrement())
-  branchToRoom   BranchToRoom @relation(fields: [branchToRoomId], references: [id])
+  id             Int            @id @default(autoincrement())
+  branchToRoom   BranchToRoom   @relation(fields: [branchToRoomId], references: [id])
   branchToRoomId Int
   startTime      DateTime
-  roomRate       RoomRate     @relation(fields: [roomRateId], references: [id])
+  roomRate       RoomRate       @relation(fields: [roomRateId], references: [id])
   roomRateId     Int
   status         String
-  createAt       DateTime     @default(now())
-  updateAt       DateTime     @updatedAt
+  createAt       DateTime       @default(now())
+  updateAt       DateTime       @updatedAt
+  UserExternal   UserExternal[]
 }
 
 model OpenClose {

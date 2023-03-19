@@ -22,6 +22,7 @@ export type UserExternal = {
   password: string
   createAt: Date
   updateAt: Date
+  bookRoomId: number
 }
 
 /**
@@ -1262,6 +1263,49 @@ export namespace Prisma {
 
 
   /**
+   * Count Type BookRoomCountOutputType
+   */
+
+
+  export type BookRoomCountOutputType = {
+    UserExternal: number
+  }
+
+  export type BookRoomCountOutputTypeSelect = {
+    UserExternal?: boolean
+  }
+
+  export type BookRoomCountOutputTypeGetPayload<S extends boolean | null | undefined | BookRoomCountOutputTypeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? BookRoomCountOutputType :
+    S extends undefined ? never :
+    S extends { include: any } & (BookRoomCountOutputTypeArgs)
+    ? BookRoomCountOutputType 
+    : S extends { select: any } & (BookRoomCountOutputTypeArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof BookRoomCountOutputType ? BookRoomCountOutputType[P] : never
+  } 
+      : BookRoomCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * BookRoomCountOutputType without action
+   */
+  export type BookRoomCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the BookRoomCountOutputType
+     */
+    select?: BookRoomCountOutputTypeSelect | null
+  }
+
+
+
+  /**
    * Models
    */
 
@@ -1281,11 +1325,13 @@ export namespace Prisma {
   export type UserExternalAvgAggregateOutputType = {
     id: number | null
     tel: number | null
+    bookRoomId: number | null
   }
 
   export type UserExternalSumAggregateOutputType = {
     id: number | null
     tel: number | null
+    bookRoomId: number | null
   }
 
   export type UserExternalMinAggregateOutputType = {
@@ -1296,6 +1342,7 @@ export namespace Prisma {
     password: string | null
     createAt: Date | null
     updateAt: Date | null
+    bookRoomId: number | null
   }
 
   export type UserExternalMaxAggregateOutputType = {
@@ -1306,6 +1353,7 @@ export namespace Prisma {
     password: string | null
     createAt: Date | null
     updateAt: Date | null
+    bookRoomId: number | null
   }
 
   export type UserExternalCountAggregateOutputType = {
@@ -1316,6 +1364,7 @@ export namespace Prisma {
     password: number
     createAt: number
     updateAt: number
+    bookRoomId: number
     _all: number
   }
 
@@ -1323,11 +1372,13 @@ export namespace Prisma {
   export type UserExternalAvgAggregateInputType = {
     id?: true
     tel?: true
+    bookRoomId?: true
   }
 
   export type UserExternalSumAggregateInputType = {
     id?: true
     tel?: true
+    bookRoomId?: true
   }
 
   export type UserExternalMinAggregateInputType = {
@@ -1338,6 +1389,7 @@ export namespace Prisma {
     password?: true
     createAt?: true
     updateAt?: true
+    bookRoomId?: true
   }
 
   export type UserExternalMaxAggregateInputType = {
@@ -1348,6 +1400,7 @@ export namespace Prisma {
     password?: true
     createAt?: true
     updateAt?: true
+    bookRoomId?: true
   }
 
   export type UserExternalCountAggregateInputType = {
@@ -1358,6 +1411,7 @@ export namespace Prisma {
     password?: true
     createAt?: true
     updateAt?: true
+    bookRoomId?: true
     _all?: true
   }
 
@@ -1456,6 +1510,7 @@ export namespace Prisma {
     password: string
     createAt: Date
     updateAt: Date
+    bookRoomId: number
     _count: UserExternalCountAggregateOutputType | null
     _avg: UserExternalAvgAggregateOutputType | null
     _sum: UserExternalSumAggregateOutputType | null
@@ -1485,19 +1540,28 @@ export namespace Prisma {
     password?: boolean
     createAt?: boolean
     updateAt?: boolean
+    bookRoomId?: boolean
+    bookRoom?: boolean | BookRoomArgs
   }
 
+
+  export type UserExternalInclude = {
+    bookRoom?: boolean | BookRoomArgs
+  }
 
   export type UserExternalGetPayload<S extends boolean | null | undefined | UserExternalArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
     S extends true ? UserExternal :
     S extends undefined ? never :
     S extends { include: any } & (UserExternalArgs | UserExternalFindManyArgs)
-    ? UserExternal 
+    ? UserExternal  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'bookRoom' ? BookRoomGetPayload<S['include'][P]> :  never
+  } 
     : S extends { select: any } & (UserExternalArgs | UserExternalFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-    P extends keyof UserExternal ? UserExternal[P] : never
+        P extends 'bookRoom' ? BookRoomGetPayload<S['select'][P]> :  P extends keyof UserExternal ? UserExternal[P] : never
   } 
       : UserExternal
 
@@ -1869,6 +1933,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
+    bookRoom<T extends BookRoomArgs= {}>(args?: Subset<T, BookRoomArgs>): Prisma__BookRoomClient<BookRoomGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -1906,6 +1971,10 @@ export namespace Prisma {
      */
     select?: UserExternalSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
+    /**
      * Filter, which UserExternal to fetch.
      */
     where: UserExternalWhereUniqueInput
@@ -1932,6 +2001,10 @@ export namespace Prisma {
      */
     select?: UserExternalSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
+    /**
      * Filter, which UserExternal to fetch.
      */
     where: UserExternalWhereUniqueInput
@@ -1946,6 +2019,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserExternal
      */
     select?: UserExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
     /**
      * Filter, which UserExternal to fetch.
      */
@@ -2003,6 +2080,10 @@ export namespace Prisma {
      */
     select?: UserExternalSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
+    /**
      * Filter, which UserExternal to fetch.
      */
     where?: UserExternalWhereInput
@@ -2048,6 +2129,10 @@ export namespace Prisma {
      */
     select?: UserExternalSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
+    /**
      * Filter, which UserExternals to fetch.
      */
     where?: UserExternalWhereInput
@@ -2088,6 +2173,10 @@ export namespace Prisma {
      */
     select?: UserExternalSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
+    /**
      * The data needed to create a UserExternal.
      */
     data: XOR<UserExternalCreateInput, UserExternalUncheckedCreateInput>
@@ -2114,6 +2203,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserExternal
      */
     select?: UserExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
     /**
      * The data needed to update a UserExternal.
      */
@@ -2149,6 +2242,10 @@ export namespace Prisma {
      */
     select?: UserExternalSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
+    /**
      * The filter to search for the UserExternal to update in case it exists.
      */
     where: UserExternalWhereUniqueInput
@@ -2171,6 +2268,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserExternal
      */
     select?: UserExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
     /**
      * Filter which UserExternal to delete.
      */
@@ -2197,6 +2298,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserExternal
      */
     select?: UserExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
   }
 
 
@@ -9515,12 +9620,16 @@ export namespace Prisma {
     updateAt?: boolean
     branchToRoom?: boolean | BranchToRoomArgs
     roomRate?: boolean | RoomRateArgs
+    UserExternal?: boolean | BookRoom$UserExternalArgs
+    _count?: boolean | BookRoomCountOutputTypeArgs
   }
 
 
   export type BookRoomInclude = {
     branchToRoom?: boolean | BranchToRoomArgs
     roomRate?: boolean | RoomRateArgs
+    UserExternal?: boolean | BookRoom$UserExternalArgs
+    _count?: boolean | BookRoomCountOutputTypeArgs
   }
 
   export type BookRoomGetPayload<S extends boolean | null | undefined | BookRoomArgs> =
@@ -9531,13 +9640,17 @@ export namespace Prisma {
     ? BookRoom  & {
     [P in TruthyKeys<S['include']>]:
         P extends 'branchToRoom' ? BranchToRoomGetPayload<S['include'][P]> :
-        P extends 'roomRate' ? RoomRateGetPayload<S['include'][P]> :  never
+        P extends 'roomRate' ? RoomRateGetPayload<S['include'][P]> :
+        P extends 'UserExternal' ? Array < UserExternalGetPayload<S['include'][P]>>  :
+        P extends '_count' ? BookRoomCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (BookRoomArgs | BookRoomFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
         P extends 'branchToRoom' ? BranchToRoomGetPayload<S['select'][P]> :
-        P extends 'roomRate' ? RoomRateGetPayload<S['select'][P]> :  P extends keyof BookRoom ? BookRoom[P] : never
+        P extends 'roomRate' ? RoomRateGetPayload<S['select'][P]> :
+        P extends 'UserExternal' ? Array < UserExternalGetPayload<S['select'][P]>>  :
+        P extends '_count' ? BookRoomCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof BookRoom ? BookRoom[P] : never
   } 
       : BookRoom
 
@@ -9913,6 +10026,8 @@ export namespace Prisma {
 
     roomRate<T extends RoomRateArgs= {}>(args?: Subset<T, RoomRateArgs>): Prisma__RoomRateClient<RoomRateGetPayload<T> | Null>;
 
+    UserExternal<T extends BookRoom$UserExternalArgs= {}>(args?: Subset<T, BookRoom$UserExternalArgs>): Prisma.PrismaPromise<Array<UserExternalGetPayload<T>>| Null>;
+
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -10265,6 +10380,27 @@ export namespace Prisma {
      * Filter which BookRooms to delete
      */
     where?: BookRoomWhereInput
+  }
+
+
+  /**
+   * BookRoom.UserExternal
+   */
+  export type BookRoom$UserExternalArgs = {
+    /**
+     * Select specific fields to fetch from the UserExternal
+     */
+    select?: UserExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
+    where?: UserExternalWhereInput
+    orderBy?: Enumerable<UserExternalOrderByWithRelationInput>
+    cursor?: UserExternalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<UserExternalScalarFieldEnum>
   }
 
 
@@ -11416,7 +11552,8 @@ export namespace Prisma {
     tel: 'tel',
     password: 'password',
     createAt: 'createAt',
-    updateAt: 'updateAt'
+    updateAt: 'updateAt',
+    bookRoomId: 'bookRoomId'
   };
 
   export type UserExternalScalarFieldEnum = (typeof UserExternalScalarFieldEnum)[keyof typeof UserExternalScalarFieldEnum]
@@ -11451,6 +11588,8 @@ export namespace Prisma {
     password?: StringFilter | string
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
+    bookRoomId?: IntFilter | number
+    bookRoom?: XOR<BookRoomRelationFilter, BookRoomWhereInput>
   }
 
   export type UserExternalOrderByWithRelationInput = {
@@ -11461,6 +11600,8 @@ export namespace Prisma {
     password?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    bookRoomId?: SortOrder
+    bookRoom?: BookRoomOrderByWithRelationInput
   }
 
   export type UserExternalWhereUniqueInput = {
@@ -11475,6 +11616,7 @@ export namespace Prisma {
     password?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    bookRoomId?: SortOrder
     _count?: UserExternalCountOrderByAggregateInput
     _avg?: UserExternalAvgOrderByAggregateInput
     _max?: UserExternalMaxOrderByAggregateInput
@@ -11493,6 +11635,7 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter | string
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
+    bookRoomId?: IntWithAggregatesFilter | number
   }
 
   export type BranchWhereInput = {
@@ -11883,6 +12026,7 @@ export namespace Prisma {
     updateAt?: DateTimeFilter | Date | string
     branchToRoom?: XOR<BranchToRoomRelationFilter, BranchToRoomWhereInput>
     roomRate?: XOR<RoomRateRelationFilter, RoomRateWhereInput>
+    UserExternal?: UserExternalListRelationFilter
   }
 
   export type BookRoomOrderByWithRelationInput = {
@@ -11895,6 +12039,7 @@ export namespace Prisma {
     updateAt?: SortOrder
     branchToRoom?: BranchToRoomOrderByWithRelationInput
     roomRate?: RoomRateOrderByWithRelationInput
+    UserExternal?: UserExternalOrderByRelationAggregateInput
   }
 
   export type BookRoomWhereUniqueInput = {
@@ -11997,6 +12142,7 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
+    bookRoom: BookRoomCreateNestedOneWithoutUserExternalInput
   }
 
   export type UserExternalUncheckedCreateInput = {
@@ -12007,6 +12153,7 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
+    bookRoomId: number
   }
 
   export type UserExternalUpdateInput = {
@@ -12016,6 +12163,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookRoom?: BookRoomUpdateOneRequiredWithoutUserExternalNestedInput
   }
 
   export type UserExternalUncheckedUpdateInput = {
@@ -12026,6 +12174,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookRoomId?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserExternalCreateManyInput = {
@@ -12036,6 +12185,7 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
+    bookRoomId: number
   }
 
   export type UserExternalUpdateManyMutationInput = {
@@ -12055,6 +12205,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookRoomId?: IntFieldUpdateOperationsInput | number
   }
 
   export type BranchCreateInput = {
@@ -12493,6 +12644,7 @@ export namespace Prisma {
     updateAt?: Date | string
     branchToRoom: BranchToRoomCreateNestedOneWithoutBookRoomInput
     roomRate: RoomRateCreateNestedOneWithoutBookRoomInput
+    UserExternal?: UserExternalCreateNestedManyWithoutBookRoomInput
   }
 
   export type BookRoomUncheckedCreateInput = {
@@ -12503,6 +12655,7 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
+    UserExternal?: UserExternalUncheckedCreateNestedManyWithoutBookRoomInput
   }
 
   export type BookRoomUpdateInput = {
@@ -12512,6 +12665,7 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     branchToRoom?: BranchToRoomUpdateOneRequiredWithoutBookRoomNestedInput
     roomRate?: RoomRateUpdateOneRequiredWithoutBookRoomNestedInput
+    UserExternal?: UserExternalUpdateManyWithoutBookRoomNestedInput
   }
 
   export type BookRoomUncheckedUpdateInput = {
@@ -12522,6 +12676,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    UserExternal?: UserExternalUncheckedUpdateManyWithoutBookRoomNestedInput
   }
 
   export type BookRoomCreateManyInput = {
@@ -12661,6 +12816,11 @@ export namespace Prisma {
     not?: NestedDateTimeFilter | Date | string
   }
 
+  export type BookRoomRelationFilter = {
+    is?: BookRoomWhereInput
+    isNot?: BookRoomWhereInput
+  }
+
   export type UserExternalCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -12669,11 +12829,13 @@ export namespace Prisma {
     password?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    bookRoomId?: SortOrder
   }
 
   export type UserExternalAvgOrderByAggregateInput = {
     id?: SortOrder
     tel?: SortOrder
+    bookRoomId?: SortOrder
   }
 
   export type UserExternalMaxOrderByAggregateInput = {
@@ -12684,6 +12846,7 @@ export namespace Prisma {
     password?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    bookRoomId?: SortOrder
   }
 
   export type UserExternalMinOrderByAggregateInput = {
@@ -12694,11 +12857,13 @@ export namespace Prisma {
     password?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    bookRoomId?: SortOrder
   }
 
   export type UserExternalSumOrderByAggregateInput = {
     id?: SortOrder
     tel?: SortOrder
+    bookRoomId?: SortOrder
   }
 
   export type IntWithAggregatesFilter = {
@@ -13095,6 +13260,16 @@ export namespace Prisma {
     isNot?: RoomRateWhereInput
   }
 
+  export type UserExternalListRelationFilter = {
+    every?: UserExternalWhereInput
+    some?: UserExternalWhereInput
+    none?: UserExternalWhereInput
+  }
+
+  export type UserExternalOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type BookRoomCountOrderByAggregateInput = {
     id?: SortOrder
     branchToRoomId?: SortOrder
@@ -13195,6 +13370,12 @@ export namespace Prisma {
     _max?: NestedBoolFilter
   }
 
+  export type BookRoomCreateNestedOneWithoutUserExternalInput = {
+    create?: XOR<BookRoomCreateWithoutUserExternalInput, BookRoomUncheckedCreateWithoutUserExternalInput>
+    connectOrCreate?: BookRoomCreateOrConnectWithoutUserExternalInput
+    connect?: BookRoomWhereUniqueInput
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -13209,6 +13390,14 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type BookRoomUpdateOneRequiredWithoutUserExternalNestedInput = {
+    create?: XOR<BookRoomCreateWithoutUserExternalInput, BookRoomUncheckedCreateWithoutUserExternalInput>
+    connectOrCreate?: BookRoomCreateOrConnectWithoutUserExternalInput
+    upsert?: BookRoomUpsertWithoutUserExternalInput
+    connect?: BookRoomWhereUniqueInput
+    update?: XOR<BookRoomUpdateWithoutUserExternalInput, BookRoomUncheckedUpdateWithoutUserExternalInput>
   }
 
   export type UserInternalCreateNestedOneWithoutBranchInput = {
@@ -13685,6 +13874,20 @@ export namespace Prisma {
     connect?: RoomRateWhereUniqueInput
   }
 
+  export type UserExternalCreateNestedManyWithoutBookRoomInput = {
+    create?: XOR<Enumerable<UserExternalCreateWithoutBookRoomInput>, Enumerable<UserExternalUncheckedCreateWithoutBookRoomInput>>
+    connectOrCreate?: Enumerable<UserExternalCreateOrConnectWithoutBookRoomInput>
+    createMany?: UserExternalCreateManyBookRoomInputEnvelope
+    connect?: Enumerable<UserExternalWhereUniqueInput>
+  }
+
+  export type UserExternalUncheckedCreateNestedManyWithoutBookRoomInput = {
+    create?: XOR<Enumerable<UserExternalCreateWithoutBookRoomInput>, Enumerable<UserExternalUncheckedCreateWithoutBookRoomInput>>
+    connectOrCreate?: Enumerable<UserExternalCreateOrConnectWithoutBookRoomInput>
+    createMany?: UserExternalCreateManyBookRoomInputEnvelope
+    connect?: Enumerable<UserExternalWhereUniqueInput>
+  }
+
   export type BranchToRoomUpdateOneRequiredWithoutBookRoomNestedInput = {
     create?: XOR<BranchToRoomCreateWithoutBookRoomInput, BranchToRoomUncheckedCreateWithoutBookRoomInput>
     connectOrCreate?: BranchToRoomCreateOrConnectWithoutBookRoomInput
@@ -13699,6 +13902,34 @@ export namespace Prisma {
     upsert?: RoomRateUpsertWithoutBookRoomInput
     connect?: RoomRateWhereUniqueInput
     update?: XOR<RoomRateUpdateWithoutBookRoomInput, RoomRateUncheckedUpdateWithoutBookRoomInput>
+  }
+
+  export type UserExternalUpdateManyWithoutBookRoomNestedInput = {
+    create?: XOR<Enumerable<UserExternalCreateWithoutBookRoomInput>, Enumerable<UserExternalUncheckedCreateWithoutBookRoomInput>>
+    connectOrCreate?: Enumerable<UserExternalCreateOrConnectWithoutBookRoomInput>
+    upsert?: Enumerable<UserExternalUpsertWithWhereUniqueWithoutBookRoomInput>
+    createMany?: UserExternalCreateManyBookRoomInputEnvelope
+    set?: Enumerable<UserExternalWhereUniqueInput>
+    disconnect?: Enumerable<UserExternalWhereUniqueInput>
+    delete?: Enumerable<UserExternalWhereUniqueInput>
+    connect?: Enumerable<UserExternalWhereUniqueInput>
+    update?: Enumerable<UserExternalUpdateWithWhereUniqueWithoutBookRoomInput>
+    updateMany?: Enumerable<UserExternalUpdateManyWithWhereWithoutBookRoomInput>
+    deleteMany?: Enumerable<UserExternalScalarWhereInput>
+  }
+
+  export type UserExternalUncheckedUpdateManyWithoutBookRoomNestedInput = {
+    create?: XOR<Enumerable<UserExternalCreateWithoutBookRoomInput>, Enumerable<UserExternalUncheckedCreateWithoutBookRoomInput>>
+    connectOrCreate?: Enumerable<UserExternalCreateOrConnectWithoutBookRoomInput>
+    upsert?: Enumerable<UserExternalUpsertWithWhereUniqueWithoutBookRoomInput>
+    createMany?: UserExternalCreateManyBookRoomInputEnvelope
+    set?: Enumerable<UserExternalWhereUniqueInput>
+    disconnect?: Enumerable<UserExternalWhereUniqueInput>
+    delete?: Enumerable<UserExternalWhereUniqueInput>
+    connect?: Enumerable<UserExternalWhereUniqueInput>
+    update?: Enumerable<UserExternalUpdateWithWhereUniqueWithoutBookRoomInput>
+    updateMany?: Enumerable<UserExternalUpdateManyWithWhereWithoutBookRoomInput>
+    deleteMany?: Enumerable<UserExternalScalarWhereInput>
   }
 
   export type BranchCreateNestedOneWithoutOpenCloseInput = {
@@ -13824,6 +14055,54 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedBoolFilter
     _max?: NestedBoolFilter
+  }
+
+  export type BookRoomCreateWithoutUserExternalInput = {
+    startTime: Date | string
+    status: string
+    createAt?: Date | string
+    updateAt?: Date | string
+    branchToRoom: BranchToRoomCreateNestedOneWithoutBookRoomInput
+    roomRate: RoomRateCreateNestedOneWithoutBookRoomInput
+  }
+
+  export type BookRoomUncheckedCreateWithoutUserExternalInput = {
+    id?: number
+    branchToRoomId: number
+    startTime: Date | string
+    roomRateId: number
+    status: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type BookRoomCreateOrConnectWithoutUserExternalInput = {
+    where: BookRoomWhereUniqueInput
+    create: XOR<BookRoomCreateWithoutUserExternalInput, BookRoomUncheckedCreateWithoutUserExternalInput>
+  }
+
+  export type BookRoomUpsertWithoutUserExternalInput = {
+    update: XOR<BookRoomUpdateWithoutUserExternalInput, BookRoomUncheckedUpdateWithoutUserExternalInput>
+    create: XOR<BookRoomCreateWithoutUserExternalInput, BookRoomUncheckedCreateWithoutUserExternalInput>
+  }
+
+  export type BookRoomUpdateWithoutUserExternalInput = {
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    branchToRoom?: BranchToRoomUpdateOneRequiredWithoutBookRoomNestedInput
+    roomRate?: RoomRateUpdateOneRequiredWithoutBookRoomNestedInput
+  }
+
+  export type BookRoomUncheckedUpdateWithoutUserExternalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    branchToRoomId?: IntFieldUpdateOperationsInput | number
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    roomRateId?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserInternalCreateWithoutBranchInput = {
@@ -14221,6 +14500,7 @@ export namespace Prisma {
     createAt?: Date | string
     updateAt?: Date | string
     branchToRoom: BranchToRoomCreateNestedOneWithoutBookRoomInput
+    UserExternal?: UserExternalCreateNestedManyWithoutBookRoomInput
   }
 
   export type BookRoomUncheckedCreateWithoutRoomRateInput = {
@@ -14230,6 +14510,7 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
+    UserExternal?: UserExternalUncheckedCreateNestedManyWithoutBookRoomInput
   }
 
   export type BookRoomCreateOrConnectWithoutRoomRateInput = {
@@ -14474,6 +14755,7 @@ export namespace Prisma {
     createAt?: Date | string
     updateAt?: Date | string
     roomRate: RoomRateCreateNestedOneWithoutBookRoomInput
+    UserExternal?: UserExternalCreateNestedManyWithoutBookRoomInput
   }
 
   export type BookRoomUncheckedCreateWithoutBranchToRoomInput = {
@@ -14483,6 +14765,7 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
+    UserExternal?: UserExternalUncheckedCreateNestedManyWithoutBookRoomInput
   }
 
   export type BookRoomCreateOrConnectWithoutBranchToRoomInput = {
@@ -14603,6 +14886,35 @@ export namespace Prisma {
     create: XOR<RoomRateCreateWithoutBookRoomInput, RoomRateUncheckedCreateWithoutBookRoomInput>
   }
 
+  export type UserExternalCreateWithoutBookRoomInput = {
+    name: string
+    email: string
+    tel: number
+    password: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type UserExternalUncheckedCreateWithoutBookRoomInput = {
+    id?: number
+    name: string
+    email: string
+    tel: number
+    password: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type UserExternalCreateOrConnectWithoutBookRoomInput = {
+    where: UserExternalWhereUniqueInput
+    create: XOR<UserExternalCreateWithoutBookRoomInput, UserExternalUncheckedCreateWithoutBookRoomInput>
+  }
+
+  export type UserExternalCreateManyBookRoomInputEnvelope = {
+    data: Enumerable<UserExternalCreateManyBookRoomInput>
+    skipDuplicates?: boolean
+  }
+
   export type BranchToRoomUpsertWithoutBookRoomInput = {
     update: XOR<BranchToRoomUpdateWithoutBookRoomInput, BranchToRoomUncheckedUpdateWithoutBookRoomInput>
     create: XOR<BranchToRoomCreateWithoutBookRoomInput, BranchToRoomUncheckedCreateWithoutBookRoomInput>
@@ -14643,6 +14955,36 @@ export namespace Prisma {
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserExternalUpsertWithWhereUniqueWithoutBookRoomInput = {
+    where: UserExternalWhereUniqueInput
+    update: XOR<UserExternalUpdateWithoutBookRoomInput, UserExternalUncheckedUpdateWithoutBookRoomInput>
+    create: XOR<UserExternalCreateWithoutBookRoomInput, UserExternalUncheckedCreateWithoutBookRoomInput>
+  }
+
+  export type UserExternalUpdateWithWhereUniqueWithoutBookRoomInput = {
+    where: UserExternalWhereUniqueInput
+    data: XOR<UserExternalUpdateWithoutBookRoomInput, UserExternalUncheckedUpdateWithoutBookRoomInput>
+  }
+
+  export type UserExternalUpdateManyWithWhereWithoutBookRoomInput = {
+    where: UserExternalScalarWhereInput
+    data: XOR<UserExternalUpdateManyMutationInput, UserExternalUncheckedUpdateManyWithoutUserExternalInput>
+  }
+
+  export type UserExternalScalarWhereInput = {
+    AND?: Enumerable<UserExternalScalarWhereInput>
+    OR?: Enumerable<UserExternalScalarWhereInput>
+    NOT?: Enumerable<UserExternalScalarWhereInput>
+    id?: IntFilter | number
+    name?: StringFilter | string
+    email?: StringFilter | string
+    tel?: IntFilter | number
+    password?: StringFilter | string
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
+    bookRoomId?: IntFilter | number
   }
 
   export type BranchCreateWithoutOpenCloseInput = {
@@ -14901,6 +15243,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     branchToRoom?: BranchToRoomUpdateOneRequiredWithoutBookRoomNestedInput
+    UserExternal?: UserExternalUpdateManyWithoutBookRoomNestedInput
   }
 
   export type BookRoomUncheckedUpdateWithoutRoomRateInput = {
@@ -14910,6 +15253,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    UserExternal?: UserExternalUncheckedUpdateManyWithoutBookRoomNestedInput
   }
 
   export type BookRoomUncheckedUpdateManyWithoutBookRoomInput = {
@@ -14956,6 +15300,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     roomRate?: RoomRateUpdateOneRequiredWithoutBookRoomNestedInput
+    UserExternal?: UserExternalUpdateManyWithoutBookRoomNestedInput
   }
 
   export type BookRoomUncheckedUpdateWithoutBranchToRoomInput = {
@@ -14963,6 +15308,46 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     roomRateId?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    UserExternal?: UserExternalUncheckedUpdateManyWithoutBookRoomNestedInput
+  }
+
+  export type UserExternalCreateManyBookRoomInput = {
+    id?: number
+    name: string
+    email: string
+    tel: number
+    password: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type UserExternalUpdateWithoutBookRoomInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tel?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserExternalUncheckedUpdateWithoutBookRoomInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tel?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserExternalUncheckedUpdateManyWithoutUserExternalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tel?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
