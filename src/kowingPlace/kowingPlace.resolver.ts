@@ -1,16 +1,17 @@
 import { date } from "fp-ts";
 import { PrismaClient } from "../../prisma/client";
+import {
+  ICreateUserExternal,
+  IFilterPrice,
+  IGetCoWorkUserChoose,
+  IGetUserConfirmBooking,
+} from "./kowingPlace.interface";
 export const prisma = new PrismaClient();
 
 //############################################
 //                 External
 //############################################
-export const createUserExternal = (args: {
-  name: string;
-  email: string;
-  tel: number;
-  password: string;
-}) =>
+export const createUserExternal = (args: ICreateUserExternal) =>
   prisma.userExternal.create({
     data: {
       name: args.name,
@@ -51,7 +52,7 @@ export const getCoworkRecomment = async () => {
 };
 //let p'mac Math random at frontend 🙏🏻
 
-export const filterPrice = (args: { roomId: number }) =>
+export const filterPrice = (args: IFilterPrice) =>
   prisma.roomRate.findMany({
     include: {
       room: true,
@@ -60,7 +61,7 @@ export const filterPrice = (args: { roomId: number }) =>
 
 //------- page2 ---------
 //filter price/day
-export const getCoWorkUserChoose = (args: { id: number }) =>
+export const getCoWorkUserChoose = (args: IGetCoWorkUserChoose) =>
   prisma.coWork.findUnique({
     where: {
       id: args.id,
@@ -76,13 +77,7 @@ export const getCoWorkUserChoose = (args: { id: number }) =>
 //เวลาที่จะใช้งาน
 //ราคา
 
-export const getUserConfirmBooking = async (args: {
-  startTime: string;
-  time: string;
-  roomId: number;
-  coWorkId: number;
-  userExId: number;
-}) => {
+export const getUserConfirmBooking = async (args: IGetUserConfirmBooking) => {
   const verifyCode = `${args.userExId}${args.coWorkId}${args.roomId}`;
 
   const getBookData = await prisma.bookRoom.create({
@@ -121,9 +116,6 @@ export const getUserConfirmBooking = async (args: {
   });
   return getBookData;
 };
-
-//insert + include data
-//getcode backend
 
 //############################################
 //                 Internal
