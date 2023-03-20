@@ -18,7 +18,7 @@ export type UserExternal = {
   id: number
   name: string
   email: string
-  tel: number
+  tel: string
   password: string
   createAt: Date
   updateAt: Date
@@ -1413,19 +1413,17 @@ export namespace Prisma {
 
   export type UserExternalAvgAggregateOutputType = {
     id: number | null
-    tel: number | null
   }
 
   export type UserExternalSumAggregateOutputType = {
     id: number | null
-    tel: number | null
   }
 
   export type UserExternalMinAggregateOutputType = {
     id: number | null
     name: string | null
     email: string | null
-    tel: number | null
+    tel: string | null
     password: string | null
     createAt: Date | null
     updateAt: Date | null
@@ -1435,7 +1433,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     email: string | null
-    tel: number | null
+    tel: string | null
     password: string | null
     createAt: Date | null
     updateAt: Date | null
@@ -1455,12 +1453,10 @@ export namespace Prisma {
 
   export type UserExternalAvgAggregateInputType = {
     id?: true
-    tel?: true
   }
 
   export type UserExternalSumAggregateInputType = {
     id?: true
-    tel?: true
   }
 
   export type UserExternalMinAggregateInputType = {
@@ -1585,7 +1581,7 @@ export namespace Prisma {
     id: number
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt: Date
     updateAt: Date
@@ -12940,7 +12936,7 @@ export namespace Prisma {
     id?: IntFilter | number
     name?: StringFilter | string
     email?: StringFilter | string
-    tel?: IntFilter | number
+    tel?: StringFilter | string
     password?: StringFilter | string
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
@@ -12984,7 +12980,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter | number
     name?: StringWithAggregatesFilter | string
     email?: StringWithAggregatesFilter | string
-    tel?: IntWithAggregatesFilter | number
+    tel?: StringWithAggregatesFilter | string
     password?: StringWithAggregatesFilter | string
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
@@ -13646,7 +13642,7 @@ export namespace Prisma {
   export type UserExternalCreateInput = {
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt?: Date | string
     updateAt?: Date | string
@@ -13657,7 +13653,7 @@ export namespace Prisma {
     id?: number
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt?: Date | string
     updateAt?: Date | string
@@ -13667,7 +13663,7 @@ export namespace Prisma {
   export type UserExternalUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13678,7 +13674,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13689,7 +13685,7 @@ export namespace Prisma {
     id?: number
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt?: Date | string
     updateAt?: Date | string
@@ -13698,7 +13694,7 @@ export namespace Prisma {
   export type UserExternalUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13708,7 +13704,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14577,7 +14573,6 @@ export namespace Prisma {
 
   export type UserExternalAvgOrderByAggregateInput = {
     id?: SortOrder
-    tel?: SortOrder
   }
 
   export type UserExternalMaxOrderByAggregateInput = {
@@ -14602,7 +14597,6 @@ export namespace Prisma {
 
   export type UserExternalSumOrderByAggregateInput = {
     id?: SortOrder
-    tel?: SortOrder
   }
 
   export type IntWithAggregatesFilter = {
@@ -15279,14 +15273,6 @@ export namespace Prisma {
     set?: string
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
@@ -15303,6 +15289,14 @@ export namespace Prisma {
     update?: Enumerable<BookRoomUpdateWithWhereUniqueWithoutUserExternalInput>
     updateMany?: Enumerable<BookRoomUpdateManyWithWhereWithoutUserExternalInput>
     deleteMany?: Enumerable<BookRoomScalarWhereInput>
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type BookRoomUncheckedUpdateManyWithoutUserExternalNestedInput = {
@@ -16964,7 +16958,7 @@ export namespace Prisma {
   export type UserExternalCreateWithoutBookRoomInput = {
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt?: Date | string
     updateAt?: Date | string
@@ -16974,7 +16968,7 @@ export namespace Prisma {
     id?: number
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt?: Date | string
     updateAt?: Date | string
@@ -17055,7 +17049,7 @@ export namespace Prisma {
   export type UserExternalUpdateWithoutBookRoomInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17065,7 +17059,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string

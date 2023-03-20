@@ -20,7 +20,6 @@ export const createUserExternal = (args: ICreateUserExternal) =>
       password: args.password,
     },
   });
-//------- page1 --------
 
 export const getCoWork24Hrs = async () => {
   const getAllCoWork = await prisma.coWork.findMany({

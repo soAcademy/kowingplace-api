@@ -3,7 +3,7 @@ import * as t from "io-ts";
 export const createUserExternalCodec = t.type({
   name: t.string,
   email: t.string,
-  tel: t.number,
+  tel: t.string,
   password: t.string,
 });
 export interface ICreateUserExternal

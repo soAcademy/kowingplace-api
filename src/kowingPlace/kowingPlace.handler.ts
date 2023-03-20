@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   createUserExternal,
+  createUserInternal,
   getCoWork24Hrs,
   getCoWorkUserChoose,
   getCoworkRecomment,
@@ -68,6 +69,23 @@ export const getUserConfirmBookingHandler = async (
   const args = req.body;
   try {
     const result = await getUserConfirmBooking(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+
+//----------------- internal -------------------
+
+export const createUserInternalHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await createUserInternal(args);
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({

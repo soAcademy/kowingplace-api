@@ -13,7 +13,7 @@ model UserExternal {
   id       Int        @id @default(autoincrement())
   name     String
   email    String
-  tel      Int
+  tel      String
   password String
   createAt DateTime   @default(now())
   updateAt DateTime   @updatedAt
