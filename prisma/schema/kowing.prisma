@@ -1,15 +1,12 @@
 model UserExternal {
-  id                   Int                 @id @default(autoincrement())
-  name                 String
-  email                String
-  tel                  Int
-  password             String
-  bookRoom             BookRoom?           @relation(fields: [bookRoomId], references: [id])
-  createAt             DateTime            @default(now())
-  updateAt             DateTime            @updatedAt
-  bookRoomId           Int?
-  vertifyBookingCode   VertifyBookingCode? @relation(fields: [vertifyBookingCodeId], references: [id])
-  vertifyBookingCodeId Int?
+  id       Int        @id @default(autoincrement())
+  name     String
+  email    String
+  tel      Int
+  password String
+  createAt DateTime   @default(now())
+  updateAt DateTime   @updatedAt
+  BookRoom BookRoom[]
 }
 
 model CoWork {
@@ -88,16 +85,19 @@ model BranchToRoom {
 }
 
 model BookRoom {
-  id             Int            @id @default(autoincrement())
-  branchToRoom   BranchToRoom?  @relation(fields: [branchToRoomId], references: [id])
-  branchToRoomId Int?
-  startTime      DateTime
-  roomRate       RoomRate       @relation(fields: [roomRateId], references: [id])
-  roomRateId     Int
-  status         String
-  createAt       DateTime       @default(now())
-  updateAt       DateTime       @updatedAt
-  UserExternal   UserExternal[]
+  id                   Int                @id @default(autoincrement())
+  branchToRoom         BranchToRoom?      @relation(fields: [branchToRoomId], references: [id])
+  branchToRoomId       Int?
+  startTime            DateTime
+  roomRate             RoomRate           @relation(fields: [roomRateId], references: [id])
+  roomRateId           Int
+  status               String
+  createAt             DateTime           @default(now())
+  updateAt             DateTime           @updatedAt
+  UserExternal         UserExternal       @relation(fields: [userExternalId], references: [id])
+  userExternalId       Int
+  vertifyCode          VertifyBookingCode @relation(fields: [vertifyBookingCodeId], references: [id])
+  vertifyBookingCodeId Int
 }
 
 model OpenClose {
@@ -137,11 +137,12 @@ model OpenClose {
 }
 
 model VertifyBookingCode {
-  id           Int            @id @default(autoincrement())
-  UserExternal UserExternal[]
-  bookdate     DateTime
-  createAt     DateTime       @default(now())
-  updateAt     DateTime       @updatedAt
+  id         Int        @id @default(autoincrement())
+  verifyCode String
+  bookdate   DateTime
+  createAt   DateTime   @default(now())
+  updateAt   DateTime   @updatedAt
+  BookRoom   BookRoom[]
 }
 
 //how do we should the data about 24 hours for filter in the frontend

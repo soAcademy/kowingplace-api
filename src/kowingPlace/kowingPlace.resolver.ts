@@ -70,19 +70,21 @@ export const getCoWorkUserChoose = (args: { id: number }) =>
     },
   });
 
-//------- page 3 --------
 //เส้น booking
 //ห้องประชุมId
 //เวลาที่จะมา
 //เวลาที่จะใช้งาน
 //ราคา
 
-export const getUserChooseCoWork = async (args: {
+export const getUserConfirmBooking = async (args: {
   startTime: string;
   time: string;
   roomId: number;
   coWorkId: number;
+  userExId: number;
 }) => {
+  const verifyCode = `${args.userExId}${args.coWorkId}${args.roomId}`;
+
   const getBookData = await prisma.bookRoom.create({
     data: {
       startTime: args.startTime,
@@ -97,32 +99,28 @@ export const getUserChooseCoWork = async (args: {
           id: args.roomId,
         },
       },
-    },
-    select: {
-      branchToRoom: {
-        select: {
-          room: {
-            select: {
-              name: true,
-            },
-          },
+      UserExternal: {
+        connect: {
+          id: args.userExId,
         },
       },
-      startTime: true,
-      roomRate: {
+      vertifyCode: {
+        create: {
+          bookdate: args.startTime,
+          verifyCode: verifyCode,
+        },
+      },
+    },
+    select: {
+      vertifyCode: {
         select: {
-          time: true,
-          price: true,
+          verifyCode: true,
         },
       },
     },
   });
   return getBookData;
 };
-
-//------- page 4 ---------
-
-//get ข้อมูลที่ทำการยืนยัน (รับ id การจองจากหน้าบ้าน)
 
 //insert + include data
 //getcode backend
