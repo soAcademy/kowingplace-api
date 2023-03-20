@@ -59,7 +59,6 @@ export const filterPrice = (args: IFilterPrice) =>
     },
   });
 
-//------- page2 ---------
 //filter price/day
 export const getCoWorkUserChoose = (args: IGetCoWorkUserChoose) =>
   prisma.coWork.findUnique({
