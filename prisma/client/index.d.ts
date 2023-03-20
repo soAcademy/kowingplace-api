@@ -46,7 +46,7 @@ export type UserInternal = {
   id: number
   name: string
   email: string
-  tel: number
+  tel: string
   password: string
   createAt: Date
   updateAt: Date
@@ -71,8 +71,19 @@ export type Room = {
 export type RoomRate = {
   id: number
   price: number
-  time: string
+  createAt: Date
+  updateAt: Date
+  durationCategoryId: number
   roomId: number
+}
+
+/**
+ * Model durationCategory
+ * 
+ */
+export type durationCategory = {
+  id: number
+  duration: string
   createAt: Date
   updateAt: Date
 }
@@ -89,12 +100,12 @@ export type Facility = {
 }
 
 /**
- * Model FacilityToRoom
+ * Model FacilityToCoWork
  * 
  */
-export type FacilityToRoom = {
+export type FacilityToCoWork = {
   id: number
-  roomId: number
+  coWorkId: number
   facilityId: number
   createAt: Date
   updateAt: Date
@@ -348,6 +359,16 @@ export class PrismaClient<
   get roomRate(): Prisma.RoomRateDelegate<GlobalReject>;
 
   /**
+   * `prisma.durationCategory`: Exposes CRUD operations for the **durationCategory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DurationCategories
+    * const durationCategories = await prisma.durationCategory.findMany()
+    * ```
+    */
+  get durationCategory(): Prisma.durationCategoryDelegate<GlobalReject>;
+
+  /**
    * `prisma.facility`: Exposes CRUD operations for the **Facility** model.
     * Example usage:
     * ```ts
@@ -358,14 +379,14 @@ export class PrismaClient<
   get facility(): Prisma.FacilityDelegate<GlobalReject>;
 
   /**
-   * `prisma.facilityToRoom`: Exposes CRUD operations for the **FacilityToRoom** model.
+   * `prisma.facilityToCoWork`: Exposes CRUD operations for the **FacilityToCoWork** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more FacilityToRooms
-    * const facilityToRooms = await prisma.facilityToRoom.findMany()
+    * // Fetch zero or more FacilityToCoWorks
+    * const facilityToCoWorks = await prisma.facilityToCoWork.findMany()
     * ```
     */
-  get facilityToRoom(): Prisma.FacilityToRoomDelegate<GlobalReject>;
+  get facilityToCoWork(): Prisma.FacilityToCoWorkDelegate<GlobalReject>;
 
   /**
    * `prisma.branchToRoom`: Exposes CRUD operations for the **BranchToRoom** model.
@@ -449,7 +470,7 @@ export namespace Prisma {
 
 
   /**
-   * Prisma Client JS version: 4.10.1
+   * Prisma Client JS version: 4.11.0
    * Query Engine version: 8fde8fef4033376662cad983758335009d522acb
    */
   export type PrismaVersion = {
@@ -880,8 +901,9 @@ export namespace Prisma {
     UserInternal: 'UserInternal',
     Room: 'Room',
     RoomRate: 'RoomRate',
+    durationCategory: 'durationCategory',
     Facility: 'Facility',
-    FacilityToRoom: 'FacilityToRoom',
+    FacilityToCoWork: 'FacilityToCoWork',
     BranchToRoom: 'BranchToRoom',
     BookRoom: 'BookRoom',
     OpenClose: 'OpenClose',
@@ -1096,10 +1118,12 @@ export namespace Prisma {
 
   export type CoWorkCountOutputType = {
     BranchToRoom: number
+    FacilityToCoWork: number
   }
 
   export type CoWorkCountOutputTypeSelect = {
     BranchToRoom?: boolean
+    FacilityToCoWork?: boolean
   }
 
   export type CoWorkCountOutputTypeGetPayload<S extends boolean | null | undefined | CoWorkCountOutputTypeArgs> =
@@ -1181,15 +1205,13 @@ export namespace Prisma {
 
 
   export type RoomCountOutputType = {
-    RoomPrice: number
-    FacilityToRoom: number
     BranchToRoom: number
+    RoomRate: number
   }
 
   export type RoomCountOutputTypeSelect = {
-    RoomPrice?: boolean
-    FacilityToRoom?: boolean
     BranchToRoom?: boolean
+    RoomRate?: boolean
   }
 
   export type RoomCountOutputTypeGetPayload<S extends boolean | null | undefined | RoomCountOutputTypeArgs> =
@@ -1266,16 +1288,59 @@ export namespace Prisma {
 
 
   /**
+   * Count Type DurationCategoryCountOutputType
+   */
+
+
+  export type DurationCategoryCountOutputType = {
+    RoomRate: number
+  }
+
+  export type DurationCategoryCountOutputTypeSelect = {
+    RoomRate?: boolean
+  }
+
+  export type DurationCategoryCountOutputTypeGetPayload<S extends boolean | null | undefined | DurationCategoryCountOutputTypeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? DurationCategoryCountOutputType :
+    S extends undefined ? never :
+    S extends { include: any } & (DurationCategoryCountOutputTypeArgs)
+    ? DurationCategoryCountOutputType 
+    : S extends { select: any } & (DurationCategoryCountOutputTypeArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof DurationCategoryCountOutputType ? DurationCategoryCountOutputType[P] : never
+  } 
+      : DurationCategoryCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * DurationCategoryCountOutputType without action
+   */
+  export type DurationCategoryCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the DurationCategoryCountOutputType
+     */
+    select?: DurationCategoryCountOutputTypeSelect | null
+  }
+
+
+
+  /**
    * Count Type FacilityCountOutputType
    */
 
 
   export type FacilityCountOutputType = {
-    FacilityToRoom: number
+    FacilityToCoWork: number
   }
 
   export type FacilityCountOutputTypeSelect = {
-    FacilityToRoom?: boolean
+    FacilityToCoWork?: boolean
   }
 
   export type FacilityCountOutputTypeGetPayload<S extends boolean | null | undefined | FacilityCountOutputTypeArgs> =
@@ -2631,6 +2696,7 @@ export namespace Prisma {
     userInternal?: boolean | UserInternalArgs
     BranchToRoom?: boolean | CoWork$BranchToRoomArgs
     OpenClose?: boolean | OpenCloseArgs
+    FacilityToCoWork?: boolean | CoWork$FacilityToCoWorkArgs
     _count?: boolean | CoWorkCountOutputTypeArgs
   }
 
@@ -2639,6 +2705,7 @@ export namespace Prisma {
     userInternal?: boolean | UserInternalArgs
     BranchToRoom?: boolean | CoWork$BranchToRoomArgs
     OpenClose?: boolean | OpenCloseArgs
+    FacilityToCoWork?: boolean | CoWork$FacilityToCoWorkArgs
     _count?: boolean | CoWorkCountOutputTypeArgs
   }
 
@@ -2652,6 +2719,7 @@ export namespace Prisma {
         P extends 'userInternal' ? UserInternalGetPayload<S['include'][P]> :
         P extends 'BranchToRoom' ? Array < BranchToRoomGetPayload<S['include'][P]>>  :
         P extends 'OpenClose' ? OpenCloseGetPayload<S['include'][P]> | null :
+        P extends 'FacilityToCoWork' ? Array < FacilityToCoWorkGetPayload<S['include'][P]>>  :
         P extends '_count' ? CoWorkCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (CoWorkArgs | CoWorkFindManyArgs)
@@ -2660,6 +2728,7 @@ export namespace Prisma {
         P extends 'userInternal' ? UserInternalGetPayload<S['select'][P]> :
         P extends 'BranchToRoom' ? Array < BranchToRoomGetPayload<S['select'][P]>>  :
         P extends 'OpenClose' ? OpenCloseGetPayload<S['select'][P]> | null :
+        P extends 'FacilityToCoWork' ? Array < FacilityToCoWorkGetPayload<S['select'][P]>>  :
         P extends '_count' ? CoWorkCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof CoWork ? CoWork[P] : never
   } 
       : CoWork
@@ -3038,6 +3107,8 @@ export namespace Prisma {
 
     OpenClose<T extends OpenCloseArgs= {}>(args?: Subset<T, OpenCloseArgs>): Prisma__OpenCloseClient<OpenCloseGetPayload<T> | Null>;
 
+    FacilityToCoWork<T extends CoWork$FacilityToCoWorkArgs= {}>(args?: Subset<T, CoWork$FacilityToCoWorkArgs>): Prisma.PrismaPromise<Array<FacilityToCoWorkGetPayload<T>>| Null>;
+
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3415,6 +3486,27 @@ export namespace Prisma {
 
 
   /**
+   * CoWork.FacilityToCoWork
+   */
+  export type CoWork$FacilityToCoWorkArgs = {
+    /**
+     * Select specific fields to fetch from the FacilityToCoWork
+     */
+    select?: FacilityToCoWorkSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FacilityToCoWorkInclude | null
+    where?: FacilityToCoWorkWhereInput
+    orderBy?: Enumerable<FacilityToCoWorkOrderByWithRelationInput>
+    cursor?: FacilityToCoWorkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<FacilityToCoWorkScalarFieldEnum>
+  }
+
+
+  /**
    * CoWork without action
    */
   export type CoWorkArgs = {
@@ -3445,19 +3537,17 @@ export namespace Prisma {
 
   export type UserInternalAvgAggregateOutputType = {
     id: number | null
-    tel: number | null
   }
 
   export type UserInternalSumAggregateOutputType = {
     id: number | null
-    tel: number | null
   }
 
   export type UserInternalMinAggregateOutputType = {
     id: number | null
     name: string | null
     email: string | null
-    tel: number | null
+    tel: string | null
     password: string | null
     createAt: Date | null
     updateAt: Date | null
@@ -3467,7 +3557,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     email: string | null
-    tel: number | null
+    tel: string | null
     password: string | null
     createAt: Date | null
     updateAt: Date | null
@@ -3487,12 +3577,10 @@ export namespace Prisma {
 
   export type UserInternalAvgAggregateInputType = {
     id?: true
-    tel?: true
   }
 
   export type UserInternalSumAggregateInputType = {
     id?: true
-    tel?: true
   }
 
   export type UserInternalMinAggregateInputType = {
@@ -3617,7 +3705,7 @@ export namespace Prisma {
     id: number
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt: Date
     updateAt: Date
@@ -4644,17 +4732,15 @@ export namespace Prisma {
     capacity?: boolean
     createAt?: boolean
     updateAt?: boolean
-    RoomPrice?: boolean | Room$RoomPriceArgs
-    FacilityToRoom?: boolean | Room$FacilityToRoomArgs
     BranchToRoom?: boolean | Room$BranchToRoomArgs
+    RoomRate?: boolean | Room$RoomRateArgs
     _count?: boolean | RoomCountOutputTypeArgs
   }
 
 
   export type RoomInclude = {
-    RoomPrice?: boolean | Room$RoomPriceArgs
-    FacilityToRoom?: boolean | Room$FacilityToRoomArgs
     BranchToRoom?: boolean | Room$BranchToRoomArgs
+    RoomRate?: boolean | Room$RoomRateArgs
     _count?: boolean | RoomCountOutputTypeArgs
   }
 
@@ -4665,17 +4751,15 @@ export namespace Prisma {
     S extends { include: any } & (RoomArgs | RoomFindManyArgs)
     ? Room  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'RoomPrice' ? Array < RoomRateGetPayload<S['include'][P]>>  :
-        P extends 'FacilityToRoom' ? Array < FacilityToRoomGetPayload<S['include'][P]>>  :
         P extends 'BranchToRoom' ? Array < BranchToRoomGetPayload<S['include'][P]>>  :
+        P extends 'RoomRate' ? Array < RoomRateGetPayload<S['include'][P]>>  :
         P extends '_count' ? RoomCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (RoomArgs | RoomFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'RoomPrice' ? Array < RoomRateGetPayload<S['select'][P]>>  :
-        P extends 'FacilityToRoom' ? Array < FacilityToRoomGetPayload<S['select'][P]>>  :
         P extends 'BranchToRoom' ? Array < BranchToRoomGetPayload<S['select'][P]>>  :
+        P extends 'RoomRate' ? Array < RoomRateGetPayload<S['select'][P]>>  :
         P extends '_count' ? RoomCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Room ? Room[P] : never
   } 
       : Room
@@ -5048,11 +5132,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    RoomPrice<T extends Room$RoomPriceArgs= {}>(args?: Subset<T, Room$RoomPriceArgs>): Prisma.PrismaPromise<Array<RoomRateGetPayload<T>>| Null>;
-
-    FacilityToRoom<T extends Room$FacilityToRoomArgs= {}>(args?: Subset<T, Room$FacilityToRoomArgs>): Prisma.PrismaPromise<Array<FacilityToRoomGetPayload<T>>| Null>;
-
     BranchToRoom<T extends Room$BranchToRoomArgs= {}>(args?: Subset<T, Room$BranchToRoomArgs>): Prisma.PrismaPromise<Array<BranchToRoomGetPayload<T>>| Null>;
+
+    RoomRate<T extends Room$RoomRateArgs= {}>(args?: Subset<T, Room$RoomRateArgs>): Prisma.PrismaPromise<Array<RoomRateGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -5410,48 +5492,6 @@ export namespace Prisma {
 
 
   /**
-   * Room.RoomPrice
-   */
-  export type Room$RoomPriceArgs = {
-    /**
-     * Select specific fields to fetch from the RoomRate
-     */
-    select?: RoomRateSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: RoomRateInclude | null
-    where?: RoomRateWhereInput
-    orderBy?: Enumerable<RoomRateOrderByWithRelationInput>
-    cursor?: RoomRateWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Enumerable<RoomRateScalarFieldEnum>
-  }
-
-
-  /**
-   * Room.FacilityToRoom
-   */
-  export type Room$FacilityToRoomArgs = {
-    /**
-     * Select specific fields to fetch from the FacilityToRoom
-     */
-    select?: FacilityToRoomSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: FacilityToRoomInclude | null
-    where?: FacilityToRoomWhereInput
-    orderBy?: Enumerable<FacilityToRoomOrderByWithRelationInput>
-    cursor?: FacilityToRoomWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Enumerable<FacilityToRoomScalarFieldEnum>
-  }
-
-
-  /**
    * Room.BranchToRoom
    */
   export type Room$BranchToRoomArgs = {
@@ -5469,6 +5509,27 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Enumerable<BranchToRoomScalarFieldEnum>
+  }
+
+
+  /**
+   * Room.RoomRate
+   */
+  export type Room$RoomRateArgs = {
+    /**
+     * Select specific fields to fetch from the RoomRate
+     */
+    select?: RoomRateSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: RoomRateInclude | null
+    where?: RoomRateWhereInput
+    orderBy?: Enumerable<RoomRateOrderByWithRelationInput>
+    cursor?: RoomRateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<RoomRateScalarFieldEnum>
   }
 
 
@@ -5504,40 +5565,42 @@ export namespace Prisma {
   export type RoomRateAvgAggregateOutputType = {
     id: number | null
     price: number | null
+    durationCategoryId: number | null
     roomId: number | null
   }
 
   export type RoomRateSumAggregateOutputType = {
     id: number | null
     price: number | null
+    durationCategoryId: number | null
     roomId: number | null
   }
 
   export type RoomRateMinAggregateOutputType = {
     id: number | null
     price: number | null
-    time: string | null
-    roomId: number | null
     createAt: Date | null
     updateAt: Date | null
+    durationCategoryId: number | null
+    roomId: number | null
   }
 
   export type RoomRateMaxAggregateOutputType = {
     id: number | null
     price: number | null
-    time: string | null
-    roomId: number | null
     createAt: Date | null
     updateAt: Date | null
+    durationCategoryId: number | null
+    roomId: number | null
   }
 
   export type RoomRateCountAggregateOutputType = {
     id: number
     price: number
-    time: number
-    roomId: number
     createAt: number
     updateAt: number
+    durationCategoryId: number
+    roomId: number
     _all: number
   }
 
@@ -5545,40 +5608,42 @@ export namespace Prisma {
   export type RoomRateAvgAggregateInputType = {
     id?: true
     price?: true
+    durationCategoryId?: true
     roomId?: true
   }
 
   export type RoomRateSumAggregateInputType = {
     id?: true
     price?: true
+    durationCategoryId?: true
     roomId?: true
   }
 
   export type RoomRateMinAggregateInputType = {
     id?: true
     price?: true
-    time?: true
-    roomId?: true
     createAt?: true
     updateAt?: true
+    durationCategoryId?: true
+    roomId?: true
   }
 
   export type RoomRateMaxAggregateInputType = {
     id?: true
     price?: true
-    time?: true
-    roomId?: true
     createAt?: true
     updateAt?: true
+    durationCategoryId?: true
+    roomId?: true
   }
 
   export type RoomRateCountAggregateInputType = {
     id?: true
     price?: true
-    time?: true
-    roomId?: true
     createAt?: true
     updateAt?: true
+    durationCategoryId?: true
+    roomId?: true
     _all?: true
   }
 
@@ -5672,10 +5737,10 @@ export namespace Prisma {
   export type RoomRateGroupByOutputType = {
     id: number
     price: number
-    time: string
-    roomId: number
     createAt: Date
     updateAt: Date
+    durationCategoryId: number
+    roomId: number
     _count: RoomRateCountAggregateOutputType | null
     _avg: RoomRateAvgAggregateOutputType | null
     _sum: RoomRateSumAggregateOutputType | null
@@ -5700,19 +5765,21 @@ export namespace Prisma {
   export type RoomRateSelect = {
     id?: boolean
     price?: boolean
-    time?: boolean
-    roomId?: boolean
     createAt?: boolean
     updateAt?: boolean
-    room?: boolean | RoomArgs
+    durationCategoryId?: boolean
+    roomId?: boolean
     BookRoom?: boolean | RoomRate$BookRoomArgs
+    duration?: boolean | durationCategoryArgs
+    room?: boolean | RoomArgs
     _count?: boolean | RoomRateCountOutputTypeArgs
   }
 
 
   export type RoomRateInclude = {
-    room?: boolean | RoomArgs
     BookRoom?: boolean | RoomRate$BookRoomArgs
+    duration?: boolean | durationCategoryArgs
+    room?: boolean | RoomArgs
     _count?: boolean | RoomRateCountOutputTypeArgs
   }
 
@@ -5723,15 +5790,17 @@ export namespace Prisma {
     S extends { include: any } & (RoomRateArgs | RoomRateFindManyArgs)
     ? RoomRate  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'room' ? RoomGetPayload<S['include'][P]> :
         P extends 'BookRoom' ? Array < BookRoomGetPayload<S['include'][P]>>  :
+        P extends 'duration' ? durationCategoryGetPayload<S['include'][P]> :
+        P extends 'room' ? RoomGetPayload<S['include'][P]> :
         P extends '_count' ? RoomRateCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (RoomRateArgs | RoomRateFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'room' ? RoomGetPayload<S['select'][P]> :
         P extends 'BookRoom' ? Array < BookRoomGetPayload<S['select'][P]>>  :
+        P extends 'duration' ? durationCategoryGetPayload<S['select'][P]> :
+        P extends 'room' ? RoomGetPayload<S['select'][P]> :
         P extends '_count' ? RoomRateCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof RoomRate ? RoomRate[P] : never
   } 
       : RoomRate
@@ -6104,9 +6173,11 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    room<T extends RoomArgs= {}>(args?: Subset<T, RoomArgs>): Prisma__RoomClient<RoomGetPayload<T> | Null>;
-
     BookRoom<T extends RoomRate$BookRoomArgs= {}>(args?: Subset<T, RoomRate$BookRoomArgs>): Prisma.PrismaPromise<Array<BookRoomGetPayload<T>>| Null>;
+
+    duration<T extends durationCategoryArgs= {}>(args?: Subset<T, durationCategoryArgs>): Prisma__durationCategoryClient<durationCategoryGetPayload<T> | Null>;
+
+    room<T extends RoomArgs= {}>(args?: Subset<T, RoomArgs>): Prisma__RoomClient<RoomGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -6501,6 +6572,988 @@ export namespace Prisma {
 
 
   /**
+   * Model durationCategory
+   */
+
+
+  export type AggregateDurationCategory = {
+    _count: DurationCategoryCountAggregateOutputType | null
+    _avg: DurationCategoryAvgAggregateOutputType | null
+    _sum: DurationCategorySumAggregateOutputType | null
+    _min: DurationCategoryMinAggregateOutputType | null
+    _max: DurationCategoryMaxAggregateOutputType | null
+  }
+
+  export type DurationCategoryAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type DurationCategorySumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type DurationCategoryMinAggregateOutputType = {
+    id: number | null
+    duration: string | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type DurationCategoryMaxAggregateOutputType = {
+    id: number | null
+    duration: string | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type DurationCategoryCountAggregateOutputType = {
+    id: number
+    duration: number
+    createAt: number
+    updateAt: number
+    _all: number
+  }
+
+
+  export type DurationCategoryAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type DurationCategorySumAggregateInputType = {
+    id?: true
+  }
+
+  export type DurationCategoryMinAggregateInputType = {
+    id?: true
+    duration?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type DurationCategoryMaxAggregateInputType = {
+    id?: true
+    duration?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type DurationCategoryCountAggregateInputType = {
+    id?: true
+    duration?: true
+    createAt?: true
+    updateAt?: true
+    _all?: true
+  }
+
+  export type DurationCategoryAggregateArgs = {
+    /**
+     * Filter which durationCategory to aggregate.
+     */
+    where?: durationCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of durationCategories to fetch.
+     */
+    orderBy?: Enumerable<durationCategoryOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: durationCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` durationCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` durationCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned durationCategories
+    **/
+    _count?: true | DurationCategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DurationCategoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DurationCategorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DurationCategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DurationCategoryMaxAggregateInputType
+  }
+
+  export type GetDurationCategoryAggregateType<T extends DurationCategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateDurationCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDurationCategory[P]>
+      : GetScalarType<T[P], AggregateDurationCategory[P]>
+  }
+
+
+
+
+  export type DurationCategoryGroupByArgs = {
+    where?: durationCategoryWhereInput
+    orderBy?: Enumerable<durationCategoryOrderByWithAggregationInput>
+    by: DurationCategoryScalarFieldEnum[]
+    having?: durationCategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DurationCategoryCountAggregateInputType | true
+    _avg?: DurationCategoryAvgAggregateInputType
+    _sum?: DurationCategorySumAggregateInputType
+    _min?: DurationCategoryMinAggregateInputType
+    _max?: DurationCategoryMaxAggregateInputType
+  }
+
+
+  export type DurationCategoryGroupByOutputType = {
+    id: number
+    duration: string
+    createAt: Date
+    updateAt: Date
+    _count: DurationCategoryCountAggregateOutputType | null
+    _avg: DurationCategoryAvgAggregateOutputType | null
+    _sum: DurationCategorySumAggregateOutputType | null
+    _min: DurationCategoryMinAggregateOutputType | null
+    _max: DurationCategoryMaxAggregateOutputType | null
+  }
+
+  type GetDurationCategoryGroupByPayload<T extends DurationCategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<DurationCategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DurationCategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DurationCategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], DurationCategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type durationCategorySelect = {
+    id?: boolean
+    duration?: boolean
+    createAt?: boolean
+    updateAt?: boolean
+    RoomRate?: boolean | durationCategory$RoomRateArgs
+    _count?: boolean | DurationCategoryCountOutputTypeArgs
+  }
+
+
+  export type durationCategoryInclude = {
+    RoomRate?: boolean | durationCategory$RoomRateArgs
+    _count?: boolean | DurationCategoryCountOutputTypeArgs
+  }
+
+  export type durationCategoryGetPayload<S extends boolean | null | undefined | durationCategoryArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? durationCategory :
+    S extends undefined ? never :
+    S extends { include: any } & (durationCategoryArgs | durationCategoryFindManyArgs)
+    ? durationCategory  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'RoomRate' ? Array < RoomRateGetPayload<S['include'][P]>>  :
+        P extends '_count' ? DurationCategoryCountOutputTypeGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (durationCategoryArgs | durationCategoryFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'RoomRate' ? Array < RoomRateGetPayload<S['select'][P]>>  :
+        P extends '_count' ? DurationCategoryCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof durationCategory ? durationCategory[P] : never
+  } 
+      : durationCategory
+
+
+  type durationCategoryCountArgs = 
+    Omit<durationCategoryFindManyArgs, 'select' | 'include'> & {
+      select?: DurationCategoryCountAggregateInputType | true
+    }
+
+  export interface durationCategoryDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one DurationCategory that matches the filter.
+     * @param {durationCategoryFindUniqueArgs} args - Arguments to find a DurationCategory
+     * @example
+     * // Get one DurationCategory
+     * const durationCategory = await prisma.durationCategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends durationCategoryFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, durationCategoryFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'durationCategory'> extends True ? Prisma__durationCategoryClient<durationCategoryGetPayload<T>> : Prisma__durationCategoryClient<durationCategoryGetPayload<T> | null, null>
+
+    /**
+     * Find one DurationCategory that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {durationCategoryFindUniqueOrThrowArgs} args - Arguments to find a DurationCategory
+     * @example
+     * // Get one DurationCategory
+     * const durationCategory = await prisma.durationCategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends durationCategoryFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, durationCategoryFindUniqueOrThrowArgs>
+    ): Prisma__durationCategoryClient<durationCategoryGetPayload<T>>
+
+    /**
+     * Find the first DurationCategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {durationCategoryFindFirstArgs} args - Arguments to find a DurationCategory
+     * @example
+     * // Get one DurationCategory
+     * const durationCategory = await prisma.durationCategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends durationCategoryFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, durationCategoryFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'durationCategory'> extends True ? Prisma__durationCategoryClient<durationCategoryGetPayload<T>> : Prisma__durationCategoryClient<durationCategoryGetPayload<T> | null, null>
+
+    /**
+     * Find the first DurationCategory that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {durationCategoryFindFirstOrThrowArgs} args - Arguments to find a DurationCategory
+     * @example
+     * // Get one DurationCategory
+     * const durationCategory = await prisma.durationCategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends durationCategoryFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, durationCategoryFindFirstOrThrowArgs>
+    ): Prisma__durationCategoryClient<durationCategoryGetPayload<T>>
+
+    /**
+     * Find zero or more DurationCategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {durationCategoryFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DurationCategories
+     * const durationCategories = await prisma.durationCategory.findMany()
+     * 
+     * // Get first 10 DurationCategories
+     * const durationCategories = await prisma.durationCategory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const durationCategoryWithIdOnly = await prisma.durationCategory.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends durationCategoryFindManyArgs>(
+      args?: SelectSubset<T, durationCategoryFindManyArgs>
+    ): Prisma.PrismaPromise<Array<durationCategoryGetPayload<T>>>
+
+    /**
+     * Create a DurationCategory.
+     * @param {durationCategoryCreateArgs} args - Arguments to create a DurationCategory.
+     * @example
+     * // Create one DurationCategory
+     * const DurationCategory = await prisma.durationCategory.create({
+     *   data: {
+     *     // ... data to create a DurationCategory
+     *   }
+     * })
+     * 
+    **/
+    create<T extends durationCategoryCreateArgs>(
+      args: SelectSubset<T, durationCategoryCreateArgs>
+    ): Prisma__durationCategoryClient<durationCategoryGetPayload<T>>
+
+    /**
+     * Create many DurationCategories.
+     *     @param {durationCategoryCreateManyArgs} args - Arguments to create many DurationCategories.
+     *     @example
+     *     // Create many DurationCategories
+     *     const durationCategory = await prisma.durationCategory.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends durationCategoryCreateManyArgs>(
+      args?: SelectSubset<T, durationCategoryCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a DurationCategory.
+     * @param {durationCategoryDeleteArgs} args - Arguments to delete one DurationCategory.
+     * @example
+     * // Delete one DurationCategory
+     * const DurationCategory = await prisma.durationCategory.delete({
+     *   where: {
+     *     // ... filter to delete one DurationCategory
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends durationCategoryDeleteArgs>(
+      args: SelectSubset<T, durationCategoryDeleteArgs>
+    ): Prisma__durationCategoryClient<durationCategoryGetPayload<T>>
+
+    /**
+     * Update one DurationCategory.
+     * @param {durationCategoryUpdateArgs} args - Arguments to update one DurationCategory.
+     * @example
+     * // Update one DurationCategory
+     * const durationCategory = await prisma.durationCategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends durationCategoryUpdateArgs>(
+      args: SelectSubset<T, durationCategoryUpdateArgs>
+    ): Prisma__durationCategoryClient<durationCategoryGetPayload<T>>
+
+    /**
+     * Delete zero or more DurationCategories.
+     * @param {durationCategoryDeleteManyArgs} args - Arguments to filter DurationCategories to delete.
+     * @example
+     * // Delete a few DurationCategories
+     * const { count } = await prisma.durationCategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends durationCategoryDeleteManyArgs>(
+      args?: SelectSubset<T, durationCategoryDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DurationCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {durationCategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DurationCategories
+     * const durationCategory = await prisma.durationCategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends durationCategoryUpdateManyArgs>(
+      args: SelectSubset<T, durationCategoryUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DurationCategory.
+     * @param {durationCategoryUpsertArgs} args - Arguments to update or create a DurationCategory.
+     * @example
+     * // Update or create a DurationCategory
+     * const durationCategory = await prisma.durationCategory.upsert({
+     *   create: {
+     *     // ... data to create a DurationCategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DurationCategory we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends durationCategoryUpsertArgs>(
+      args: SelectSubset<T, durationCategoryUpsertArgs>
+    ): Prisma__durationCategoryClient<durationCategoryGetPayload<T>>
+
+    /**
+     * Count the number of DurationCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {durationCategoryCountArgs} args - Arguments to filter DurationCategories to count.
+     * @example
+     * // Count the number of DurationCategories
+     * const count = await prisma.durationCategory.count({
+     *   where: {
+     *     // ... the filter for the DurationCategories we want to count
+     *   }
+     * })
+    **/
+    count<T extends durationCategoryCountArgs>(
+      args?: Subset<T, durationCategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DurationCategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DurationCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DurationCategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DurationCategoryAggregateArgs>(args: Subset<T, DurationCategoryAggregateArgs>): Prisma.PrismaPromise<GetDurationCategoryAggregateType<T>>
+
+    /**
+     * Group by DurationCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DurationCategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DurationCategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DurationCategoryGroupByArgs['orderBy'] }
+        : { orderBy?: DurationCategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DurationCategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDurationCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for durationCategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__durationCategoryClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    RoomRate<T extends durationCategory$RoomRateArgs= {}>(args?: Subset<T, durationCategory$RoomRateArgs>): Prisma.PrismaPromise<Array<RoomRateGetPayload<T>>| Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * durationCategory base type for findUnique actions
+   */
+  export type durationCategoryFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the durationCategory
+     */
+    select?: durationCategorySelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: durationCategoryInclude | null
+    /**
+     * Filter, which durationCategory to fetch.
+     */
+    where: durationCategoryWhereUniqueInput
+  }
+
+  /**
+   * durationCategory findUnique
+   */
+  export interface durationCategoryFindUniqueArgs extends durationCategoryFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * durationCategory findUniqueOrThrow
+   */
+  export type durationCategoryFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the durationCategory
+     */
+    select?: durationCategorySelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: durationCategoryInclude | null
+    /**
+     * Filter, which durationCategory to fetch.
+     */
+    where: durationCategoryWhereUniqueInput
+  }
+
+
+  /**
+   * durationCategory base type for findFirst actions
+   */
+  export type durationCategoryFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the durationCategory
+     */
+    select?: durationCategorySelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: durationCategoryInclude | null
+    /**
+     * Filter, which durationCategory to fetch.
+     */
+    where?: durationCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of durationCategories to fetch.
+     */
+    orderBy?: Enumerable<durationCategoryOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for durationCategories.
+     */
+    cursor?: durationCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` durationCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` durationCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of durationCategories.
+     */
+    distinct?: Enumerable<DurationCategoryScalarFieldEnum>
+  }
+
+  /**
+   * durationCategory findFirst
+   */
+  export interface durationCategoryFindFirstArgs extends durationCategoryFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * durationCategory findFirstOrThrow
+   */
+  export type durationCategoryFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the durationCategory
+     */
+    select?: durationCategorySelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: durationCategoryInclude | null
+    /**
+     * Filter, which durationCategory to fetch.
+     */
+    where?: durationCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of durationCategories to fetch.
+     */
+    orderBy?: Enumerable<durationCategoryOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for durationCategories.
+     */
+    cursor?: durationCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` durationCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` durationCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of durationCategories.
+     */
+    distinct?: Enumerable<DurationCategoryScalarFieldEnum>
+  }
+
+
+  /**
+   * durationCategory findMany
+   */
+  export type durationCategoryFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the durationCategory
+     */
+    select?: durationCategorySelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: durationCategoryInclude | null
+    /**
+     * Filter, which durationCategories to fetch.
+     */
+    where?: durationCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of durationCategories to fetch.
+     */
+    orderBy?: Enumerable<durationCategoryOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing durationCategories.
+     */
+    cursor?: durationCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` durationCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` durationCategories.
+     */
+    skip?: number
+    distinct?: Enumerable<DurationCategoryScalarFieldEnum>
+  }
+
+
+  /**
+   * durationCategory create
+   */
+  export type durationCategoryCreateArgs = {
+    /**
+     * Select specific fields to fetch from the durationCategory
+     */
+    select?: durationCategorySelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: durationCategoryInclude | null
+    /**
+     * The data needed to create a durationCategory.
+     */
+    data: XOR<durationCategoryCreateInput, durationCategoryUncheckedCreateInput>
+  }
+
+
+  /**
+   * durationCategory createMany
+   */
+  export type durationCategoryCreateManyArgs = {
+    /**
+     * The data used to create many durationCategories.
+     */
+    data: Enumerable<durationCategoryCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * durationCategory update
+   */
+  export type durationCategoryUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the durationCategory
+     */
+    select?: durationCategorySelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: durationCategoryInclude | null
+    /**
+     * The data needed to update a durationCategory.
+     */
+    data: XOR<durationCategoryUpdateInput, durationCategoryUncheckedUpdateInput>
+    /**
+     * Choose, which durationCategory to update.
+     */
+    where: durationCategoryWhereUniqueInput
+  }
+
+
+  /**
+   * durationCategory updateMany
+   */
+  export type durationCategoryUpdateManyArgs = {
+    /**
+     * The data used to update durationCategories.
+     */
+    data: XOR<durationCategoryUpdateManyMutationInput, durationCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which durationCategories to update
+     */
+    where?: durationCategoryWhereInput
+  }
+
+
+  /**
+   * durationCategory upsert
+   */
+  export type durationCategoryUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the durationCategory
+     */
+    select?: durationCategorySelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: durationCategoryInclude | null
+    /**
+     * The filter to search for the durationCategory to update in case it exists.
+     */
+    where: durationCategoryWhereUniqueInput
+    /**
+     * In case the durationCategory found by the `where` argument doesn't exist, create a new durationCategory with this data.
+     */
+    create: XOR<durationCategoryCreateInput, durationCategoryUncheckedCreateInput>
+    /**
+     * In case the durationCategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<durationCategoryUpdateInput, durationCategoryUncheckedUpdateInput>
+  }
+
+
+  /**
+   * durationCategory delete
+   */
+  export type durationCategoryDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the durationCategory
+     */
+    select?: durationCategorySelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: durationCategoryInclude | null
+    /**
+     * Filter which durationCategory to delete.
+     */
+    where: durationCategoryWhereUniqueInput
+  }
+
+
+  /**
+   * durationCategory deleteMany
+   */
+  export type durationCategoryDeleteManyArgs = {
+    /**
+     * Filter which durationCategories to delete
+     */
+    where?: durationCategoryWhereInput
+  }
+
+
+  /**
+   * durationCategory.RoomRate
+   */
+  export type durationCategory$RoomRateArgs = {
+    /**
+     * Select specific fields to fetch from the RoomRate
+     */
+    select?: RoomRateSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: RoomRateInclude | null
+    where?: RoomRateWhereInput
+    orderBy?: Enumerable<RoomRateOrderByWithRelationInput>
+    cursor?: RoomRateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<RoomRateScalarFieldEnum>
+  }
+
+
+  /**
+   * durationCategory without action
+   */
+  export type durationCategoryArgs = {
+    /**
+     * Select specific fields to fetch from the durationCategory
+     */
+    select?: durationCategorySelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: durationCategoryInclude | null
+  }
+
+
+
+  /**
    * Model Facility
    */
 
@@ -6692,13 +7745,13 @@ export namespace Prisma {
     name?: boolean
     createAt?: boolean
     updateAt?: boolean
-    FacilityToRoom?: boolean | Facility$FacilityToRoomArgs
+    FacilityToCoWork?: boolean | Facility$FacilityToCoWorkArgs
     _count?: boolean | FacilityCountOutputTypeArgs
   }
 
 
   export type FacilityInclude = {
-    FacilityToRoom?: boolean | Facility$FacilityToRoomArgs
+    FacilityToCoWork?: boolean | Facility$FacilityToCoWorkArgs
     _count?: boolean | FacilityCountOutputTypeArgs
   }
 
@@ -6709,13 +7762,13 @@ export namespace Prisma {
     S extends { include: any } & (FacilityArgs | FacilityFindManyArgs)
     ? Facility  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'FacilityToRoom' ? Array < FacilityToRoomGetPayload<S['include'][P]>>  :
+        P extends 'FacilityToCoWork' ? Array < FacilityToCoWorkGetPayload<S['include'][P]>>  :
         P extends '_count' ? FacilityCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (FacilityArgs | FacilityFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'FacilityToRoom' ? Array < FacilityToRoomGetPayload<S['select'][P]>>  :
+        P extends 'FacilityToCoWork' ? Array < FacilityToCoWorkGetPayload<S['select'][P]>>  :
         P extends '_count' ? FacilityCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Facility ? Facility[P] : never
   } 
       : Facility
@@ -7088,7 +8141,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    FacilityToRoom<T extends Facility$FacilityToRoomArgs= {}>(args?: Subset<T, Facility$FacilityToRoomArgs>): Prisma.PrismaPromise<Array<FacilityToRoomGetPayload<T>>| Null>;
+    FacilityToCoWork<T extends Facility$FacilityToCoWorkArgs= {}>(args?: Subset<T, Facility$FacilityToCoWorkArgs>): Prisma.PrismaPromise<Array<FacilityToCoWorkGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -7446,23 +8499,23 @@ export namespace Prisma {
 
 
   /**
-   * Facility.FacilityToRoom
+   * Facility.FacilityToCoWork
    */
-  export type Facility$FacilityToRoomArgs = {
+  export type Facility$FacilityToCoWorkArgs = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
-    where?: FacilityToRoomWhereInput
-    orderBy?: Enumerable<FacilityToRoomOrderByWithRelationInput>
-    cursor?: FacilityToRoomWhereUniqueInput
+    include?: FacilityToCoWorkInclude | null
+    where?: FacilityToCoWorkWhereInput
+    orderBy?: Enumerable<FacilityToCoWorkOrderByWithRelationInput>
+    cursor?: FacilityToCoWorkWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<FacilityToRoomScalarFieldEnum>
+    distinct?: Enumerable<FacilityToCoWorkScalarFieldEnum>
   }
 
 
@@ -7483,49 +8536,49 @@ export namespace Prisma {
 
 
   /**
-   * Model FacilityToRoom
+   * Model FacilityToCoWork
    */
 
 
-  export type AggregateFacilityToRoom = {
-    _count: FacilityToRoomCountAggregateOutputType | null
-    _avg: FacilityToRoomAvgAggregateOutputType | null
-    _sum: FacilityToRoomSumAggregateOutputType | null
-    _min: FacilityToRoomMinAggregateOutputType | null
-    _max: FacilityToRoomMaxAggregateOutputType | null
+  export type AggregateFacilityToCoWork = {
+    _count: FacilityToCoWorkCountAggregateOutputType | null
+    _avg: FacilityToCoWorkAvgAggregateOutputType | null
+    _sum: FacilityToCoWorkSumAggregateOutputType | null
+    _min: FacilityToCoWorkMinAggregateOutputType | null
+    _max: FacilityToCoWorkMaxAggregateOutputType | null
   }
 
-  export type FacilityToRoomAvgAggregateOutputType = {
+  export type FacilityToCoWorkAvgAggregateOutputType = {
     id: number | null
-    roomId: number | null
+    coWorkId: number | null
     facilityId: number | null
   }
 
-  export type FacilityToRoomSumAggregateOutputType = {
+  export type FacilityToCoWorkSumAggregateOutputType = {
     id: number | null
-    roomId: number | null
+    coWorkId: number | null
     facilityId: number | null
   }
 
-  export type FacilityToRoomMinAggregateOutputType = {
+  export type FacilityToCoWorkMinAggregateOutputType = {
     id: number | null
-    roomId: number | null
-    facilityId: number | null
-    createAt: Date | null
-    updateAt: Date | null
-  }
-
-  export type FacilityToRoomMaxAggregateOutputType = {
-    id: number | null
-    roomId: number | null
+    coWorkId: number | null
     facilityId: number | null
     createAt: Date | null
     updateAt: Date | null
   }
 
-  export type FacilityToRoomCountAggregateOutputType = {
+  export type FacilityToCoWorkMaxAggregateOutputType = {
+    id: number | null
+    coWorkId: number | null
+    facilityId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type FacilityToCoWorkCountAggregateOutputType = {
     id: number
-    roomId: number
+    coWorkId: number
     facilityId: number
     createAt: number
     updateAt: number
@@ -7533,339 +8586,339 @@ export namespace Prisma {
   }
 
 
-  export type FacilityToRoomAvgAggregateInputType = {
+  export type FacilityToCoWorkAvgAggregateInputType = {
     id?: true
-    roomId?: true
+    coWorkId?: true
     facilityId?: true
   }
 
-  export type FacilityToRoomSumAggregateInputType = {
+  export type FacilityToCoWorkSumAggregateInputType = {
     id?: true
-    roomId?: true
+    coWorkId?: true
     facilityId?: true
   }
 
-  export type FacilityToRoomMinAggregateInputType = {
+  export type FacilityToCoWorkMinAggregateInputType = {
     id?: true
-    roomId?: true
-    facilityId?: true
-    createAt?: true
-    updateAt?: true
-  }
-
-  export type FacilityToRoomMaxAggregateInputType = {
-    id?: true
-    roomId?: true
+    coWorkId?: true
     facilityId?: true
     createAt?: true
     updateAt?: true
   }
 
-  export type FacilityToRoomCountAggregateInputType = {
+  export type FacilityToCoWorkMaxAggregateInputType = {
     id?: true
-    roomId?: true
+    coWorkId?: true
+    facilityId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type FacilityToCoWorkCountAggregateInputType = {
+    id?: true
+    coWorkId?: true
     facilityId?: true
     createAt?: true
     updateAt?: true
     _all?: true
   }
 
-  export type FacilityToRoomAggregateArgs = {
+  export type FacilityToCoWorkAggregateArgs = {
     /**
-     * Filter which FacilityToRoom to aggregate.
+     * Filter which FacilityToCoWork to aggregate.
      */
-    where?: FacilityToRoomWhereInput
+    where?: FacilityToCoWorkWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of FacilityToRooms to fetch.
+     * Determine the order of FacilityToCoWorks to fetch.
      */
-    orderBy?: Enumerable<FacilityToRoomOrderByWithRelationInput>
+    orderBy?: Enumerable<FacilityToCoWorkOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: FacilityToRoomWhereUniqueInput
+    cursor?: FacilityToCoWorkWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` FacilityToRooms from the position of the cursor.
+     * Take `±n` FacilityToCoWorks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` FacilityToRooms.
+     * Skip the first `n` FacilityToCoWorks.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned FacilityToRooms
+     * Count returned FacilityToCoWorks
     **/
-    _count?: true | FacilityToRoomCountAggregateInputType
+    _count?: true | FacilityToCoWorkCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: FacilityToRoomAvgAggregateInputType
+    _avg?: FacilityToCoWorkAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: FacilityToRoomSumAggregateInputType
+    _sum?: FacilityToCoWorkSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: FacilityToRoomMinAggregateInputType
+    _min?: FacilityToCoWorkMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: FacilityToRoomMaxAggregateInputType
+    _max?: FacilityToCoWorkMaxAggregateInputType
   }
 
-  export type GetFacilityToRoomAggregateType<T extends FacilityToRoomAggregateArgs> = {
-        [P in keyof T & keyof AggregateFacilityToRoom]: P extends '_count' | 'count'
+  export type GetFacilityToCoWorkAggregateType<T extends FacilityToCoWorkAggregateArgs> = {
+        [P in keyof T & keyof AggregateFacilityToCoWork]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateFacilityToRoom[P]>
-      : GetScalarType<T[P], AggregateFacilityToRoom[P]>
+        : GetScalarType<T[P], AggregateFacilityToCoWork[P]>
+      : GetScalarType<T[P], AggregateFacilityToCoWork[P]>
   }
 
 
 
 
-  export type FacilityToRoomGroupByArgs = {
-    where?: FacilityToRoomWhereInput
-    orderBy?: Enumerable<FacilityToRoomOrderByWithAggregationInput>
-    by: FacilityToRoomScalarFieldEnum[]
-    having?: FacilityToRoomScalarWhereWithAggregatesInput
+  export type FacilityToCoWorkGroupByArgs = {
+    where?: FacilityToCoWorkWhereInput
+    orderBy?: Enumerable<FacilityToCoWorkOrderByWithAggregationInput>
+    by: FacilityToCoWorkScalarFieldEnum[]
+    having?: FacilityToCoWorkScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: FacilityToRoomCountAggregateInputType | true
-    _avg?: FacilityToRoomAvgAggregateInputType
-    _sum?: FacilityToRoomSumAggregateInputType
-    _min?: FacilityToRoomMinAggregateInputType
-    _max?: FacilityToRoomMaxAggregateInputType
+    _count?: FacilityToCoWorkCountAggregateInputType | true
+    _avg?: FacilityToCoWorkAvgAggregateInputType
+    _sum?: FacilityToCoWorkSumAggregateInputType
+    _min?: FacilityToCoWorkMinAggregateInputType
+    _max?: FacilityToCoWorkMaxAggregateInputType
   }
 
 
-  export type FacilityToRoomGroupByOutputType = {
+  export type FacilityToCoWorkGroupByOutputType = {
     id: number
-    roomId: number
+    coWorkId: number
     facilityId: number
     createAt: Date
     updateAt: Date
-    _count: FacilityToRoomCountAggregateOutputType | null
-    _avg: FacilityToRoomAvgAggregateOutputType | null
-    _sum: FacilityToRoomSumAggregateOutputType | null
-    _min: FacilityToRoomMinAggregateOutputType | null
-    _max: FacilityToRoomMaxAggregateOutputType | null
+    _count: FacilityToCoWorkCountAggregateOutputType | null
+    _avg: FacilityToCoWorkAvgAggregateOutputType | null
+    _sum: FacilityToCoWorkSumAggregateOutputType | null
+    _min: FacilityToCoWorkMinAggregateOutputType | null
+    _max: FacilityToCoWorkMaxAggregateOutputType | null
   }
 
-  type GetFacilityToRoomGroupByPayload<T extends FacilityToRoomGroupByArgs> = Prisma.PrismaPromise<
+  type GetFacilityToCoWorkGroupByPayload<T extends FacilityToCoWorkGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<FacilityToRoomGroupByOutputType, T['by']> &
+      PickArray<FacilityToCoWorkGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof FacilityToRoomGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof FacilityToCoWorkGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], FacilityToRoomGroupByOutputType[P]>
-            : GetScalarType<T[P], FacilityToRoomGroupByOutputType[P]>
+              : GetScalarType<T[P], FacilityToCoWorkGroupByOutputType[P]>
+            : GetScalarType<T[P], FacilityToCoWorkGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type FacilityToRoomSelect = {
+  export type FacilityToCoWorkSelect = {
     id?: boolean
-    roomId?: boolean
+    coWorkId?: boolean
     facilityId?: boolean
     createAt?: boolean
     updateAt?: boolean
-    room?: boolean | RoomArgs
-    facilities?: boolean | FacilityArgs
+    coWork?: boolean | CoWorkArgs
+    facility?: boolean | FacilityArgs
   }
 
 
-  export type FacilityToRoomInclude = {
-    room?: boolean | RoomArgs
-    facilities?: boolean | FacilityArgs
+  export type FacilityToCoWorkInclude = {
+    coWork?: boolean | CoWorkArgs
+    facility?: boolean | FacilityArgs
   }
 
-  export type FacilityToRoomGetPayload<S extends boolean | null | undefined | FacilityToRoomArgs> =
+  export type FacilityToCoWorkGetPayload<S extends boolean | null | undefined | FacilityToCoWorkArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? FacilityToRoom :
+    S extends true ? FacilityToCoWork :
     S extends undefined ? never :
-    S extends { include: any } & (FacilityToRoomArgs | FacilityToRoomFindManyArgs)
-    ? FacilityToRoom  & {
+    S extends { include: any } & (FacilityToCoWorkArgs | FacilityToCoWorkFindManyArgs)
+    ? FacilityToCoWork  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'room' ? RoomGetPayload<S['include'][P]> :
-        P extends 'facilities' ? FacilityGetPayload<S['include'][P]> :  never
+        P extends 'coWork' ? CoWorkGetPayload<S['include'][P]> :
+        P extends 'facility' ? FacilityGetPayload<S['include'][P]> :  never
   } 
-    : S extends { select: any } & (FacilityToRoomArgs | FacilityToRoomFindManyArgs)
+    : S extends { select: any } & (FacilityToCoWorkArgs | FacilityToCoWorkFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'room' ? RoomGetPayload<S['select'][P]> :
-        P extends 'facilities' ? FacilityGetPayload<S['select'][P]> :  P extends keyof FacilityToRoom ? FacilityToRoom[P] : never
+        P extends 'coWork' ? CoWorkGetPayload<S['select'][P]> :
+        P extends 'facility' ? FacilityGetPayload<S['select'][P]> :  P extends keyof FacilityToCoWork ? FacilityToCoWork[P] : never
   } 
-      : FacilityToRoom
+      : FacilityToCoWork
 
 
-  type FacilityToRoomCountArgs = 
-    Omit<FacilityToRoomFindManyArgs, 'select' | 'include'> & {
-      select?: FacilityToRoomCountAggregateInputType | true
+  type FacilityToCoWorkCountArgs = 
+    Omit<FacilityToCoWorkFindManyArgs, 'select' | 'include'> & {
+      select?: FacilityToCoWorkCountAggregateInputType | true
     }
 
-  export interface FacilityToRoomDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+  export interface FacilityToCoWorkDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
 
     /**
-     * Find zero or one FacilityToRoom that matches the filter.
-     * @param {FacilityToRoomFindUniqueArgs} args - Arguments to find a FacilityToRoom
+     * Find zero or one FacilityToCoWork that matches the filter.
+     * @param {FacilityToCoWorkFindUniqueArgs} args - Arguments to find a FacilityToCoWork
      * @example
-     * // Get one FacilityToRoom
-     * const facilityToRoom = await prisma.facilityToRoom.findUnique({
+     * // Get one FacilityToCoWork
+     * const facilityToCoWork = await prisma.facilityToCoWork.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends FacilityToRoomFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, FacilityToRoomFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'FacilityToRoom'> extends True ? Prisma__FacilityToRoomClient<FacilityToRoomGetPayload<T>> : Prisma__FacilityToRoomClient<FacilityToRoomGetPayload<T> | null, null>
+    findUnique<T extends FacilityToCoWorkFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, FacilityToCoWorkFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'FacilityToCoWork'> extends True ? Prisma__FacilityToCoWorkClient<FacilityToCoWorkGetPayload<T>> : Prisma__FacilityToCoWorkClient<FacilityToCoWorkGetPayload<T> | null, null>
 
     /**
-     * Find one FacilityToRoom that matches the filter or throw an error  with `error.code='P2025'` 
+     * Find one FacilityToCoWork that matches the filter or throw an error  with `error.code='P2025'` 
      *     if no matches were found.
-     * @param {FacilityToRoomFindUniqueOrThrowArgs} args - Arguments to find a FacilityToRoom
+     * @param {FacilityToCoWorkFindUniqueOrThrowArgs} args - Arguments to find a FacilityToCoWork
      * @example
-     * // Get one FacilityToRoom
-     * const facilityToRoom = await prisma.facilityToRoom.findUniqueOrThrow({
+     * // Get one FacilityToCoWork
+     * const facilityToCoWork = await prisma.facilityToCoWork.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends FacilityToRoomFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, FacilityToRoomFindUniqueOrThrowArgs>
-    ): Prisma__FacilityToRoomClient<FacilityToRoomGetPayload<T>>
+    findUniqueOrThrow<T extends FacilityToCoWorkFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, FacilityToCoWorkFindUniqueOrThrowArgs>
+    ): Prisma__FacilityToCoWorkClient<FacilityToCoWorkGetPayload<T>>
 
     /**
-     * Find the first FacilityToRoom that matches the filter.
+     * Find the first FacilityToCoWork that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityToRoomFindFirstArgs} args - Arguments to find a FacilityToRoom
+     * @param {FacilityToCoWorkFindFirstArgs} args - Arguments to find a FacilityToCoWork
      * @example
-     * // Get one FacilityToRoom
-     * const facilityToRoom = await prisma.facilityToRoom.findFirst({
+     * // Get one FacilityToCoWork
+     * const facilityToCoWork = await prisma.facilityToCoWork.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends FacilityToRoomFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, FacilityToRoomFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'FacilityToRoom'> extends True ? Prisma__FacilityToRoomClient<FacilityToRoomGetPayload<T>> : Prisma__FacilityToRoomClient<FacilityToRoomGetPayload<T> | null, null>
+    findFirst<T extends FacilityToCoWorkFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, FacilityToCoWorkFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'FacilityToCoWork'> extends True ? Prisma__FacilityToCoWorkClient<FacilityToCoWorkGetPayload<T>> : Prisma__FacilityToCoWorkClient<FacilityToCoWorkGetPayload<T> | null, null>
 
     /**
-     * Find the first FacilityToRoom that matches the filter or
+     * Find the first FacilityToCoWork that matches the filter or
      * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityToRoomFindFirstOrThrowArgs} args - Arguments to find a FacilityToRoom
+     * @param {FacilityToCoWorkFindFirstOrThrowArgs} args - Arguments to find a FacilityToCoWork
      * @example
-     * // Get one FacilityToRoom
-     * const facilityToRoom = await prisma.facilityToRoom.findFirstOrThrow({
+     * // Get one FacilityToCoWork
+     * const facilityToCoWork = await prisma.facilityToCoWork.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends FacilityToRoomFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, FacilityToRoomFindFirstOrThrowArgs>
-    ): Prisma__FacilityToRoomClient<FacilityToRoomGetPayload<T>>
+    findFirstOrThrow<T extends FacilityToCoWorkFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, FacilityToCoWorkFindFirstOrThrowArgs>
+    ): Prisma__FacilityToCoWorkClient<FacilityToCoWorkGetPayload<T>>
 
     /**
-     * Find zero or more FacilityToRooms that matches the filter.
+     * Find zero or more FacilityToCoWorks that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityToRoomFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {FacilityToCoWorkFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all FacilityToRooms
-     * const facilityToRooms = await prisma.facilityToRoom.findMany()
+     * // Get all FacilityToCoWorks
+     * const facilityToCoWorks = await prisma.facilityToCoWork.findMany()
      * 
-     * // Get first 10 FacilityToRooms
-     * const facilityToRooms = await prisma.facilityToRoom.findMany({ take: 10 })
+     * // Get first 10 FacilityToCoWorks
+     * const facilityToCoWorks = await prisma.facilityToCoWork.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const facilityToRoomWithIdOnly = await prisma.facilityToRoom.findMany({ select: { id: true } })
+     * const facilityToCoWorkWithIdOnly = await prisma.facilityToCoWork.findMany({ select: { id: true } })
      * 
     **/
-    findMany<T extends FacilityToRoomFindManyArgs>(
-      args?: SelectSubset<T, FacilityToRoomFindManyArgs>
-    ): Prisma.PrismaPromise<Array<FacilityToRoomGetPayload<T>>>
+    findMany<T extends FacilityToCoWorkFindManyArgs>(
+      args?: SelectSubset<T, FacilityToCoWorkFindManyArgs>
+    ): Prisma.PrismaPromise<Array<FacilityToCoWorkGetPayload<T>>>
 
     /**
-     * Create a FacilityToRoom.
-     * @param {FacilityToRoomCreateArgs} args - Arguments to create a FacilityToRoom.
+     * Create a FacilityToCoWork.
+     * @param {FacilityToCoWorkCreateArgs} args - Arguments to create a FacilityToCoWork.
      * @example
-     * // Create one FacilityToRoom
-     * const FacilityToRoom = await prisma.facilityToRoom.create({
+     * // Create one FacilityToCoWork
+     * const FacilityToCoWork = await prisma.facilityToCoWork.create({
      *   data: {
-     *     // ... data to create a FacilityToRoom
+     *     // ... data to create a FacilityToCoWork
      *   }
      * })
      * 
     **/
-    create<T extends FacilityToRoomCreateArgs>(
-      args: SelectSubset<T, FacilityToRoomCreateArgs>
-    ): Prisma__FacilityToRoomClient<FacilityToRoomGetPayload<T>>
+    create<T extends FacilityToCoWorkCreateArgs>(
+      args: SelectSubset<T, FacilityToCoWorkCreateArgs>
+    ): Prisma__FacilityToCoWorkClient<FacilityToCoWorkGetPayload<T>>
 
     /**
-     * Create many FacilityToRooms.
-     *     @param {FacilityToRoomCreateManyArgs} args - Arguments to create many FacilityToRooms.
+     * Create many FacilityToCoWorks.
+     *     @param {FacilityToCoWorkCreateManyArgs} args - Arguments to create many FacilityToCoWorks.
      *     @example
-     *     // Create many FacilityToRooms
-     *     const facilityToRoom = await prisma.facilityToRoom.createMany({
+     *     // Create many FacilityToCoWorks
+     *     const facilityToCoWork = await prisma.facilityToCoWork.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends FacilityToRoomCreateManyArgs>(
-      args?: SelectSubset<T, FacilityToRoomCreateManyArgs>
+    createMany<T extends FacilityToCoWorkCreateManyArgs>(
+      args?: SelectSubset<T, FacilityToCoWorkCreateManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a FacilityToRoom.
-     * @param {FacilityToRoomDeleteArgs} args - Arguments to delete one FacilityToRoom.
+     * Delete a FacilityToCoWork.
+     * @param {FacilityToCoWorkDeleteArgs} args - Arguments to delete one FacilityToCoWork.
      * @example
-     * // Delete one FacilityToRoom
-     * const FacilityToRoom = await prisma.facilityToRoom.delete({
+     * // Delete one FacilityToCoWork
+     * const FacilityToCoWork = await prisma.facilityToCoWork.delete({
      *   where: {
-     *     // ... filter to delete one FacilityToRoom
+     *     // ... filter to delete one FacilityToCoWork
      *   }
      * })
      * 
     **/
-    delete<T extends FacilityToRoomDeleteArgs>(
-      args: SelectSubset<T, FacilityToRoomDeleteArgs>
-    ): Prisma__FacilityToRoomClient<FacilityToRoomGetPayload<T>>
+    delete<T extends FacilityToCoWorkDeleteArgs>(
+      args: SelectSubset<T, FacilityToCoWorkDeleteArgs>
+    ): Prisma__FacilityToCoWorkClient<FacilityToCoWorkGetPayload<T>>
 
     /**
-     * Update one FacilityToRoom.
-     * @param {FacilityToRoomUpdateArgs} args - Arguments to update one FacilityToRoom.
+     * Update one FacilityToCoWork.
+     * @param {FacilityToCoWorkUpdateArgs} args - Arguments to update one FacilityToCoWork.
      * @example
-     * // Update one FacilityToRoom
-     * const facilityToRoom = await prisma.facilityToRoom.update({
+     * // Update one FacilityToCoWork
+     * const facilityToCoWork = await prisma.facilityToCoWork.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -7875,34 +8928,34 @@ export namespace Prisma {
      * })
      * 
     **/
-    update<T extends FacilityToRoomUpdateArgs>(
-      args: SelectSubset<T, FacilityToRoomUpdateArgs>
-    ): Prisma__FacilityToRoomClient<FacilityToRoomGetPayload<T>>
+    update<T extends FacilityToCoWorkUpdateArgs>(
+      args: SelectSubset<T, FacilityToCoWorkUpdateArgs>
+    ): Prisma__FacilityToCoWorkClient<FacilityToCoWorkGetPayload<T>>
 
     /**
-     * Delete zero or more FacilityToRooms.
-     * @param {FacilityToRoomDeleteManyArgs} args - Arguments to filter FacilityToRooms to delete.
+     * Delete zero or more FacilityToCoWorks.
+     * @param {FacilityToCoWorkDeleteManyArgs} args - Arguments to filter FacilityToCoWorks to delete.
      * @example
-     * // Delete a few FacilityToRooms
-     * const { count } = await prisma.facilityToRoom.deleteMany({
+     * // Delete a few FacilityToCoWorks
+     * const { count } = await prisma.facilityToCoWork.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends FacilityToRoomDeleteManyArgs>(
-      args?: SelectSubset<T, FacilityToRoomDeleteManyArgs>
+    deleteMany<T extends FacilityToCoWorkDeleteManyArgs>(
+      args?: SelectSubset<T, FacilityToCoWorkDeleteManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more FacilityToRooms.
+     * Update zero or more FacilityToCoWorks.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityToRoomUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {FacilityToCoWorkUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many FacilityToRooms
-     * const facilityToRoom = await prisma.facilityToRoom.updateMany({
+     * // Update many FacilityToCoWorks
+     * const facilityToCoWork = await prisma.facilityToCoWork.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -7912,59 +8965,59 @@ export namespace Prisma {
      * })
      * 
     **/
-    updateMany<T extends FacilityToRoomUpdateManyArgs>(
-      args: SelectSubset<T, FacilityToRoomUpdateManyArgs>
+    updateMany<T extends FacilityToCoWorkUpdateManyArgs>(
+      args: SelectSubset<T, FacilityToCoWorkUpdateManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one FacilityToRoom.
-     * @param {FacilityToRoomUpsertArgs} args - Arguments to update or create a FacilityToRoom.
+     * Create or update one FacilityToCoWork.
+     * @param {FacilityToCoWorkUpsertArgs} args - Arguments to update or create a FacilityToCoWork.
      * @example
-     * // Update or create a FacilityToRoom
-     * const facilityToRoom = await prisma.facilityToRoom.upsert({
+     * // Update or create a FacilityToCoWork
+     * const facilityToCoWork = await prisma.facilityToCoWork.upsert({
      *   create: {
-     *     // ... data to create a FacilityToRoom
+     *     // ... data to create a FacilityToCoWork
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the FacilityToRoom we want to update
+     *     // ... the filter for the FacilityToCoWork we want to update
      *   }
      * })
     **/
-    upsert<T extends FacilityToRoomUpsertArgs>(
-      args: SelectSubset<T, FacilityToRoomUpsertArgs>
-    ): Prisma__FacilityToRoomClient<FacilityToRoomGetPayload<T>>
+    upsert<T extends FacilityToCoWorkUpsertArgs>(
+      args: SelectSubset<T, FacilityToCoWorkUpsertArgs>
+    ): Prisma__FacilityToCoWorkClient<FacilityToCoWorkGetPayload<T>>
 
     /**
-     * Count the number of FacilityToRooms.
+     * Count the number of FacilityToCoWorks.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityToRoomCountArgs} args - Arguments to filter FacilityToRooms to count.
+     * @param {FacilityToCoWorkCountArgs} args - Arguments to filter FacilityToCoWorks to count.
      * @example
-     * // Count the number of FacilityToRooms
-     * const count = await prisma.facilityToRoom.count({
+     * // Count the number of FacilityToCoWorks
+     * const count = await prisma.facilityToCoWork.count({
      *   where: {
-     *     // ... the filter for the FacilityToRooms we want to count
+     *     // ... the filter for the FacilityToCoWorks we want to count
      *   }
      * })
     **/
-    count<T extends FacilityToRoomCountArgs>(
-      args?: Subset<T, FacilityToRoomCountArgs>,
+    count<T extends FacilityToCoWorkCountArgs>(
+      args?: Subset<T, FacilityToCoWorkCountArgs>,
     ): Prisma.PrismaPromise<
       T extends _Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], FacilityToRoomCountAggregateOutputType>
+          : GetScalarType<T['select'], FacilityToCoWorkCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a FacilityToRoom.
+     * Allows you to perform aggregations operations on a FacilityToCoWork.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityToRoomAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {FacilityToCoWorkAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -7984,13 +9037,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends FacilityToRoomAggregateArgs>(args: Subset<T, FacilityToRoomAggregateArgs>): Prisma.PrismaPromise<GetFacilityToRoomAggregateType<T>>
+    aggregate<T extends FacilityToCoWorkAggregateArgs>(args: Subset<T, FacilityToCoWorkAggregateArgs>): Prisma.PrismaPromise<GetFacilityToCoWorkAggregateType<T>>
 
     /**
-     * Group by FacilityToRoom.
+     * Group by FacilityToCoWork.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityToRoomGroupByArgs} args - Group by arguments.
+     * @param {FacilityToCoWorkGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -8005,14 +9058,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends FacilityToRoomGroupByArgs,
+      T extends FacilityToCoWorkGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: FacilityToRoomGroupByArgs['orderBy'] }
-        : { orderBy?: FacilityToRoomGroupByArgs['orderBy'] },
+        ? { orderBy: FacilityToCoWorkGroupByArgs['orderBy'] }
+        : { orderBy?: FacilityToCoWorkGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -8061,17 +9114,17 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, FacilityToRoomGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFacilityToRoomGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, FacilityToCoWorkGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFacilityToCoWorkGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
 
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for FacilityToRoom.
+   * The delegate class that acts as a "Promise-like" for FacilityToCoWork.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export class Prisma__FacilityToRoomClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+  export class Prisma__FacilityToCoWorkClient<T, Null = never> implements Prisma.PrismaPromise<T> {
     private readonly _dmmf;
     private readonly _queryType;
     private readonly _rootField;
@@ -8086,9 +9139,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    room<T extends RoomArgs= {}>(args?: Subset<T, RoomArgs>): Prisma__RoomClient<RoomGetPayload<T> | Null>;
+    coWork<T extends CoWorkArgs= {}>(args?: Subset<T, CoWorkArgs>): Prisma__CoWorkClient<CoWorkGetPayload<T> | Null>;
 
-    facilities<T extends FacilityArgs= {}>(args?: Subset<T, FacilityArgs>): Prisma__FacilityClient<FacilityGetPayload<T> | Null>;
+    facility<T extends FacilityArgs= {}>(args?: Subset<T, FacilityArgs>): Prisma__FacilityClient<FacilityGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -8118,27 +9171,27 @@ export namespace Prisma {
   // Custom InputTypes
 
   /**
-   * FacilityToRoom base type for findUnique actions
+   * FacilityToCoWork base type for findUnique actions
    */
-  export type FacilityToRoomFindUniqueArgsBase = {
+  export type FacilityToCoWorkFindUniqueArgsBase = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
+    include?: FacilityToCoWorkInclude | null
     /**
-     * Filter, which FacilityToRoom to fetch.
+     * Filter, which FacilityToCoWork to fetch.
      */
-    where: FacilityToRoomWhereUniqueInput
+    where: FacilityToCoWorkWhereUniqueInput
   }
 
   /**
-   * FacilityToRoom findUnique
+   * FacilityToCoWork findUnique
    */
-  export interface FacilityToRoomFindUniqueArgs extends FacilityToRoomFindUniqueArgsBase {
+  export interface FacilityToCoWorkFindUniqueArgs extends FacilityToCoWorkFindUniqueArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
@@ -8148,76 +9201,76 @@ export namespace Prisma {
       
 
   /**
-   * FacilityToRoom findUniqueOrThrow
+   * FacilityToCoWork findUniqueOrThrow
    */
-  export type FacilityToRoomFindUniqueOrThrowArgs = {
+  export type FacilityToCoWorkFindUniqueOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
+    include?: FacilityToCoWorkInclude | null
     /**
-     * Filter, which FacilityToRoom to fetch.
+     * Filter, which FacilityToCoWork to fetch.
      */
-    where: FacilityToRoomWhereUniqueInput
+    where: FacilityToCoWorkWhereUniqueInput
   }
 
 
   /**
-   * FacilityToRoom base type for findFirst actions
+   * FacilityToCoWork base type for findFirst actions
    */
-  export type FacilityToRoomFindFirstArgsBase = {
+  export type FacilityToCoWorkFindFirstArgsBase = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
+    include?: FacilityToCoWorkInclude | null
     /**
-     * Filter, which FacilityToRoom to fetch.
+     * Filter, which FacilityToCoWork to fetch.
      */
-    where?: FacilityToRoomWhereInput
+    where?: FacilityToCoWorkWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of FacilityToRooms to fetch.
+     * Determine the order of FacilityToCoWorks to fetch.
      */
-    orderBy?: Enumerable<FacilityToRoomOrderByWithRelationInput>
+    orderBy?: Enumerable<FacilityToCoWorkOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for FacilityToRooms.
+     * Sets the position for searching for FacilityToCoWorks.
      */
-    cursor?: FacilityToRoomWhereUniqueInput
+    cursor?: FacilityToCoWorkWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` FacilityToRooms from the position of the cursor.
+     * Take `±n` FacilityToCoWorks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` FacilityToRooms.
+     * Skip the first `n` FacilityToCoWorks.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of FacilityToRooms.
+     * Filter by unique combinations of FacilityToCoWorks.
      */
-    distinct?: Enumerable<FacilityToRoomScalarFieldEnum>
+    distinct?: Enumerable<FacilityToCoWorkScalarFieldEnum>
   }
 
   /**
-   * FacilityToRoom findFirst
+   * FacilityToCoWork findFirst
    */
-  export interface FacilityToRoomFindFirstArgs extends FacilityToRoomFindFirstArgsBase {
+  export interface FacilityToCoWorkFindFirstArgs extends FacilityToCoWorkFindFirstArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
@@ -8227,236 +9280,236 @@ export namespace Prisma {
       
 
   /**
-   * FacilityToRoom findFirstOrThrow
+   * FacilityToCoWork findFirstOrThrow
    */
-  export type FacilityToRoomFindFirstOrThrowArgs = {
+  export type FacilityToCoWorkFindFirstOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
+    include?: FacilityToCoWorkInclude | null
     /**
-     * Filter, which FacilityToRoom to fetch.
+     * Filter, which FacilityToCoWork to fetch.
      */
-    where?: FacilityToRoomWhereInput
+    where?: FacilityToCoWorkWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of FacilityToRooms to fetch.
+     * Determine the order of FacilityToCoWorks to fetch.
      */
-    orderBy?: Enumerable<FacilityToRoomOrderByWithRelationInput>
+    orderBy?: Enumerable<FacilityToCoWorkOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for FacilityToRooms.
+     * Sets the position for searching for FacilityToCoWorks.
      */
-    cursor?: FacilityToRoomWhereUniqueInput
+    cursor?: FacilityToCoWorkWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` FacilityToRooms from the position of the cursor.
+     * Take `±n` FacilityToCoWorks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` FacilityToRooms.
+     * Skip the first `n` FacilityToCoWorks.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of FacilityToRooms.
+     * Filter by unique combinations of FacilityToCoWorks.
      */
-    distinct?: Enumerable<FacilityToRoomScalarFieldEnum>
+    distinct?: Enumerable<FacilityToCoWorkScalarFieldEnum>
   }
 
 
   /**
-   * FacilityToRoom findMany
+   * FacilityToCoWork findMany
    */
-  export type FacilityToRoomFindManyArgs = {
+  export type FacilityToCoWorkFindManyArgs = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
+    include?: FacilityToCoWorkInclude | null
     /**
-     * Filter, which FacilityToRooms to fetch.
+     * Filter, which FacilityToCoWorks to fetch.
      */
-    where?: FacilityToRoomWhereInput
+    where?: FacilityToCoWorkWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of FacilityToRooms to fetch.
+     * Determine the order of FacilityToCoWorks to fetch.
      */
-    orderBy?: Enumerable<FacilityToRoomOrderByWithRelationInput>
+    orderBy?: Enumerable<FacilityToCoWorkOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing FacilityToRooms.
+     * Sets the position for listing FacilityToCoWorks.
      */
-    cursor?: FacilityToRoomWhereUniqueInput
+    cursor?: FacilityToCoWorkWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` FacilityToRooms from the position of the cursor.
+     * Take `±n` FacilityToCoWorks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` FacilityToRooms.
+     * Skip the first `n` FacilityToCoWorks.
      */
     skip?: number
-    distinct?: Enumerable<FacilityToRoomScalarFieldEnum>
+    distinct?: Enumerable<FacilityToCoWorkScalarFieldEnum>
   }
 
 
   /**
-   * FacilityToRoom create
+   * FacilityToCoWork create
    */
-  export type FacilityToRoomCreateArgs = {
+  export type FacilityToCoWorkCreateArgs = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
+    include?: FacilityToCoWorkInclude | null
     /**
-     * The data needed to create a FacilityToRoom.
+     * The data needed to create a FacilityToCoWork.
      */
-    data: XOR<FacilityToRoomCreateInput, FacilityToRoomUncheckedCreateInput>
+    data: XOR<FacilityToCoWorkCreateInput, FacilityToCoWorkUncheckedCreateInput>
   }
 
 
   /**
-   * FacilityToRoom createMany
+   * FacilityToCoWork createMany
    */
-  export type FacilityToRoomCreateManyArgs = {
+  export type FacilityToCoWorkCreateManyArgs = {
     /**
-     * The data used to create many FacilityToRooms.
+     * The data used to create many FacilityToCoWorks.
      */
-    data: Enumerable<FacilityToRoomCreateManyInput>
+    data: Enumerable<FacilityToCoWorkCreateManyInput>
     skipDuplicates?: boolean
   }
 
 
   /**
-   * FacilityToRoom update
+   * FacilityToCoWork update
    */
-  export type FacilityToRoomUpdateArgs = {
+  export type FacilityToCoWorkUpdateArgs = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
+    include?: FacilityToCoWorkInclude | null
     /**
-     * The data needed to update a FacilityToRoom.
+     * The data needed to update a FacilityToCoWork.
      */
-    data: XOR<FacilityToRoomUpdateInput, FacilityToRoomUncheckedUpdateInput>
+    data: XOR<FacilityToCoWorkUpdateInput, FacilityToCoWorkUncheckedUpdateInput>
     /**
-     * Choose, which FacilityToRoom to update.
+     * Choose, which FacilityToCoWork to update.
      */
-    where: FacilityToRoomWhereUniqueInput
+    where: FacilityToCoWorkWhereUniqueInput
   }
 
 
   /**
-   * FacilityToRoom updateMany
+   * FacilityToCoWork updateMany
    */
-  export type FacilityToRoomUpdateManyArgs = {
+  export type FacilityToCoWorkUpdateManyArgs = {
     /**
-     * The data used to update FacilityToRooms.
+     * The data used to update FacilityToCoWorks.
      */
-    data: XOR<FacilityToRoomUpdateManyMutationInput, FacilityToRoomUncheckedUpdateManyInput>
+    data: XOR<FacilityToCoWorkUpdateManyMutationInput, FacilityToCoWorkUncheckedUpdateManyInput>
     /**
-     * Filter which FacilityToRooms to update
+     * Filter which FacilityToCoWorks to update
      */
-    where?: FacilityToRoomWhereInput
+    where?: FacilityToCoWorkWhereInput
   }
 
 
   /**
-   * FacilityToRoom upsert
+   * FacilityToCoWork upsert
    */
-  export type FacilityToRoomUpsertArgs = {
+  export type FacilityToCoWorkUpsertArgs = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
+    include?: FacilityToCoWorkInclude | null
     /**
-     * The filter to search for the FacilityToRoom to update in case it exists.
+     * The filter to search for the FacilityToCoWork to update in case it exists.
      */
-    where: FacilityToRoomWhereUniqueInput
+    where: FacilityToCoWorkWhereUniqueInput
     /**
-     * In case the FacilityToRoom found by the `where` argument doesn't exist, create a new FacilityToRoom with this data.
+     * In case the FacilityToCoWork found by the `where` argument doesn't exist, create a new FacilityToCoWork with this data.
      */
-    create: XOR<FacilityToRoomCreateInput, FacilityToRoomUncheckedCreateInput>
+    create: XOR<FacilityToCoWorkCreateInput, FacilityToCoWorkUncheckedCreateInput>
     /**
-     * In case the FacilityToRoom was found with the provided `where` argument, update it with this data.
+     * In case the FacilityToCoWork was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<FacilityToRoomUpdateInput, FacilityToRoomUncheckedUpdateInput>
+    update: XOR<FacilityToCoWorkUpdateInput, FacilityToCoWorkUncheckedUpdateInput>
   }
 
 
   /**
-   * FacilityToRoom delete
+   * FacilityToCoWork delete
    */
-  export type FacilityToRoomDeleteArgs = {
+  export type FacilityToCoWorkDeleteArgs = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
+    include?: FacilityToCoWorkInclude | null
     /**
-     * Filter which FacilityToRoom to delete.
+     * Filter which FacilityToCoWork to delete.
      */
-    where: FacilityToRoomWhereUniqueInput
+    where: FacilityToCoWorkWhereUniqueInput
   }
 
 
   /**
-   * FacilityToRoom deleteMany
+   * FacilityToCoWork deleteMany
    */
-  export type FacilityToRoomDeleteManyArgs = {
+  export type FacilityToCoWorkDeleteManyArgs = {
     /**
-     * Filter which FacilityToRooms to delete
+     * Filter which FacilityToCoWorks to delete
      */
-    where?: FacilityToRoomWhereInput
+    where?: FacilityToCoWorkWhereInput
   }
 
 
   /**
-   * FacilityToRoom without action
+   * FacilityToCoWork without action
    */
-  export type FacilityToRoomArgs = {
+  export type FacilityToCoWorkArgs = {
     /**
-     * Select specific fields to fetch from the FacilityToRoom
+     * Select specific fields to fetch from the FacilityToCoWork
      */
-    select?: FacilityToRoomSelect | null
+    select?: FacilityToCoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FacilityToRoomInclude | null
+    include?: FacilityToCoWorkInclude | null
   }
 
 
@@ -12779,6 +13832,16 @@ export namespace Prisma {
   export type CoWorkScalarFieldEnum = (typeof CoWorkScalarFieldEnum)[keyof typeof CoWorkScalarFieldEnum]
 
 
+  export const DurationCategoryScalarFieldEnum: {
+    id: 'id',
+    duration: 'duration',
+    createAt: 'createAt',
+    updateAt: 'updateAt'
+  };
+
+  export type DurationCategoryScalarFieldEnum = (typeof DurationCategoryScalarFieldEnum)[keyof typeof DurationCategoryScalarFieldEnum]
+
+
   export const FacilityScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -12789,15 +13852,15 @@ export namespace Prisma {
   export type FacilityScalarFieldEnum = (typeof FacilityScalarFieldEnum)[keyof typeof FacilityScalarFieldEnum]
 
 
-  export const FacilityToRoomScalarFieldEnum: {
+  export const FacilityToCoWorkScalarFieldEnum: {
     id: 'id',
-    roomId: 'roomId',
+    coWorkId: 'coWorkId',
     facilityId: 'facilityId',
     createAt: 'createAt',
     updateAt: 'updateAt'
   };
 
-  export type FacilityToRoomScalarFieldEnum = (typeof FacilityToRoomScalarFieldEnum)[keyof typeof FacilityToRoomScalarFieldEnum]
+  export type FacilityToCoWorkScalarFieldEnum = (typeof FacilityToCoWorkScalarFieldEnum)[keyof typeof FacilityToCoWorkScalarFieldEnum]
 
 
   export const OpenCloseScalarFieldEnum: {
@@ -12849,10 +13912,10 @@ export namespace Prisma {
   export const RoomRateScalarFieldEnum: {
     id: 'id',
     price: 'price',
-    time: 'time',
-    roomId: 'roomId',
     createAt: 'createAt',
-    updateAt: 'updateAt'
+    updateAt: 'updateAt',
+    durationCategoryId: 'durationCategoryId',
+    roomId: 'roomId'
   };
 
   export type RoomRateScalarFieldEnum = (typeof RoomRateScalarFieldEnum)[keyof typeof RoomRateScalarFieldEnum]
@@ -13000,6 +14063,7 @@ export namespace Prisma {
     userInternal?: XOR<UserInternalRelationFilter, UserInternalWhereInput>
     BranchToRoom?: BranchToRoomListRelationFilter
     OpenClose?: XOR<OpenCloseRelationFilter, OpenCloseWhereInput> | null
+    FacilityToCoWork?: FacilityToCoWorkListRelationFilter
   }
 
   export type CoWorkOrderByWithRelationInput = {
@@ -13013,6 +14077,7 @@ export namespace Prisma {
     userInternal?: UserInternalOrderByWithRelationInput
     BranchToRoom?: BranchToRoomOrderByRelationAggregateInput
     OpenClose?: OpenCloseOrderByWithRelationInput
+    FacilityToCoWork?: FacilityToCoWorkOrderByRelationAggregateInput
   }
 
   export type CoWorkWhereUniqueInput = {
@@ -13054,7 +14119,7 @@ export namespace Prisma {
     id?: IntFilter | number
     name?: StringFilter | string
     email?: StringFilter | string
-    tel?: IntFilter | number
+    tel?: StringFilter | string
     password?: StringFilter | string
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
@@ -13098,7 +14163,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter | number
     name?: StringWithAggregatesFilter | string
     email?: StringWithAggregatesFilter | string
-    tel?: IntWithAggregatesFilter | number
+    tel?: StringWithAggregatesFilter | string
     password?: StringWithAggregatesFilter | string
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
@@ -13113,9 +14178,8 @@ export namespace Prisma {
     capacity?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    RoomPrice?: RoomRateListRelationFilter
-    FacilityToRoom?: FacilityToRoomListRelationFilter
     BranchToRoom?: BranchToRoomListRelationFilter
+    RoomRate?: RoomRateListRelationFilter
   }
 
   export type RoomOrderByWithRelationInput = {
@@ -13124,9 +14188,8 @@ export namespace Prisma {
     capacity?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
-    RoomPrice?: RoomRateOrderByRelationAggregateInput
-    FacilityToRoom?: FacilityToRoomOrderByRelationAggregateInput
     BranchToRoom?: BranchToRoomOrderByRelationAggregateInput
+    RoomRate?: RoomRateOrderByRelationAggregateInput
   }
 
   export type RoomWhereUniqueInput = {
@@ -13163,23 +14226,25 @@ export namespace Prisma {
     NOT?: Enumerable<RoomRateWhereInput>
     id?: IntFilter | number
     price?: IntFilter | number
-    time?: StringFilter | string
-    roomId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    room?: XOR<RoomRelationFilter, RoomWhereInput>
+    durationCategoryId?: IntFilter | number
+    roomId?: IntFilter | number
     BookRoom?: BookRoomListRelationFilter
+    duration?: XOR<DurationCategoryRelationFilter, durationCategoryWhereInput>
+    room?: XOR<RoomRelationFilter, RoomWhereInput>
   }
 
   export type RoomRateOrderByWithRelationInput = {
     id?: SortOrder
     price?: SortOrder
-    time?: SortOrder
-    roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
-    room?: RoomOrderByWithRelationInput
+    durationCategoryId?: SortOrder
+    roomId?: SortOrder
     BookRoom?: BookRoomOrderByRelationAggregateInput
+    duration?: durationCategoryOrderByWithRelationInput
+    room?: RoomOrderByWithRelationInput
   }
 
   export type RoomRateWhereUniqueInput = {
@@ -13189,10 +14254,10 @@ export namespace Prisma {
   export type RoomRateOrderByWithAggregationInput = {
     id?: SortOrder
     price?: SortOrder
-    time?: SortOrder
-    roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    durationCategoryId?: SortOrder
+    roomId?: SortOrder
     _count?: RoomRateCountOrderByAggregateInput
     _avg?: RoomRateAvgOrderByAggregateInput
     _max?: RoomRateMaxOrderByAggregateInput
@@ -13206,8 +14271,53 @@ export namespace Prisma {
     NOT?: Enumerable<RoomRateScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
     price?: IntWithAggregatesFilter | number
-    time?: StringWithAggregatesFilter | string
+    createAt?: DateTimeWithAggregatesFilter | Date | string
+    updateAt?: DateTimeWithAggregatesFilter | Date | string
+    durationCategoryId?: IntWithAggregatesFilter | number
     roomId?: IntWithAggregatesFilter | number
+  }
+
+  export type durationCategoryWhereInput = {
+    AND?: Enumerable<durationCategoryWhereInput>
+    OR?: Enumerable<durationCategoryWhereInput>
+    NOT?: Enumerable<durationCategoryWhereInput>
+    id?: IntFilter | number
+    duration?: StringFilter | string
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
+    RoomRate?: RoomRateListRelationFilter
+  }
+
+  export type durationCategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    duration?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    RoomRate?: RoomRateOrderByRelationAggregateInput
+  }
+
+  export type durationCategoryWhereUniqueInput = {
+    id?: number
+  }
+
+  export type durationCategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    duration?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    _count?: durationCategoryCountOrderByAggregateInput
+    _avg?: durationCategoryAvgOrderByAggregateInput
+    _max?: durationCategoryMaxOrderByAggregateInput
+    _min?: durationCategoryMinOrderByAggregateInput
+    _sum?: durationCategorySumOrderByAggregateInput
+  }
+
+  export type durationCategoryScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<durationCategoryScalarWhereWithAggregatesInput>
+    OR?: Enumerable<durationCategoryScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<durationCategoryScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    duration?: StringWithAggregatesFilter | string
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
   }
@@ -13220,7 +14330,7 @@ export namespace Prisma {
     name?: StringFilter | string
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    FacilityToRoom?: FacilityToRoomListRelationFilter
+    FacilityToCoWork?: FacilityToCoWorkListRelationFilter
   }
 
   export type FacilityOrderByWithRelationInput = {
@@ -13228,7 +14338,7 @@ export namespace Prisma {
     name?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
-    FacilityToRoom?: FacilityToRoomOrderByRelationAggregateInput
+    FacilityToCoWork?: FacilityToCoWorkOrderByRelationAggregateInput
   }
 
   export type FacilityWhereUniqueInput = {
@@ -13257,52 +14367,52 @@ export namespace Prisma {
     updateAt?: DateTimeWithAggregatesFilter | Date | string
   }
 
-  export type FacilityToRoomWhereInput = {
-    AND?: Enumerable<FacilityToRoomWhereInput>
-    OR?: Enumerable<FacilityToRoomWhereInput>
-    NOT?: Enumerable<FacilityToRoomWhereInput>
+  export type FacilityToCoWorkWhereInput = {
+    AND?: Enumerable<FacilityToCoWorkWhereInput>
+    OR?: Enumerable<FacilityToCoWorkWhereInput>
+    NOT?: Enumerable<FacilityToCoWorkWhereInput>
     id?: IntFilter | number
-    roomId?: IntFilter | number
+    coWorkId?: IntFilter | number
     facilityId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    room?: XOR<RoomRelationFilter, RoomWhereInput>
-    facilities?: XOR<FacilityRelationFilter, FacilityWhereInput>
+    coWork?: XOR<CoWorkRelationFilter, CoWorkWhereInput>
+    facility?: XOR<FacilityRelationFilter, FacilityWhereInput>
   }
 
-  export type FacilityToRoomOrderByWithRelationInput = {
+  export type FacilityToCoWorkOrderByWithRelationInput = {
     id?: SortOrder
-    roomId?: SortOrder
+    coWorkId?: SortOrder
     facilityId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
-    room?: RoomOrderByWithRelationInput
-    facilities?: FacilityOrderByWithRelationInput
+    coWork?: CoWorkOrderByWithRelationInput
+    facility?: FacilityOrderByWithRelationInput
   }
 
-  export type FacilityToRoomWhereUniqueInput = {
+  export type FacilityToCoWorkWhereUniqueInput = {
     id?: number
   }
 
-  export type FacilityToRoomOrderByWithAggregationInput = {
+  export type FacilityToCoWorkOrderByWithAggregationInput = {
     id?: SortOrder
-    roomId?: SortOrder
+    coWorkId?: SortOrder
     facilityId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
-    _count?: FacilityToRoomCountOrderByAggregateInput
-    _avg?: FacilityToRoomAvgOrderByAggregateInput
-    _max?: FacilityToRoomMaxOrderByAggregateInput
-    _min?: FacilityToRoomMinOrderByAggregateInput
-    _sum?: FacilityToRoomSumOrderByAggregateInput
+    _count?: FacilityToCoWorkCountOrderByAggregateInput
+    _avg?: FacilityToCoWorkAvgOrderByAggregateInput
+    _max?: FacilityToCoWorkMaxOrderByAggregateInput
+    _min?: FacilityToCoWorkMinOrderByAggregateInput
+    _sum?: FacilityToCoWorkSumOrderByAggregateInput
   }
 
-  export type FacilityToRoomScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<FacilityToRoomScalarWhereWithAggregatesInput>
-    OR?: Enumerable<FacilityToRoomScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<FacilityToRoomScalarWhereWithAggregatesInput>
+  export type FacilityToCoWorkScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<FacilityToCoWorkScalarWhereWithAggregatesInput>
+    OR?: Enumerable<FacilityToCoWorkScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<FacilityToCoWorkScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
-    roomId?: IntWithAggregatesFilter | number
+    coWorkId?: IntWithAggregatesFilter | number
     facilityId?: IntWithAggregatesFilter | number
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
@@ -13719,6 +14829,7 @@ export namespace Prisma {
     userInternal: UserInternalCreateNestedOneWithoutCoWorkInput
     BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
     OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
   }
 
   export type CoWorkUncheckedCreateInput = {
@@ -13731,6 +14842,7 @@ export namespace Prisma {
     userInternalId: number
     BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
     OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
   }
 
   export type CoWorkUpdateInput = {
@@ -13742,6 +14854,7 @@ export namespace Prisma {
     userInternal?: UserInternalUpdateOneRequiredWithoutCoWorkNestedInput
     BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
     OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
   }
 
   export type CoWorkUncheckedUpdateInput = {
@@ -13754,6 +14867,7 @@ export namespace Prisma {
     userInternalId?: IntFieldUpdateOperationsInput | number
     BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
     OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
   }
 
   export type CoWorkCreateManyInput = {
@@ -13787,7 +14901,7 @@ export namespace Prisma {
   export type UserInternalCreateInput = {
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt?: Date | string
     updateAt?: Date | string
@@ -13798,7 +14912,7 @@ export namespace Prisma {
     id?: number
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt?: Date | string
     updateAt?: Date | string
@@ -13808,7 +14922,7 @@ export namespace Prisma {
   export type UserInternalUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13819,7 +14933,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13830,7 +14944,7 @@ export namespace Prisma {
     id?: number
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt?: Date | string
     updateAt?: Date | string
@@ -13839,7 +14953,7 @@ export namespace Prisma {
   export type UserInternalUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13849,7 +14963,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13860,9 +14974,8 @@ export namespace Prisma {
     capacity: number
     createAt?: Date | string
     updateAt?: Date | string
-    RoomPrice?: RoomRateCreateNestedManyWithoutRoomInput
-    FacilityToRoom?: FacilityToRoomCreateNestedManyWithoutRoomInput
     BranchToRoom?: BranchToRoomCreateNestedManyWithoutRoomInput
+    RoomRate?: RoomRateCreateNestedManyWithoutRoomInput
   }
 
   export type RoomUncheckedCreateInput = {
@@ -13871,9 +14984,8 @@ export namespace Prisma {
     capacity: number
     createAt?: Date | string
     updateAt?: Date | string
-    RoomPrice?: RoomRateUncheckedCreateNestedManyWithoutRoomInput
-    FacilityToRoom?: FacilityToRoomUncheckedCreateNestedManyWithoutRoomInput
     BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutRoomInput
+    RoomRate?: RoomRateUncheckedCreateNestedManyWithoutRoomInput
   }
 
   export type RoomUpdateInput = {
@@ -13881,9 +14993,8 @@ export namespace Prisma {
     capacity?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    RoomPrice?: RoomRateUpdateManyWithoutRoomNestedInput
-    FacilityToRoom?: FacilityToRoomUpdateManyWithoutRoomNestedInput
     BranchToRoom?: BranchToRoomUpdateManyWithoutRoomNestedInput
+    RoomRate?: RoomRateUpdateManyWithoutRoomNestedInput
   }
 
   export type RoomUncheckedUpdateInput = {
@@ -13892,9 +15003,8 @@ export namespace Prisma {
     capacity?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    RoomPrice?: RoomRateUncheckedUpdateManyWithoutRoomNestedInput
-    FacilityToRoom?: FacilityToRoomUncheckedUpdateManyWithoutRoomNestedInput
     BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutRoomNestedInput
+    RoomRate?: RoomRateUncheckedUpdateManyWithoutRoomNestedInput
   }
 
   export type RoomCreateManyInput = {
@@ -13922,54 +15032,53 @@ export namespace Prisma {
 
   export type RoomRateCreateInput = {
     price: number
-    time: string
     createAt?: Date | string
     updateAt?: Date | string
-    room: RoomCreateNestedOneWithoutRoomPriceInput
     BookRoom?: BookRoomCreateNestedManyWithoutRoomRateInput
+    duration: durationCategoryCreateNestedOneWithoutRoomRateInput
+    room: RoomCreateNestedOneWithoutRoomRateInput
   }
 
   export type RoomRateUncheckedCreateInput = {
     id?: number
     price: number
-    time: string
-    roomId: number
     createAt?: Date | string
     updateAt?: Date | string
+    durationCategoryId: number
+    roomId: number
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutRoomRateInput
   }
 
   export type RoomRateUpdateInput = {
     price?: IntFieldUpdateOperationsInput | number
-    time?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    room?: RoomUpdateOneRequiredWithoutRoomPriceNestedInput
     BookRoom?: BookRoomUpdateManyWithoutRoomRateNestedInput
+    duration?: durationCategoryUpdateOneRequiredWithoutRoomRateNestedInput
+    room?: RoomUpdateOneRequiredWithoutRoomRateNestedInput
   }
 
   export type RoomRateUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
-    time?: StringFieldUpdateOperationsInput | string
-    roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationCategoryId?: IntFieldUpdateOperationsInput | number
+    roomId?: IntFieldUpdateOperationsInput | number
     BookRoom?: BookRoomUncheckedUpdateManyWithoutRoomRateNestedInput
   }
 
   export type RoomRateCreateManyInput = {
     id?: number
     price: number
-    time: string
-    roomId: number
     createAt?: Date | string
     updateAt?: Date | string
+    durationCategoryId: number
+    roomId: number
   }
 
   export type RoomRateUpdateManyMutationInput = {
     price?: IntFieldUpdateOperationsInput | number
-    time?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13977,8 +15086,58 @@ export namespace Prisma {
   export type RoomRateUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
-    time?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationCategoryId?: IntFieldUpdateOperationsInput | number
     roomId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type durationCategoryCreateInput = {
+    duration: string
+    createAt?: Date | string
+    updateAt?: Date | string
+    RoomRate?: RoomRateCreateNestedManyWithoutDurationInput
+  }
+
+  export type durationCategoryUncheckedCreateInput = {
+    id?: number
+    duration: string
+    createAt?: Date | string
+    updateAt?: Date | string
+    RoomRate?: RoomRateUncheckedCreateNestedManyWithoutDurationInput
+  }
+
+  export type durationCategoryUpdateInput = {
+    duration?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    RoomRate?: RoomRateUpdateManyWithoutDurationNestedInput
+  }
+
+  export type durationCategoryUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    duration?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    RoomRate?: RoomRateUncheckedUpdateManyWithoutDurationNestedInput
+  }
+
+  export type durationCategoryCreateManyInput = {
+    id?: number
+    duration: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type durationCategoryUpdateManyMutationInput = {
+    duration?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type durationCategoryUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    duration?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13987,7 +15146,7 @@ export namespace Prisma {
     name: string
     createAt?: Date | string
     updateAt?: Date | string
-    FacilityToRoom?: FacilityToRoomCreateNestedManyWithoutFacilitiesInput
+    FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateInput = {
@@ -13995,14 +15154,14 @@ export namespace Prisma {
     name: string
     createAt?: Date | string
     updateAt?: Date | string
-    FacilityToRoom?: FacilityToRoomUncheckedCreateNestedManyWithoutFacilitiesInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    FacilityToRoom?: FacilityToRoomUpdateManyWithoutFacilitiesNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateInput = {
@@ -14010,7 +15169,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    FacilityToRoom?: FacilityToRoomUncheckedUpdateManyWithoutFacilitiesNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityCreateManyInput = {
@@ -14033,52 +15192,52 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FacilityToRoomCreateInput = {
+  export type FacilityToCoWorkCreateInput = {
     createAt?: Date | string
     updateAt?: Date | string
-    room: RoomCreateNestedOneWithoutFacilityToRoomInput
-    facilities: FacilityCreateNestedOneWithoutFacilityToRoomInput
+    coWork: CoWorkCreateNestedOneWithoutFacilityToCoWorkInput
+    facility: FacilityCreateNestedOneWithoutFacilityToCoWorkInput
   }
 
-  export type FacilityToRoomUncheckedCreateInput = {
+  export type FacilityToCoWorkUncheckedCreateInput = {
     id?: number
-    roomId: number
+    coWorkId: number
     facilityId: number
     createAt?: Date | string
     updateAt?: Date | string
   }
 
-  export type FacilityToRoomUpdateInput = {
+  export type FacilityToCoWorkUpdateInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    room?: RoomUpdateOneRequiredWithoutFacilityToRoomNestedInput
-    facilities?: FacilityUpdateOneRequiredWithoutFacilityToRoomNestedInput
+    coWork?: CoWorkUpdateOneRequiredWithoutFacilityToCoWorkNestedInput
+    facility?: FacilityUpdateOneRequiredWithoutFacilityToCoWorkNestedInput
   }
 
-  export type FacilityToRoomUncheckedUpdateInput = {
+  export type FacilityToCoWorkUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    roomId?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
     facilityId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FacilityToRoomCreateManyInput = {
+  export type FacilityToCoWorkCreateManyInput = {
     id?: number
-    roomId: number
+    coWorkId: number
     facilityId: number
     createAt?: Date | string
     updateAt?: Date | string
   }
 
-  export type FacilityToRoomUpdateManyMutationInput = {
+  export type FacilityToCoWorkUpdateManyMutationInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FacilityToRoomUncheckedUpdateManyInput = {
+  export type FacilityToCoWorkUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    roomId?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
     facilityId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14663,7 +15822,17 @@ export namespace Prisma {
     isNot?: OpenCloseWhereInput | null
   }
 
+  export type FacilityToCoWorkListRelationFilter = {
+    every?: FacilityToCoWorkWhereInput
+    some?: FacilityToCoWorkWhereInput
+    none?: FacilityToCoWorkWhereInput
+  }
+
   export type BranchToRoomOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FacilityToCoWorkOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14731,7 +15900,6 @@ export namespace Prisma {
 
   export type UserInternalAvgOrderByAggregateInput = {
     id?: SortOrder
-    tel?: SortOrder
   }
 
   export type UserInternalMaxOrderByAggregateInput = {
@@ -14756,7 +15924,6 @@ export namespace Prisma {
 
   export type UserInternalSumOrderByAggregateInput = {
     id?: SortOrder
-    tel?: SortOrder
   }
 
   export type RoomRateListRelationFilter = {
@@ -14765,17 +15932,7 @@ export namespace Prisma {
     none?: RoomRateWhereInput
   }
 
-  export type FacilityToRoomListRelationFilter = {
-    every?: FacilityToRoomWhereInput
-    some?: FacilityToRoomWhereInput
-    none?: FacilityToRoomWhereInput
-  }
-
   export type RoomRateOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type FacilityToRoomOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14813,6 +15970,11 @@ export namespace Prisma {
     capacity?: SortOrder
   }
 
+  export type DurationCategoryRelationFilter = {
+    is?: durationCategoryWhereInput
+    isNot?: durationCategoryWhereInput
+  }
+
   export type RoomRelationFilter = {
     is?: RoomWhereInput
     isNot?: RoomWhereInput
@@ -14821,40 +15983,71 @@ export namespace Prisma {
   export type RoomRateCountOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
-    time?: SortOrder
-    roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    durationCategoryId?: SortOrder
+    roomId?: SortOrder
   }
 
   export type RoomRateAvgOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
+    durationCategoryId?: SortOrder
     roomId?: SortOrder
   }
 
   export type RoomRateMaxOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
-    time?: SortOrder
-    roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    durationCategoryId?: SortOrder
+    roomId?: SortOrder
   }
 
   export type RoomRateMinOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
-    time?: SortOrder
-    roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    durationCategoryId?: SortOrder
+    roomId?: SortOrder
   }
 
   export type RoomRateSumOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
+    durationCategoryId?: SortOrder
     roomId?: SortOrder
+  }
+
+  export type durationCategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    duration?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type durationCategoryAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type durationCategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    duration?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type durationCategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    duration?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type durationCategorySumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type FacilityCountOrderByAggregateInput = {
@@ -14886,50 +16079,50 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type CoWorkRelationFilter = {
+    is?: CoWorkWhereInput
+    isNot?: CoWorkWhereInput
+  }
+
   export type FacilityRelationFilter = {
     is?: FacilityWhereInput
     isNot?: FacilityWhereInput
   }
 
-  export type FacilityToRoomCountOrderByAggregateInput = {
+  export type FacilityToCoWorkCountOrderByAggregateInput = {
     id?: SortOrder
-    roomId?: SortOrder
+    coWorkId?: SortOrder
     facilityId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
   }
 
-  export type FacilityToRoomAvgOrderByAggregateInput = {
+  export type FacilityToCoWorkAvgOrderByAggregateInput = {
     id?: SortOrder
-    roomId?: SortOrder
+    coWorkId?: SortOrder
     facilityId?: SortOrder
   }
 
-  export type FacilityToRoomMaxOrderByAggregateInput = {
+  export type FacilityToCoWorkMaxOrderByAggregateInput = {
     id?: SortOrder
-    roomId?: SortOrder
-    facilityId?: SortOrder
-    createAt?: SortOrder
-    updateAt?: SortOrder
-  }
-
-  export type FacilityToRoomMinOrderByAggregateInput = {
-    id?: SortOrder
-    roomId?: SortOrder
+    coWorkId?: SortOrder
     facilityId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
   }
 
-  export type FacilityToRoomSumOrderByAggregateInput = {
+  export type FacilityToCoWorkMinOrderByAggregateInput = {
     id?: SortOrder
-    roomId?: SortOrder
+    coWorkId?: SortOrder
     facilityId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
   }
 
-  export type CoWorkRelationFilter = {
-    is?: CoWorkWhereInput
-    isNot?: CoWorkWhereInput
+  export type FacilityToCoWorkSumOrderByAggregateInput = {
+    id?: SortOrder
+    coWorkId?: SortOrder
+    facilityId?: SortOrder
   }
 
   export type BranchToRoomCountOrderByAggregateInput = {
@@ -15332,6 +16525,13 @@ export namespace Prisma {
     connect?: OpenCloseWhereUniqueInput
   }
 
+  export type FacilityToCoWorkCreateNestedManyWithoutCoWorkInput = {
+    create?: XOR<Enumerable<FacilityToCoWorkCreateWithoutCoWorkInput>, Enumerable<FacilityToCoWorkUncheckedCreateWithoutCoWorkInput>>
+    connectOrCreate?: Enumerable<FacilityToCoWorkCreateOrConnectWithoutCoWorkInput>
+    createMany?: FacilityToCoWorkCreateManyCoWorkInputEnvelope
+    connect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+  }
+
   export type BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput = {
     create?: XOR<Enumerable<BranchToRoomCreateWithoutCoWorkInput>, Enumerable<BranchToRoomUncheckedCreateWithoutCoWorkInput>>
     connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutCoWorkInput>
@@ -15343,6 +16543,13 @@ export namespace Prisma {
     create?: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
     connectOrCreate?: OpenCloseCreateOrConnectWithoutCoWorkInput
     connect?: OpenCloseWhereUniqueInput
+  }
+
+  export type FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput = {
+    create?: XOR<Enumerable<FacilityToCoWorkCreateWithoutCoWorkInput>, Enumerable<FacilityToCoWorkUncheckedCreateWithoutCoWorkInput>>
+    connectOrCreate?: Enumerable<FacilityToCoWorkCreateOrConnectWithoutCoWorkInput>
+    createMany?: FacilityToCoWorkCreateManyCoWorkInputEnvelope
+    connect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
   }
 
   export type UserInternalUpdateOneRequiredWithoutCoWorkNestedInput = {
@@ -15377,6 +16584,20 @@ export namespace Prisma {
     update?: XOR<OpenCloseUpdateWithoutCoWorkInput, OpenCloseUncheckedUpdateWithoutCoWorkInput>
   }
 
+  export type FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput = {
+    create?: XOR<Enumerable<FacilityToCoWorkCreateWithoutCoWorkInput>, Enumerable<FacilityToCoWorkUncheckedCreateWithoutCoWorkInput>>
+    connectOrCreate?: Enumerable<FacilityToCoWorkCreateOrConnectWithoutCoWorkInput>
+    upsert?: Enumerable<FacilityToCoWorkUpsertWithWhereUniqueWithoutCoWorkInput>
+    createMany?: FacilityToCoWorkCreateManyCoWorkInputEnvelope
+    set?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    disconnect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    delete?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    connect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    update?: Enumerable<FacilityToCoWorkUpdateWithWhereUniqueWithoutCoWorkInput>
+    updateMany?: Enumerable<FacilityToCoWorkUpdateManyWithWhereWithoutCoWorkInput>
+    deleteMany?: Enumerable<FacilityToCoWorkScalarWhereInput>
+  }
+
   export type BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput = {
     create?: XOR<Enumerable<BranchToRoomCreateWithoutCoWorkInput>, Enumerable<BranchToRoomUncheckedCreateWithoutCoWorkInput>>
     connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutCoWorkInput>
@@ -15399,6 +16620,20 @@ export namespace Prisma {
     delete?: boolean
     connect?: OpenCloseWhereUniqueInput
     update?: XOR<OpenCloseUpdateWithoutCoWorkInput, OpenCloseUncheckedUpdateWithoutCoWorkInput>
+  }
+
+  export type FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput = {
+    create?: XOR<Enumerable<FacilityToCoWorkCreateWithoutCoWorkInput>, Enumerable<FacilityToCoWorkUncheckedCreateWithoutCoWorkInput>>
+    connectOrCreate?: Enumerable<FacilityToCoWorkCreateOrConnectWithoutCoWorkInput>
+    upsert?: Enumerable<FacilityToCoWorkUpsertWithWhereUniqueWithoutCoWorkInput>
+    createMany?: FacilityToCoWorkCreateManyCoWorkInputEnvelope
+    set?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    disconnect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    delete?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    connect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    update?: Enumerable<FacilityToCoWorkUpdateWithWhereUniqueWithoutCoWorkInput>
+    updateMany?: Enumerable<FacilityToCoWorkUpdateManyWithWhereWithoutCoWorkInput>
+    deleteMany?: Enumerable<FacilityToCoWorkScalarWhereInput>
   }
 
   export type CoWorkCreateNestedManyWithoutUserInternalInput = {
@@ -15443,6 +16678,13 @@ export namespace Prisma {
     deleteMany?: Enumerable<CoWorkScalarWhereInput>
   }
 
+  export type BranchToRoomCreateNestedManyWithoutRoomInput = {
+    create?: XOR<Enumerable<BranchToRoomCreateWithoutRoomInput>, Enumerable<BranchToRoomUncheckedCreateWithoutRoomInput>>
+    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutRoomInput>
+    createMany?: BranchToRoomCreateManyRoomInputEnvelope
+    connect?: Enumerable<BranchToRoomWhereUniqueInput>
+  }
+
   export type RoomRateCreateNestedManyWithoutRoomInput = {
     create?: XOR<Enumerable<RoomRateCreateWithoutRoomInput>, Enumerable<RoomRateUncheckedCreateWithoutRoomInput>>
     connectOrCreate?: Enumerable<RoomRateCreateOrConnectWithoutRoomInput>
@@ -15450,14 +16692,7 @@ export namespace Prisma {
     connect?: Enumerable<RoomRateWhereUniqueInput>
   }
 
-  export type FacilityToRoomCreateNestedManyWithoutRoomInput = {
-    create?: XOR<Enumerable<FacilityToRoomCreateWithoutRoomInput>, Enumerable<FacilityToRoomUncheckedCreateWithoutRoomInput>>
-    connectOrCreate?: Enumerable<FacilityToRoomCreateOrConnectWithoutRoomInput>
-    createMany?: FacilityToRoomCreateManyRoomInputEnvelope
-    connect?: Enumerable<FacilityToRoomWhereUniqueInput>
-  }
-
-  export type BranchToRoomCreateNestedManyWithoutRoomInput = {
+  export type BranchToRoomUncheckedCreateNestedManyWithoutRoomInput = {
     create?: XOR<Enumerable<BranchToRoomCreateWithoutRoomInput>, Enumerable<BranchToRoomUncheckedCreateWithoutRoomInput>>
     connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutRoomInput>
     createMany?: BranchToRoomCreateManyRoomInputEnvelope
@@ -15471,18 +16706,18 @@ export namespace Prisma {
     connect?: Enumerable<RoomRateWhereUniqueInput>
   }
 
-  export type FacilityToRoomUncheckedCreateNestedManyWithoutRoomInput = {
-    create?: XOR<Enumerable<FacilityToRoomCreateWithoutRoomInput>, Enumerable<FacilityToRoomUncheckedCreateWithoutRoomInput>>
-    connectOrCreate?: Enumerable<FacilityToRoomCreateOrConnectWithoutRoomInput>
-    createMany?: FacilityToRoomCreateManyRoomInputEnvelope
-    connect?: Enumerable<FacilityToRoomWhereUniqueInput>
-  }
-
-  export type BranchToRoomUncheckedCreateNestedManyWithoutRoomInput = {
+  export type BranchToRoomUpdateManyWithoutRoomNestedInput = {
     create?: XOR<Enumerable<BranchToRoomCreateWithoutRoomInput>, Enumerable<BranchToRoomUncheckedCreateWithoutRoomInput>>
     connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutRoomInput>
+    upsert?: Enumerable<BranchToRoomUpsertWithWhereUniqueWithoutRoomInput>
     createMany?: BranchToRoomCreateManyRoomInputEnvelope
+    set?: Enumerable<BranchToRoomWhereUniqueInput>
+    disconnect?: Enumerable<BranchToRoomWhereUniqueInput>
+    delete?: Enumerable<BranchToRoomWhereUniqueInput>
     connect?: Enumerable<BranchToRoomWhereUniqueInput>
+    update?: Enumerable<BranchToRoomUpdateWithWhereUniqueWithoutRoomInput>
+    updateMany?: Enumerable<BranchToRoomUpdateManyWithWhereWithoutRoomInput>
+    deleteMany?: Enumerable<BranchToRoomScalarWhereInput>
   }
 
   export type RoomRateUpdateManyWithoutRoomNestedInput = {
@@ -15499,21 +16734,7 @@ export namespace Prisma {
     deleteMany?: Enumerable<RoomRateScalarWhereInput>
   }
 
-  export type FacilityToRoomUpdateManyWithoutRoomNestedInput = {
-    create?: XOR<Enumerable<FacilityToRoomCreateWithoutRoomInput>, Enumerable<FacilityToRoomUncheckedCreateWithoutRoomInput>>
-    connectOrCreate?: Enumerable<FacilityToRoomCreateOrConnectWithoutRoomInput>
-    upsert?: Enumerable<FacilityToRoomUpsertWithWhereUniqueWithoutRoomInput>
-    createMany?: FacilityToRoomCreateManyRoomInputEnvelope
-    set?: Enumerable<FacilityToRoomWhereUniqueInput>
-    disconnect?: Enumerable<FacilityToRoomWhereUniqueInput>
-    delete?: Enumerable<FacilityToRoomWhereUniqueInput>
-    connect?: Enumerable<FacilityToRoomWhereUniqueInput>
-    update?: Enumerable<FacilityToRoomUpdateWithWhereUniqueWithoutRoomInput>
-    updateMany?: Enumerable<FacilityToRoomUpdateManyWithWhereWithoutRoomInput>
-    deleteMany?: Enumerable<FacilityToRoomScalarWhereInput>
-  }
-
-  export type BranchToRoomUpdateManyWithoutRoomNestedInput = {
+  export type BranchToRoomUncheckedUpdateManyWithoutRoomNestedInput = {
     create?: XOR<Enumerable<BranchToRoomCreateWithoutRoomInput>, Enumerable<BranchToRoomUncheckedCreateWithoutRoomInput>>
     connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutRoomInput>
     upsert?: Enumerable<BranchToRoomUpsertWithWhereUniqueWithoutRoomInput>
@@ -15541,40 +16762,6 @@ export namespace Prisma {
     deleteMany?: Enumerable<RoomRateScalarWhereInput>
   }
 
-  export type FacilityToRoomUncheckedUpdateManyWithoutRoomNestedInput = {
-    create?: XOR<Enumerable<FacilityToRoomCreateWithoutRoomInput>, Enumerable<FacilityToRoomUncheckedCreateWithoutRoomInput>>
-    connectOrCreate?: Enumerable<FacilityToRoomCreateOrConnectWithoutRoomInput>
-    upsert?: Enumerable<FacilityToRoomUpsertWithWhereUniqueWithoutRoomInput>
-    createMany?: FacilityToRoomCreateManyRoomInputEnvelope
-    set?: Enumerable<FacilityToRoomWhereUniqueInput>
-    disconnect?: Enumerable<FacilityToRoomWhereUniqueInput>
-    delete?: Enumerable<FacilityToRoomWhereUniqueInput>
-    connect?: Enumerable<FacilityToRoomWhereUniqueInput>
-    update?: Enumerable<FacilityToRoomUpdateWithWhereUniqueWithoutRoomInput>
-    updateMany?: Enumerable<FacilityToRoomUpdateManyWithWhereWithoutRoomInput>
-    deleteMany?: Enumerable<FacilityToRoomScalarWhereInput>
-  }
-
-  export type BranchToRoomUncheckedUpdateManyWithoutRoomNestedInput = {
-    create?: XOR<Enumerable<BranchToRoomCreateWithoutRoomInput>, Enumerable<BranchToRoomUncheckedCreateWithoutRoomInput>>
-    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutRoomInput>
-    upsert?: Enumerable<BranchToRoomUpsertWithWhereUniqueWithoutRoomInput>
-    createMany?: BranchToRoomCreateManyRoomInputEnvelope
-    set?: Enumerable<BranchToRoomWhereUniqueInput>
-    disconnect?: Enumerable<BranchToRoomWhereUniqueInput>
-    delete?: Enumerable<BranchToRoomWhereUniqueInput>
-    connect?: Enumerable<BranchToRoomWhereUniqueInput>
-    update?: Enumerable<BranchToRoomUpdateWithWhereUniqueWithoutRoomInput>
-    updateMany?: Enumerable<BranchToRoomUpdateManyWithWhereWithoutRoomInput>
-    deleteMany?: Enumerable<BranchToRoomScalarWhereInput>
-  }
-
-  export type RoomCreateNestedOneWithoutRoomPriceInput = {
-    create?: XOR<RoomCreateWithoutRoomPriceInput, RoomUncheckedCreateWithoutRoomPriceInput>
-    connectOrCreate?: RoomCreateOrConnectWithoutRoomPriceInput
-    connect?: RoomWhereUniqueInput
-  }
-
   export type BookRoomCreateNestedManyWithoutRoomRateInput = {
     create?: XOR<Enumerable<BookRoomCreateWithoutRoomRateInput>, Enumerable<BookRoomUncheckedCreateWithoutRoomRateInput>>
     connectOrCreate?: Enumerable<BookRoomCreateOrConnectWithoutRoomRateInput>
@@ -15582,19 +16769,23 @@ export namespace Prisma {
     connect?: Enumerable<BookRoomWhereUniqueInput>
   }
 
+  export type durationCategoryCreateNestedOneWithoutRoomRateInput = {
+    create?: XOR<durationCategoryCreateWithoutRoomRateInput, durationCategoryUncheckedCreateWithoutRoomRateInput>
+    connectOrCreate?: durationCategoryCreateOrConnectWithoutRoomRateInput
+    connect?: durationCategoryWhereUniqueInput
+  }
+
+  export type RoomCreateNestedOneWithoutRoomRateInput = {
+    create?: XOR<RoomCreateWithoutRoomRateInput, RoomUncheckedCreateWithoutRoomRateInput>
+    connectOrCreate?: RoomCreateOrConnectWithoutRoomRateInput
+    connect?: RoomWhereUniqueInput
+  }
+
   export type BookRoomUncheckedCreateNestedManyWithoutRoomRateInput = {
     create?: XOR<Enumerable<BookRoomCreateWithoutRoomRateInput>, Enumerable<BookRoomUncheckedCreateWithoutRoomRateInput>>
     connectOrCreate?: Enumerable<BookRoomCreateOrConnectWithoutRoomRateInput>
     createMany?: BookRoomCreateManyRoomRateInputEnvelope
     connect?: Enumerable<BookRoomWhereUniqueInput>
-  }
-
-  export type RoomUpdateOneRequiredWithoutRoomPriceNestedInput = {
-    create?: XOR<RoomCreateWithoutRoomPriceInput, RoomUncheckedCreateWithoutRoomPriceInput>
-    connectOrCreate?: RoomCreateOrConnectWithoutRoomPriceInput
-    upsert?: RoomUpsertWithoutRoomPriceInput
-    connect?: RoomWhereUniqueInput
-    update?: XOR<RoomUpdateWithoutRoomPriceInput, RoomUncheckedUpdateWithoutRoomPriceInput>
   }
 
   export type BookRoomUpdateManyWithoutRoomRateNestedInput = {
@@ -15611,6 +16802,22 @@ export namespace Prisma {
     deleteMany?: Enumerable<BookRoomScalarWhereInput>
   }
 
+  export type durationCategoryUpdateOneRequiredWithoutRoomRateNestedInput = {
+    create?: XOR<durationCategoryCreateWithoutRoomRateInput, durationCategoryUncheckedCreateWithoutRoomRateInput>
+    connectOrCreate?: durationCategoryCreateOrConnectWithoutRoomRateInput
+    upsert?: durationCategoryUpsertWithoutRoomRateInput
+    connect?: durationCategoryWhereUniqueInput
+    update?: XOR<durationCategoryUpdateWithoutRoomRateInput, durationCategoryUncheckedUpdateWithoutRoomRateInput>
+  }
+
+  export type RoomUpdateOneRequiredWithoutRoomRateNestedInput = {
+    create?: XOR<RoomCreateWithoutRoomRateInput, RoomUncheckedCreateWithoutRoomRateInput>
+    connectOrCreate?: RoomCreateOrConnectWithoutRoomRateInput
+    upsert?: RoomUpsertWithoutRoomRateInput
+    connect?: RoomWhereUniqueInput
+    update?: XOR<RoomUpdateWithoutRoomRateInput, RoomUncheckedUpdateWithoutRoomRateInput>
+  }
+
   export type BookRoomUncheckedUpdateManyWithoutRoomRateNestedInput = {
     create?: XOR<Enumerable<BookRoomCreateWithoutRoomRateInput>, Enumerable<BookRoomUncheckedCreateWithoutRoomRateInput>>
     connectOrCreate?: Enumerable<BookRoomCreateOrConnectWithoutRoomRateInput>
@@ -15625,74 +16832,116 @@ export namespace Prisma {
     deleteMany?: Enumerable<BookRoomScalarWhereInput>
   }
 
-  export type FacilityToRoomCreateNestedManyWithoutFacilitiesInput = {
-    create?: XOR<Enumerable<FacilityToRoomCreateWithoutFacilitiesInput>, Enumerable<FacilityToRoomUncheckedCreateWithoutFacilitiesInput>>
-    connectOrCreate?: Enumerable<FacilityToRoomCreateOrConnectWithoutFacilitiesInput>
-    createMany?: FacilityToRoomCreateManyFacilitiesInputEnvelope
-    connect?: Enumerable<FacilityToRoomWhereUniqueInput>
+  export type RoomRateCreateNestedManyWithoutDurationInput = {
+    create?: XOR<Enumerable<RoomRateCreateWithoutDurationInput>, Enumerable<RoomRateUncheckedCreateWithoutDurationInput>>
+    connectOrCreate?: Enumerable<RoomRateCreateOrConnectWithoutDurationInput>
+    createMany?: RoomRateCreateManyDurationInputEnvelope
+    connect?: Enumerable<RoomRateWhereUniqueInput>
   }
 
-  export type FacilityToRoomUncheckedCreateNestedManyWithoutFacilitiesInput = {
-    create?: XOR<Enumerable<FacilityToRoomCreateWithoutFacilitiesInput>, Enumerable<FacilityToRoomUncheckedCreateWithoutFacilitiesInput>>
-    connectOrCreate?: Enumerable<FacilityToRoomCreateOrConnectWithoutFacilitiesInput>
-    createMany?: FacilityToRoomCreateManyFacilitiesInputEnvelope
-    connect?: Enumerable<FacilityToRoomWhereUniqueInput>
+  export type RoomRateUncheckedCreateNestedManyWithoutDurationInput = {
+    create?: XOR<Enumerable<RoomRateCreateWithoutDurationInput>, Enumerable<RoomRateUncheckedCreateWithoutDurationInput>>
+    connectOrCreate?: Enumerable<RoomRateCreateOrConnectWithoutDurationInput>
+    createMany?: RoomRateCreateManyDurationInputEnvelope
+    connect?: Enumerable<RoomRateWhereUniqueInput>
   }
 
-  export type FacilityToRoomUpdateManyWithoutFacilitiesNestedInput = {
-    create?: XOR<Enumerable<FacilityToRoomCreateWithoutFacilitiesInput>, Enumerable<FacilityToRoomUncheckedCreateWithoutFacilitiesInput>>
-    connectOrCreate?: Enumerable<FacilityToRoomCreateOrConnectWithoutFacilitiesInput>
-    upsert?: Enumerable<FacilityToRoomUpsertWithWhereUniqueWithoutFacilitiesInput>
-    createMany?: FacilityToRoomCreateManyFacilitiesInputEnvelope
-    set?: Enumerable<FacilityToRoomWhereUniqueInput>
-    disconnect?: Enumerable<FacilityToRoomWhereUniqueInput>
-    delete?: Enumerable<FacilityToRoomWhereUniqueInput>
-    connect?: Enumerable<FacilityToRoomWhereUniqueInput>
-    update?: Enumerable<FacilityToRoomUpdateWithWhereUniqueWithoutFacilitiesInput>
-    updateMany?: Enumerable<FacilityToRoomUpdateManyWithWhereWithoutFacilitiesInput>
-    deleteMany?: Enumerable<FacilityToRoomScalarWhereInput>
+  export type RoomRateUpdateManyWithoutDurationNestedInput = {
+    create?: XOR<Enumerable<RoomRateCreateWithoutDurationInput>, Enumerable<RoomRateUncheckedCreateWithoutDurationInput>>
+    connectOrCreate?: Enumerable<RoomRateCreateOrConnectWithoutDurationInput>
+    upsert?: Enumerable<RoomRateUpsertWithWhereUniqueWithoutDurationInput>
+    createMany?: RoomRateCreateManyDurationInputEnvelope
+    set?: Enumerable<RoomRateWhereUniqueInput>
+    disconnect?: Enumerable<RoomRateWhereUniqueInput>
+    delete?: Enumerable<RoomRateWhereUniqueInput>
+    connect?: Enumerable<RoomRateWhereUniqueInput>
+    update?: Enumerable<RoomRateUpdateWithWhereUniqueWithoutDurationInput>
+    updateMany?: Enumerable<RoomRateUpdateManyWithWhereWithoutDurationInput>
+    deleteMany?: Enumerable<RoomRateScalarWhereInput>
   }
 
-  export type FacilityToRoomUncheckedUpdateManyWithoutFacilitiesNestedInput = {
-    create?: XOR<Enumerable<FacilityToRoomCreateWithoutFacilitiesInput>, Enumerable<FacilityToRoomUncheckedCreateWithoutFacilitiesInput>>
-    connectOrCreate?: Enumerable<FacilityToRoomCreateOrConnectWithoutFacilitiesInput>
-    upsert?: Enumerable<FacilityToRoomUpsertWithWhereUniqueWithoutFacilitiesInput>
-    createMany?: FacilityToRoomCreateManyFacilitiesInputEnvelope
-    set?: Enumerable<FacilityToRoomWhereUniqueInput>
-    disconnect?: Enumerable<FacilityToRoomWhereUniqueInput>
-    delete?: Enumerable<FacilityToRoomWhereUniqueInput>
-    connect?: Enumerable<FacilityToRoomWhereUniqueInput>
-    update?: Enumerable<FacilityToRoomUpdateWithWhereUniqueWithoutFacilitiesInput>
-    updateMany?: Enumerable<FacilityToRoomUpdateManyWithWhereWithoutFacilitiesInput>
-    deleteMany?: Enumerable<FacilityToRoomScalarWhereInput>
+  export type RoomRateUncheckedUpdateManyWithoutDurationNestedInput = {
+    create?: XOR<Enumerable<RoomRateCreateWithoutDurationInput>, Enumerable<RoomRateUncheckedCreateWithoutDurationInput>>
+    connectOrCreate?: Enumerable<RoomRateCreateOrConnectWithoutDurationInput>
+    upsert?: Enumerable<RoomRateUpsertWithWhereUniqueWithoutDurationInput>
+    createMany?: RoomRateCreateManyDurationInputEnvelope
+    set?: Enumerable<RoomRateWhereUniqueInput>
+    disconnect?: Enumerable<RoomRateWhereUniqueInput>
+    delete?: Enumerable<RoomRateWhereUniqueInput>
+    connect?: Enumerable<RoomRateWhereUniqueInput>
+    update?: Enumerable<RoomRateUpdateWithWhereUniqueWithoutDurationInput>
+    updateMany?: Enumerable<RoomRateUpdateManyWithWhereWithoutDurationInput>
+    deleteMany?: Enumerable<RoomRateScalarWhereInput>
   }
 
-  export type RoomCreateNestedOneWithoutFacilityToRoomInput = {
-    create?: XOR<RoomCreateWithoutFacilityToRoomInput, RoomUncheckedCreateWithoutFacilityToRoomInput>
-    connectOrCreate?: RoomCreateOrConnectWithoutFacilityToRoomInput
-    connect?: RoomWhereUniqueInput
+  export type FacilityToCoWorkCreateNestedManyWithoutFacilityInput = {
+    create?: XOR<Enumerable<FacilityToCoWorkCreateWithoutFacilityInput>, Enumerable<FacilityToCoWorkUncheckedCreateWithoutFacilityInput>>
+    connectOrCreate?: Enumerable<FacilityToCoWorkCreateOrConnectWithoutFacilityInput>
+    createMany?: FacilityToCoWorkCreateManyFacilityInputEnvelope
+    connect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
   }
 
-  export type FacilityCreateNestedOneWithoutFacilityToRoomInput = {
-    create?: XOR<FacilityCreateWithoutFacilityToRoomInput, FacilityUncheckedCreateWithoutFacilityToRoomInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutFacilityToRoomInput
+  export type FacilityToCoWorkUncheckedCreateNestedManyWithoutFacilityInput = {
+    create?: XOR<Enumerable<FacilityToCoWorkCreateWithoutFacilityInput>, Enumerable<FacilityToCoWorkUncheckedCreateWithoutFacilityInput>>
+    connectOrCreate?: Enumerable<FacilityToCoWorkCreateOrConnectWithoutFacilityInput>
+    createMany?: FacilityToCoWorkCreateManyFacilityInputEnvelope
+    connect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+  }
+
+  export type FacilityToCoWorkUpdateManyWithoutFacilityNestedInput = {
+    create?: XOR<Enumerable<FacilityToCoWorkCreateWithoutFacilityInput>, Enumerable<FacilityToCoWorkUncheckedCreateWithoutFacilityInput>>
+    connectOrCreate?: Enumerable<FacilityToCoWorkCreateOrConnectWithoutFacilityInput>
+    upsert?: Enumerable<FacilityToCoWorkUpsertWithWhereUniqueWithoutFacilityInput>
+    createMany?: FacilityToCoWorkCreateManyFacilityInputEnvelope
+    set?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    disconnect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    delete?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    connect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    update?: Enumerable<FacilityToCoWorkUpdateWithWhereUniqueWithoutFacilityInput>
+    updateMany?: Enumerable<FacilityToCoWorkUpdateManyWithWhereWithoutFacilityInput>
+    deleteMany?: Enumerable<FacilityToCoWorkScalarWhereInput>
+  }
+
+  export type FacilityToCoWorkUncheckedUpdateManyWithoutFacilityNestedInput = {
+    create?: XOR<Enumerable<FacilityToCoWorkCreateWithoutFacilityInput>, Enumerable<FacilityToCoWorkUncheckedCreateWithoutFacilityInput>>
+    connectOrCreate?: Enumerable<FacilityToCoWorkCreateOrConnectWithoutFacilityInput>
+    upsert?: Enumerable<FacilityToCoWorkUpsertWithWhereUniqueWithoutFacilityInput>
+    createMany?: FacilityToCoWorkCreateManyFacilityInputEnvelope
+    set?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    disconnect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    delete?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    connect?: Enumerable<FacilityToCoWorkWhereUniqueInput>
+    update?: Enumerable<FacilityToCoWorkUpdateWithWhereUniqueWithoutFacilityInput>
+    updateMany?: Enumerable<FacilityToCoWorkUpdateManyWithWhereWithoutFacilityInput>
+    deleteMany?: Enumerable<FacilityToCoWorkScalarWhereInput>
+  }
+
+  export type CoWorkCreateNestedOneWithoutFacilityToCoWorkInput = {
+    create?: XOR<CoWorkCreateWithoutFacilityToCoWorkInput, CoWorkUncheckedCreateWithoutFacilityToCoWorkInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutFacilityToCoWorkInput
+    connect?: CoWorkWhereUniqueInput
+  }
+
+  export type FacilityCreateNestedOneWithoutFacilityToCoWorkInput = {
+    create?: XOR<FacilityCreateWithoutFacilityToCoWorkInput, FacilityUncheckedCreateWithoutFacilityToCoWorkInput>
+    connectOrCreate?: FacilityCreateOrConnectWithoutFacilityToCoWorkInput
     connect?: FacilityWhereUniqueInput
   }
 
-  export type RoomUpdateOneRequiredWithoutFacilityToRoomNestedInput = {
-    create?: XOR<RoomCreateWithoutFacilityToRoomInput, RoomUncheckedCreateWithoutFacilityToRoomInput>
-    connectOrCreate?: RoomCreateOrConnectWithoutFacilityToRoomInput
-    upsert?: RoomUpsertWithoutFacilityToRoomInput
-    connect?: RoomWhereUniqueInput
-    update?: XOR<RoomUpdateWithoutFacilityToRoomInput, RoomUncheckedUpdateWithoutFacilityToRoomInput>
+  export type CoWorkUpdateOneRequiredWithoutFacilityToCoWorkNestedInput = {
+    create?: XOR<CoWorkCreateWithoutFacilityToCoWorkInput, CoWorkUncheckedCreateWithoutFacilityToCoWorkInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutFacilityToCoWorkInput
+    upsert?: CoWorkUpsertWithoutFacilityToCoWorkInput
+    connect?: CoWorkWhereUniqueInput
+    update?: XOR<CoWorkUpdateWithoutFacilityToCoWorkInput, CoWorkUncheckedUpdateWithoutFacilityToCoWorkInput>
   }
 
-  export type FacilityUpdateOneRequiredWithoutFacilityToRoomNestedInput = {
-    create?: XOR<FacilityCreateWithoutFacilityToRoomInput, FacilityUncheckedCreateWithoutFacilityToRoomInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutFacilityToRoomInput
-    upsert?: FacilityUpsertWithoutFacilityToRoomInput
+  export type FacilityUpdateOneRequiredWithoutFacilityToCoWorkNestedInput = {
+    create?: XOR<FacilityCreateWithoutFacilityToCoWorkInput, FacilityUncheckedCreateWithoutFacilityToCoWorkInput>
+    connectOrCreate?: FacilityCreateOrConnectWithoutFacilityToCoWorkInput
+    upsert?: FacilityUpsertWithoutFacilityToCoWorkInput
     connect?: FacilityWhereUniqueInput
-    update?: XOR<FacilityUpdateWithoutFacilityToRoomInput, FacilityUncheckedUpdateWithoutFacilityToRoomInput>
+    update?: XOR<FacilityUpdateWithoutFacilityToCoWorkInput, FacilityUncheckedUpdateWithoutFacilityToCoWorkInput>
   }
 
   export type CoWorkCreateNestedOneWithoutBranchToRoomInput = {
@@ -16101,7 +17350,7 @@ export namespace Prisma {
   export type UserInternalCreateWithoutCoWorkInput = {
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt?: Date | string
     updateAt?: Date | string
@@ -16111,7 +17360,7 @@ export namespace Prisma {
     id?: number
     name: string
     email: string
-    tel: number
+    tel: string
     password: string
     createAt?: Date | string
     updateAt?: Date | string
@@ -16219,6 +17468,29 @@ export namespace Prisma {
     create: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
   }
 
+  export type FacilityToCoWorkCreateWithoutCoWorkInput = {
+    createAt?: Date | string
+    updateAt?: Date | string
+    facility: FacilityCreateNestedOneWithoutFacilityToCoWorkInput
+  }
+
+  export type FacilityToCoWorkUncheckedCreateWithoutCoWorkInput = {
+    id?: number
+    facilityId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type FacilityToCoWorkCreateOrConnectWithoutCoWorkInput = {
+    where: FacilityToCoWorkWhereUniqueInput
+    create: XOR<FacilityToCoWorkCreateWithoutCoWorkInput, FacilityToCoWorkUncheckedCreateWithoutCoWorkInput>
+  }
+
+  export type FacilityToCoWorkCreateManyCoWorkInputEnvelope = {
+    data: Enumerable<FacilityToCoWorkCreateManyCoWorkInput>
+    skipDuplicates?: boolean
+  }
+
   export type UserInternalUpsertWithoutCoWorkInput = {
     update: XOR<UserInternalUpdateWithoutCoWorkInput, UserInternalUncheckedUpdateWithoutCoWorkInput>
     create: XOR<UserInternalCreateWithoutCoWorkInput, UserInternalUncheckedCreateWithoutCoWorkInput>
@@ -16227,7 +17499,7 @@ export namespace Prisma {
   export type UserInternalUpdateWithoutCoWorkInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16237,7 +17509,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    tel?: IntFieldUpdateOperationsInput | number
+    tel?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16342,6 +17614,33 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FacilityToCoWorkUpsertWithWhereUniqueWithoutCoWorkInput = {
+    where: FacilityToCoWorkWhereUniqueInput
+    update: XOR<FacilityToCoWorkUpdateWithoutCoWorkInput, FacilityToCoWorkUncheckedUpdateWithoutCoWorkInput>
+    create: XOR<FacilityToCoWorkCreateWithoutCoWorkInput, FacilityToCoWorkUncheckedCreateWithoutCoWorkInput>
+  }
+
+  export type FacilityToCoWorkUpdateWithWhereUniqueWithoutCoWorkInput = {
+    where: FacilityToCoWorkWhereUniqueInput
+    data: XOR<FacilityToCoWorkUpdateWithoutCoWorkInput, FacilityToCoWorkUncheckedUpdateWithoutCoWorkInput>
+  }
+
+  export type FacilityToCoWorkUpdateManyWithWhereWithoutCoWorkInput = {
+    where: FacilityToCoWorkScalarWhereInput
+    data: XOR<FacilityToCoWorkUpdateManyMutationInput, FacilityToCoWorkUncheckedUpdateManyWithoutFacilityToCoWorkInput>
+  }
+
+  export type FacilityToCoWorkScalarWhereInput = {
+    AND?: Enumerable<FacilityToCoWorkScalarWhereInput>
+    OR?: Enumerable<FacilityToCoWorkScalarWhereInput>
+    NOT?: Enumerable<FacilityToCoWorkScalarWhereInput>
+    id?: IntFilter | number
+    coWorkId?: IntFilter | number
+    facilityId?: IntFilter | number
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
+  }
+
   export type CoWorkCreateWithoutUserInternalInput = {
     name: string
     description: string
@@ -16350,6 +17649,7 @@ export namespace Prisma {
     picture: string
     BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
     OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
   }
 
   export type CoWorkUncheckedCreateWithoutUserInternalInput = {
@@ -16361,6 +17661,7 @@ export namespace Prisma {
     picture: string
     BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
     OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
   }
 
   export type CoWorkCreateOrConnectWithoutUserInternalInput = {
@@ -16402,56 +17703,6 @@ export namespace Prisma {
     userInternalId?: IntFilter | number
   }
 
-  export type RoomRateCreateWithoutRoomInput = {
-    price: number
-    time: string
-    createAt?: Date | string
-    updateAt?: Date | string
-    BookRoom?: BookRoomCreateNestedManyWithoutRoomRateInput
-  }
-
-  export type RoomRateUncheckedCreateWithoutRoomInput = {
-    id?: number
-    price: number
-    time: string
-    createAt?: Date | string
-    updateAt?: Date | string
-    BookRoom?: BookRoomUncheckedCreateNestedManyWithoutRoomRateInput
-  }
-
-  export type RoomRateCreateOrConnectWithoutRoomInput = {
-    where: RoomRateWhereUniqueInput
-    create: XOR<RoomRateCreateWithoutRoomInput, RoomRateUncheckedCreateWithoutRoomInput>
-  }
-
-  export type RoomRateCreateManyRoomInputEnvelope = {
-    data: Enumerable<RoomRateCreateManyRoomInput>
-    skipDuplicates?: boolean
-  }
-
-  export type FacilityToRoomCreateWithoutRoomInput = {
-    createAt?: Date | string
-    updateAt?: Date | string
-    facilities: FacilityCreateNestedOneWithoutFacilityToRoomInput
-  }
-
-  export type FacilityToRoomUncheckedCreateWithoutRoomInput = {
-    id?: number
-    facilityId: number
-    createAt?: Date | string
-    updateAt?: Date | string
-  }
-
-  export type FacilityToRoomCreateOrConnectWithoutRoomInput = {
-    where: FacilityToRoomWhereUniqueInput
-    create: XOR<FacilityToRoomCreateWithoutRoomInput, FacilityToRoomUncheckedCreateWithoutRoomInput>
-  }
-
-  export type FacilityToRoomCreateManyRoomInputEnvelope = {
-    data: Enumerable<FacilityToRoomCreateManyRoomInput>
-    skipDuplicates?: boolean
-  }
-
   export type BranchToRoomCreateWithoutRoomInput = {
     createAt?: Date | string
     updateAt?: Date | string
@@ -16477,59 +17728,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type RoomRateUpsertWithWhereUniqueWithoutRoomInput = {
+  export type RoomRateCreateWithoutRoomInput = {
+    price: number
+    createAt?: Date | string
+    updateAt?: Date | string
+    BookRoom?: BookRoomCreateNestedManyWithoutRoomRateInput
+    duration: durationCategoryCreateNestedOneWithoutRoomRateInput
+  }
+
+  export type RoomRateUncheckedCreateWithoutRoomInput = {
+    id?: number
+    price: number
+    createAt?: Date | string
+    updateAt?: Date | string
+    durationCategoryId: number
+    BookRoom?: BookRoomUncheckedCreateNestedManyWithoutRoomRateInput
+  }
+
+  export type RoomRateCreateOrConnectWithoutRoomInput = {
     where: RoomRateWhereUniqueInput
-    update: XOR<RoomRateUpdateWithoutRoomInput, RoomRateUncheckedUpdateWithoutRoomInput>
     create: XOR<RoomRateCreateWithoutRoomInput, RoomRateUncheckedCreateWithoutRoomInput>
   }
 
-  export type RoomRateUpdateWithWhereUniqueWithoutRoomInput = {
-    where: RoomRateWhereUniqueInput
-    data: XOR<RoomRateUpdateWithoutRoomInput, RoomRateUncheckedUpdateWithoutRoomInput>
-  }
-
-  export type RoomRateUpdateManyWithWhereWithoutRoomInput = {
-    where: RoomRateScalarWhereInput
-    data: XOR<RoomRateUpdateManyMutationInput, RoomRateUncheckedUpdateManyWithoutRoomPriceInput>
-  }
-
-  export type RoomRateScalarWhereInput = {
-    AND?: Enumerable<RoomRateScalarWhereInput>
-    OR?: Enumerable<RoomRateScalarWhereInput>
-    NOT?: Enumerable<RoomRateScalarWhereInput>
-    id?: IntFilter | number
-    price?: IntFilter | number
-    time?: StringFilter | string
-    roomId?: IntFilter | number
-    createAt?: DateTimeFilter | Date | string
-    updateAt?: DateTimeFilter | Date | string
-  }
-
-  export type FacilityToRoomUpsertWithWhereUniqueWithoutRoomInput = {
-    where: FacilityToRoomWhereUniqueInput
-    update: XOR<FacilityToRoomUpdateWithoutRoomInput, FacilityToRoomUncheckedUpdateWithoutRoomInput>
-    create: XOR<FacilityToRoomCreateWithoutRoomInput, FacilityToRoomUncheckedCreateWithoutRoomInput>
-  }
-
-  export type FacilityToRoomUpdateWithWhereUniqueWithoutRoomInput = {
-    where: FacilityToRoomWhereUniqueInput
-    data: XOR<FacilityToRoomUpdateWithoutRoomInput, FacilityToRoomUncheckedUpdateWithoutRoomInput>
-  }
-
-  export type FacilityToRoomUpdateManyWithWhereWithoutRoomInput = {
-    where: FacilityToRoomScalarWhereInput
-    data: XOR<FacilityToRoomUpdateManyMutationInput, FacilityToRoomUncheckedUpdateManyWithoutFacilityToRoomInput>
-  }
-
-  export type FacilityToRoomScalarWhereInput = {
-    AND?: Enumerable<FacilityToRoomScalarWhereInput>
-    OR?: Enumerable<FacilityToRoomScalarWhereInput>
-    NOT?: Enumerable<FacilityToRoomScalarWhereInput>
-    id?: IntFilter | number
-    roomId?: IntFilter | number
-    facilityId?: IntFilter | number
-    createAt?: DateTimeFilter | Date | string
-    updateAt?: DateTimeFilter | Date | string
+  export type RoomRateCreateManyRoomInputEnvelope = {
+    data: Enumerable<RoomRateCreateManyRoomInput>
+    skipDuplicates?: boolean
   }
 
   export type BranchToRoomUpsertWithWhereUniqueWithoutRoomInput = {
@@ -16548,28 +17771,32 @@ export namespace Prisma {
     data: XOR<BranchToRoomUpdateManyMutationInput, BranchToRoomUncheckedUpdateManyWithoutBranchToRoomInput>
   }
 
-  export type RoomCreateWithoutRoomPriceInput = {
-    name: string
-    capacity: number
-    createAt?: Date | string
-    updateAt?: Date | string
-    FacilityToRoom?: FacilityToRoomCreateNestedManyWithoutRoomInput
-    BranchToRoom?: BranchToRoomCreateNestedManyWithoutRoomInput
+  export type RoomRateUpsertWithWhereUniqueWithoutRoomInput = {
+    where: RoomRateWhereUniqueInput
+    update: XOR<RoomRateUpdateWithoutRoomInput, RoomRateUncheckedUpdateWithoutRoomInput>
+    create: XOR<RoomRateCreateWithoutRoomInput, RoomRateUncheckedCreateWithoutRoomInput>
   }
 
-  export type RoomUncheckedCreateWithoutRoomPriceInput = {
-    id?: number
-    name: string
-    capacity: number
-    createAt?: Date | string
-    updateAt?: Date | string
-    FacilityToRoom?: FacilityToRoomUncheckedCreateNestedManyWithoutRoomInput
-    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutRoomInput
+  export type RoomRateUpdateWithWhereUniqueWithoutRoomInput = {
+    where: RoomRateWhereUniqueInput
+    data: XOR<RoomRateUpdateWithoutRoomInput, RoomRateUncheckedUpdateWithoutRoomInput>
   }
 
-  export type RoomCreateOrConnectWithoutRoomPriceInput = {
-    where: RoomWhereUniqueInput
-    create: XOR<RoomCreateWithoutRoomPriceInput, RoomUncheckedCreateWithoutRoomPriceInput>
+  export type RoomRateUpdateManyWithWhereWithoutRoomInput = {
+    where: RoomRateScalarWhereInput
+    data: XOR<RoomRateUpdateManyMutationInput, RoomRateUncheckedUpdateManyWithoutRoomRateInput>
+  }
+
+  export type RoomRateScalarWhereInput = {
+    AND?: Enumerable<RoomRateScalarWhereInput>
+    OR?: Enumerable<RoomRateScalarWhereInput>
+    NOT?: Enumerable<RoomRateScalarWhereInput>
+    id?: IntFilter | number
+    price?: IntFilter | number
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
+    durationCategoryId?: IntFilter | number
+    roomId?: IntFilter | number
   }
 
   export type BookRoomCreateWithoutRoomRateInput = {
@@ -16603,28 +17830,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type RoomUpsertWithoutRoomPriceInput = {
-    update: XOR<RoomUpdateWithoutRoomPriceInput, RoomUncheckedUpdateWithoutRoomPriceInput>
-    create: XOR<RoomCreateWithoutRoomPriceInput, RoomUncheckedCreateWithoutRoomPriceInput>
+  export type durationCategoryCreateWithoutRoomRateInput = {
+    duration: string
+    createAt?: Date | string
+    updateAt?: Date | string
   }
 
-  export type RoomUpdateWithoutRoomPriceInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    capacity?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    FacilityToRoom?: FacilityToRoomUpdateManyWithoutRoomNestedInput
-    BranchToRoom?: BranchToRoomUpdateManyWithoutRoomNestedInput
+  export type durationCategoryUncheckedCreateWithoutRoomRateInput = {
+    id?: number
+    duration: string
+    createAt?: Date | string
+    updateAt?: Date | string
   }
 
-  export type RoomUncheckedUpdateWithoutRoomPriceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    capacity?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    FacilityToRoom?: FacilityToRoomUncheckedUpdateManyWithoutRoomNestedInput
-    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutRoomNestedInput
+  export type durationCategoryCreateOrConnectWithoutRoomRateInput = {
+    where: durationCategoryWhereUniqueInput
+    create: XOR<durationCategoryCreateWithoutRoomRateInput, durationCategoryUncheckedCreateWithoutRoomRateInput>
+  }
+
+  export type RoomCreateWithoutRoomRateInput = {
+    name: string
+    capacity: number
+    createAt?: Date | string
+    updateAt?: Date | string
+    BranchToRoom?: BranchToRoomCreateNestedManyWithoutRoomInput
+  }
+
+  export type RoomUncheckedCreateWithoutRoomRateInput = {
+    id?: number
+    name: string
+    capacity: number
+    createAt?: Date | string
+    updateAt?: Date | string
+    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutRoomInput
+  }
+
+  export type RoomCreateOrConnectWithoutRoomRateInput = {
+    where: RoomWhereUniqueInput
+    create: XOR<RoomCreateWithoutRoomRateInput, RoomUncheckedCreateWithoutRoomRateInput>
   }
 
   export type BookRoomUpsertWithWhereUniqueWithoutRoomRateInput = {
@@ -16643,123 +17886,214 @@ export namespace Prisma {
     data: XOR<BookRoomUpdateManyMutationInput, BookRoomUncheckedUpdateManyWithoutBookRoomInput>
   }
 
-  export type FacilityToRoomCreateWithoutFacilitiesInput = {
-    createAt?: Date | string
-    updateAt?: Date | string
-    room: RoomCreateNestedOneWithoutFacilityToRoomInput
+  export type durationCategoryUpsertWithoutRoomRateInput = {
+    update: XOR<durationCategoryUpdateWithoutRoomRateInput, durationCategoryUncheckedUpdateWithoutRoomRateInput>
+    create: XOR<durationCategoryCreateWithoutRoomRateInput, durationCategoryUncheckedCreateWithoutRoomRateInput>
   }
 
-  export type FacilityToRoomUncheckedCreateWithoutFacilitiesInput = {
-    id?: number
-    roomId: number
-    createAt?: Date | string
-    updateAt?: Date | string
+  export type durationCategoryUpdateWithoutRoomRateInput = {
+    duration?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FacilityToRoomCreateOrConnectWithoutFacilitiesInput = {
-    where: FacilityToRoomWhereUniqueInput
-    create: XOR<FacilityToRoomCreateWithoutFacilitiesInput, FacilityToRoomUncheckedCreateWithoutFacilitiesInput>
+  export type durationCategoryUncheckedUpdateWithoutRoomRateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    duration?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FacilityToRoomCreateManyFacilitiesInputEnvelope = {
-    data: Enumerable<FacilityToRoomCreateManyFacilitiesInput>
-    skipDuplicates?: boolean
+  export type RoomUpsertWithoutRoomRateInput = {
+    update: XOR<RoomUpdateWithoutRoomRateInput, RoomUncheckedUpdateWithoutRoomRateInput>
+    create: XOR<RoomCreateWithoutRoomRateInput, RoomUncheckedCreateWithoutRoomRateInput>
   }
 
-  export type FacilityToRoomUpsertWithWhereUniqueWithoutFacilitiesInput = {
-    where: FacilityToRoomWhereUniqueInput
-    update: XOR<FacilityToRoomUpdateWithoutFacilitiesInput, FacilityToRoomUncheckedUpdateWithoutFacilitiesInput>
-    create: XOR<FacilityToRoomCreateWithoutFacilitiesInput, FacilityToRoomUncheckedCreateWithoutFacilitiesInput>
-  }
-
-  export type FacilityToRoomUpdateWithWhereUniqueWithoutFacilitiesInput = {
-    where: FacilityToRoomWhereUniqueInput
-    data: XOR<FacilityToRoomUpdateWithoutFacilitiesInput, FacilityToRoomUncheckedUpdateWithoutFacilitiesInput>
-  }
-
-  export type FacilityToRoomUpdateManyWithWhereWithoutFacilitiesInput = {
-    where: FacilityToRoomScalarWhereInput
-    data: XOR<FacilityToRoomUpdateManyMutationInput, FacilityToRoomUncheckedUpdateManyWithoutFacilityToRoomInput>
-  }
-
-  export type RoomCreateWithoutFacilityToRoomInput = {
-    name: string
-    capacity: number
-    createAt?: Date | string
-    updateAt?: Date | string
-    RoomPrice?: RoomRateCreateNestedManyWithoutRoomInput
-    BranchToRoom?: BranchToRoomCreateNestedManyWithoutRoomInput
-  }
-
-  export type RoomUncheckedCreateWithoutFacilityToRoomInput = {
-    id?: number
-    name: string
-    capacity: number
-    createAt?: Date | string
-    updateAt?: Date | string
-    RoomPrice?: RoomRateUncheckedCreateNestedManyWithoutRoomInput
-    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutRoomInput
-  }
-
-  export type RoomCreateOrConnectWithoutFacilityToRoomInput = {
-    where: RoomWhereUniqueInput
-    create: XOR<RoomCreateWithoutFacilityToRoomInput, RoomUncheckedCreateWithoutFacilityToRoomInput>
-  }
-
-  export type FacilityCreateWithoutFacilityToRoomInput = {
-    name: string
-    createAt?: Date | string
-    updateAt?: Date | string
-  }
-
-  export type FacilityUncheckedCreateWithoutFacilityToRoomInput = {
-    id?: number
-    name: string
-    createAt?: Date | string
-    updateAt?: Date | string
-  }
-
-  export type FacilityCreateOrConnectWithoutFacilityToRoomInput = {
-    where: FacilityWhereUniqueInput
-    create: XOR<FacilityCreateWithoutFacilityToRoomInput, FacilityUncheckedCreateWithoutFacilityToRoomInput>
-  }
-
-  export type RoomUpsertWithoutFacilityToRoomInput = {
-    update: XOR<RoomUpdateWithoutFacilityToRoomInput, RoomUncheckedUpdateWithoutFacilityToRoomInput>
-    create: XOR<RoomCreateWithoutFacilityToRoomInput, RoomUncheckedCreateWithoutFacilityToRoomInput>
-  }
-
-  export type RoomUpdateWithoutFacilityToRoomInput = {
+  export type RoomUpdateWithoutRoomRateInput = {
     name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    RoomPrice?: RoomRateUpdateManyWithoutRoomNestedInput
     BranchToRoom?: BranchToRoomUpdateManyWithoutRoomNestedInput
   }
 
-  export type RoomUncheckedUpdateWithoutFacilityToRoomInput = {
+  export type RoomUncheckedUpdateWithoutRoomRateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    RoomPrice?: RoomRateUncheckedUpdateManyWithoutRoomNestedInput
     BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutRoomNestedInput
   }
 
-  export type FacilityUpsertWithoutFacilityToRoomInput = {
-    update: XOR<FacilityUpdateWithoutFacilityToRoomInput, FacilityUncheckedUpdateWithoutFacilityToRoomInput>
-    create: XOR<FacilityCreateWithoutFacilityToRoomInput, FacilityUncheckedCreateWithoutFacilityToRoomInput>
+  export type RoomRateCreateWithoutDurationInput = {
+    price: number
+    createAt?: Date | string
+    updateAt?: Date | string
+    BookRoom?: BookRoomCreateNestedManyWithoutRoomRateInput
+    room: RoomCreateNestedOneWithoutRoomRateInput
   }
 
-  export type FacilityUpdateWithoutFacilityToRoomInput = {
+  export type RoomRateUncheckedCreateWithoutDurationInput = {
+    id?: number
+    price: number
+    createAt?: Date | string
+    updateAt?: Date | string
+    roomId: number
+    BookRoom?: BookRoomUncheckedCreateNestedManyWithoutRoomRateInput
+  }
+
+  export type RoomRateCreateOrConnectWithoutDurationInput = {
+    where: RoomRateWhereUniqueInput
+    create: XOR<RoomRateCreateWithoutDurationInput, RoomRateUncheckedCreateWithoutDurationInput>
+  }
+
+  export type RoomRateCreateManyDurationInputEnvelope = {
+    data: Enumerable<RoomRateCreateManyDurationInput>
+    skipDuplicates?: boolean
+  }
+
+  export type RoomRateUpsertWithWhereUniqueWithoutDurationInput = {
+    where: RoomRateWhereUniqueInput
+    update: XOR<RoomRateUpdateWithoutDurationInput, RoomRateUncheckedUpdateWithoutDurationInput>
+    create: XOR<RoomRateCreateWithoutDurationInput, RoomRateUncheckedCreateWithoutDurationInput>
+  }
+
+  export type RoomRateUpdateWithWhereUniqueWithoutDurationInput = {
+    where: RoomRateWhereUniqueInput
+    data: XOR<RoomRateUpdateWithoutDurationInput, RoomRateUncheckedUpdateWithoutDurationInput>
+  }
+
+  export type RoomRateUpdateManyWithWhereWithoutDurationInput = {
+    where: RoomRateScalarWhereInput
+    data: XOR<RoomRateUpdateManyMutationInput, RoomRateUncheckedUpdateManyWithoutRoomRateInput>
+  }
+
+  export type FacilityToCoWorkCreateWithoutFacilityInput = {
+    createAt?: Date | string
+    updateAt?: Date | string
+    coWork: CoWorkCreateNestedOneWithoutFacilityToCoWorkInput
+  }
+
+  export type FacilityToCoWorkUncheckedCreateWithoutFacilityInput = {
+    id?: number
+    coWorkId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type FacilityToCoWorkCreateOrConnectWithoutFacilityInput = {
+    where: FacilityToCoWorkWhereUniqueInput
+    create: XOR<FacilityToCoWorkCreateWithoutFacilityInput, FacilityToCoWorkUncheckedCreateWithoutFacilityInput>
+  }
+
+  export type FacilityToCoWorkCreateManyFacilityInputEnvelope = {
+    data: Enumerable<FacilityToCoWorkCreateManyFacilityInput>
+    skipDuplicates?: boolean
+  }
+
+  export type FacilityToCoWorkUpsertWithWhereUniqueWithoutFacilityInput = {
+    where: FacilityToCoWorkWhereUniqueInput
+    update: XOR<FacilityToCoWorkUpdateWithoutFacilityInput, FacilityToCoWorkUncheckedUpdateWithoutFacilityInput>
+    create: XOR<FacilityToCoWorkCreateWithoutFacilityInput, FacilityToCoWorkUncheckedCreateWithoutFacilityInput>
+  }
+
+  export type FacilityToCoWorkUpdateWithWhereUniqueWithoutFacilityInput = {
+    where: FacilityToCoWorkWhereUniqueInput
+    data: XOR<FacilityToCoWorkUpdateWithoutFacilityInput, FacilityToCoWorkUncheckedUpdateWithoutFacilityInput>
+  }
+
+  export type FacilityToCoWorkUpdateManyWithWhereWithoutFacilityInput = {
+    where: FacilityToCoWorkScalarWhereInput
+    data: XOR<FacilityToCoWorkUpdateManyMutationInput, FacilityToCoWorkUncheckedUpdateManyWithoutFacilityToCoWorkInput>
+  }
+
+  export type CoWorkCreateWithoutFacilityToCoWorkInput = {
+    name: string
+    description: string
+    location: string
+    tel: number
+    picture: string
+    userInternal: UserInternalCreateNestedOneWithoutCoWorkInput
+    BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
+    OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
+  }
+
+  export type CoWorkUncheckedCreateWithoutFacilityToCoWorkInput = {
+    id?: number
+    name: string
+    description: string
+    location: string
+    tel: number
+    picture: string
+    userInternalId: number
+    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
+    OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
+  }
+
+  export type CoWorkCreateOrConnectWithoutFacilityToCoWorkInput = {
+    where: CoWorkWhereUniqueInput
+    create: XOR<CoWorkCreateWithoutFacilityToCoWorkInput, CoWorkUncheckedCreateWithoutFacilityToCoWorkInput>
+  }
+
+  export type FacilityCreateWithoutFacilityToCoWorkInput = {
+    name: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type FacilityUncheckedCreateWithoutFacilityToCoWorkInput = {
+    id?: number
+    name: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type FacilityCreateOrConnectWithoutFacilityToCoWorkInput = {
+    where: FacilityWhereUniqueInput
+    create: XOR<FacilityCreateWithoutFacilityToCoWorkInput, FacilityUncheckedCreateWithoutFacilityToCoWorkInput>
+  }
+
+  export type CoWorkUpsertWithoutFacilityToCoWorkInput = {
+    update: XOR<CoWorkUpdateWithoutFacilityToCoWorkInput, CoWorkUncheckedUpdateWithoutFacilityToCoWorkInput>
+    create: XOR<CoWorkCreateWithoutFacilityToCoWorkInput, CoWorkUncheckedCreateWithoutFacilityToCoWorkInput>
+  }
+
+  export type CoWorkUpdateWithoutFacilityToCoWorkInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    tel?: IntFieldUpdateOperationsInput | number
+    picture?: StringFieldUpdateOperationsInput | string
+    userInternal?: UserInternalUpdateOneRequiredWithoutCoWorkNestedInput
+    BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
+    OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
+  }
+
+  export type CoWorkUncheckedUpdateWithoutFacilityToCoWorkInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    tel?: IntFieldUpdateOperationsInput | number
+    picture?: StringFieldUpdateOperationsInput | string
+    userInternalId?: IntFieldUpdateOperationsInput | number
+    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
+    OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
+  }
+
+  export type FacilityUpsertWithoutFacilityToCoWorkInput = {
+    update: XOR<FacilityUpdateWithoutFacilityToCoWorkInput, FacilityUncheckedUpdateWithoutFacilityToCoWorkInput>
+    create: XOR<FacilityCreateWithoutFacilityToCoWorkInput, FacilityUncheckedCreateWithoutFacilityToCoWorkInput>
+  }
+
+  export type FacilityUpdateWithoutFacilityToCoWorkInput = {
     name?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FacilityUncheckedUpdateWithoutFacilityToRoomInput = {
+  export type FacilityUncheckedUpdateWithoutFacilityToCoWorkInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16774,6 +18108,7 @@ export namespace Prisma {
     picture: string
     userInternal: UserInternalCreateNestedOneWithoutCoWorkInput
     OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
   }
 
   export type CoWorkUncheckedCreateWithoutBranchToRoomInput = {
@@ -16785,6 +18120,7 @@ export namespace Prisma {
     picture: string
     userInternalId: number
     OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
   }
 
   export type CoWorkCreateOrConnectWithoutBranchToRoomInput = {
@@ -16797,8 +18133,7 @@ export namespace Prisma {
     capacity: number
     createAt?: Date | string
     updateAt?: Date | string
-    RoomPrice?: RoomRateCreateNestedManyWithoutRoomInput
-    FacilityToRoom?: FacilityToRoomCreateNestedManyWithoutRoomInput
+    RoomRate?: RoomRateCreateNestedManyWithoutRoomInput
   }
 
   export type RoomUncheckedCreateWithoutBranchToRoomInput = {
@@ -16807,8 +18142,7 @@ export namespace Prisma {
     capacity: number
     createAt?: Date | string
     updateAt?: Date | string
-    RoomPrice?: RoomRateUncheckedCreateNestedManyWithoutRoomInput
-    FacilityToRoom?: FacilityToRoomUncheckedCreateNestedManyWithoutRoomInput
+    RoomRate?: RoomRateUncheckedCreateNestedManyWithoutRoomInput
   }
 
   export type RoomCreateOrConnectWithoutBranchToRoomInput = {
@@ -16860,6 +18194,7 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     userInternal?: UserInternalUpdateOneRequiredWithoutCoWorkNestedInput
     OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
   }
 
   export type CoWorkUncheckedUpdateWithoutBranchToRoomInput = {
@@ -16871,6 +18206,7 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     userInternalId?: IntFieldUpdateOperationsInput | number
     OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
   }
 
   export type RoomUpsertWithoutBranchToRoomInput = {
@@ -16883,8 +18219,7 @@ export namespace Prisma {
     capacity?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    RoomPrice?: RoomRateUpdateManyWithoutRoomNestedInput
-    FacilityToRoom?: FacilityToRoomUpdateManyWithoutRoomNestedInput
+    RoomRate?: RoomRateUpdateManyWithoutRoomNestedInput
   }
 
   export type RoomUncheckedUpdateWithoutBranchToRoomInput = {
@@ -16893,8 +18228,7 @@ export namespace Prisma {
     capacity?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    RoomPrice?: RoomRateUncheckedUpdateManyWithoutRoomNestedInput
-    FacilityToRoom?: FacilityToRoomUncheckedUpdateManyWithoutRoomNestedInput
+    RoomRate?: RoomRateUncheckedUpdateManyWithoutRoomNestedInput
   }
 
   export type BookRoomUpsertWithWhereUniqueWithoutBranchToRoomInput = {
@@ -16935,19 +18269,19 @@ export namespace Prisma {
 
   export type RoomRateCreateWithoutBookRoomInput = {
     price: number
-    time: string
     createAt?: Date | string
     updateAt?: Date | string
-    room: RoomCreateNestedOneWithoutRoomPriceInput
+    duration: durationCategoryCreateNestedOneWithoutRoomRateInput
+    room: RoomCreateNestedOneWithoutRoomRateInput
   }
 
   export type RoomRateUncheckedCreateWithoutBookRoomInput = {
     id?: number
     price: number
-    time: string
-    roomId: number
     createAt?: Date | string
     updateAt?: Date | string
+    durationCategoryId: number
+    roomId: number
   }
 
   export type RoomRateCreateOrConnectWithoutBookRoomInput = {
@@ -17026,19 +18360,19 @@ export namespace Prisma {
 
   export type RoomRateUpdateWithoutBookRoomInput = {
     price?: IntFieldUpdateOperationsInput | number
-    time?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    room?: RoomUpdateOneRequiredWithoutRoomPriceNestedInput
+    duration?: durationCategoryUpdateOneRequiredWithoutRoomRateNestedInput
+    room?: RoomUpdateOneRequiredWithoutRoomRateNestedInput
   }
 
   export type RoomRateUncheckedUpdateWithoutBookRoomInput = {
     id?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
-    time?: StringFieldUpdateOperationsInput | string
-    roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationCategoryId?: IntFieldUpdateOperationsInput | number
+    roomId?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserExternalUpsertWithoutBookRoomInput = {
@@ -17093,6 +18427,7 @@ export namespace Prisma {
     picture: string
     userInternal: UserInternalCreateNestedOneWithoutCoWorkInput
     BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
   }
 
   export type CoWorkUncheckedCreateWithoutOpenCloseInput = {
@@ -17104,6 +18439,7 @@ export namespace Prisma {
     picture: string
     userInternalId: number
     BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
   }
 
   export type CoWorkCreateOrConnectWithoutOpenCloseInput = {
@@ -17124,6 +18460,7 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     userInternal?: UserInternalUpdateOneRequiredWithoutCoWorkNestedInput
     BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
   }
 
   export type CoWorkUncheckedUpdateWithoutOpenCloseInput = {
@@ -17135,6 +18472,7 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     userInternalId?: IntFieldUpdateOperationsInput | number
     BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
   }
 
   export type BookRoomCreateWithoutVertifyCodeInput = {
@@ -17234,6 +18572,13 @@ export namespace Prisma {
     updateAt?: Date | string
   }
 
+  export type FacilityToCoWorkCreateManyCoWorkInput = {
+    id?: number
+    facilityId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
   export type BranchToRoomUpdateWithoutCoWorkInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17256,6 +18601,26 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FacilityToCoWorkUpdateWithoutCoWorkInput = {
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility?: FacilityUpdateOneRequiredWithoutFacilityToCoWorkNestedInput
+  }
+
+  export type FacilityToCoWorkUncheckedUpdateWithoutCoWorkInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    facilityId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilityToCoWorkUncheckedUpdateManyWithoutFacilityToCoWorkInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    facilityId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CoWorkCreateManyUserInternalInput = {
     id?: number
     name: string
@@ -17273,6 +18638,7 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
     OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
   }
 
   export type CoWorkUncheckedUpdateWithoutUserInternalInput = {
@@ -17284,6 +18650,7 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
     OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
   }
 
   export type CoWorkUncheckedUpdateManyWithoutCoWorkInput = {
@@ -17295,21 +18662,6 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
   }
 
-  export type RoomRateCreateManyRoomInput = {
-    id?: number
-    price: number
-    time: string
-    createAt?: Date | string
-    updateAt?: Date | string
-  }
-
-  export type FacilityToRoomCreateManyRoomInput = {
-    id?: number
-    facilityId: number
-    createAt?: Date | string
-    updateAt?: Date | string
-  }
-
   export type BranchToRoomCreateManyRoomInput = {
     id?: number
     coWorkId: number
@@ -17317,49 +18669,12 @@ export namespace Prisma {
     updateAt?: Date | string
   }
 
-  export type RoomRateUpdateWithoutRoomInput = {
-    price?: IntFieldUpdateOperationsInput | number
-    time?: StringFieldUpdateOperationsInput | string
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    BookRoom?: BookRoomUpdateManyWithoutRoomRateNestedInput
-  }
-
-  export type RoomRateUncheckedUpdateWithoutRoomInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    price?: IntFieldUpdateOperationsInput | number
-    time?: StringFieldUpdateOperationsInput | string
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    BookRoom?: BookRoomUncheckedUpdateManyWithoutRoomRateNestedInput
-  }
-
-  export type RoomRateUncheckedUpdateManyWithoutRoomPriceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    price?: IntFieldUpdateOperationsInput | number
-    time?: StringFieldUpdateOperationsInput | string
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityToRoomUpdateWithoutRoomInput = {
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    facilities?: FacilityUpdateOneRequiredWithoutFacilityToRoomNestedInput
-  }
-
-  export type FacilityToRoomUncheckedUpdateWithoutRoomInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    facilityId?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityToRoomUncheckedUpdateManyWithoutFacilityToRoomInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    facilityId?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type RoomRateCreateManyRoomInput = {
+    id?: number
+    price: number
+    createAt?: Date | string
+    updateAt?: Date | string
+    durationCategoryId: number
   }
 
   export type BranchToRoomUpdateWithoutRoomInput = {
@@ -17375,6 +18690,31 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     BookRoom?: BookRoomUncheckedUpdateManyWithoutBranchToRoomNestedInput
+  }
+
+  export type RoomRateUpdateWithoutRoomInput = {
+    price?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    BookRoom?: BookRoomUpdateManyWithoutRoomRateNestedInput
+    duration?: durationCategoryUpdateOneRequiredWithoutRoomRateNestedInput
+  }
+
+  export type RoomRateUncheckedUpdateWithoutRoomInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    price?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationCategoryId?: IntFieldUpdateOperationsInput | number
+    BookRoom?: BookRoomUncheckedUpdateManyWithoutRoomRateNestedInput
+  }
+
+  export type RoomRateUncheckedUpdateManyWithoutRoomRateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    price?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationCategoryId?: IntFieldUpdateOperationsInput | number
   }
 
   export type BookRoomCreateManyRoomRateInput = {
@@ -17409,22 +18749,47 @@ export namespace Prisma {
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type FacilityToRoomCreateManyFacilitiesInput = {
+  export type RoomRateCreateManyDurationInput = {
     id?: number
+    price: number
+    createAt?: Date | string
+    updateAt?: Date | string
     roomId: number
+  }
+
+  export type RoomRateUpdateWithoutDurationInput = {
+    price?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    BookRoom?: BookRoomUpdateManyWithoutRoomRateNestedInput
+    room?: RoomUpdateOneRequiredWithoutRoomRateNestedInput
+  }
+
+  export type RoomRateUncheckedUpdateWithoutDurationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    price?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    roomId?: IntFieldUpdateOperationsInput | number
+    BookRoom?: BookRoomUncheckedUpdateManyWithoutRoomRateNestedInput
+  }
+
+  export type FacilityToCoWorkCreateManyFacilityInput = {
+    id?: number
+    coWorkId: number
     createAt?: Date | string
     updateAt?: Date | string
   }
 
-  export type FacilityToRoomUpdateWithoutFacilitiesInput = {
+  export type FacilityToCoWorkUpdateWithoutFacilityInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    room?: RoomUpdateOneRequiredWithoutFacilityToRoomNestedInput
+    coWork?: CoWorkUpdateOneRequiredWithoutFacilityToCoWorkNestedInput
   }
 
-  export type FacilityToRoomUncheckedUpdateWithoutFacilitiesInput = {
+  export type FacilityToCoWorkUncheckedUpdateWithoutFacilityInput = {
     id?: IntFieldUpdateOperationsInput | number
-    roomId?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

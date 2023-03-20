@@ -10,13 +10,6 @@ export interface ICreateUserExternal
   extends t.TypeOf<typeof createUserExternalCodec> {}
 //-------------------------------------------------
 
-export const filterPriceCodec = t.type({
-  roomId: t.number,
-});
-export interface IFilterPrice extends t.TypeOf<typeof filterPriceCodec> {}
-
-//-------------------------------------------------
-
 export const getCoWorkUserChooseCodec = t.type({
   id: t.number,
 });

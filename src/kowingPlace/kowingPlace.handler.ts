@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   createUserExternal,
   createUserInternal,
+  filterPrice,
   getCoWork24Hrs,
   getCoWorkUserChoose,
   getCoworkRecomment,
@@ -26,6 +27,16 @@ export const createUserExternalHandler = async (
 export const getCoWork24HrsHandler = async (req: Request, res: Response) => {
   try {
     const result = await getCoWork24Hrs();
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const filterPriceHandler = async (req: Request, res: Response) => {
+  try {
+    const result = await filterPrice();
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({

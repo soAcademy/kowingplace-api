@@ -1,8 +1,7 @@
 import { date } from "fp-ts";
-import { PrismaClient } from "../../prisma/client";
+import { Prisma, PrismaClient } from "../../prisma/client";
 import {
   ICreateUserExternal,
-  IFilterPrice,
   IGetCoWorkUserChoose,
   IGetUserConfirmBooking,
 } from "./kowingPlace.interface";
@@ -49,16 +48,16 @@ export const getCoWork24Hrs = async () => {
 export const getCoworkRecomment = async () => {
   const getAllCoWork = await prisma.coWork.findMany({});
 };
-//let p'mac Math random at frontend 🙏🏻
+//let p'mac Math random at frontend
 
-export const filterPrice = (args: IFilterPrice) =>
+//filter price/day
+export const filterPrice = () =>
   prisma.roomRate.findMany({
-    include: {
-      room: true,
+    select: {
+      price: true,
     },
   });
 
-//filter price/day
 export const getCoWorkUserChoose = (args: IGetCoWorkUserChoose) =>
   prisma.coWork.findUnique({
     where: {
@@ -68,12 +67,6 @@ export const getCoWorkUserChoose = (args: IGetCoWorkUserChoose) =>
       userInternal: true,
     },
   });
-
-//เส้น booking
-//ห้องประชุมId
-//เวลาที่จะมา
-//เวลาที่จะใช้งาน
-//ราคา
 
 export const getUserConfirmBooking = async (args: IGetUserConfirmBooking) => {
   const verifyCode = `${args.userExId}${args.coWorkId}${args.roomId}`;
@@ -119,11 +112,10 @@ export const getUserConfirmBooking = async (args: IGetUserConfirmBooking) => {
 //                 Internal
 //############################################
 
-//--------- page 1 ----------
 export const createUserInternal = (args: {
   name: string;
   email: string;
-  tel: number;
+  tel: string;
   password: string;
 }) =>
   prisma.userInternal.create({
@@ -134,6 +126,95 @@ export const createUserInternal = (args: {
       password: args.password,
     },
   });
+
 //เส้นโชว์ ห้องประชุมทั้งหมด / ชื่อผู้ใช้ / booking detail
-//เส้นข้อมูลการ Manage ห้องทั้งหมด
-//เส้น save ข้อมูล (Create & Update ในเส้นเดียวกัน)
+export const showBookDetailInternal = async () => {
+  const bookDetailData = await prisma.bookRoom.findMany({
+    select: {
+      branchToRoom: {
+        select: {
+          room: true,
+        },
+      },
+      UserExternal: {
+        select: {
+          name: true,
+        },
+      },
+      roomRate: {
+        select: {
+          duration: true,
+        },
+      },
+      startTime: true,
+      status: true,
+    },
+  });
+  return bookDetailData;
+};
+interface IRoom {
+  name: string;
+  capacity: number;
+  price: {
+    durationId: number;
+    price: number;
+    roomRateId?: number;
+    isDeleted: boolean;
+  }[];
+  roomId?: number;
+  coWorkId: number;
+  isDeleted: boolean;
+}
+export const createOrUpdateRoomInternal = async (args: IRoom[]) => {
+  let resultRoom;
+  let resultPrice;
+  for (const roomKey in args) {
+    const room = args[roomKey];
+    resultRoom = await prisma.room.upsert({
+      where: { id: room.roomId },
+      create: {
+        name: room.name,
+        capacity: room.capacity,
+        BranchToRoom: {
+          create: {
+            coWork: {
+              connect: { id: room.coWorkId },
+            },
+          },
+        },
+      },
+      update: {
+        name: room.name,
+        capacity: room.capacity,
+      },
+    });
+
+    for (const priceKey in room.price) {
+      const price = room.price[priceKey];
+      if (price.isDeleted) {
+        await prisma.roomRate.delete({
+          where: { id: price.roomRateId },
+        });
+        continue;
+      }
+      resultPrice = await prisma.roomRate.upsert({
+        where: { id: price.roomRateId },
+        create: {
+          price: price.price,
+          duration: {
+            connect: { id: price.durationId },
+          },
+          room: { connect: { id: room.roomId } },
+        },
+        update: {
+          price: price.price,
+          duration: {
+            connect: { id: price.durationId },
+          },
+          room: { connect: { id: room.roomId } },
+        },
+      });
+    }
+  }
+  return { room: resultRoom, price: resultPrice };
+};

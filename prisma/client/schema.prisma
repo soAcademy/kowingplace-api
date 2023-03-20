@@ -21,23 +21,24 @@ model UserExternal {
 }
 
 model CoWork {
-  id             Int            @id @default(autoincrement())
-  name           String
-  description    String
-  location       String
-  tel            Int
-  picture        String
-  userInternal   UserInternal   @relation(fields: [userInternalId], references: [id])
-  userInternalId Int
-  BranchToRoom   BranchToRoom[]
-  OpenClose      OpenClose?
+  id               Int                @id @default(autoincrement())
+  name             String
+  description      String
+  location         String
+  tel              Int
+  picture          String
+  userInternal     UserInternal       @relation(fields: [userInternalId], references: [id])
+  userInternalId   Int
+  BranchToRoom     BranchToRoom[]
+  OpenClose        OpenClose?
+  FacilityToCoWork FacilityToCoWork[]
 }
 
 model UserInternal {
   id       Int      @id @default(autoincrement())
   name     String
   email    String
-  tel      Int
+  tel      String
   password String
   coWork   CoWork[]
   createAt DateTime @default(now())
@@ -45,44 +46,64 @@ model UserInternal {
 }
 
 model Room {
-  id             Int              @id @default(autoincrement())
-  name           String
-  capacity       Int
-  createAt       DateTime         @default(now())
-  updateAt       DateTime         @updatedAt
-  RoomPrice      RoomRate[]
-  FacilityToRoom FacilityToRoom[]
-  BranchToRoom   BranchToRoom[]
+  id           Int            @id @default(autoincrement())
+  name         String
+  capacity     Int
+  createAt     DateTime       @default(now())
+  updateAt     DateTime       @updatedAt
+  //FacilityToRoom FacilityToRoom[]
+  BranchToRoom BranchToRoom[]
+  RoomRate     RoomRate[]
 }
 
 model RoomRate {
+  id                 Int              @id @default(autoincrement())
+  price              Int
+  createAt           DateTime         @default(now())
+  updateAt           DateTime         @updatedAt
+  BookRoom           BookRoom[]
+  duration           durationCategory @relation(fields: [durationCategoryId], references: [id])
+  durationCategoryId Int
+  room               Room             @relation(fields: [roomId], references: [id])
+  roomId             Int
+}
+
+model durationCategory {
   id       Int        @id @default(autoincrement())
-  price    Int
-  time     String
-  room     Room       @relation(fields: [roomId], references: [id])
-  roomId   Int
+  duration String
   createAt DateTime   @default(now())
   updateAt DateTime   @updatedAt
-  BookRoom BookRoom[]
+  RoomRate RoomRate[]
 }
 
 model Facility {
-  id             Int              @id @default(autoincrement())
-  name           String
-  createAt       DateTime         @default(now())
-  updateAt       DateTime         @updatedAt
-  FacilityToRoom FacilityToRoom[]
+  id               Int                @id @default(autoincrement())
+  name             String
+  createAt         DateTime           @default(now())
+  updateAt         DateTime           @updatedAt
+  //FacilityToRoom FacilityToRoom[]
+  FacilityToCoWork FacilityToCoWork[]
 }
 
-model FacilityToRoom {
+model FacilityToCoWork {
   id         Int      @id @default(autoincrement())
-  room       Room     @relation(fields: [roomId], references: [id])
-  roomId     Int
-  facilities Facility @relation(fields: [facilityId], references: [id])
+  coWork     CoWork   @relation(fields: [coWorkId], references: [id])
+  coWorkId   Int
+  facility   Facility @relation(fields: [facilityId], references: [id])
   facilityId Int
   createAt   DateTime @default(now())
   updateAt   DateTime @updatedAt
 }
+
+// model FacilityToRoom {
+//   id         Int      @id @default(autoincrement())
+//   room       Room     @relation(fields: [roomId], references: [id])
+//   roomId     Int
+//   facilities Facility @relation(fields: [facilityId], references: [id])
+//   facilityId Int
+//   createAt   DateTime @default(now())
+//   updateAt   DateTime @updatedAt
+// }
 
 model BranchToRoom {
   id       Int        @id @default(autoincrement())

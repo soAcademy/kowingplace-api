@@ -1,6 +1,7 @@
 import {
   createUserExternalHandler,
   createUserInternalHandler,
+  filterPriceHandler,
   getCoWork24HrsHandler,
   getCoWorkUserChooseHandler,
   getCoworkRecommentHandler,
@@ -17,12 +18,12 @@ export const AppRoutes = [
   {
     path: "/kowing/createUserExternal",
     method: "post",
-    action: createUserExternalHandler,
+    action: createUserExternalHandler, //OK
   },
   {
     path: "/kowing/getCoWork24Hrs",
     method: "post",
-    action: getCoWork24HrsHandler,
+    action: getCoWork24HrsHandler, //OK
   },
   {
     path: "/kowing/getCoworkRecomment",
@@ -39,10 +40,20 @@ export const AppRoutes = [
     method: "post",
     action: getUserConfirmBookingHandler,
   },
+  {
+    path: "/kowing/filterPrice",
+    method: "post",
+    action: filterPriceHandler, //OK
+  },
   //-------------- internal part ----------------
   {
     path: "/kowing/createUserInternal",
     method: "post",
-    action: createUserInternalHandler,
+    action: createUserInternalHandler, //OK
   },
+  // {
+  //   path: "/kowing/",
+  //   method: "post",
+  //   action: ,
+  // },
 ];

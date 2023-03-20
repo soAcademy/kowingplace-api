@@ -13,11 +13,11 @@ const Prisma = {}
 exports.Prisma = Prisma
 
 /**
- * Prisma Client JS version: 4.10.1
+ * Prisma Client JS version: 4.11.0
  * Query Engine version: 8fde8fef4033376662cad983758335009d522acb
  */
 Prisma.prismaVersion = {
-  client: "4.10.1",
+  client: "4.11.0",
   engine: "8fde8fef4033376662cad983758335009d522acb"
 }
 
@@ -119,6 +119,13 @@ exports.Prisma.CoWorkScalarFieldEnum = makeEnum({
   userInternalId: 'userInternalId'
 });
 
+exports.Prisma.DurationCategoryScalarFieldEnum = makeEnum({
+  id: 'id',
+  duration: 'duration',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
 exports.Prisma.FacilityScalarFieldEnum = makeEnum({
   id: 'id',
   name: 'name',
@@ -126,9 +133,9 @@ exports.Prisma.FacilityScalarFieldEnum = makeEnum({
   updateAt: 'updateAt'
 });
 
-exports.Prisma.FacilityToRoomScalarFieldEnum = makeEnum({
+exports.Prisma.FacilityToCoWorkScalarFieldEnum = makeEnum({
   id: 'id',
-  roomId: 'roomId',
+  coWorkId: 'coWorkId',
   facilityId: 'facilityId',
   createAt: 'createAt',
   updateAt: 'updateAt'
@@ -177,10 +184,10 @@ exports.Prisma.QueryMode = makeEnum({
 exports.Prisma.RoomRateScalarFieldEnum = makeEnum({
   id: 'id',
   price: 'price',
-  time: 'time',
-  roomId: 'roomId',
   createAt: 'createAt',
-  updateAt: 'updateAt'
+  updateAt: 'updateAt',
+  durationCategoryId: 'durationCategoryId',
+  roomId: 'roomId'
 });
 
 exports.Prisma.RoomScalarFieldEnum = makeEnum({
@@ -238,8 +245,9 @@ exports.Prisma.ModelName = makeEnum({
   UserInternal: 'UserInternal',
   Room: 'Room',
   RoomRate: 'RoomRate',
+  durationCategory: 'durationCategory',
   Facility: 'Facility',
-  FacilityToRoom: 'FacilityToRoom',
+  FacilityToCoWork: 'FacilityToCoWork',
   BranchToRoom: 'BranchToRoom',
   BookRoom: 'BookRoom',
   OpenClose: 'OpenClose',
