@@ -22,14 +22,15 @@ export type UserExternal = {
   password: string
   createAt: Date
   updateAt: Date
-  bookRoomId: number
+  bookRoomId: number | null
+  vertifyBookingCodeId: number | null
 }
 
 /**
- * Model Branch
+ * Model CoWork
  * 
  */
-export type Branch = {
+export type CoWork = {
   id: number
   name: string
   description: string
@@ -72,7 +73,7 @@ export type Room = {
 export type RoomRate = {
   id: number
   price: number
-  time: Date
+  time: string
   roomId: number
   createAt: Date
   updateAt: Date
@@ -107,7 +108,7 @@ export type FacilityToRoom = {
  */
 export type BranchToRoom = {
   id: number
-  branchId: number
+  coWorkId: number
   roomId: number
   createAt: Date
   updateAt: Date
@@ -119,7 +120,7 @@ export type BranchToRoom = {
  */
 export type BookRoom = {
   id: number
-  branchToRoomId: number
+  branchToRoomId: number | null
   startTime: Date
   roomRateId: number
   status: string
@@ -133,11 +134,46 @@ export type BookRoom = {
  */
 export type OpenClose = {
   id: number
-  open: Date
-  close: Date
-  allDay: boolean
-  branchId: number
-  day: number
+  openTimeMon: number
+  closeTimeMon: number
+  isOpenMon: boolean
+  isOpen24hoursMon: boolean
+  openTimeTue: number
+  closeTimeTue: number
+  isOpenTue: boolean
+  isOpen24hoursTue: boolean
+  openTimeWed: number
+  closeTimeWed: number
+  isOpenWed: boolean
+  isOpen24hoursWed: boolean
+  openTimeThurs: number
+  closeTimeThurs: number
+  isOpenThurs: boolean
+  isOpen24hoursThurs: boolean
+  openTimeFri: number
+  closeTimeFri: number
+  isOpenFri: boolean
+  isOpen24hoursFri: boolean
+  openTimeSat: number
+  closeTimeSat: number
+  isOpenSat: boolean
+  isOpen24hoursSat: boolean
+  openTimeSun: number
+  closeTimeSun: number
+  isOpenSun: boolean
+  isOpen24hoursSun: boolean
+  coWorkId: number
+  createAt: Date
+  updateAt: Date
+}
+
+/**
+ * Model VertifyBookingCode
+ * 
+ */
+export type VertifyBookingCode = {
+  id: number
+  bookdate: Date
   createAt: Date
   updateAt: Date
 }
@@ -271,14 +307,14 @@ export class PrismaClient<
   get userExternal(): Prisma.UserExternalDelegate<GlobalReject>;
 
   /**
-   * `prisma.branch`: Exposes CRUD operations for the **Branch** model.
+   * `prisma.coWork`: Exposes CRUD operations for the **CoWork** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Branches
-    * const branches = await prisma.branch.findMany()
+    * // Fetch zero or more CoWorks
+    * const coWorks = await prisma.coWork.findMany()
     * ```
     */
-  get branch(): Prisma.BranchDelegate<GlobalReject>;
+  get coWork(): Prisma.CoWorkDelegate<GlobalReject>;
 
   /**
    * `prisma.userInternal`: Exposes CRUD operations for the **UserInternal** model.
@@ -359,6 +395,16 @@ export class PrismaClient<
     * ```
     */
   get openClose(): Prisma.OpenCloseDelegate<GlobalReject>;
+
+  /**
+   * `prisma.vertifyBookingCode`: Exposes CRUD operations for the **VertifyBookingCode** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VertifyBookingCodes
+    * const vertifyBookingCodes = await prisma.vertifyBookingCode.findMany()
+    * ```
+    */
+  get vertifyBookingCode(): Prisma.VertifyBookingCodeDelegate<GlobalReject>;
 }
 
 export namespace Prisma {
@@ -829,7 +875,7 @@ export namespace Prisma {
 
   export const ModelName: {
     UserExternal: 'UserExternal',
-    Branch: 'Branch',
+    CoWork: 'CoWork',
     UserInternal: 'UserInternal',
     Room: 'Room',
     RoomRate: 'RoomRate',
@@ -837,7 +883,8 @@ export namespace Prisma {
     FacilityToRoom: 'FacilityToRoom',
     BranchToRoom: 'BranchToRoom',
     BookRoom: 'BookRoom',
-    OpenClose: 'OpenClose'
+    OpenClose: 'OpenClose',
+    VertifyBookingCode: 'VertifyBookingCode'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -999,32 +1046,30 @@ export namespace Prisma {
 
 
   /**
-   * Count Type BranchCountOutputType
+   * Count Type CoWorkCountOutputType
    */
 
 
-  export type BranchCountOutputType = {
+  export type CoWorkCountOutputType = {
     BranchToRoom: number
-    OpenClose: number
   }
 
-  export type BranchCountOutputTypeSelect = {
+  export type CoWorkCountOutputTypeSelect = {
     BranchToRoom?: boolean
-    OpenClose?: boolean
   }
 
-  export type BranchCountOutputTypeGetPayload<S extends boolean | null | undefined | BranchCountOutputTypeArgs> =
+  export type CoWorkCountOutputTypeGetPayload<S extends boolean | null | undefined | CoWorkCountOutputTypeArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? BranchCountOutputType :
+    S extends true ? CoWorkCountOutputType :
     S extends undefined ? never :
-    S extends { include: any } & (BranchCountOutputTypeArgs)
-    ? BranchCountOutputType 
-    : S extends { select: any } & (BranchCountOutputTypeArgs)
+    S extends { include: any } & (CoWorkCountOutputTypeArgs)
+    ? CoWorkCountOutputType 
+    : S extends { select: any } & (CoWorkCountOutputTypeArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-    P extends keyof BranchCountOutputType ? BranchCountOutputType[P] : never
+    P extends keyof CoWorkCountOutputType ? CoWorkCountOutputType[P] : never
   } 
-      : BranchCountOutputType
+      : CoWorkCountOutputType
 
 
 
@@ -1032,13 +1077,13 @@ export namespace Prisma {
   // Custom InputTypes
 
   /**
-   * BranchCountOutputType without action
+   * CoWorkCountOutputType without action
    */
-  export type BranchCountOutputTypeArgs = {
+  export type CoWorkCountOutputTypeArgs = {
     /**
-     * Select specific fields to fetch from the BranchCountOutputType
+     * Select specific fields to fetch from the CoWorkCountOutputType
      */
-    select?: BranchCountOutputTypeSelect | null
+    select?: CoWorkCountOutputTypeSelect | null
   }
 
 
@@ -1049,11 +1094,11 @@ export namespace Prisma {
 
 
   export type UserInternalCountOutputType = {
-    Branch: number
+    coWork: number
   }
 
   export type UserInternalCountOutputTypeSelect = {
-    Branch?: boolean
+    coWork?: boolean
   }
 
   export type UserInternalCountOutputTypeGetPayload<S extends boolean | null | undefined | UserInternalCountOutputTypeArgs> =
@@ -1306,6 +1351,49 @@ export namespace Prisma {
 
 
   /**
+   * Count Type VertifyBookingCodeCountOutputType
+   */
+
+
+  export type VertifyBookingCodeCountOutputType = {
+    UserExternal: number
+  }
+
+  export type VertifyBookingCodeCountOutputTypeSelect = {
+    UserExternal?: boolean
+  }
+
+  export type VertifyBookingCodeCountOutputTypeGetPayload<S extends boolean | null | undefined | VertifyBookingCodeCountOutputTypeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? VertifyBookingCodeCountOutputType :
+    S extends undefined ? never :
+    S extends { include: any } & (VertifyBookingCodeCountOutputTypeArgs)
+    ? VertifyBookingCodeCountOutputType 
+    : S extends { select: any } & (VertifyBookingCodeCountOutputTypeArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof VertifyBookingCodeCountOutputType ? VertifyBookingCodeCountOutputType[P] : never
+  } 
+      : VertifyBookingCodeCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * VertifyBookingCodeCountOutputType without action
+   */
+  export type VertifyBookingCodeCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCodeCountOutputType
+     */
+    select?: VertifyBookingCodeCountOutputTypeSelect | null
+  }
+
+
+
+  /**
    * Models
    */
 
@@ -1326,12 +1414,14 @@ export namespace Prisma {
     id: number | null
     tel: number | null
     bookRoomId: number | null
+    vertifyBookingCodeId: number | null
   }
 
   export type UserExternalSumAggregateOutputType = {
     id: number | null
     tel: number | null
     bookRoomId: number | null
+    vertifyBookingCodeId: number | null
   }
 
   export type UserExternalMinAggregateOutputType = {
@@ -1343,6 +1433,7 @@ export namespace Prisma {
     createAt: Date | null
     updateAt: Date | null
     bookRoomId: number | null
+    vertifyBookingCodeId: number | null
   }
 
   export type UserExternalMaxAggregateOutputType = {
@@ -1354,6 +1445,7 @@ export namespace Prisma {
     createAt: Date | null
     updateAt: Date | null
     bookRoomId: number | null
+    vertifyBookingCodeId: number | null
   }
 
   export type UserExternalCountAggregateOutputType = {
@@ -1365,6 +1457,7 @@ export namespace Prisma {
     createAt: number
     updateAt: number
     bookRoomId: number
+    vertifyBookingCodeId: number
     _all: number
   }
 
@@ -1373,12 +1466,14 @@ export namespace Prisma {
     id?: true
     tel?: true
     bookRoomId?: true
+    vertifyBookingCodeId?: true
   }
 
   export type UserExternalSumAggregateInputType = {
     id?: true
     tel?: true
     bookRoomId?: true
+    vertifyBookingCodeId?: true
   }
 
   export type UserExternalMinAggregateInputType = {
@@ -1390,6 +1485,7 @@ export namespace Prisma {
     createAt?: true
     updateAt?: true
     bookRoomId?: true
+    vertifyBookingCodeId?: true
   }
 
   export type UserExternalMaxAggregateInputType = {
@@ -1401,6 +1497,7 @@ export namespace Prisma {
     createAt?: true
     updateAt?: true
     bookRoomId?: true
+    vertifyBookingCodeId?: true
   }
 
   export type UserExternalCountAggregateInputType = {
@@ -1412,6 +1509,7 @@ export namespace Prisma {
     createAt?: true
     updateAt?: true
     bookRoomId?: true
+    vertifyBookingCodeId?: true
     _all?: true
   }
 
@@ -1510,7 +1608,8 @@ export namespace Prisma {
     password: string
     createAt: Date
     updateAt: Date
-    bookRoomId: number
+    bookRoomId: number | null
+    vertifyBookingCodeId: number | null
     _count: UserExternalCountAggregateOutputType | null
     _avg: UserExternalAvgAggregateOutputType | null
     _sum: UserExternalSumAggregateOutputType | null
@@ -1541,12 +1640,15 @@ export namespace Prisma {
     createAt?: boolean
     updateAt?: boolean
     bookRoomId?: boolean
+    vertifyBookingCodeId?: boolean
     bookRoom?: boolean | BookRoomArgs
+    vertifyBookingCode?: boolean | VertifyBookingCodeArgs
   }
 
 
   export type UserExternalInclude = {
     bookRoom?: boolean | BookRoomArgs
+    vertifyBookingCode?: boolean | VertifyBookingCodeArgs
   }
 
   export type UserExternalGetPayload<S extends boolean | null | undefined | UserExternalArgs> =
@@ -1556,12 +1658,14 @@ export namespace Prisma {
     S extends { include: any } & (UserExternalArgs | UserExternalFindManyArgs)
     ? UserExternal  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'bookRoom' ? BookRoomGetPayload<S['include'][P]> :  never
+        P extends 'bookRoom' ? BookRoomGetPayload<S['include'][P]> | null :
+        P extends 'vertifyBookingCode' ? VertifyBookingCodeGetPayload<S['include'][P]> | null :  never
   } 
     : S extends { select: any } & (UserExternalArgs | UserExternalFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'bookRoom' ? BookRoomGetPayload<S['select'][P]> :  P extends keyof UserExternal ? UserExternal[P] : never
+        P extends 'bookRoom' ? BookRoomGetPayload<S['select'][P]> | null :
+        P extends 'vertifyBookingCode' ? VertifyBookingCodeGetPayload<S['select'][P]> | null :  P extends keyof UserExternal ? UserExternal[P] : never
   } 
       : UserExternal
 
@@ -1935,6 +2039,8 @@ export namespace Prisma {
 
     bookRoom<T extends BookRoomArgs= {}>(args?: Subset<T, BookRoomArgs>): Prisma__BookRoomClient<BookRoomGetPayload<T> | Null>;
 
+    vertifyBookingCode<T extends VertifyBookingCodeArgs= {}>(args?: Subset<T, VertifyBookingCodeArgs>): Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T> | Null>;
+
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2307,41 +2413,31 @@ export namespace Prisma {
 
 
   /**
-   * Model Branch
+   * Model CoWork
    */
 
 
-  export type AggregateBranch = {
-    _count: BranchCountAggregateOutputType | null
-    _avg: BranchAvgAggregateOutputType | null
-    _sum: BranchSumAggregateOutputType | null
-    _min: BranchMinAggregateOutputType | null
-    _max: BranchMaxAggregateOutputType | null
+  export type AggregateCoWork = {
+    _count: CoWorkCountAggregateOutputType | null
+    _avg: CoWorkAvgAggregateOutputType | null
+    _sum: CoWorkSumAggregateOutputType | null
+    _min: CoWorkMinAggregateOutputType | null
+    _max: CoWorkMaxAggregateOutputType | null
   }
 
-  export type BranchAvgAggregateOutputType = {
+  export type CoWorkAvgAggregateOutputType = {
     id: number | null
     tel: number | null
     userInternalId: number | null
   }
 
-  export type BranchSumAggregateOutputType = {
+  export type CoWorkSumAggregateOutputType = {
     id: number | null
     tel: number | null
     userInternalId: number | null
   }
 
-  export type BranchMinAggregateOutputType = {
-    id: number | null
-    name: string | null
-    description: string | null
-    location: string | null
-    tel: number | null
-    picture: string | null
-    userInternalId: number | null
-  }
-
-  export type BranchMaxAggregateOutputType = {
+  export type CoWorkMinAggregateOutputType = {
     id: number | null
     name: string | null
     description: string | null
@@ -2351,7 +2447,17 @@ export namespace Prisma {
     userInternalId: number | null
   }
 
-  export type BranchCountAggregateOutputType = {
+  export type CoWorkMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    description: string | null
+    location: string | null
+    tel: number | null
+    picture: string | null
+    userInternalId: number | null
+  }
+
+  export type CoWorkCountAggregateOutputType = {
     id: number
     name: number
     description: number
@@ -2363,29 +2469,19 @@ export namespace Prisma {
   }
 
 
-  export type BranchAvgAggregateInputType = {
+  export type CoWorkAvgAggregateInputType = {
     id?: true
     tel?: true
     userInternalId?: true
   }
 
-  export type BranchSumAggregateInputType = {
+  export type CoWorkSumAggregateInputType = {
     id?: true
     tel?: true
     userInternalId?: true
   }
 
-  export type BranchMinAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    location?: true
-    tel?: true
-    picture?: true
-    userInternalId?: true
-  }
-
-  export type BranchMaxAggregateInputType = {
+  export type CoWorkMinAggregateInputType = {
     id?: true
     name?: true
     description?: true
@@ -2395,7 +2491,17 @@ export namespace Prisma {
     userInternalId?: true
   }
 
-  export type BranchCountAggregateInputType = {
+  export type CoWorkMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    location?: true
+    tel?: true
+    picture?: true
+    userInternalId?: true
+  }
+
+  export type CoWorkCountAggregateInputType = {
     id?: true
     name?: true
     description?: true
@@ -2406,94 +2512,94 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type BranchAggregateArgs = {
+  export type CoWorkAggregateArgs = {
     /**
-     * Filter which Branch to aggregate.
+     * Filter which CoWork to aggregate.
      */
-    where?: BranchWhereInput
+    where?: CoWorkWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Branches to fetch.
+     * Determine the order of CoWorks to fetch.
      */
-    orderBy?: Enumerable<BranchOrderByWithRelationInput>
+    orderBy?: Enumerable<CoWorkOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: BranchWhereUniqueInput
+    cursor?: CoWorkWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Branches from the position of the cursor.
+     * Take `±n` CoWorks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Branches.
+     * Skip the first `n` CoWorks.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Branches
+     * Count returned CoWorks
     **/
-    _count?: true | BranchCountAggregateInputType
+    _count?: true | CoWorkCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: BranchAvgAggregateInputType
+    _avg?: CoWorkAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: BranchSumAggregateInputType
+    _sum?: CoWorkSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: BranchMinAggregateInputType
+    _min?: CoWorkMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: BranchMaxAggregateInputType
+    _max?: CoWorkMaxAggregateInputType
   }
 
-  export type GetBranchAggregateType<T extends BranchAggregateArgs> = {
-        [P in keyof T & keyof AggregateBranch]: P extends '_count' | 'count'
+  export type GetCoWorkAggregateType<T extends CoWorkAggregateArgs> = {
+        [P in keyof T & keyof AggregateCoWork]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateBranch[P]>
-      : GetScalarType<T[P], AggregateBranch[P]>
+        : GetScalarType<T[P], AggregateCoWork[P]>
+      : GetScalarType<T[P], AggregateCoWork[P]>
   }
 
 
 
 
-  export type BranchGroupByArgs = {
-    where?: BranchWhereInput
-    orderBy?: Enumerable<BranchOrderByWithAggregationInput>
-    by: BranchScalarFieldEnum[]
-    having?: BranchScalarWhereWithAggregatesInput
+  export type CoWorkGroupByArgs = {
+    where?: CoWorkWhereInput
+    orderBy?: Enumerable<CoWorkOrderByWithAggregationInput>
+    by: CoWorkScalarFieldEnum[]
+    having?: CoWorkScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: BranchCountAggregateInputType | true
-    _avg?: BranchAvgAggregateInputType
-    _sum?: BranchSumAggregateInputType
-    _min?: BranchMinAggregateInputType
-    _max?: BranchMaxAggregateInputType
+    _count?: CoWorkCountAggregateInputType | true
+    _avg?: CoWorkAvgAggregateInputType
+    _sum?: CoWorkSumAggregateInputType
+    _min?: CoWorkMinAggregateInputType
+    _max?: CoWorkMaxAggregateInputType
   }
 
 
-  export type BranchGroupByOutputType = {
+  export type CoWorkGroupByOutputType = {
     id: number
     name: string
     description: string
@@ -2501,28 +2607,28 @@ export namespace Prisma {
     tel: number
     picture: string
     userInternalId: number
-    _count: BranchCountAggregateOutputType | null
-    _avg: BranchAvgAggregateOutputType | null
-    _sum: BranchSumAggregateOutputType | null
-    _min: BranchMinAggregateOutputType | null
-    _max: BranchMaxAggregateOutputType | null
+    _count: CoWorkCountAggregateOutputType | null
+    _avg: CoWorkAvgAggregateOutputType | null
+    _sum: CoWorkSumAggregateOutputType | null
+    _min: CoWorkMinAggregateOutputType | null
+    _max: CoWorkMaxAggregateOutputType | null
   }
 
-  type GetBranchGroupByPayload<T extends BranchGroupByArgs> = Prisma.PrismaPromise<
+  type GetCoWorkGroupByPayload<T extends CoWorkGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<BranchGroupByOutputType, T['by']> &
+      PickArray<CoWorkGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof BranchGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof CoWorkGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], BranchGroupByOutputType[P]>
-            : GetScalarType<T[P], BranchGroupByOutputType[P]>
+              : GetScalarType<T[P], CoWorkGroupByOutputType[P]>
+            : GetScalarType<T[P], CoWorkGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type BranchSelect = {
+  export type CoWorkSelect = {
     id?: boolean
     name?: boolean
     description?: boolean
@@ -2531,189 +2637,189 @@ export namespace Prisma {
     picture?: boolean
     userInternalId?: boolean
     userInternal?: boolean | UserInternalArgs
-    BranchToRoom?: boolean | Branch$BranchToRoomArgs
-    OpenClose?: boolean | Branch$OpenCloseArgs
-    _count?: boolean | BranchCountOutputTypeArgs
+    BranchToRoom?: boolean | CoWork$BranchToRoomArgs
+    OpenClose?: boolean | OpenCloseArgs
+    _count?: boolean | CoWorkCountOutputTypeArgs
   }
 
 
-  export type BranchInclude = {
+  export type CoWorkInclude = {
     userInternal?: boolean | UserInternalArgs
-    BranchToRoom?: boolean | Branch$BranchToRoomArgs
-    OpenClose?: boolean | Branch$OpenCloseArgs
-    _count?: boolean | BranchCountOutputTypeArgs
+    BranchToRoom?: boolean | CoWork$BranchToRoomArgs
+    OpenClose?: boolean | OpenCloseArgs
+    _count?: boolean | CoWorkCountOutputTypeArgs
   }
 
-  export type BranchGetPayload<S extends boolean | null | undefined | BranchArgs> =
+  export type CoWorkGetPayload<S extends boolean | null | undefined | CoWorkArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? Branch :
+    S extends true ? CoWork :
     S extends undefined ? never :
-    S extends { include: any } & (BranchArgs | BranchFindManyArgs)
-    ? Branch  & {
+    S extends { include: any } & (CoWorkArgs | CoWorkFindManyArgs)
+    ? CoWork  & {
     [P in TruthyKeys<S['include']>]:
         P extends 'userInternal' ? UserInternalGetPayload<S['include'][P]> :
         P extends 'BranchToRoom' ? Array < BranchToRoomGetPayload<S['include'][P]>>  :
-        P extends 'OpenClose' ? Array < OpenCloseGetPayload<S['include'][P]>>  :
-        P extends '_count' ? BranchCountOutputTypeGetPayload<S['include'][P]> :  never
+        P extends 'OpenClose' ? OpenCloseGetPayload<S['include'][P]> | null :
+        P extends '_count' ? CoWorkCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
-    : S extends { select: any } & (BranchArgs | BranchFindManyArgs)
+    : S extends { select: any } & (CoWorkArgs | CoWorkFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
         P extends 'userInternal' ? UserInternalGetPayload<S['select'][P]> :
         P extends 'BranchToRoom' ? Array < BranchToRoomGetPayload<S['select'][P]>>  :
-        P extends 'OpenClose' ? Array < OpenCloseGetPayload<S['select'][P]>>  :
-        P extends '_count' ? BranchCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Branch ? Branch[P] : never
+        P extends 'OpenClose' ? OpenCloseGetPayload<S['select'][P]> | null :
+        P extends '_count' ? CoWorkCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof CoWork ? CoWork[P] : never
   } 
-      : Branch
+      : CoWork
 
 
-  type BranchCountArgs = 
-    Omit<BranchFindManyArgs, 'select' | 'include'> & {
-      select?: BranchCountAggregateInputType | true
+  type CoWorkCountArgs = 
+    Omit<CoWorkFindManyArgs, 'select' | 'include'> & {
+      select?: CoWorkCountAggregateInputType | true
     }
 
-  export interface BranchDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+  export interface CoWorkDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
 
     /**
-     * Find zero or one Branch that matches the filter.
-     * @param {BranchFindUniqueArgs} args - Arguments to find a Branch
+     * Find zero or one CoWork that matches the filter.
+     * @param {CoWorkFindUniqueArgs} args - Arguments to find a CoWork
      * @example
-     * // Get one Branch
-     * const branch = await prisma.branch.findUnique({
+     * // Get one CoWork
+     * const coWork = await prisma.coWork.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends BranchFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, BranchFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Branch'> extends True ? Prisma__BranchClient<BranchGetPayload<T>> : Prisma__BranchClient<BranchGetPayload<T> | null, null>
+    findUnique<T extends CoWorkFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, CoWorkFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'CoWork'> extends True ? Prisma__CoWorkClient<CoWorkGetPayload<T>> : Prisma__CoWorkClient<CoWorkGetPayload<T> | null, null>
 
     /**
-     * Find one Branch that matches the filter or throw an error  with `error.code='P2025'` 
+     * Find one CoWork that matches the filter or throw an error  with `error.code='P2025'` 
      *     if no matches were found.
-     * @param {BranchFindUniqueOrThrowArgs} args - Arguments to find a Branch
+     * @param {CoWorkFindUniqueOrThrowArgs} args - Arguments to find a CoWork
      * @example
-     * // Get one Branch
-     * const branch = await prisma.branch.findUniqueOrThrow({
+     * // Get one CoWork
+     * const coWork = await prisma.coWork.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends BranchFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, BranchFindUniqueOrThrowArgs>
-    ): Prisma__BranchClient<BranchGetPayload<T>>
+    findUniqueOrThrow<T extends CoWorkFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, CoWorkFindUniqueOrThrowArgs>
+    ): Prisma__CoWorkClient<CoWorkGetPayload<T>>
 
     /**
-     * Find the first Branch that matches the filter.
+     * Find the first CoWork that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BranchFindFirstArgs} args - Arguments to find a Branch
+     * @param {CoWorkFindFirstArgs} args - Arguments to find a CoWork
      * @example
-     * // Get one Branch
-     * const branch = await prisma.branch.findFirst({
+     * // Get one CoWork
+     * const coWork = await prisma.coWork.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends BranchFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, BranchFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Branch'> extends True ? Prisma__BranchClient<BranchGetPayload<T>> : Prisma__BranchClient<BranchGetPayload<T> | null, null>
+    findFirst<T extends CoWorkFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, CoWorkFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'CoWork'> extends True ? Prisma__CoWorkClient<CoWorkGetPayload<T>> : Prisma__CoWorkClient<CoWorkGetPayload<T> | null, null>
 
     /**
-     * Find the first Branch that matches the filter or
+     * Find the first CoWork that matches the filter or
      * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BranchFindFirstOrThrowArgs} args - Arguments to find a Branch
+     * @param {CoWorkFindFirstOrThrowArgs} args - Arguments to find a CoWork
      * @example
-     * // Get one Branch
-     * const branch = await prisma.branch.findFirstOrThrow({
+     * // Get one CoWork
+     * const coWork = await prisma.coWork.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends BranchFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, BranchFindFirstOrThrowArgs>
-    ): Prisma__BranchClient<BranchGetPayload<T>>
+    findFirstOrThrow<T extends CoWorkFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, CoWorkFindFirstOrThrowArgs>
+    ): Prisma__CoWorkClient<CoWorkGetPayload<T>>
 
     /**
-     * Find zero or more Branches that matches the filter.
+     * Find zero or more CoWorks that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BranchFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {CoWorkFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Branches
-     * const branches = await prisma.branch.findMany()
+     * // Get all CoWorks
+     * const coWorks = await prisma.coWork.findMany()
      * 
-     * // Get first 10 Branches
-     * const branches = await prisma.branch.findMany({ take: 10 })
+     * // Get first 10 CoWorks
+     * const coWorks = await prisma.coWork.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const branchWithIdOnly = await prisma.branch.findMany({ select: { id: true } })
+     * const coWorkWithIdOnly = await prisma.coWork.findMany({ select: { id: true } })
      * 
     **/
-    findMany<T extends BranchFindManyArgs>(
-      args?: SelectSubset<T, BranchFindManyArgs>
-    ): Prisma.PrismaPromise<Array<BranchGetPayload<T>>>
+    findMany<T extends CoWorkFindManyArgs>(
+      args?: SelectSubset<T, CoWorkFindManyArgs>
+    ): Prisma.PrismaPromise<Array<CoWorkGetPayload<T>>>
 
     /**
-     * Create a Branch.
-     * @param {BranchCreateArgs} args - Arguments to create a Branch.
+     * Create a CoWork.
+     * @param {CoWorkCreateArgs} args - Arguments to create a CoWork.
      * @example
-     * // Create one Branch
-     * const Branch = await prisma.branch.create({
+     * // Create one CoWork
+     * const CoWork = await prisma.coWork.create({
      *   data: {
-     *     // ... data to create a Branch
+     *     // ... data to create a CoWork
      *   }
      * })
      * 
     **/
-    create<T extends BranchCreateArgs>(
-      args: SelectSubset<T, BranchCreateArgs>
-    ): Prisma__BranchClient<BranchGetPayload<T>>
+    create<T extends CoWorkCreateArgs>(
+      args: SelectSubset<T, CoWorkCreateArgs>
+    ): Prisma__CoWorkClient<CoWorkGetPayload<T>>
 
     /**
-     * Create many Branches.
-     *     @param {BranchCreateManyArgs} args - Arguments to create many Branches.
+     * Create many CoWorks.
+     *     @param {CoWorkCreateManyArgs} args - Arguments to create many CoWorks.
      *     @example
-     *     // Create many Branches
-     *     const branch = await prisma.branch.createMany({
+     *     // Create many CoWorks
+     *     const coWork = await prisma.coWork.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends BranchCreateManyArgs>(
-      args?: SelectSubset<T, BranchCreateManyArgs>
+    createMany<T extends CoWorkCreateManyArgs>(
+      args?: SelectSubset<T, CoWorkCreateManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Branch.
-     * @param {BranchDeleteArgs} args - Arguments to delete one Branch.
+     * Delete a CoWork.
+     * @param {CoWorkDeleteArgs} args - Arguments to delete one CoWork.
      * @example
-     * // Delete one Branch
-     * const Branch = await prisma.branch.delete({
+     * // Delete one CoWork
+     * const CoWork = await prisma.coWork.delete({
      *   where: {
-     *     // ... filter to delete one Branch
+     *     // ... filter to delete one CoWork
      *   }
      * })
      * 
     **/
-    delete<T extends BranchDeleteArgs>(
-      args: SelectSubset<T, BranchDeleteArgs>
-    ): Prisma__BranchClient<BranchGetPayload<T>>
+    delete<T extends CoWorkDeleteArgs>(
+      args: SelectSubset<T, CoWorkDeleteArgs>
+    ): Prisma__CoWorkClient<CoWorkGetPayload<T>>
 
     /**
-     * Update one Branch.
-     * @param {BranchUpdateArgs} args - Arguments to update one Branch.
+     * Update one CoWork.
+     * @param {CoWorkUpdateArgs} args - Arguments to update one CoWork.
      * @example
-     * // Update one Branch
-     * const branch = await prisma.branch.update({
+     * // Update one CoWork
+     * const coWork = await prisma.coWork.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2723,34 +2829,34 @@ export namespace Prisma {
      * })
      * 
     **/
-    update<T extends BranchUpdateArgs>(
-      args: SelectSubset<T, BranchUpdateArgs>
-    ): Prisma__BranchClient<BranchGetPayload<T>>
+    update<T extends CoWorkUpdateArgs>(
+      args: SelectSubset<T, CoWorkUpdateArgs>
+    ): Prisma__CoWorkClient<CoWorkGetPayload<T>>
 
     /**
-     * Delete zero or more Branches.
-     * @param {BranchDeleteManyArgs} args - Arguments to filter Branches to delete.
+     * Delete zero or more CoWorks.
+     * @param {CoWorkDeleteManyArgs} args - Arguments to filter CoWorks to delete.
      * @example
-     * // Delete a few Branches
-     * const { count } = await prisma.branch.deleteMany({
+     * // Delete a few CoWorks
+     * const { count } = await prisma.coWork.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends BranchDeleteManyArgs>(
-      args?: SelectSubset<T, BranchDeleteManyArgs>
+    deleteMany<T extends CoWorkDeleteManyArgs>(
+      args?: SelectSubset<T, CoWorkDeleteManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Branches.
+     * Update zero or more CoWorks.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BranchUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {CoWorkUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Branches
-     * const branch = await prisma.branch.updateMany({
+     * // Update many CoWorks
+     * const coWork = await prisma.coWork.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2760,59 +2866,59 @@ export namespace Prisma {
      * })
      * 
     **/
-    updateMany<T extends BranchUpdateManyArgs>(
-      args: SelectSubset<T, BranchUpdateManyArgs>
+    updateMany<T extends CoWorkUpdateManyArgs>(
+      args: SelectSubset<T, CoWorkUpdateManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Branch.
-     * @param {BranchUpsertArgs} args - Arguments to update or create a Branch.
+     * Create or update one CoWork.
+     * @param {CoWorkUpsertArgs} args - Arguments to update or create a CoWork.
      * @example
-     * // Update or create a Branch
-     * const branch = await prisma.branch.upsert({
+     * // Update or create a CoWork
+     * const coWork = await prisma.coWork.upsert({
      *   create: {
-     *     // ... data to create a Branch
+     *     // ... data to create a CoWork
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Branch we want to update
+     *     // ... the filter for the CoWork we want to update
      *   }
      * })
     **/
-    upsert<T extends BranchUpsertArgs>(
-      args: SelectSubset<T, BranchUpsertArgs>
-    ): Prisma__BranchClient<BranchGetPayload<T>>
+    upsert<T extends CoWorkUpsertArgs>(
+      args: SelectSubset<T, CoWorkUpsertArgs>
+    ): Prisma__CoWorkClient<CoWorkGetPayload<T>>
 
     /**
-     * Count the number of Branches.
+     * Count the number of CoWorks.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BranchCountArgs} args - Arguments to filter Branches to count.
+     * @param {CoWorkCountArgs} args - Arguments to filter CoWorks to count.
      * @example
-     * // Count the number of Branches
-     * const count = await prisma.branch.count({
+     * // Count the number of CoWorks
+     * const count = await prisma.coWork.count({
      *   where: {
-     *     // ... the filter for the Branches we want to count
+     *     // ... the filter for the CoWorks we want to count
      *   }
      * })
     **/
-    count<T extends BranchCountArgs>(
-      args?: Subset<T, BranchCountArgs>,
+    count<T extends CoWorkCountArgs>(
+      args?: Subset<T, CoWorkCountArgs>,
     ): Prisma.PrismaPromise<
       T extends _Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], BranchCountAggregateOutputType>
+          : GetScalarType<T['select'], CoWorkCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Branch.
+     * Allows you to perform aggregations operations on a CoWork.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BranchAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {CoWorkAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -2832,13 +2938,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends BranchAggregateArgs>(args: Subset<T, BranchAggregateArgs>): Prisma.PrismaPromise<GetBranchAggregateType<T>>
+    aggregate<T extends CoWorkAggregateArgs>(args: Subset<T, CoWorkAggregateArgs>): Prisma.PrismaPromise<GetCoWorkAggregateType<T>>
 
     /**
-     * Group by Branch.
+     * Group by CoWork.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BranchGroupByArgs} args - Group by arguments.
+     * @param {CoWorkGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -2853,14 +2959,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends BranchGroupByArgs,
+      T extends CoWorkGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: BranchGroupByArgs['orderBy'] }
-        : { orderBy?: BranchGroupByArgs['orderBy'] },
+        ? { orderBy: CoWorkGroupByArgs['orderBy'] }
+        : { orderBy?: CoWorkGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -2909,17 +3015,17 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, BranchGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBranchGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, CoWorkGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCoWorkGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
 
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Branch.
+   * The delegate class that acts as a "Promise-like" for CoWork.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export class Prisma__BranchClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+  export class Prisma__CoWorkClient<T, Null = never> implements Prisma.PrismaPromise<T> {
     private readonly _dmmf;
     private readonly _queryType;
     private readonly _rootField;
@@ -2936,9 +3042,9 @@ export namespace Prisma {
 
     userInternal<T extends UserInternalArgs= {}>(args?: Subset<T, UserInternalArgs>): Prisma__UserInternalClient<UserInternalGetPayload<T> | Null>;
 
-    BranchToRoom<T extends Branch$BranchToRoomArgs= {}>(args?: Subset<T, Branch$BranchToRoomArgs>): Prisma.PrismaPromise<Array<BranchToRoomGetPayload<T>>| Null>;
+    BranchToRoom<T extends CoWork$BranchToRoomArgs= {}>(args?: Subset<T, CoWork$BranchToRoomArgs>): Prisma.PrismaPromise<Array<BranchToRoomGetPayload<T>>| Null>;
 
-    OpenClose<T extends Branch$OpenCloseArgs= {}>(args?: Subset<T, Branch$OpenCloseArgs>): Prisma.PrismaPromise<Array<OpenCloseGetPayload<T>>| Null>;
+    OpenClose<T extends OpenCloseArgs= {}>(args?: Subset<T, OpenCloseArgs>): Prisma__OpenCloseClient<OpenCloseGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -2968,27 +3074,27 @@ export namespace Prisma {
   // Custom InputTypes
 
   /**
-   * Branch base type for findUnique actions
+   * CoWork base type for findUnique actions
    */
-  export type BranchFindUniqueArgsBase = {
+  export type CoWorkFindUniqueArgsBase = {
     /**
-     * Select specific fields to fetch from the Branch
+     * Select specific fields to fetch from the CoWork
      */
-    select?: BranchSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: BranchInclude | null
+    include?: CoWorkInclude | null
     /**
-     * Filter, which Branch to fetch.
+     * Filter, which CoWork to fetch.
      */
-    where: BranchWhereUniqueInput
+    where: CoWorkWhereUniqueInput
   }
 
   /**
-   * Branch findUnique
+   * CoWork findUnique
    */
-  export interface BranchFindUniqueArgs extends BranchFindUniqueArgsBase {
+  export interface CoWorkFindUniqueArgs extends CoWorkFindUniqueArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
@@ -2998,76 +3104,76 @@ export namespace Prisma {
       
 
   /**
-   * Branch findUniqueOrThrow
+   * CoWork findUniqueOrThrow
    */
-  export type BranchFindUniqueOrThrowArgs = {
+  export type CoWorkFindUniqueOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Branch
+     * Select specific fields to fetch from the CoWork
      */
-    select?: BranchSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: BranchInclude | null
+    include?: CoWorkInclude | null
     /**
-     * Filter, which Branch to fetch.
+     * Filter, which CoWork to fetch.
      */
-    where: BranchWhereUniqueInput
+    where: CoWorkWhereUniqueInput
   }
 
 
   /**
-   * Branch base type for findFirst actions
+   * CoWork base type for findFirst actions
    */
-  export type BranchFindFirstArgsBase = {
+  export type CoWorkFindFirstArgsBase = {
     /**
-     * Select specific fields to fetch from the Branch
+     * Select specific fields to fetch from the CoWork
      */
-    select?: BranchSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: BranchInclude | null
+    include?: CoWorkInclude | null
     /**
-     * Filter, which Branch to fetch.
+     * Filter, which CoWork to fetch.
      */
-    where?: BranchWhereInput
+    where?: CoWorkWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Branches to fetch.
+     * Determine the order of CoWorks to fetch.
      */
-    orderBy?: Enumerable<BranchOrderByWithRelationInput>
+    orderBy?: Enumerable<CoWorkOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Branches.
+     * Sets the position for searching for CoWorks.
      */
-    cursor?: BranchWhereUniqueInput
+    cursor?: CoWorkWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Branches from the position of the cursor.
+     * Take `±n` CoWorks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Branches.
+     * Skip the first `n` CoWorks.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Branches.
+     * Filter by unique combinations of CoWorks.
      */
-    distinct?: Enumerable<BranchScalarFieldEnum>
+    distinct?: Enumerable<CoWorkScalarFieldEnum>
   }
 
   /**
-   * Branch findFirst
+   * CoWork findFirst
    */
-  export interface BranchFindFirstArgs extends BranchFindFirstArgsBase {
+  export interface CoWorkFindFirstArgs extends CoWorkFindFirstArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
@@ -3077,228 +3183,228 @@ export namespace Prisma {
       
 
   /**
-   * Branch findFirstOrThrow
+   * CoWork findFirstOrThrow
    */
-  export type BranchFindFirstOrThrowArgs = {
+  export type CoWorkFindFirstOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Branch
+     * Select specific fields to fetch from the CoWork
      */
-    select?: BranchSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: BranchInclude | null
+    include?: CoWorkInclude | null
     /**
-     * Filter, which Branch to fetch.
+     * Filter, which CoWork to fetch.
      */
-    where?: BranchWhereInput
+    where?: CoWorkWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Branches to fetch.
+     * Determine the order of CoWorks to fetch.
      */
-    orderBy?: Enumerable<BranchOrderByWithRelationInput>
+    orderBy?: Enumerable<CoWorkOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Branches.
+     * Sets the position for searching for CoWorks.
      */
-    cursor?: BranchWhereUniqueInput
+    cursor?: CoWorkWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Branches from the position of the cursor.
+     * Take `±n` CoWorks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Branches.
+     * Skip the first `n` CoWorks.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Branches.
+     * Filter by unique combinations of CoWorks.
      */
-    distinct?: Enumerable<BranchScalarFieldEnum>
+    distinct?: Enumerable<CoWorkScalarFieldEnum>
   }
 
 
   /**
-   * Branch findMany
+   * CoWork findMany
    */
-  export type BranchFindManyArgs = {
+  export type CoWorkFindManyArgs = {
     /**
-     * Select specific fields to fetch from the Branch
+     * Select specific fields to fetch from the CoWork
      */
-    select?: BranchSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: BranchInclude | null
+    include?: CoWorkInclude | null
     /**
-     * Filter, which Branches to fetch.
+     * Filter, which CoWorks to fetch.
      */
-    where?: BranchWhereInput
+    where?: CoWorkWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Branches to fetch.
+     * Determine the order of CoWorks to fetch.
      */
-    orderBy?: Enumerable<BranchOrderByWithRelationInput>
+    orderBy?: Enumerable<CoWorkOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Branches.
+     * Sets the position for listing CoWorks.
      */
-    cursor?: BranchWhereUniqueInput
+    cursor?: CoWorkWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Branches from the position of the cursor.
+     * Take `±n` CoWorks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Branches.
+     * Skip the first `n` CoWorks.
      */
     skip?: number
-    distinct?: Enumerable<BranchScalarFieldEnum>
+    distinct?: Enumerable<CoWorkScalarFieldEnum>
   }
 
 
   /**
-   * Branch create
+   * CoWork create
    */
-  export type BranchCreateArgs = {
+  export type CoWorkCreateArgs = {
     /**
-     * Select specific fields to fetch from the Branch
+     * Select specific fields to fetch from the CoWork
      */
-    select?: BranchSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: BranchInclude | null
+    include?: CoWorkInclude | null
     /**
-     * The data needed to create a Branch.
+     * The data needed to create a CoWork.
      */
-    data: XOR<BranchCreateInput, BranchUncheckedCreateInput>
+    data: XOR<CoWorkCreateInput, CoWorkUncheckedCreateInput>
   }
 
 
   /**
-   * Branch createMany
+   * CoWork createMany
    */
-  export type BranchCreateManyArgs = {
+  export type CoWorkCreateManyArgs = {
     /**
-     * The data used to create many Branches.
+     * The data used to create many CoWorks.
      */
-    data: Enumerable<BranchCreateManyInput>
+    data: Enumerable<CoWorkCreateManyInput>
     skipDuplicates?: boolean
   }
 
 
   /**
-   * Branch update
+   * CoWork update
    */
-  export type BranchUpdateArgs = {
+  export type CoWorkUpdateArgs = {
     /**
-     * Select specific fields to fetch from the Branch
+     * Select specific fields to fetch from the CoWork
      */
-    select?: BranchSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: BranchInclude | null
+    include?: CoWorkInclude | null
     /**
-     * The data needed to update a Branch.
+     * The data needed to update a CoWork.
      */
-    data: XOR<BranchUpdateInput, BranchUncheckedUpdateInput>
+    data: XOR<CoWorkUpdateInput, CoWorkUncheckedUpdateInput>
     /**
-     * Choose, which Branch to update.
+     * Choose, which CoWork to update.
      */
-    where: BranchWhereUniqueInput
+    where: CoWorkWhereUniqueInput
   }
 
 
   /**
-   * Branch updateMany
+   * CoWork updateMany
    */
-  export type BranchUpdateManyArgs = {
+  export type CoWorkUpdateManyArgs = {
     /**
-     * The data used to update Branches.
+     * The data used to update CoWorks.
      */
-    data: XOR<BranchUpdateManyMutationInput, BranchUncheckedUpdateManyInput>
+    data: XOR<CoWorkUpdateManyMutationInput, CoWorkUncheckedUpdateManyInput>
     /**
-     * Filter which Branches to update
+     * Filter which CoWorks to update
      */
-    where?: BranchWhereInput
+    where?: CoWorkWhereInput
   }
 
 
   /**
-   * Branch upsert
+   * CoWork upsert
    */
-  export type BranchUpsertArgs = {
+  export type CoWorkUpsertArgs = {
     /**
-     * Select specific fields to fetch from the Branch
+     * Select specific fields to fetch from the CoWork
      */
-    select?: BranchSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: BranchInclude | null
+    include?: CoWorkInclude | null
     /**
-     * The filter to search for the Branch to update in case it exists.
+     * The filter to search for the CoWork to update in case it exists.
      */
-    where: BranchWhereUniqueInput
+    where: CoWorkWhereUniqueInput
     /**
-     * In case the Branch found by the `where` argument doesn't exist, create a new Branch with this data.
+     * In case the CoWork found by the `where` argument doesn't exist, create a new CoWork with this data.
      */
-    create: XOR<BranchCreateInput, BranchUncheckedCreateInput>
+    create: XOR<CoWorkCreateInput, CoWorkUncheckedCreateInput>
     /**
-     * In case the Branch was found with the provided `where` argument, update it with this data.
+     * In case the CoWork was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<BranchUpdateInput, BranchUncheckedUpdateInput>
+    update: XOR<CoWorkUpdateInput, CoWorkUncheckedUpdateInput>
   }
 
 
   /**
-   * Branch delete
+   * CoWork delete
    */
-  export type BranchDeleteArgs = {
+  export type CoWorkDeleteArgs = {
     /**
-     * Select specific fields to fetch from the Branch
+     * Select specific fields to fetch from the CoWork
      */
-    select?: BranchSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: BranchInclude | null
+    include?: CoWorkInclude | null
     /**
-     * Filter which Branch to delete.
+     * Filter which CoWork to delete.
      */
-    where: BranchWhereUniqueInput
+    where: CoWorkWhereUniqueInput
   }
 
 
   /**
-   * Branch deleteMany
+   * CoWork deleteMany
    */
-  export type BranchDeleteManyArgs = {
+  export type CoWorkDeleteManyArgs = {
     /**
-     * Filter which Branches to delete
+     * Filter which CoWorks to delete
      */
-    where?: BranchWhereInput
+    where?: CoWorkWhereInput
   }
 
 
   /**
-   * Branch.BranchToRoom
+   * CoWork.BranchToRoom
    */
-  export type Branch$BranchToRoomArgs = {
+  export type CoWork$BranchToRoomArgs = {
     /**
      * Select specific fields to fetch from the BranchToRoom
      */
@@ -3317,38 +3423,17 @@ export namespace Prisma {
 
 
   /**
-   * Branch.OpenClose
+   * CoWork without action
    */
-  export type Branch$OpenCloseArgs = {
+  export type CoWorkArgs = {
     /**
-     * Select specific fields to fetch from the OpenClose
+     * Select specific fields to fetch from the CoWork
      */
-    select?: OpenCloseSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: OpenCloseInclude | null
-    where?: OpenCloseWhereInput
-    orderBy?: Enumerable<OpenCloseOrderByWithRelationInput>
-    cursor?: OpenCloseWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Enumerable<OpenCloseScalarFieldEnum>
-  }
-
-
-  /**
-   * Branch without action
-   */
-  export type BranchArgs = {
-    /**
-     * Select specific fields to fetch from the Branch
-     */
-    select?: BranchSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: BranchInclude | null
+    include?: CoWorkInclude | null
   }
 
 
@@ -3573,13 +3658,13 @@ export namespace Prisma {
     password?: boolean
     createAt?: boolean
     updateAt?: boolean
-    Branch?: boolean | UserInternal$BranchArgs
+    coWork?: boolean | UserInternal$coWorkArgs
     _count?: boolean | UserInternalCountOutputTypeArgs
   }
 
 
   export type UserInternalInclude = {
-    Branch?: boolean | UserInternal$BranchArgs
+    coWork?: boolean | UserInternal$coWorkArgs
     _count?: boolean | UserInternalCountOutputTypeArgs
   }
 
@@ -3590,13 +3675,13 @@ export namespace Prisma {
     S extends { include: any } & (UserInternalArgs | UserInternalFindManyArgs)
     ? UserInternal  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'Branch' ? Array < BranchGetPayload<S['include'][P]>>  :
+        P extends 'coWork' ? Array < CoWorkGetPayload<S['include'][P]>>  :
         P extends '_count' ? UserInternalCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (UserInternalArgs | UserInternalFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'Branch' ? Array < BranchGetPayload<S['select'][P]>>  :
+        P extends 'coWork' ? Array < CoWorkGetPayload<S['select'][P]>>  :
         P extends '_count' ? UserInternalCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof UserInternal ? UserInternal[P] : never
   } 
       : UserInternal
@@ -3969,7 +4054,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    Branch<T extends UserInternal$BranchArgs= {}>(args?: Subset<T, UserInternal$BranchArgs>): Prisma.PrismaPromise<Array<BranchGetPayload<T>>| Null>;
+    coWork<T extends UserInternal$coWorkArgs= {}>(args?: Subset<T, UserInternal$coWorkArgs>): Prisma.PrismaPromise<Array<CoWorkGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -4327,23 +4412,23 @@ export namespace Prisma {
 
 
   /**
-   * UserInternal.Branch
+   * UserInternal.coWork
    */
-  export type UserInternal$BranchArgs = {
+  export type UserInternal$coWorkArgs = {
     /**
-     * Select specific fields to fetch from the Branch
+     * Select specific fields to fetch from the CoWork
      */
-    select?: BranchSelect | null
+    select?: CoWorkSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: BranchInclude | null
-    where?: BranchWhereInput
-    orderBy?: Enumerable<BranchOrderByWithRelationInput>
-    cursor?: BranchWhereUniqueInput
+    include?: CoWorkInclude | null
+    where?: CoWorkWhereInput
+    orderBy?: Enumerable<CoWorkOrderByWithRelationInput>
+    cursor?: CoWorkWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<BranchScalarFieldEnum>
+    distinct?: Enumerable<CoWorkScalarFieldEnum>
   }
 
 
@@ -5439,7 +5524,7 @@ export namespace Prisma {
   export type RoomRateMinAggregateOutputType = {
     id: number | null
     price: number | null
-    time: Date | null
+    time: string | null
     roomId: number | null
     createAt: Date | null
     updateAt: Date | null
@@ -5448,7 +5533,7 @@ export namespace Prisma {
   export type RoomRateMaxAggregateOutputType = {
     id: number | null
     price: number | null
-    time: Date | null
+    time: string | null
     roomId: number | null
     createAt: Date | null
     updateAt: Date | null
@@ -5595,7 +5680,7 @@ export namespace Prisma {
   export type RoomRateGroupByOutputType = {
     id: number
     price: number
-    time: Date
+    time: string
     roomId: number
     createAt: Date
     updateAt: Date
@@ -8399,19 +8484,19 @@ export namespace Prisma {
 
   export type BranchToRoomAvgAggregateOutputType = {
     id: number | null
-    branchId: number | null
+    coWorkId: number | null
     roomId: number | null
   }
 
   export type BranchToRoomSumAggregateOutputType = {
     id: number | null
-    branchId: number | null
+    coWorkId: number | null
     roomId: number | null
   }
 
   export type BranchToRoomMinAggregateOutputType = {
     id: number | null
-    branchId: number | null
+    coWorkId: number | null
     roomId: number | null
     createAt: Date | null
     updateAt: Date | null
@@ -8419,7 +8504,7 @@ export namespace Prisma {
 
   export type BranchToRoomMaxAggregateOutputType = {
     id: number | null
-    branchId: number | null
+    coWorkId: number | null
     roomId: number | null
     createAt: Date | null
     updateAt: Date | null
@@ -8427,7 +8512,7 @@ export namespace Prisma {
 
   export type BranchToRoomCountAggregateOutputType = {
     id: number
-    branchId: number
+    coWorkId: number
     roomId: number
     createAt: number
     updateAt: number
@@ -8437,19 +8522,19 @@ export namespace Prisma {
 
   export type BranchToRoomAvgAggregateInputType = {
     id?: true
-    branchId?: true
+    coWorkId?: true
     roomId?: true
   }
 
   export type BranchToRoomSumAggregateInputType = {
     id?: true
-    branchId?: true
+    coWorkId?: true
     roomId?: true
   }
 
   export type BranchToRoomMinAggregateInputType = {
     id?: true
-    branchId?: true
+    coWorkId?: true
     roomId?: true
     createAt?: true
     updateAt?: true
@@ -8457,7 +8542,7 @@ export namespace Prisma {
 
   export type BranchToRoomMaxAggregateInputType = {
     id?: true
-    branchId?: true
+    coWorkId?: true
     roomId?: true
     createAt?: true
     updateAt?: true
@@ -8465,7 +8550,7 @@ export namespace Prisma {
 
   export type BranchToRoomCountAggregateInputType = {
     id?: true
-    branchId?: true
+    coWorkId?: true
     roomId?: true
     createAt?: true
     updateAt?: true
@@ -8561,7 +8646,7 @@ export namespace Prisma {
 
   export type BranchToRoomGroupByOutputType = {
     id: number
-    branchId: number
+    coWorkId: number
     roomId: number
     createAt: Date
     updateAt: Date
@@ -8588,11 +8673,11 @@ export namespace Prisma {
 
   export type BranchToRoomSelect = {
     id?: boolean
-    branchId?: boolean
+    coWorkId?: boolean
     roomId?: boolean
     createAt?: boolean
     updateAt?: boolean
-    branch?: boolean | BranchArgs
+    coWork?: boolean | CoWorkArgs
     room?: boolean | RoomArgs
     BookRoom?: boolean | BranchToRoom$BookRoomArgs
     _count?: boolean | BranchToRoomCountOutputTypeArgs
@@ -8600,7 +8685,7 @@ export namespace Prisma {
 
 
   export type BranchToRoomInclude = {
-    branch?: boolean | BranchArgs
+    coWork?: boolean | CoWorkArgs
     room?: boolean | RoomArgs
     BookRoom?: boolean | BranchToRoom$BookRoomArgs
     _count?: boolean | BranchToRoomCountOutputTypeArgs
@@ -8613,7 +8698,7 @@ export namespace Prisma {
     S extends { include: any } & (BranchToRoomArgs | BranchToRoomFindManyArgs)
     ? BranchToRoom  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'branch' ? BranchGetPayload<S['include'][P]> :
+        P extends 'coWork' ? CoWorkGetPayload<S['include'][P]> :
         P extends 'room' ? RoomGetPayload<S['include'][P]> :
         P extends 'BookRoom' ? Array < BookRoomGetPayload<S['include'][P]>>  :
         P extends '_count' ? BranchToRoomCountOutputTypeGetPayload<S['include'][P]> :  never
@@ -8621,7 +8706,7 @@ export namespace Prisma {
     : S extends { select: any } & (BranchToRoomArgs | BranchToRoomFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'branch' ? BranchGetPayload<S['select'][P]> :
+        P extends 'coWork' ? CoWorkGetPayload<S['select'][P]> :
         P extends 'room' ? RoomGetPayload<S['select'][P]> :
         P extends 'BookRoom' ? Array < BookRoomGetPayload<S['select'][P]>>  :
         P extends '_count' ? BranchToRoomCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof BranchToRoom ? BranchToRoom[P] : never
@@ -8996,7 +9081,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    branch<T extends BranchArgs= {}>(args?: Subset<T, BranchArgs>): Prisma__BranchClient<BranchGetPayload<T> | Null>;
+    coWork<T extends CoWorkArgs= {}>(args?: Subset<T, CoWorkArgs>): Prisma__CoWorkClient<CoWorkGetPayload<T> | Null>;
 
     room<T extends RoomArgs= {}>(args?: Subset<T, RoomArgs>): Prisma__RoomClient<RoomGetPayload<T> | Null>;
 
@@ -9583,7 +9668,7 @@ export namespace Prisma {
 
   export type BookRoomGroupByOutputType = {
     id: number
-    branchToRoomId: number
+    branchToRoomId: number | null
     startTime: Date
     roomRateId: number
     status: string
@@ -9639,7 +9724,7 @@ export namespace Prisma {
     S extends { include: any } & (BookRoomArgs | BookRoomFindManyArgs)
     ? BookRoom  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'branchToRoom' ? BranchToRoomGetPayload<S['include'][P]> :
+        P extends 'branchToRoom' ? BranchToRoomGetPayload<S['include'][P]> | null :
         P extends 'roomRate' ? RoomRateGetPayload<S['include'][P]> :
         P extends 'UserExternal' ? Array < UserExternalGetPayload<S['include'][P]>>  :
         P extends '_count' ? BookRoomCountOutputTypeGetPayload<S['include'][P]> :  never
@@ -9647,7 +9732,7 @@ export namespace Prisma {
     : S extends { select: any } & (BookRoomArgs | BookRoomFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'branchToRoom' ? BranchToRoomGetPayload<S['select'][P]> :
+        P extends 'branchToRoom' ? BranchToRoomGetPayload<S['select'][P]> | null :
         P extends 'roomRate' ? RoomRateGetPayload<S['select'][P]> :
         P extends 'UserExternal' ? Array < UserExternalGetPayload<S['select'][P]>>  :
         P extends '_count' ? BookRoomCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof BookRoom ? BookRoom[P] : never
@@ -10435,45 +10520,143 @@ export namespace Prisma {
 
   export type OpenCloseAvgAggregateOutputType = {
     id: number | null
-    branchId: number | null
-    day: number | null
+    openTimeMon: number | null
+    closeTimeMon: number | null
+    openTimeTue: number | null
+    closeTimeTue: number | null
+    openTimeWed: number | null
+    closeTimeWed: number | null
+    openTimeThurs: number | null
+    closeTimeThurs: number | null
+    openTimeFri: number | null
+    closeTimeFri: number | null
+    openTimeSat: number | null
+    closeTimeSat: number | null
+    openTimeSun: number | null
+    closeTimeSun: number | null
+    coWorkId: number | null
   }
 
   export type OpenCloseSumAggregateOutputType = {
     id: number | null
-    branchId: number | null
-    day: number | null
+    openTimeMon: number | null
+    closeTimeMon: number | null
+    openTimeTue: number | null
+    closeTimeTue: number | null
+    openTimeWed: number | null
+    closeTimeWed: number | null
+    openTimeThurs: number | null
+    closeTimeThurs: number | null
+    openTimeFri: number | null
+    closeTimeFri: number | null
+    openTimeSat: number | null
+    closeTimeSat: number | null
+    openTimeSun: number | null
+    closeTimeSun: number | null
+    coWorkId: number | null
   }
 
   export type OpenCloseMinAggregateOutputType = {
     id: number | null
-    open: Date | null
-    close: Date | null
-    allDay: boolean | null
-    branchId: number | null
-    day: number | null
+    openTimeMon: number | null
+    closeTimeMon: number | null
+    isOpenMon: boolean | null
+    isOpen24hoursMon: boolean | null
+    openTimeTue: number | null
+    closeTimeTue: number | null
+    isOpenTue: boolean | null
+    isOpen24hoursTue: boolean | null
+    openTimeWed: number | null
+    closeTimeWed: number | null
+    isOpenWed: boolean | null
+    isOpen24hoursWed: boolean | null
+    openTimeThurs: number | null
+    closeTimeThurs: number | null
+    isOpenThurs: boolean | null
+    isOpen24hoursThurs: boolean | null
+    openTimeFri: number | null
+    closeTimeFri: number | null
+    isOpenFri: boolean | null
+    isOpen24hoursFri: boolean | null
+    openTimeSat: number | null
+    closeTimeSat: number | null
+    isOpenSat: boolean | null
+    isOpen24hoursSat: boolean | null
+    openTimeSun: number | null
+    closeTimeSun: number | null
+    isOpenSun: boolean | null
+    isOpen24hoursSun: boolean | null
+    coWorkId: number | null
     createAt: Date | null
     updateAt: Date | null
   }
 
   export type OpenCloseMaxAggregateOutputType = {
     id: number | null
-    open: Date | null
-    close: Date | null
-    allDay: boolean | null
-    branchId: number | null
-    day: number | null
+    openTimeMon: number | null
+    closeTimeMon: number | null
+    isOpenMon: boolean | null
+    isOpen24hoursMon: boolean | null
+    openTimeTue: number | null
+    closeTimeTue: number | null
+    isOpenTue: boolean | null
+    isOpen24hoursTue: boolean | null
+    openTimeWed: number | null
+    closeTimeWed: number | null
+    isOpenWed: boolean | null
+    isOpen24hoursWed: boolean | null
+    openTimeThurs: number | null
+    closeTimeThurs: number | null
+    isOpenThurs: boolean | null
+    isOpen24hoursThurs: boolean | null
+    openTimeFri: number | null
+    closeTimeFri: number | null
+    isOpenFri: boolean | null
+    isOpen24hoursFri: boolean | null
+    openTimeSat: number | null
+    closeTimeSat: number | null
+    isOpenSat: boolean | null
+    isOpen24hoursSat: boolean | null
+    openTimeSun: number | null
+    closeTimeSun: number | null
+    isOpenSun: boolean | null
+    isOpen24hoursSun: boolean | null
+    coWorkId: number | null
     createAt: Date | null
     updateAt: Date | null
   }
 
   export type OpenCloseCountAggregateOutputType = {
     id: number
-    open: number
-    close: number
-    allDay: number
-    branchId: number
-    day: number
+    openTimeMon: number
+    closeTimeMon: number
+    isOpenMon: number
+    isOpen24hoursMon: number
+    openTimeTue: number
+    closeTimeTue: number
+    isOpenTue: number
+    isOpen24hoursTue: number
+    openTimeWed: number
+    closeTimeWed: number
+    isOpenWed: number
+    isOpen24hoursWed: number
+    openTimeThurs: number
+    closeTimeThurs: number
+    isOpenThurs: number
+    isOpen24hoursThurs: number
+    openTimeFri: number
+    closeTimeFri: number
+    isOpenFri: number
+    isOpen24hoursFri: number
+    openTimeSat: number
+    closeTimeSat: number
+    isOpenSat: number
+    isOpen24hoursSat: number
+    openTimeSun: number
+    closeTimeSun: number
+    isOpenSun: number
+    isOpen24hoursSun: number
+    coWorkId: number
     createAt: number
     updateAt: number
     _all: number
@@ -10482,45 +10665,143 @@ export namespace Prisma {
 
   export type OpenCloseAvgAggregateInputType = {
     id?: true
-    branchId?: true
-    day?: true
+    openTimeMon?: true
+    closeTimeMon?: true
+    openTimeTue?: true
+    closeTimeTue?: true
+    openTimeWed?: true
+    closeTimeWed?: true
+    openTimeThurs?: true
+    closeTimeThurs?: true
+    openTimeFri?: true
+    closeTimeFri?: true
+    openTimeSat?: true
+    closeTimeSat?: true
+    openTimeSun?: true
+    closeTimeSun?: true
+    coWorkId?: true
   }
 
   export type OpenCloseSumAggregateInputType = {
     id?: true
-    branchId?: true
-    day?: true
+    openTimeMon?: true
+    closeTimeMon?: true
+    openTimeTue?: true
+    closeTimeTue?: true
+    openTimeWed?: true
+    closeTimeWed?: true
+    openTimeThurs?: true
+    closeTimeThurs?: true
+    openTimeFri?: true
+    closeTimeFri?: true
+    openTimeSat?: true
+    closeTimeSat?: true
+    openTimeSun?: true
+    closeTimeSun?: true
+    coWorkId?: true
   }
 
   export type OpenCloseMinAggregateInputType = {
     id?: true
-    open?: true
-    close?: true
-    allDay?: true
-    branchId?: true
-    day?: true
+    openTimeMon?: true
+    closeTimeMon?: true
+    isOpenMon?: true
+    isOpen24hoursMon?: true
+    openTimeTue?: true
+    closeTimeTue?: true
+    isOpenTue?: true
+    isOpen24hoursTue?: true
+    openTimeWed?: true
+    closeTimeWed?: true
+    isOpenWed?: true
+    isOpen24hoursWed?: true
+    openTimeThurs?: true
+    closeTimeThurs?: true
+    isOpenThurs?: true
+    isOpen24hoursThurs?: true
+    openTimeFri?: true
+    closeTimeFri?: true
+    isOpenFri?: true
+    isOpen24hoursFri?: true
+    openTimeSat?: true
+    closeTimeSat?: true
+    isOpenSat?: true
+    isOpen24hoursSat?: true
+    openTimeSun?: true
+    closeTimeSun?: true
+    isOpenSun?: true
+    isOpen24hoursSun?: true
+    coWorkId?: true
     createAt?: true
     updateAt?: true
   }
 
   export type OpenCloseMaxAggregateInputType = {
     id?: true
-    open?: true
-    close?: true
-    allDay?: true
-    branchId?: true
-    day?: true
+    openTimeMon?: true
+    closeTimeMon?: true
+    isOpenMon?: true
+    isOpen24hoursMon?: true
+    openTimeTue?: true
+    closeTimeTue?: true
+    isOpenTue?: true
+    isOpen24hoursTue?: true
+    openTimeWed?: true
+    closeTimeWed?: true
+    isOpenWed?: true
+    isOpen24hoursWed?: true
+    openTimeThurs?: true
+    closeTimeThurs?: true
+    isOpenThurs?: true
+    isOpen24hoursThurs?: true
+    openTimeFri?: true
+    closeTimeFri?: true
+    isOpenFri?: true
+    isOpen24hoursFri?: true
+    openTimeSat?: true
+    closeTimeSat?: true
+    isOpenSat?: true
+    isOpen24hoursSat?: true
+    openTimeSun?: true
+    closeTimeSun?: true
+    isOpenSun?: true
+    isOpen24hoursSun?: true
+    coWorkId?: true
     createAt?: true
     updateAt?: true
   }
 
   export type OpenCloseCountAggregateInputType = {
     id?: true
-    open?: true
-    close?: true
-    allDay?: true
-    branchId?: true
-    day?: true
+    openTimeMon?: true
+    closeTimeMon?: true
+    isOpenMon?: true
+    isOpen24hoursMon?: true
+    openTimeTue?: true
+    closeTimeTue?: true
+    isOpenTue?: true
+    isOpen24hoursTue?: true
+    openTimeWed?: true
+    closeTimeWed?: true
+    isOpenWed?: true
+    isOpen24hoursWed?: true
+    openTimeThurs?: true
+    closeTimeThurs?: true
+    isOpenThurs?: true
+    isOpen24hoursThurs?: true
+    openTimeFri?: true
+    closeTimeFri?: true
+    isOpenFri?: true
+    isOpen24hoursFri?: true
+    openTimeSat?: true
+    closeTimeSat?: true
+    isOpenSat?: true
+    isOpen24hoursSat?: true
+    openTimeSun?: true
+    closeTimeSun?: true
+    isOpenSun?: true
+    isOpen24hoursSun?: true
+    coWorkId?: true
     createAt?: true
     updateAt?: true
     _all?: true
@@ -10615,11 +10896,35 @@ export namespace Prisma {
 
   export type OpenCloseGroupByOutputType = {
     id: number
-    open: Date
-    close: Date
-    allDay: boolean
-    branchId: number
-    day: number
+    openTimeMon: number
+    closeTimeMon: number
+    isOpenMon: boolean
+    isOpen24hoursMon: boolean
+    openTimeTue: number
+    closeTimeTue: number
+    isOpenTue: boolean
+    isOpen24hoursTue: boolean
+    openTimeWed: number
+    closeTimeWed: number
+    isOpenWed: boolean
+    isOpen24hoursWed: boolean
+    openTimeThurs: number
+    closeTimeThurs: number
+    isOpenThurs: boolean
+    isOpen24hoursThurs: boolean
+    openTimeFri: number
+    closeTimeFri: number
+    isOpenFri: boolean
+    isOpen24hoursFri: boolean
+    openTimeSat: number
+    closeTimeSat: number
+    isOpenSat: boolean
+    isOpen24hoursSat: boolean
+    openTimeSun: number
+    closeTimeSun: number
+    isOpenSun: boolean
+    isOpen24hoursSun: boolean
+    coWorkId: number
     createAt: Date
     updateAt: Date
     _count: OpenCloseCountAggregateOutputType | null
@@ -10645,19 +10950,43 @@ export namespace Prisma {
 
   export type OpenCloseSelect = {
     id?: boolean
-    open?: boolean
-    close?: boolean
-    allDay?: boolean
-    branchId?: boolean
-    day?: boolean
+    openTimeMon?: boolean
+    closeTimeMon?: boolean
+    isOpenMon?: boolean
+    isOpen24hoursMon?: boolean
+    openTimeTue?: boolean
+    closeTimeTue?: boolean
+    isOpenTue?: boolean
+    isOpen24hoursTue?: boolean
+    openTimeWed?: boolean
+    closeTimeWed?: boolean
+    isOpenWed?: boolean
+    isOpen24hoursWed?: boolean
+    openTimeThurs?: boolean
+    closeTimeThurs?: boolean
+    isOpenThurs?: boolean
+    isOpen24hoursThurs?: boolean
+    openTimeFri?: boolean
+    closeTimeFri?: boolean
+    isOpenFri?: boolean
+    isOpen24hoursFri?: boolean
+    openTimeSat?: boolean
+    closeTimeSat?: boolean
+    isOpenSat?: boolean
+    isOpen24hoursSat?: boolean
+    openTimeSun?: boolean
+    closeTimeSun?: boolean
+    isOpenSun?: boolean
+    isOpen24hoursSun?: boolean
+    coWorkId?: boolean
     createAt?: boolean
     updateAt?: boolean
-    branch?: boolean | BranchArgs
+    coWork?: boolean | CoWorkArgs
   }
 
 
   export type OpenCloseInclude = {
-    branch?: boolean | BranchArgs
+    coWork?: boolean | CoWorkArgs
   }
 
   export type OpenCloseGetPayload<S extends boolean | null | undefined | OpenCloseArgs> =
@@ -10667,12 +10996,12 @@ export namespace Prisma {
     S extends { include: any } & (OpenCloseArgs | OpenCloseFindManyArgs)
     ? OpenClose  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'branch' ? BranchGetPayload<S['include'][P]> :  never
+        P extends 'coWork' ? CoWorkGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (OpenCloseArgs | OpenCloseFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'branch' ? BranchGetPayload<S['select'][P]> :  P extends keyof OpenClose ? OpenClose[P] : never
+        P extends 'coWork' ? CoWorkGetPayload<S['select'][P]> :  P extends keyof OpenClose ? OpenClose[P] : never
   } 
       : OpenClose
 
@@ -11044,7 +11373,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    branch<T extends BranchArgs= {}>(args?: Subset<T, BranchArgs>): Prisma__BranchClient<BranchGetPayload<T> | Null>;
+    coWork<T extends CoWorkArgs= {}>(args?: Subset<T, CoWorkArgs>): Prisma__CoWorkClient<CoWorkGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -11418,6 +11747,988 @@ export namespace Prisma {
 
 
   /**
+   * Model VertifyBookingCode
+   */
+
+
+  export type AggregateVertifyBookingCode = {
+    _count: VertifyBookingCodeCountAggregateOutputType | null
+    _avg: VertifyBookingCodeAvgAggregateOutputType | null
+    _sum: VertifyBookingCodeSumAggregateOutputType | null
+    _min: VertifyBookingCodeMinAggregateOutputType | null
+    _max: VertifyBookingCodeMaxAggregateOutputType | null
+  }
+
+  export type VertifyBookingCodeAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type VertifyBookingCodeSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type VertifyBookingCodeMinAggregateOutputType = {
+    id: number | null
+    bookdate: Date | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type VertifyBookingCodeMaxAggregateOutputType = {
+    id: number | null
+    bookdate: Date | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type VertifyBookingCodeCountAggregateOutputType = {
+    id: number
+    bookdate: number
+    createAt: number
+    updateAt: number
+    _all: number
+  }
+
+
+  export type VertifyBookingCodeAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type VertifyBookingCodeSumAggregateInputType = {
+    id?: true
+  }
+
+  export type VertifyBookingCodeMinAggregateInputType = {
+    id?: true
+    bookdate?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type VertifyBookingCodeMaxAggregateInputType = {
+    id?: true
+    bookdate?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type VertifyBookingCodeCountAggregateInputType = {
+    id?: true
+    bookdate?: true
+    createAt?: true
+    updateAt?: true
+    _all?: true
+  }
+
+  export type VertifyBookingCodeAggregateArgs = {
+    /**
+     * Filter which VertifyBookingCode to aggregate.
+     */
+    where?: VertifyBookingCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VertifyBookingCodes to fetch.
+     */
+    orderBy?: Enumerable<VertifyBookingCodeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VertifyBookingCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VertifyBookingCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VertifyBookingCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned VertifyBookingCodes
+    **/
+    _count?: true | VertifyBookingCodeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: VertifyBookingCodeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: VertifyBookingCodeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VertifyBookingCodeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VertifyBookingCodeMaxAggregateInputType
+  }
+
+  export type GetVertifyBookingCodeAggregateType<T extends VertifyBookingCodeAggregateArgs> = {
+        [P in keyof T & keyof AggregateVertifyBookingCode]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVertifyBookingCode[P]>
+      : GetScalarType<T[P], AggregateVertifyBookingCode[P]>
+  }
+
+
+
+
+  export type VertifyBookingCodeGroupByArgs = {
+    where?: VertifyBookingCodeWhereInput
+    orderBy?: Enumerable<VertifyBookingCodeOrderByWithAggregationInput>
+    by: VertifyBookingCodeScalarFieldEnum[]
+    having?: VertifyBookingCodeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VertifyBookingCodeCountAggregateInputType | true
+    _avg?: VertifyBookingCodeAvgAggregateInputType
+    _sum?: VertifyBookingCodeSumAggregateInputType
+    _min?: VertifyBookingCodeMinAggregateInputType
+    _max?: VertifyBookingCodeMaxAggregateInputType
+  }
+
+
+  export type VertifyBookingCodeGroupByOutputType = {
+    id: number
+    bookdate: Date
+    createAt: Date
+    updateAt: Date
+    _count: VertifyBookingCodeCountAggregateOutputType | null
+    _avg: VertifyBookingCodeAvgAggregateOutputType | null
+    _sum: VertifyBookingCodeSumAggregateOutputType | null
+    _min: VertifyBookingCodeMinAggregateOutputType | null
+    _max: VertifyBookingCodeMaxAggregateOutputType | null
+  }
+
+  type GetVertifyBookingCodeGroupByPayload<T extends VertifyBookingCodeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<VertifyBookingCodeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VertifyBookingCodeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VertifyBookingCodeGroupByOutputType[P]>
+            : GetScalarType<T[P], VertifyBookingCodeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VertifyBookingCodeSelect = {
+    id?: boolean
+    bookdate?: boolean
+    createAt?: boolean
+    updateAt?: boolean
+    UserExternal?: boolean | VertifyBookingCode$UserExternalArgs
+    _count?: boolean | VertifyBookingCodeCountOutputTypeArgs
+  }
+
+
+  export type VertifyBookingCodeInclude = {
+    UserExternal?: boolean | VertifyBookingCode$UserExternalArgs
+    _count?: boolean | VertifyBookingCodeCountOutputTypeArgs
+  }
+
+  export type VertifyBookingCodeGetPayload<S extends boolean | null | undefined | VertifyBookingCodeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? VertifyBookingCode :
+    S extends undefined ? never :
+    S extends { include: any } & (VertifyBookingCodeArgs | VertifyBookingCodeFindManyArgs)
+    ? VertifyBookingCode  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'UserExternal' ? Array < UserExternalGetPayload<S['include'][P]>>  :
+        P extends '_count' ? VertifyBookingCodeCountOutputTypeGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (VertifyBookingCodeArgs | VertifyBookingCodeFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'UserExternal' ? Array < UserExternalGetPayload<S['select'][P]>>  :
+        P extends '_count' ? VertifyBookingCodeCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof VertifyBookingCode ? VertifyBookingCode[P] : never
+  } 
+      : VertifyBookingCode
+
+
+  type VertifyBookingCodeCountArgs = 
+    Omit<VertifyBookingCodeFindManyArgs, 'select' | 'include'> & {
+      select?: VertifyBookingCodeCountAggregateInputType | true
+    }
+
+  export interface VertifyBookingCodeDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one VertifyBookingCode that matches the filter.
+     * @param {VertifyBookingCodeFindUniqueArgs} args - Arguments to find a VertifyBookingCode
+     * @example
+     * // Get one VertifyBookingCode
+     * const vertifyBookingCode = await prisma.vertifyBookingCode.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends VertifyBookingCodeFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, VertifyBookingCodeFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'VertifyBookingCode'> extends True ? Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T>> : Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T> | null, null>
+
+    /**
+     * Find one VertifyBookingCode that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {VertifyBookingCodeFindUniqueOrThrowArgs} args - Arguments to find a VertifyBookingCode
+     * @example
+     * // Get one VertifyBookingCode
+     * const vertifyBookingCode = await prisma.vertifyBookingCode.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends VertifyBookingCodeFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, VertifyBookingCodeFindUniqueOrThrowArgs>
+    ): Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T>>
+
+    /**
+     * Find the first VertifyBookingCode that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VertifyBookingCodeFindFirstArgs} args - Arguments to find a VertifyBookingCode
+     * @example
+     * // Get one VertifyBookingCode
+     * const vertifyBookingCode = await prisma.vertifyBookingCode.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends VertifyBookingCodeFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, VertifyBookingCodeFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'VertifyBookingCode'> extends True ? Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T>> : Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T> | null, null>
+
+    /**
+     * Find the first VertifyBookingCode that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VertifyBookingCodeFindFirstOrThrowArgs} args - Arguments to find a VertifyBookingCode
+     * @example
+     * // Get one VertifyBookingCode
+     * const vertifyBookingCode = await prisma.vertifyBookingCode.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends VertifyBookingCodeFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, VertifyBookingCodeFindFirstOrThrowArgs>
+    ): Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T>>
+
+    /**
+     * Find zero or more VertifyBookingCodes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VertifyBookingCodeFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all VertifyBookingCodes
+     * const vertifyBookingCodes = await prisma.vertifyBookingCode.findMany()
+     * 
+     * // Get first 10 VertifyBookingCodes
+     * const vertifyBookingCodes = await prisma.vertifyBookingCode.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const vertifyBookingCodeWithIdOnly = await prisma.vertifyBookingCode.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends VertifyBookingCodeFindManyArgs>(
+      args?: SelectSubset<T, VertifyBookingCodeFindManyArgs>
+    ): Prisma.PrismaPromise<Array<VertifyBookingCodeGetPayload<T>>>
+
+    /**
+     * Create a VertifyBookingCode.
+     * @param {VertifyBookingCodeCreateArgs} args - Arguments to create a VertifyBookingCode.
+     * @example
+     * // Create one VertifyBookingCode
+     * const VertifyBookingCode = await prisma.vertifyBookingCode.create({
+     *   data: {
+     *     // ... data to create a VertifyBookingCode
+     *   }
+     * })
+     * 
+    **/
+    create<T extends VertifyBookingCodeCreateArgs>(
+      args: SelectSubset<T, VertifyBookingCodeCreateArgs>
+    ): Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T>>
+
+    /**
+     * Create many VertifyBookingCodes.
+     *     @param {VertifyBookingCodeCreateManyArgs} args - Arguments to create many VertifyBookingCodes.
+     *     @example
+     *     // Create many VertifyBookingCodes
+     *     const vertifyBookingCode = await prisma.vertifyBookingCode.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends VertifyBookingCodeCreateManyArgs>(
+      args?: SelectSubset<T, VertifyBookingCodeCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a VertifyBookingCode.
+     * @param {VertifyBookingCodeDeleteArgs} args - Arguments to delete one VertifyBookingCode.
+     * @example
+     * // Delete one VertifyBookingCode
+     * const VertifyBookingCode = await prisma.vertifyBookingCode.delete({
+     *   where: {
+     *     // ... filter to delete one VertifyBookingCode
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends VertifyBookingCodeDeleteArgs>(
+      args: SelectSubset<T, VertifyBookingCodeDeleteArgs>
+    ): Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T>>
+
+    /**
+     * Update one VertifyBookingCode.
+     * @param {VertifyBookingCodeUpdateArgs} args - Arguments to update one VertifyBookingCode.
+     * @example
+     * // Update one VertifyBookingCode
+     * const vertifyBookingCode = await prisma.vertifyBookingCode.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends VertifyBookingCodeUpdateArgs>(
+      args: SelectSubset<T, VertifyBookingCodeUpdateArgs>
+    ): Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T>>
+
+    /**
+     * Delete zero or more VertifyBookingCodes.
+     * @param {VertifyBookingCodeDeleteManyArgs} args - Arguments to filter VertifyBookingCodes to delete.
+     * @example
+     * // Delete a few VertifyBookingCodes
+     * const { count } = await prisma.vertifyBookingCode.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends VertifyBookingCodeDeleteManyArgs>(
+      args?: SelectSubset<T, VertifyBookingCodeDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VertifyBookingCodes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VertifyBookingCodeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many VertifyBookingCodes
+     * const vertifyBookingCode = await prisma.vertifyBookingCode.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends VertifyBookingCodeUpdateManyArgs>(
+      args: SelectSubset<T, VertifyBookingCodeUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one VertifyBookingCode.
+     * @param {VertifyBookingCodeUpsertArgs} args - Arguments to update or create a VertifyBookingCode.
+     * @example
+     * // Update or create a VertifyBookingCode
+     * const vertifyBookingCode = await prisma.vertifyBookingCode.upsert({
+     *   create: {
+     *     // ... data to create a VertifyBookingCode
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the VertifyBookingCode we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends VertifyBookingCodeUpsertArgs>(
+      args: SelectSubset<T, VertifyBookingCodeUpsertArgs>
+    ): Prisma__VertifyBookingCodeClient<VertifyBookingCodeGetPayload<T>>
+
+    /**
+     * Count the number of VertifyBookingCodes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VertifyBookingCodeCountArgs} args - Arguments to filter VertifyBookingCodes to count.
+     * @example
+     * // Count the number of VertifyBookingCodes
+     * const count = await prisma.vertifyBookingCode.count({
+     *   where: {
+     *     // ... the filter for the VertifyBookingCodes we want to count
+     *   }
+     * })
+    **/
+    count<T extends VertifyBookingCodeCountArgs>(
+      args?: Subset<T, VertifyBookingCodeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VertifyBookingCodeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a VertifyBookingCode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VertifyBookingCodeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VertifyBookingCodeAggregateArgs>(args: Subset<T, VertifyBookingCodeAggregateArgs>): Prisma.PrismaPromise<GetVertifyBookingCodeAggregateType<T>>
+
+    /**
+     * Group by VertifyBookingCode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VertifyBookingCodeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VertifyBookingCodeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VertifyBookingCodeGroupByArgs['orderBy'] }
+        : { orderBy?: VertifyBookingCodeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VertifyBookingCodeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVertifyBookingCodeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for VertifyBookingCode.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__VertifyBookingCodeClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    UserExternal<T extends VertifyBookingCode$UserExternalArgs= {}>(args?: Subset<T, VertifyBookingCode$UserExternalArgs>): Prisma.PrismaPromise<Array<UserExternalGetPayload<T>>| Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * VertifyBookingCode base type for findUnique actions
+   */
+  export type VertifyBookingCodeFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCode
+     */
+    select?: VertifyBookingCodeSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: VertifyBookingCodeInclude | null
+    /**
+     * Filter, which VertifyBookingCode to fetch.
+     */
+    where: VertifyBookingCodeWhereUniqueInput
+  }
+
+  /**
+   * VertifyBookingCode findUnique
+   */
+  export interface VertifyBookingCodeFindUniqueArgs extends VertifyBookingCodeFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * VertifyBookingCode findUniqueOrThrow
+   */
+  export type VertifyBookingCodeFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCode
+     */
+    select?: VertifyBookingCodeSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: VertifyBookingCodeInclude | null
+    /**
+     * Filter, which VertifyBookingCode to fetch.
+     */
+    where: VertifyBookingCodeWhereUniqueInput
+  }
+
+
+  /**
+   * VertifyBookingCode base type for findFirst actions
+   */
+  export type VertifyBookingCodeFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCode
+     */
+    select?: VertifyBookingCodeSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: VertifyBookingCodeInclude | null
+    /**
+     * Filter, which VertifyBookingCode to fetch.
+     */
+    where?: VertifyBookingCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VertifyBookingCodes to fetch.
+     */
+    orderBy?: Enumerable<VertifyBookingCodeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VertifyBookingCodes.
+     */
+    cursor?: VertifyBookingCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VertifyBookingCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VertifyBookingCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VertifyBookingCodes.
+     */
+    distinct?: Enumerable<VertifyBookingCodeScalarFieldEnum>
+  }
+
+  /**
+   * VertifyBookingCode findFirst
+   */
+  export interface VertifyBookingCodeFindFirstArgs extends VertifyBookingCodeFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * VertifyBookingCode findFirstOrThrow
+   */
+  export type VertifyBookingCodeFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCode
+     */
+    select?: VertifyBookingCodeSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: VertifyBookingCodeInclude | null
+    /**
+     * Filter, which VertifyBookingCode to fetch.
+     */
+    where?: VertifyBookingCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VertifyBookingCodes to fetch.
+     */
+    orderBy?: Enumerable<VertifyBookingCodeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VertifyBookingCodes.
+     */
+    cursor?: VertifyBookingCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VertifyBookingCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VertifyBookingCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VertifyBookingCodes.
+     */
+    distinct?: Enumerable<VertifyBookingCodeScalarFieldEnum>
+  }
+
+
+  /**
+   * VertifyBookingCode findMany
+   */
+  export type VertifyBookingCodeFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCode
+     */
+    select?: VertifyBookingCodeSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: VertifyBookingCodeInclude | null
+    /**
+     * Filter, which VertifyBookingCodes to fetch.
+     */
+    where?: VertifyBookingCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VertifyBookingCodes to fetch.
+     */
+    orderBy?: Enumerable<VertifyBookingCodeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing VertifyBookingCodes.
+     */
+    cursor?: VertifyBookingCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VertifyBookingCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VertifyBookingCodes.
+     */
+    skip?: number
+    distinct?: Enumerable<VertifyBookingCodeScalarFieldEnum>
+  }
+
+
+  /**
+   * VertifyBookingCode create
+   */
+  export type VertifyBookingCodeCreateArgs = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCode
+     */
+    select?: VertifyBookingCodeSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: VertifyBookingCodeInclude | null
+    /**
+     * The data needed to create a VertifyBookingCode.
+     */
+    data: XOR<VertifyBookingCodeCreateInput, VertifyBookingCodeUncheckedCreateInput>
+  }
+
+
+  /**
+   * VertifyBookingCode createMany
+   */
+  export type VertifyBookingCodeCreateManyArgs = {
+    /**
+     * The data used to create many VertifyBookingCodes.
+     */
+    data: Enumerable<VertifyBookingCodeCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * VertifyBookingCode update
+   */
+  export type VertifyBookingCodeUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCode
+     */
+    select?: VertifyBookingCodeSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: VertifyBookingCodeInclude | null
+    /**
+     * The data needed to update a VertifyBookingCode.
+     */
+    data: XOR<VertifyBookingCodeUpdateInput, VertifyBookingCodeUncheckedUpdateInput>
+    /**
+     * Choose, which VertifyBookingCode to update.
+     */
+    where: VertifyBookingCodeWhereUniqueInput
+  }
+
+
+  /**
+   * VertifyBookingCode updateMany
+   */
+  export type VertifyBookingCodeUpdateManyArgs = {
+    /**
+     * The data used to update VertifyBookingCodes.
+     */
+    data: XOR<VertifyBookingCodeUpdateManyMutationInput, VertifyBookingCodeUncheckedUpdateManyInput>
+    /**
+     * Filter which VertifyBookingCodes to update
+     */
+    where?: VertifyBookingCodeWhereInput
+  }
+
+
+  /**
+   * VertifyBookingCode upsert
+   */
+  export type VertifyBookingCodeUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCode
+     */
+    select?: VertifyBookingCodeSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: VertifyBookingCodeInclude | null
+    /**
+     * The filter to search for the VertifyBookingCode to update in case it exists.
+     */
+    where: VertifyBookingCodeWhereUniqueInput
+    /**
+     * In case the VertifyBookingCode found by the `where` argument doesn't exist, create a new VertifyBookingCode with this data.
+     */
+    create: XOR<VertifyBookingCodeCreateInput, VertifyBookingCodeUncheckedCreateInput>
+    /**
+     * In case the VertifyBookingCode was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VertifyBookingCodeUpdateInput, VertifyBookingCodeUncheckedUpdateInput>
+  }
+
+
+  /**
+   * VertifyBookingCode delete
+   */
+  export type VertifyBookingCodeDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCode
+     */
+    select?: VertifyBookingCodeSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: VertifyBookingCodeInclude | null
+    /**
+     * Filter which VertifyBookingCode to delete.
+     */
+    where: VertifyBookingCodeWhereUniqueInput
+  }
+
+
+  /**
+   * VertifyBookingCode deleteMany
+   */
+  export type VertifyBookingCodeDeleteManyArgs = {
+    /**
+     * Filter which VertifyBookingCodes to delete
+     */
+    where?: VertifyBookingCodeWhereInput
+  }
+
+
+  /**
+   * VertifyBookingCode.UserExternal
+   */
+  export type VertifyBookingCode$UserExternalArgs = {
+    /**
+     * Select specific fields to fetch from the UserExternal
+     */
+    select?: UserExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserExternalInclude | null
+    where?: UserExternalWhereInput
+    orderBy?: Enumerable<UserExternalOrderByWithRelationInput>
+    cursor?: UserExternalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<UserExternalScalarFieldEnum>
+  }
+
+
+  /**
+   * VertifyBookingCode without action
+   */
+  export type VertifyBookingCodeArgs = {
+    /**
+     * Select specific fields to fetch from the VertifyBookingCode
+     */
+    select?: VertifyBookingCodeSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: VertifyBookingCodeInclude | null
+  }
+
+
+
+  /**
    * Enums
    */
 
@@ -11437,7 +12748,18 @@ export namespace Prisma {
   export type BookRoomScalarFieldEnum = (typeof BookRoomScalarFieldEnum)[keyof typeof BookRoomScalarFieldEnum]
 
 
-  export const BranchScalarFieldEnum: {
+  export const BranchToRoomScalarFieldEnum: {
+    id: 'id',
+    coWorkId: 'coWorkId',
+    roomId: 'roomId',
+    createAt: 'createAt',
+    updateAt: 'updateAt'
+  };
+
+  export type BranchToRoomScalarFieldEnum = (typeof BranchToRoomScalarFieldEnum)[keyof typeof BranchToRoomScalarFieldEnum]
+
+
+  export const CoWorkScalarFieldEnum: {
     id: 'id',
     name: 'name',
     description: 'description',
@@ -11447,18 +12769,7 @@ export namespace Prisma {
     userInternalId: 'userInternalId'
   };
 
-  export type BranchScalarFieldEnum = (typeof BranchScalarFieldEnum)[keyof typeof BranchScalarFieldEnum]
-
-
-  export const BranchToRoomScalarFieldEnum: {
-    id: 'id',
-    branchId: 'branchId',
-    roomId: 'roomId',
-    createAt: 'createAt',
-    updateAt: 'updateAt'
-  };
-
-  export type BranchToRoomScalarFieldEnum = (typeof BranchToRoomScalarFieldEnum)[keyof typeof BranchToRoomScalarFieldEnum]
+  export type CoWorkScalarFieldEnum = (typeof CoWorkScalarFieldEnum)[keyof typeof CoWorkScalarFieldEnum]
 
 
   export const FacilityScalarFieldEnum: {
@@ -11484,11 +12795,35 @@ export namespace Prisma {
 
   export const OpenCloseScalarFieldEnum: {
     id: 'id',
-    open: 'open',
-    close: 'close',
-    allDay: 'allDay',
-    branchId: 'branchId',
-    day: 'day',
+    openTimeMon: 'openTimeMon',
+    closeTimeMon: 'closeTimeMon',
+    isOpenMon: 'isOpenMon',
+    isOpen24hoursMon: 'isOpen24hoursMon',
+    openTimeTue: 'openTimeTue',
+    closeTimeTue: 'closeTimeTue',
+    isOpenTue: 'isOpenTue',
+    isOpen24hoursTue: 'isOpen24hoursTue',
+    openTimeWed: 'openTimeWed',
+    closeTimeWed: 'closeTimeWed',
+    isOpenWed: 'isOpenWed',
+    isOpen24hoursWed: 'isOpen24hoursWed',
+    openTimeThurs: 'openTimeThurs',
+    closeTimeThurs: 'closeTimeThurs',
+    isOpenThurs: 'isOpenThurs',
+    isOpen24hoursThurs: 'isOpen24hoursThurs',
+    openTimeFri: 'openTimeFri',
+    closeTimeFri: 'closeTimeFri',
+    isOpenFri: 'isOpenFri',
+    isOpen24hoursFri: 'isOpen24hoursFri',
+    openTimeSat: 'openTimeSat',
+    closeTimeSat: 'closeTimeSat',
+    isOpenSat: 'isOpenSat',
+    isOpen24hoursSat: 'isOpen24hoursSat',
+    openTimeSun: 'openTimeSun',
+    closeTimeSun: 'closeTimeSun',
+    isOpenSun: 'isOpenSun',
+    isOpen24hoursSun: 'isOpen24hoursSun',
+    coWorkId: 'coWorkId',
     createAt: 'createAt',
     updateAt: 'updateAt'
   };
@@ -11553,7 +12888,8 @@ export namespace Prisma {
     password: 'password',
     createAt: 'createAt',
     updateAt: 'updateAt',
-    bookRoomId: 'bookRoomId'
+    bookRoomId: 'bookRoomId',
+    vertifyBookingCodeId: 'vertifyBookingCodeId'
   };
 
   export type UserExternalScalarFieldEnum = (typeof UserExternalScalarFieldEnum)[keyof typeof UserExternalScalarFieldEnum]
@@ -11572,6 +12908,16 @@ export namespace Prisma {
   export type UserInternalScalarFieldEnum = (typeof UserInternalScalarFieldEnum)[keyof typeof UserInternalScalarFieldEnum]
 
 
+  export const VertifyBookingCodeScalarFieldEnum: {
+    id: 'id',
+    bookdate: 'bookdate',
+    createAt: 'createAt',
+    updateAt: 'updateAt'
+  };
+
+  export type VertifyBookingCodeScalarFieldEnum = (typeof VertifyBookingCodeScalarFieldEnum)[keyof typeof VertifyBookingCodeScalarFieldEnum]
+
+
   /**
    * Deep Input Types
    */
@@ -11588,8 +12934,10 @@ export namespace Prisma {
     password?: StringFilter | string
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    bookRoomId?: IntFilter | number
-    bookRoom?: XOR<BookRoomRelationFilter, BookRoomWhereInput>
+    bookRoomId?: IntNullableFilter | number | null
+    vertifyBookingCodeId?: IntNullableFilter | number | null
+    bookRoom?: XOR<BookRoomRelationFilter, BookRoomWhereInput> | null
+    vertifyBookingCode?: XOR<VertifyBookingCodeRelationFilter, VertifyBookingCodeWhereInput> | null
   }
 
   export type UserExternalOrderByWithRelationInput = {
@@ -11601,7 +12949,9 @@ export namespace Prisma {
     createAt?: SortOrder
     updateAt?: SortOrder
     bookRoomId?: SortOrder
+    vertifyBookingCodeId?: SortOrder
     bookRoom?: BookRoomOrderByWithRelationInput
+    vertifyBookingCode?: VertifyBookingCodeOrderByWithRelationInput
   }
 
   export type UserExternalWhereUniqueInput = {
@@ -11617,6 +12967,7 @@ export namespace Prisma {
     createAt?: SortOrder
     updateAt?: SortOrder
     bookRoomId?: SortOrder
+    vertifyBookingCodeId?: SortOrder
     _count?: UserExternalCountOrderByAggregateInput
     _avg?: UserExternalAvgOrderByAggregateInput
     _max?: UserExternalMaxOrderByAggregateInput
@@ -11635,13 +12986,14 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter | string
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
-    bookRoomId?: IntWithAggregatesFilter | number
+    bookRoomId?: IntNullableWithAggregatesFilter | number | null
+    vertifyBookingCodeId?: IntNullableWithAggregatesFilter | number | null
   }
 
-  export type BranchWhereInput = {
-    AND?: Enumerable<BranchWhereInput>
-    OR?: Enumerable<BranchWhereInput>
-    NOT?: Enumerable<BranchWhereInput>
+  export type CoWorkWhereInput = {
+    AND?: Enumerable<CoWorkWhereInput>
+    OR?: Enumerable<CoWorkWhereInput>
+    NOT?: Enumerable<CoWorkWhereInput>
     id?: IntFilter | number
     name?: StringFilter | string
     description?: StringFilter | string
@@ -11651,10 +13003,10 @@ export namespace Prisma {
     userInternalId?: IntFilter | number
     userInternal?: XOR<UserInternalRelationFilter, UserInternalWhereInput>
     BranchToRoom?: BranchToRoomListRelationFilter
-    OpenClose?: OpenCloseListRelationFilter
+    OpenClose?: XOR<OpenCloseRelationFilter, OpenCloseWhereInput> | null
   }
 
-  export type BranchOrderByWithRelationInput = {
+  export type CoWorkOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
@@ -11664,14 +13016,14 @@ export namespace Prisma {
     userInternalId?: SortOrder
     userInternal?: UserInternalOrderByWithRelationInput
     BranchToRoom?: BranchToRoomOrderByRelationAggregateInput
-    OpenClose?: OpenCloseOrderByRelationAggregateInput
+    OpenClose?: OpenCloseOrderByWithRelationInput
   }
 
-  export type BranchWhereUniqueInput = {
+  export type CoWorkWhereUniqueInput = {
     id?: number
   }
 
-  export type BranchOrderByWithAggregationInput = {
+  export type CoWorkOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
@@ -11679,17 +13031,17 @@ export namespace Prisma {
     tel?: SortOrder
     picture?: SortOrder
     userInternalId?: SortOrder
-    _count?: BranchCountOrderByAggregateInput
-    _avg?: BranchAvgOrderByAggregateInput
-    _max?: BranchMaxOrderByAggregateInput
-    _min?: BranchMinOrderByAggregateInput
-    _sum?: BranchSumOrderByAggregateInput
+    _count?: CoWorkCountOrderByAggregateInput
+    _avg?: CoWorkAvgOrderByAggregateInput
+    _max?: CoWorkMaxOrderByAggregateInput
+    _min?: CoWorkMinOrderByAggregateInput
+    _sum?: CoWorkSumOrderByAggregateInput
   }
 
-  export type BranchScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<BranchScalarWhereWithAggregatesInput>
-    OR?: Enumerable<BranchScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<BranchScalarWhereWithAggregatesInput>
+  export type CoWorkScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<CoWorkScalarWhereWithAggregatesInput>
+    OR?: Enumerable<CoWorkScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<CoWorkScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
     name?: StringWithAggregatesFilter | string
     description?: StringWithAggregatesFilter | string
@@ -11710,7 +13062,7 @@ export namespace Prisma {
     password?: StringFilter | string
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    Branch?: BranchListRelationFilter
+    coWork?: CoWorkListRelationFilter
   }
 
   export type UserInternalOrderByWithRelationInput = {
@@ -11721,7 +13073,7 @@ export namespace Prisma {
     password?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
-    Branch?: BranchOrderByRelationAggregateInput
+    coWork?: CoWorkOrderByRelationAggregateInput
   }
 
   export type UserInternalWhereUniqueInput = {
@@ -11815,7 +13167,7 @@ export namespace Prisma {
     NOT?: Enumerable<RoomRateWhereInput>
     id?: IntFilter | number
     price?: IntFilter | number
-    time?: DateTimeFilter | Date | string
+    time?: StringFilter | string
     roomId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
@@ -11858,7 +13210,7 @@ export namespace Prisma {
     NOT?: Enumerable<RoomRateScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
     price?: IntWithAggregatesFilter | number
-    time?: DateTimeWithAggregatesFilter | Date | string
+    time?: StringWithAggregatesFilter | string
     roomId?: IntWithAggregatesFilter | number
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
@@ -11965,22 +13317,22 @@ export namespace Prisma {
     OR?: Enumerable<BranchToRoomWhereInput>
     NOT?: Enumerable<BranchToRoomWhereInput>
     id?: IntFilter | number
-    branchId?: IntFilter | number
+    coWorkId?: IntFilter | number
     roomId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    branch?: XOR<BranchRelationFilter, BranchWhereInput>
+    coWork?: XOR<CoWorkRelationFilter, CoWorkWhereInput>
     room?: XOR<RoomRelationFilter, RoomWhereInput>
     BookRoom?: BookRoomListRelationFilter
   }
 
   export type BranchToRoomOrderByWithRelationInput = {
     id?: SortOrder
-    branchId?: SortOrder
+    coWorkId?: SortOrder
     roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
-    branch?: BranchOrderByWithRelationInput
+    coWork?: CoWorkOrderByWithRelationInput
     room?: RoomOrderByWithRelationInput
     BookRoom?: BookRoomOrderByRelationAggregateInput
   }
@@ -11991,7 +13343,7 @@ export namespace Prisma {
 
   export type BranchToRoomOrderByWithAggregationInput = {
     id?: SortOrder
-    branchId?: SortOrder
+    coWorkId?: SortOrder
     roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
@@ -12007,7 +13359,7 @@ export namespace Prisma {
     OR?: Enumerable<BranchToRoomScalarWhereWithAggregatesInput>
     NOT?: Enumerable<BranchToRoomScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
-    branchId?: IntWithAggregatesFilter | number
+    coWorkId?: IntWithAggregatesFilter | number
     roomId?: IntWithAggregatesFilter | number
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
@@ -12018,13 +13370,13 @@ export namespace Prisma {
     OR?: Enumerable<BookRoomWhereInput>
     NOT?: Enumerable<BookRoomWhereInput>
     id?: IntFilter | number
-    branchToRoomId?: IntFilter | number
+    branchToRoomId?: IntNullableFilter | number | null
     startTime?: DateTimeFilter | Date | string
     roomRateId?: IntFilter | number
     status?: StringFilter | string
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    branchToRoom?: XOR<BranchToRoomRelationFilter, BranchToRoomWhereInput>
+    branchToRoom?: XOR<BranchToRoomRelationFilter, BranchToRoomWhereInput> | null
     roomRate?: XOR<RoomRateRelationFilter, RoomRateWhereInput>
     UserExternal?: UserExternalListRelationFilter
   }
@@ -12066,7 +13418,7 @@ export namespace Prisma {
     OR?: Enumerable<BookRoomScalarWhereWithAggregatesInput>
     NOT?: Enumerable<BookRoomScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
-    branchToRoomId?: IntWithAggregatesFilter | number
+    branchToRoomId?: IntNullableWithAggregatesFilter | number | null
     startTime?: DateTimeWithAggregatesFilter | Date | string
     roomRateId?: IntWithAggregatesFilter | number
     status?: StringWithAggregatesFilter | string
@@ -12079,39 +13431,112 @@ export namespace Prisma {
     OR?: Enumerable<OpenCloseWhereInput>
     NOT?: Enumerable<OpenCloseWhereInput>
     id?: IntFilter | number
-    open?: DateTimeFilter | Date | string
-    close?: DateTimeFilter | Date | string
-    allDay?: BoolFilter | boolean
-    branchId?: IntFilter | number
-    day?: IntFilter | number
+    openTimeMon?: IntFilter | number
+    closeTimeMon?: IntFilter | number
+    isOpenMon?: BoolFilter | boolean
+    isOpen24hoursMon?: BoolFilter | boolean
+    openTimeTue?: IntFilter | number
+    closeTimeTue?: IntFilter | number
+    isOpenTue?: BoolFilter | boolean
+    isOpen24hoursTue?: BoolFilter | boolean
+    openTimeWed?: IntFilter | number
+    closeTimeWed?: IntFilter | number
+    isOpenWed?: BoolFilter | boolean
+    isOpen24hoursWed?: BoolFilter | boolean
+    openTimeThurs?: IntFilter | number
+    closeTimeThurs?: IntFilter | number
+    isOpenThurs?: BoolFilter | boolean
+    isOpen24hoursThurs?: BoolFilter | boolean
+    openTimeFri?: IntFilter | number
+    closeTimeFri?: IntFilter | number
+    isOpenFri?: BoolFilter | boolean
+    isOpen24hoursFri?: BoolFilter | boolean
+    openTimeSat?: IntFilter | number
+    closeTimeSat?: IntFilter | number
+    isOpenSat?: BoolFilter | boolean
+    isOpen24hoursSat?: BoolFilter | boolean
+    openTimeSun?: IntFilter | number
+    closeTimeSun?: IntFilter | number
+    isOpenSun?: BoolFilter | boolean
+    isOpen24hoursSun?: BoolFilter | boolean
+    coWorkId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    branch?: XOR<BranchRelationFilter, BranchWhereInput>
+    coWork?: XOR<CoWorkRelationFilter, CoWorkWhereInput>
   }
 
   export type OpenCloseOrderByWithRelationInput = {
     id?: SortOrder
-    open?: SortOrder
-    close?: SortOrder
-    allDay?: SortOrder
-    branchId?: SortOrder
-    day?: SortOrder
+    openTimeMon?: SortOrder
+    closeTimeMon?: SortOrder
+    isOpenMon?: SortOrder
+    isOpen24hoursMon?: SortOrder
+    openTimeTue?: SortOrder
+    closeTimeTue?: SortOrder
+    isOpenTue?: SortOrder
+    isOpen24hoursTue?: SortOrder
+    openTimeWed?: SortOrder
+    closeTimeWed?: SortOrder
+    isOpenWed?: SortOrder
+    isOpen24hoursWed?: SortOrder
+    openTimeThurs?: SortOrder
+    closeTimeThurs?: SortOrder
+    isOpenThurs?: SortOrder
+    isOpen24hoursThurs?: SortOrder
+    openTimeFri?: SortOrder
+    closeTimeFri?: SortOrder
+    isOpenFri?: SortOrder
+    isOpen24hoursFri?: SortOrder
+    openTimeSat?: SortOrder
+    closeTimeSat?: SortOrder
+    isOpenSat?: SortOrder
+    isOpen24hoursSat?: SortOrder
+    openTimeSun?: SortOrder
+    closeTimeSun?: SortOrder
+    isOpenSun?: SortOrder
+    isOpen24hoursSun?: SortOrder
+    coWorkId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
-    branch?: BranchOrderByWithRelationInput
+    coWork?: CoWorkOrderByWithRelationInput
   }
 
   export type OpenCloseWhereUniqueInput = {
     id?: number
+    coWorkId?: number
   }
 
   export type OpenCloseOrderByWithAggregationInput = {
     id?: SortOrder
-    open?: SortOrder
-    close?: SortOrder
-    allDay?: SortOrder
-    branchId?: SortOrder
-    day?: SortOrder
+    openTimeMon?: SortOrder
+    closeTimeMon?: SortOrder
+    isOpenMon?: SortOrder
+    isOpen24hoursMon?: SortOrder
+    openTimeTue?: SortOrder
+    closeTimeTue?: SortOrder
+    isOpenTue?: SortOrder
+    isOpen24hoursTue?: SortOrder
+    openTimeWed?: SortOrder
+    closeTimeWed?: SortOrder
+    isOpenWed?: SortOrder
+    isOpen24hoursWed?: SortOrder
+    openTimeThurs?: SortOrder
+    closeTimeThurs?: SortOrder
+    isOpenThurs?: SortOrder
+    isOpen24hoursThurs?: SortOrder
+    openTimeFri?: SortOrder
+    closeTimeFri?: SortOrder
+    isOpenFri?: SortOrder
+    isOpen24hoursFri?: SortOrder
+    openTimeSat?: SortOrder
+    closeTimeSat?: SortOrder
+    isOpenSat?: SortOrder
+    isOpen24hoursSat?: SortOrder
+    openTimeSun?: SortOrder
+    closeTimeSun?: SortOrder
+    isOpenSun?: SortOrder
+    isOpen24hoursSun?: SortOrder
+    coWorkId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
     _count?: OpenCloseCountOrderByAggregateInput
@@ -12126,11 +13551,80 @@ export namespace Prisma {
     OR?: Enumerable<OpenCloseScalarWhereWithAggregatesInput>
     NOT?: Enumerable<OpenCloseScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
-    open?: DateTimeWithAggregatesFilter | Date | string
-    close?: DateTimeWithAggregatesFilter | Date | string
-    allDay?: BoolWithAggregatesFilter | boolean
-    branchId?: IntWithAggregatesFilter | number
-    day?: IntWithAggregatesFilter | number
+    openTimeMon?: IntWithAggregatesFilter | number
+    closeTimeMon?: IntWithAggregatesFilter | number
+    isOpenMon?: BoolWithAggregatesFilter | boolean
+    isOpen24hoursMon?: BoolWithAggregatesFilter | boolean
+    openTimeTue?: IntWithAggregatesFilter | number
+    closeTimeTue?: IntWithAggregatesFilter | number
+    isOpenTue?: BoolWithAggregatesFilter | boolean
+    isOpen24hoursTue?: BoolWithAggregatesFilter | boolean
+    openTimeWed?: IntWithAggregatesFilter | number
+    closeTimeWed?: IntWithAggregatesFilter | number
+    isOpenWed?: BoolWithAggregatesFilter | boolean
+    isOpen24hoursWed?: BoolWithAggregatesFilter | boolean
+    openTimeThurs?: IntWithAggregatesFilter | number
+    closeTimeThurs?: IntWithAggregatesFilter | number
+    isOpenThurs?: BoolWithAggregatesFilter | boolean
+    isOpen24hoursThurs?: BoolWithAggregatesFilter | boolean
+    openTimeFri?: IntWithAggregatesFilter | number
+    closeTimeFri?: IntWithAggregatesFilter | number
+    isOpenFri?: BoolWithAggregatesFilter | boolean
+    isOpen24hoursFri?: BoolWithAggregatesFilter | boolean
+    openTimeSat?: IntWithAggregatesFilter | number
+    closeTimeSat?: IntWithAggregatesFilter | number
+    isOpenSat?: BoolWithAggregatesFilter | boolean
+    isOpen24hoursSat?: BoolWithAggregatesFilter | boolean
+    openTimeSun?: IntWithAggregatesFilter | number
+    closeTimeSun?: IntWithAggregatesFilter | number
+    isOpenSun?: BoolWithAggregatesFilter | boolean
+    isOpen24hoursSun?: BoolWithAggregatesFilter | boolean
+    coWorkId?: IntWithAggregatesFilter | number
+    createAt?: DateTimeWithAggregatesFilter | Date | string
+    updateAt?: DateTimeWithAggregatesFilter | Date | string
+  }
+
+  export type VertifyBookingCodeWhereInput = {
+    AND?: Enumerable<VertifyBookingCodeWhereInput>
+    OR?: Enumerable<VertifyBookingCodeWhereInput>
+    NOT?: Enumerable<VertifyBookingCodeWhereInput>
+    id?: IntFilter | number
+    bookdate?: DateTimeFilter | Date | string
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
+    UserExternal?: UserExternalListRelationFilter
+  }
+
+  export type VertifyBookingCodeOrderByWithRelationInput = {
+    id?: SortOrder
+    bookdate?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    UserExternal?: UserExternalOrderByRelationAggregateInput
+  }
+
+  export type VertifyBookingCodeWhereUniqueInput = {
+    id?: number
+  }
+
+  export type VertifyBookingCodeOrderByWithAggregationInput = {
+    id?: SortOrder
+    bookdate?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    _count?: VertifyBookingCodeCountOrderByAggregateInput
+    _avg?: VertifyBookingCodeAvgOrderByAggregateInput
+    _max?: VertifyBookingCodeMaxOrderByAggregateInput
+    _min?: VertifyBookingCodeMinOrderByAggregateInput
+    _sum?: VertifyBookingCodeSumOrderByAggregateInput
+  }
+
+  export type VertifyBookingCodeScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<VertifyBookingCodeScalarWhereWithAggregatesInput>
+    OR?: Enumerable<VertifyBookingCodeScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<VertifyBookingCodeScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    bookdate?: DateTimeWithAggregatesFilter | Date | string
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
   }
@@ -12142,7 +13636,8 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
-    bookRoom: BookRoomCreateNestedOneWithoutUserExternalInput
+    bookRoom?: BookRoomCreateNestedOneWithoutUserExternalInput
+    vertifyBookingCode?: VertifyBookingCodeCreateNestedOneWithoutUserExternalInput
   }
 
   export type UserExternalUncheckedCreateInput = {
@@ -12153,7 +13648,8 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
-    bookRoomId: number
+    bookRoomId?: number | null
+    vertifyBookingCodeId?: number | null
   }
 
   export type UserExternalUpdateInput = {
@@ -12163,7 +13659,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    bookRoom?: BookRoomUpdateOneRequiredWithoutUserExternalNestedInput
+    bookRoom?: BookRoomUpdateOneWithoutUserExternalNestedInput
+    vertifyBookingCode?: VertifyBookingCodeUpdateOneWithoutUserExternalNestedInput
   }
 
   export type UserExternalUncheckedUpdateInput = {
@@ -12174,7 +13671,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    bookRoomId?: IntFieldUpdateOperationsInput | number
+    bookRoomId?: NullableIntFieldUpdateOperationsInput | number | null
+    vertifyBookingCodeId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type UserExternalCreateManyInput = {
@@ -12185,7 +13683,8 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
-    bookRoomId: number
+    bookRoomId?: number | null
+    vertifyBookingCodeId?: number | null
   }
 
   export type UserExternalUpdateManyMutationInput = {
@@ -12205,21 +13704,22 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    bookRoomId?: IntFieldUpdateOperationsInput | number
+    bookRoomId?: NullableIntFieldUpdateOperationsInput | number | null
+    vertifyBookingCodeId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
-  export type BranchCreateInput = {
+  export type CoWorkCreateInput = {
     name: string
     description: string
     location: string
     tel: number
     picture: string
-    userInternal: UserInternalCreateNestedOneWithoutBranchInput
-    BranchToRoom?: BranchToRoomCreateNestedManyWithoutBranchInput
-    OpenClose?: OpenCloseCreateNestedManyWithoutBranchInput
+    userInternal: UserInternalCreateNestedOneWithoutCoWorkInput
+    BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
+    OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
   }
 
-  export type BranchUncheckedCreateInput = {
+  export type CoWorkUncheckedCreateInput = {
     id?: number
     name: string
     description: string
@@ -12227,22 +13727,22 @@ export namespace Prisma {
     tel: number
     picture: string
     userInternalId: number
-    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutBranchInput
-    OpenClose?: OpenCloseUncheckedCreateNestedManyWithoutBranchInput
+    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
+    OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
   }
 
-  export type BranchUpdateInput = {
+  export type CoWorkUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     tel?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
-    userInternal?: UserInternalUpdateOneRequiredWithoutBranchNestedInput
-    BranchToRoom?: BranchToRoomUpdateManyWithoutBranchNestedInput
-    OpenClose?: OpenCloseUpdateManyWithoutBranchNestedInput
+    userInternal?: UserInternalUpdateOneRequiredWithoutCoWorkNestedInput
+    BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
+    OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
   }
 
-  export type BranchUncheckedUpdateInput = {
+  export type CoWorkUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -12250,11 +13750,11 @@ export namespace Prisma {
     tel?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
     userInternalId?: IntFieldUpdateOperationsInput | number
-    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutBranchNestedInput
-    OpenClose?: OpenCloseUncheckedUpdateManyWithoutBranchNestedInput
+    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
+    OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
   }
 
-  export type BranchCreateManyInput = {
+  export type CoWorkCreateManyInput = {
     id?: number
     name: string
     description: string
@@ -12264,7 +13764,7 @@ export namespace Prisma {
     userInternalId: number
   }
 
-  export type BranchUpdateManyMutationInput = {
+  export type CoWorkUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
@@ -12272,7 +13772,7 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
   }
 
-  export type BranchUncheckedUpdateManyInput = {
+  export type CoWorkUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -12289,7 +13789,7 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
-    Branch?: BranchCreateNestedManyWithoutUserInternalInput
+    coWork?: CoWorkCreateNestedManyWithoutUserInternalInput
   }
 
   export type UserInternalUncheckedCreateInput = {
@@ -12300,7 +13800,7 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
-    Branch?: BranchUncheckedCreateNestedManyWithoutUserInternalInput
+    coWork?: CoWorkUncheckedCreateNestedManyWithoutUserInternalInput
   }
 
   export type UserInternalUpdateInput = {
@@ -12310,7 +13810,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Branch?: BranchUpdateManyWithoutUserInternalNestedInput
+    coWork?: CoWorkUpdateManyWithoutUserInternalNestedInput
   }
 
   export type UserInternalUncheckedUpdateInput = {
@@ -12321,7 +13821,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Branch?: BranchUncheckedUpdateManyWithoutUserInternalNestedInput
+    coWork?: CoWorkUncheckedUpdateManyWithoutUserInternalNestedInput
   }
 
   export type UserInternalCreateManyInput = {
@@ -12420,7 +13920,7 @@ export namespace Prisma {
 
   export type RoomRateCreateInput = {
     price: number
-    time: Date | string
+    time: string
     createAt?: Date | string
     updateAt?: Date | string
     room: RoomCreateNestedOneWithoutRoomPriceInput
@@ -12430,7 +13930,7 @@ export namespace Prisma {
   export type RoomRateUncheckedCreateInput = {
     id?: number
     price: number
-    time: Date | string
+    time: string
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
@@ -12439,7 +13939,7 @@ export namespace Prisma {
 
   export type RoomRateUpdateInput = {
     price?: IntFieldUpdateOperationsInput | number
-    time?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     room?: RoomUpdateOneRequiredWithoutRoomPriceNestedInput
@@ -12449,7 +13949,7 @@ export namespace Prisma {
   export type RoomRateUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
-    time?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12459,7 +13959,7 @@ export namespace Prisma {
   export type RoomRateCreateManyInput = {
     id?: number
     price: number
-    time: Date | string
+    time: string
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
@@ -12467,7 +13967,7 @@ export namespace Prisma {
 
   export type RoomRateUpdateManyMutationInput = {
     price?: IntFieldUpdateOperationsInput | number
-    time?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12475,7 +13975,7 @@ export namespace Prisma {
   export type RoomRateUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
-    time?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12585,14 +14085,14 @@ export namespace Prisma {
   export type BranchToRoomCreateInput = {
     createAt?: Date | string
     updateAt?: Date | string
-    branch: BranchCreateNestedOneWithoutBranchToRoomInput
+    coWork: CoWorkCreateNestedOneWithoutBranchToRoomInput
     room: RoomCreateNestedOneWithoutBranchToRoomInput
     BookRoom?: BookRoomCreateNestedManyWithoutBranchToRoomInput
   }
 
   export type BranchToRoomUncheckedCreateInput = {
     id?: number
-    branchId: number
+    coWorkId: number
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
@@ -12602,14 +14102,14 @@ export namespace Prisma {
   export type BranchToRoomUpdateInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branch?: BranchUpdateOneRequiredWithoutBranchToRoomNestedInput
+    coWork?: CoWorkUpdateOneRequiredWithoutBranchToRoomNestedInput
     room?: RoomUpdateOneRequiredWithoutBranchToRoomNestedInput
     BookRoom?: BookRoomUpdateManyWithoutBranchToRoomNestedInput
   }
 
   export type BranchToRoomUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    branchId?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12618,7 +14118,7 @@ export namespace Prisma {
 
   export type BranchToRoomCreateManyInput = {
     id?: number
-    branchId: number
+    coWorkId: number
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
@@ -12631,7 +14131,7 @@ export namespace Prisma {
 
   export type BranchToRoomUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    branchId?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12642,14 +14142,14 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
-    branchToRoom: BranchToRoomCreateNestedOneWithoutBookRoomInput
+    branchToRoom?: BranchToRoomCreateNestedOneWithoutBookRoomInput
     roomRate: RoomRateCreateNestedOneWithoutBookRoomInput
     UserExternal?: UserExternalCreateNestedManyWithoutBookRoomInput
   }
 
   export type BookRoomUncheckedCreateInput = {
     id?: number
-    branchToRoomId: number
+    branchToRoomId?: number | null
     startTime: Date | string
     roomRateId: number
     status: string
@@ -12663,14 +14163,14 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchToRoom?: BranchToRoomUpdateOneRequiredWithoutBookRoomNestedInput
+    branchToRoom?: BranchToRoomUpdateOneWithoutBookRoomNestedInput
     roomRate?: RoomRateUpdateOneRequiredWithoutBookRoomNestedInput
     UserExternal?: UserExternalUpdateManyWithoutBookRoomNestedInput
   }
 
   export type BookRoomUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    branchToRoomId?: IntFieldUpdateOperationsInput | number
+    branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     roomRateId?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
@@ -12681,7 +14181,7 @@ export namespace Prisma {
 
   export type BookRoomCreateManyInput = {
     id?: number
-    branchToRoomId: number
+    branchToRoomId?: number | null
     startTime: Date | string
     roomRateId: number
     status: string
@@ -12698,7 +14198,7 @@ export namespace Prisma {
 
   export type BookRoomUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    branchToRoomId?: IntFieldUpdateOperationsInput | number
+    branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     roomRateId?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
@@ -12707,74 +14207,292 @@ export namespace Prisma {
   }
 
   export type OpenCloseCreateInput = {
-    open: Date | string
-    close: Date | string
-    allDay: boolean
-    day: number
+    openTimeMon: number
+    closeTimeMon: number
+    isOpenMon: boolean
+    isOpen24hoursMon: boolean
+    openTimeTue: number
+    closeTimeTue: number
+    isOpenTue: boolean
+    isOpen24hoursTue: boolean
+    openTimeWed: number
+    closeTimeWed: number
+    isOpenWed: boolean
+    isOpen24hoursWed: boolean
+    openTimeThurs: number
+    closeTimeThurs: number
+    isOpenThurs: boolean
+    isOpen24hoursThurs: boolean
+    openTimeFri: number
+    closeTimeFri: number
+    isOpenFri: boolean
+    isOpen24hoursFri: boolean
+    openTimeSat: number
+    closeTimeSat: number
+    isOpenSat: boolean
+    isOpen24hoursSat: boolean
+    openTimeSun: number
+    closeTimeSun: number
+    isOpenSun: boolean
+    isOpen24hoursSun: boolean
     createAt?: Date | string
     updateAt?: Date | string
-    branch: BranchCreateNestedOneWithoutOpenCloseInput
+    coWork: CoWorkCreateNestedOneWithoutOpenCloseInput
   }
 
   export type OpenCloseUncheckedCreateInput = {
     id?: number
-    open: Date | string
-    close: Date | string
-    allDay: boolean
-    branchId: number
-    day: number
+    openTimeMon: number
+    closeTimeMon: number
+    isOpenMon: boolean
+    isOpen24hoursMon: boolean
+    openTimeTue: number
+    closeTimeTue: number
+    isOpenTue: boolean
+    isOpen24hoursTue: boolean
+    openTimeWed: number
+    closeTimeWed: number
+    isOpenWed: boolean
+    isOpen24hoursWed: boolean
+    openTimeThurs: number
+    closeTimeThurs: number
+    isOpenThurs: boolean
+    isOpen24hoursThurs: boolean
+    openTimeFri: number
+    closeTimeFri: number
+    isOpenFri: boolean
+    isOpen24hoursFri: boolean
+    openTimeSat: number
+    closeTimeSat: number
+    isOpenSat: boolean
+    isOpen24hoursSat: boolean
+    openTimeSun: number
+    closeTimeSun: number
+    isOpenSun: boolean
+    isOpen24hoursSun: boolean
+    coWorkId: number
     createAt?: Date | string
     updateAt?: Date | string
   }
 
   export type OpenCloseUpdateInput = {
-    open?: DateTimeFieldUpdateOperationsInput | Date | string
-    close?: DateTimeFieldUpdateOperationsInput | Date | string
-    allDay?: BoolFieldUpdateOperationsInput | boolean
-    day?: IntFieldUpdateOperationsInput | number
+    openTimeMon?: IntFieldUpdateOperationsInput | number
+    closeTimeMon?: IntFieldUpdateOperationsInput | number
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    openTimeTue?: IntFieldUpdateOperationsInput | number
+    closeTimeTue?: IntFieldUpdateOperationsInput | number
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    openTimeWed?: IntFieldUpdateOperationsInput | number
+    closeTimeWed?: IntFieldUpdateOperationsInput | number
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    openTimeThurs?: IntFieldUpdateOperationsInput | number
+    closeTimeThurs?: IntFieldUpdateOperationsInput | number
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    openTimeFri?: IntFieldUpdateOperationsInput | number
+    closeTimeFri?: IntFieldUpdateOperationsInput | number
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSat?: IntFieldUpdateOperationsInput | number
+    closeTimeSat?: IntFieldUpdateOperationsInput | number
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSun?: IntFieldUpdateOperationsInput | number
+    closeTimeSun?: IntFieldUpdateOperationsInput | number
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branch?: BranchUpdateOneRequiredWithoutOpenCloseNestedInput
+    coWork?: CoWorkUpdateOneRequiredWithoutOpenCloseNestedInput
   }
 
   export type OpenCloseUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    open?: DateTimeFieldUpdateOperationsInput | Date | string
-    close?: DateTimeFieldUpdateOperationsInput | Date | string
-    allDay?: BoolFieldUpdateOperationsInput | boolean
-    branchId?: IntFieldUpdateOperationsInput | number
-    day?: IntFieldUpdateOperationsInput | number
+    openTimeMon?: IntFieldUpdateOperationsInput | number
+    closeTimeMon?: IntFieldUpdateOperationsInput | number
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    openTimeTue?: IntFieldUpdateOperationsInput | number
+    closeTimeTue?: IntFieldUpdateOperationsInput | number
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    openTimeWed?: IntFieldUpdateOperationsInput | number
+    closeTimeWed?: IntFieldUpdateOperationsInput | number
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    openTimeThurs?: IntFieldUpdateOperationsInput | number
+    closeTimeThurs?: IntFieldUpdateOperationsInput | number
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    openTimeFri?: IntFieldUpdateOperationsInput | number
+    closeTimeFri?: IntFieldUpdateOperationsInput | number
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSat?: IntFieldUpdateOperationsInput | number
+    closeTimeSat?: IntFieldUpdateOperationsInput | number
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSun?: IntFieldUpdateOperationsInput | number
+    closeTimeSun?: IntFieldUpdateOperationsInput | number
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    coWorkId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OpenCloseCreateManyInput = {
     id?: number
-    open: Date | string
-    close: Date | string
-    allDay: boolean
-    branchId: number
-    day: number
+    openTimeMon: number
+    closeTimeMon: number
+    isOpenMon: boolean
+    isOpen24hoursMon: boolean
+    openTimeTue: number
+    closeTimeTue: number
+    isOpenTue: boolean
+    isOpen24hoursTue: boolean
+    openTimeWed: number
+    closeTimeWed: number
+    isOpenWed: boolean
+    isOpen24hoursWed: boolean
+    openTimeThurs: number
+    closeTimeThurs: number
+    isOpenThurs: boolean
+    isOpen24hoursThurs: boolean
+    openTimeFri: number
+    closeTimeFri: number
+    isOpenFri: boolean
+    isOpen24hoursFri: boolean
+    openTimeSat: number
+    closeTimeSat: number
+    isOpenSat: boolean
+    isOpen24hoursSat: boolean
+    openTimeSun: number
+    closeTimeSun: number
+    isOpenSun: boolean
+    isOpen24hoursSun: boolean
+    coWorkId: number
     createAt?: Date | string
     updateAt?: Date | string
   }
 
   export type OpenCloseUpdateManyMutationInput = {
-    open?: DateTimeFieldUpdateOperationsInput | Date | string
-    close?: DateTimeFieldUpdateOperationsInput | Date | string
-    allDay?: BoolFieldUpdateOperationsInput | boolean
-    day?: IntFieldUpdateOperationsInput | number
+    openTimeMon?: IntFieldUpdateOperationsInput | number
+    closeTimeMon?: IntFieldUpdateOperationsInput | number
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    openTimeTue?: IntFieldUpdateOperationsInput | number
+    closeTimeTue?: IntFieldUpdateOperationsInput | number
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    openTimeWed?: IntFieldUpdateOperationsInput | number
+    closeTimeWed?: IntFieldUpdateOperationsInput | number
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    openTimeThurs?: IntFieldUpdateOperationsInput | number
+    closeTimeThurs?: IntFieldUpdateOperationsInput | number
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    openTimeFri?: IntFieldUpdateOperationsInput | number
+    closeTimeFri?: IntFieldUpdateOperationsInput | number
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSat?: IntFieldUpdateOperationsInput | number
+    closeTimeSat?: IntFieldUpdateOperationsInput | number
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSun?: IntFieldUpdateOperationsInput | number
+    closeTimeSun?: IntFieldUpdateOperationsInput | number
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OpenCloseUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    open?: DateTimeFieldUpdateOperationsInput | Date | string
-    close?: DateTimeFieldUpdateOperationsInput | Date | string
-    allDay?: BoolFieldUpdateOperationsInput | boolean
-    branchId?: IntFieldUpdateOperationsInput | number
-    day?: IntFieldUpdateOperationsInput | number
+    openTimeMon?: IntFieldUpdateOperationsInput | number
+    closeTimeMon?: IntFieldUpdateOperationsInput | number
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    openTimeTue?: IntFieldUpdateOperationsInput | number
+    closeTimeTue?: IntFieldUpdateOperationsInput | number
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    openTimeWed?: IntFieldUpdateOperationsInput | number
+    closeTimeWed?: IntFieldUpdateOperationsInput | number
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    openTimeThurs?: IntFieldUpdateOperationsInput | number
+    closeTimeThurs?: IntFieldUpdateOperationsInput | number
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    openTimeFri?: IntFieldUpdateOperationsInput | number
+    closeTimeFri?: IntFieldUpdateOperationsInput | number
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSat?: IntFieldUpdateOperationsInput | number
+    closeTimeSat?: IntFieldUpdateOperationsInput | number
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSun?: IntFieldUpdateOperationsInput | number
+    closeTimeSun?: IntFieldUpdateOperationsInput | number
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    coWorkId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VertifyBookingCodeCreateInput = {
+    bookdate: Date | string
+    createAt?: Date | string
+    updateAt?: Date | string
+    UserExternal?: UserExternalCreateNestedManyWithoutVertifyBookingCodeInput
+  }
+
+  export type VertifyBookingCodeUncheckedCreateInput = {
+    id?: number
+    bookdate: Date | string
+    createAt?: Date | string
+    updateAt?: Date | string
+    UserExternal?: UserExternalUncheckedCreateNestedManyWithoutVertifyBookingCodeInput
+  }
+
+  export type VertifyBookingCodeUpdateInput = {
+    bookdate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    UserExternal?: UserExternalUpdateManyWithoutVertifyBookingCodeNestedInput
+  }
+
+  export type VertifyBookingCodeUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bookdate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    UserExternal?: UserExternalUncheckedUpdateManyWithoutVertifyBookingCodeNestedInput
+  }
+
+  export type VertifyBookingCodeCreateManyInput = {
+    id?: number
+    bookdate: Date | string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type VertifyBookingCodeUpdateManyMutationInput = {
+    bookdate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VertifyBookingCodeUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bookdate?: DateTimeFieldUpdateOperationsInput | Date | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12816,9 +14534,25 @@ export namespace Prisma {
     not?: NestedDateTimeFilter | Date | string
   }
 
+  export type IntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
+  }
+
   export type BookRoomRelationFilter = {
-    is?: BookRoomWhereInput
-    isNot?: BookRoomWhereInput
+    is?: BookRoomWhereInput | null
+    isNot?: BookRoomWhereInput | null
+  }
+
+  export type VertifyBookingCodeRelationFilter = {
+    is?: VertifyBookingCodeWhereInput | null
+    isNot?: VertifyBookingCodeWhereInput | null
   }
 
   export type UserExternalCountOrderByAggregateInput = {
@@ -12830,12 +14564,14 @@ export namespace Prisma {
     createAt?: SortOrder
     updateAt?: SortOrder
     bookRoomId?: SortOrder
+    vertifyBookingCodeId?: SortOrder
   }
 
   export type UserExternalAvgOrderByAggregateInput = {
     id?: SortOrder
     tel?: SortOrder
     bookRoomId?: SortOrder
+    vertifyBookingCodeId?: SortOrder
   }
 
   export type UserExternalMaxOrderByAggregateInput = {
@@ -12847,6 +14583,7 @@ export namespace Prisma {
     createAt?: SortOrder
     updateAt?: SortOrder
     bookRoomId?: SortOrder
+    vertifyBookingCodeId?: SortOrder
   }
 
   export type UserExternalMinOrderByAggregateInput = {
@@ -12858,12 +14595,14 @@ export namespace Prisma {
     createAt?: SortOrder
     updateAt?: SortOrder
     bookRoomId?: SortOrder
+    vertifyBookingCodeId?: SortOrder
   }
 
   export type UserExternalSumOrderByAggregateInput = {
     id?: SortOrder
     tel?: SortOrder
     bookRoomId?: SortOrder
+    vertifyBookingCodeId?: SortOrder
   }
 
   export type IntWithAggregatesFilter = {
@@ -12914,6 +14653,22 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter
   }
 
+  export type IntNullableWithAggregatesFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableWithAggregatesFilter | number | null
+    _count?: NestedIntNullableFilter
+    _avg?: NestedFloatNullableFilter
+    _sum?: NestedIntNullableFilter
+    _min?: NestedIntNullableFilter
+    _max?: NestedIntNullableFilter
+  }
+
   export type UserInternalRelationFilter = {
     is?: UserInternalWhereInput
     isNot?: UserInternalWhereInput
@@ -12925,21 +14680,16 @@ export namespace Prisma {
     none?: BranchToRoomWhereInput
   }
 
-  export type OpenCloseListRelationFilter = {
-    every?: OpenCloseWhereInput
-    some?: OpenCloseWhereInput
-    none?: OpenCloseWhereInput
+  export type OpenCloseRelationFilter = {
+    is?: OpenCloseWhereInput | null
+    isNot?: OpenCloseWhereInput | null
   }
 
   export type BranchToRoomOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type OpenCloseOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type BranchCountOrderByAggregateInput = {
+  export type CoWorkCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
@@ -12949,23 +14699,13 @@ export namespace Prisma {
     userInternalId?: SortOrder
   }
 
-  export type BranchAvgOrderByAggregateInput = {
+  export type CoWorkAvgOrderByAggregateInput = {
     id?: SortOrder
     tel?: SortOrder
     userInternalId?: SortOrder
   }
 
-  export type BranchMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    location?: SortOrder
-    tel?: SortOrder
-    picture?: SortOrder
-    userInternalId?: SortOrder
-  }
-
-  export type BranchMinOrderByAggregateInput = {
+  export type CoWorkMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
@@ -12975,19 +14715,29 @@ export namespace Prisma {
     userInternalId?: SortOrder
   }
 
-  export type BranchSumOrderByAggregateInput = {
+  export type CoWorkMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    location?: SortOrder
+    tel?: SortOrder
+    picture?: SortOrder
+    userInternalId?: SortOrder
+  }
+
+  export type CoWorkSumOrderByAggregateInput = {
     id?: SortOrder
     tel?: SortOrder
     userInternalId?: SortOrder
   }
 
-  export type BranchListRelationFilter = {
-    every?: BranchWhereInput
-    some?: BranchWhereInput
-    none?: BranchWhereInput
+  export type CoWorkListRelationFilter = {
+    every?: CoWorkWhereInput
+    some?: CoWorkWhereInput
+    none?: CoWorkWhereInput
   }
 
-  export type BranchOrderByRelationAggregateInput = {
+  export type CoWorkOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13209,14 +14959,14 @@ export namespace Prisma {
     facilityId?: SortOrder
   }
 
-  export type BranchRelationFilter = {
-    is?: BranchWhereInput
-    isNot?: BranchWhereInput
+  export type CoWorkRelationFilter = {
+    is?: CoWorkWhereInput
+    isNot?: CoWorkWhereInput
   }
 
   export type BranchToRoomCountOrderByAggregateInput = {
     id?: SortOrder
-    branchId?: SortOrder
+    coWorkId?: SortOrder
     roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
@@ -13224,13 +14974,13 @@ export namespace Prisma {
 
   export type BranchToRoomAvgOrderByAggregateInput = {
     id?: SortOrder
-    branchId?: SortOrder
+    coWorkId?: SortOrder
     roomId?: SortOrder
   }
 
   export type BranchToRoomMaxOrderByAggregateInput = {
     id?: SortOrder
-    branchId?: SortOrder
+    coWorkId?: SortOrder
     roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
@@ -13238,7 +14988,7 @@ export namespace Prisma {
 
   export type BranchToRoomMinOrderByAggregateInput = {
     id?: SortOrder
-    branchId?: SortOrder
+    coWorkId?: SortOrder
     roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
@@ -13246,13 +14996,13 @@ export namespace Prisma {
 
   export type BranchToRoomSumOrderByAggregateInput = {
     id?: SortOrder
-    branchId?: SortOrder
+    coWorkId?: SortOrder
     roomId?: SortOrder
   }
 
   export type BranchToRoomRelationFilter = {
-    is?: BranchToRoomWhereInput
-    isNot?: BranchToRoomWhereInput
+    is?: BranchToRoomWhereInput | null
+    isNot?: BranchToRoomWhereInput | null
   }
 
   export type RoomRateRelationFilter = {
@@ -13319,47 +15069,145 @@ export namespace Prisma {
 
   export type OpenCloseCountOrderByAggregateInput = {
     id?: SortOrder
-    open?: SortOrder
-    close?: SortOrder
-    allDay?: SortOrder
-    branchId?: SortOrder
-    day?: SortOrder
+    openTimeMon?: SortOrder
+    closeTimeMon?: SortOrder
+    isOpenMon?: SortOrder
+    isOpen24hoursMon?: SortOrder
+    openTimeTue?: SortOrder
+    closeTimeTue?: SortOrder
+    isOpenTue?: SortOrder
+    isOpen24hoursTue?: SortOrder
+    openTimeWed?: SortOrder
+    closeTimeWed?: SortOrder
+    isOpenWed?: SortOrder
+    isOpen24hoursWed?: SortOrder
+    openTimeThurs?: SortOrder
+    closeTimeThurs?: SortOrder
+    isOpenThurs?: SortOrder
+    isOpen24hoursThurs?: SortOrder
+    openTimeFri?: SortOrder
+    closeTimeFri?: SortOrder
+    isOpenFri?: SortOrder
+    isOpen24hoursFri?: SortOrder
+    openTimeSat?: SortOrder
+    closeTimeSat?: SortOrder
+    isOpenSat?: SortOrder
+    isOpen24hoursSat?: SortOrder
+    openTimeSun?: SortOrder
+    closeTimeSun?: SortOrder
+    isOpenSun?: SortOrder
+    isOpen24hoursSun?: SortOrder
+    coWorkId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
   }
 
   export type OpenCloseAvgOrderByAggregateInput = {
     id?: SortOrder
-    branchId?: SortOrder
-    day?: SortOrder
+    openTimeMon?: SortOrder
+    closeTimeMon?: SortOrder
+    openTimeTue?: SortOrder
+    closeTimeTue?: SortOrder
+    openTimeWed?: SortOrder
+    closeTimeWed?: SortOrder
+    openTimeThurs?: SortOrder
+    closeTimeThurs?: SortOrder
+    openTimeFri?: SortOrder
+    closeTimeFri?: SortOrder
+    openTimeSat?: SortOrder
+    closeTimeSat?: SortOrder
+    openTimeSun?: SortOrder
+    closeTimeSun?: SortOrder
+    coWorkId?: SortOrder
   }
 
   export type OpenCloseMaxOrderByAggregateInput = {
     id?: SortOrder
-    open?: SortOrder
-    close?: SortOrder
-    allDay?: SortOrder
-    branchId?: SortOrder
-    day?: SortOrder
+    openTimeMon?: SortOrder
+    closeTimeMon?: SortOrder
+    isOpenMon?: SortOrder
+    isOpen24hoursMon?: SortOrder
+    openTimeTue?: SortOrder
+    closeTimeTue?: SortOrder
+    isOpenTue?: SortOrder
+    isOpen24hoursTue?: SortOrder
+    openTimeWed?: SortOrder
+    closeTimeWed?: SortOrder
+    isOpenWed?: SortOrder
+    isOpen24hoursWed?: SortOrder
+    openTimeThurs?: SortOrder
+    closeTimeThurs?: SortOrder
+    isOpenThurs?: SortOrder
+    isOpen24hoursThurs?: SortOrder
+    openTimeFri?: SortOrder
+    closeTimeFri?: SortOrder
+    isOpenFri?: SortOrder
+    isOpen24hoursFri?: SortOrder
+    openTimeSat?: SortOrder
+    closeTimeSat?: SortOrder
+    isOpenSat?: SortOrder
+    isOpen24hoursSat?: SortOrder
+    openTimeSun?: SortOrder
+    closeTimeSun?: SortOrder
+    isOpenSun?: SortOrder
+    isOpen24hoursSun?: SortOrder
+    coWorkId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
   }
 
   export type OpenCloseMinOrderByAggregateInput = {
     id?: SortOrder
-    open?: SortOrder
-    close?: SortOrder
-    allDay?: SortOrder
-    branchId?: SortOrder
-    day?: SortOrder
+    openTimeMon?: SortOrder
+    closeTimeMon?: SortOrder
+    isOpenMon?: SortOrder
+    isOpen24hoursMon?: SortOrder
+    openTimeTue?: SortOrder
+    closeTimeTue?: SortOrder
+    isOpenTue?: SortOrder
+    isOpen24hoursTue?: SortOrder
+    openTimeWed?: SortOrder
+    closeTimeWed?: SortOrder
+    isOpenWed?: SortOrder
+    isOpen24hoursWed?: SortOrder
+    openTimeThurs?: SortOrder
+    closeTimeThurs?: SortOrder
+    isOpenThurs?: SortOrder
+    isOpen24hoursThurs?: SortOrder
+    openTimeFri?: SortOrder
+    closeTimeFri?: SortOrder
+    isOpenFri?: SortOrder
+    isOpen24hoursFri?: SortOrder
+    openTimeSat?: SortOrder
+    closeTimeSat?: SortOrder
+    isOpenSat?: SortOrder
+    isOpen24hoursSat?: SortOrder
+    openTimeSun?: SortOrder
+    closeTimeSun?: SortOrder
+    isOpenSun?: SortOrder
+    isOpen24hoursSun?: SortOrder
+    coWorkId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
   }
 
   export type OpenCloseSumOrderByAggregateInput = {
     id?: SortOrder
-    branchId?: SortOrder
-    day?: SortOrder
+    openTimeMon?: SortOrder
+    closeTimeMon?: SortOrder
+    openTimeTue?: SortOrder
+    closeTimeTue?: SortOrder
+    openTimeWed?: SortOrder
+    closeTimeWed?: SortOrder
+    openTimeThurs?: SortOrder
+    closeTimeThurs?: SortOrder
+    openTimeFri?: SortOrder
+    closeTimeFri?: SortOrder
+    openTimeSat?: SortOrder
+    closeTimeSat?: SortOrder
+    openTimeSun?: SortOrder
+    closeTimeSun?: SortOrder
+    coWorkId?: SortOrder
   }
 
   export type BoolWithAggregatesFilter = {
@@ -13370,10 +15218,45 @@ export namespace Prisma {
     _max?: NestedBoolFilter
   }
 
+  export type VertifyBookingCodeCountOrderByAggregateInput = {
+    id?: SortOrder
+    bookdate?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type VertifyBookingCodeAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type VertifyBookingCodeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bookdate?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type VertifyBookingCodeMinOrderByAggregateInput = {
+    id?: SortOrder
+    bookdate?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type VertifyBookingCodeSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type BookRoomCreateNestedOneWithoutUserExternalInput = {
     create?: XOR<BookRoomCreateWithoutUserExternalInput, BookRoomUncheckedCreateWithoutUserExternalInput>
     connectOrCreate?: BookRoomCreateOrConnectWithoutUserExternalInput
     connect?: BookRoomWhereUniqueInput
+  }
+
+  export type VertifyBookingCodeCreateNestedOneWithoutUserExternalInput = {
+    create?: XOR<VertifyBookingCodeCreateWithoutUserExternalInput, VertifyBookingCodeUncheckedCreateWithoutUserExternalInput>
+    connectOrCreate?: VertifyBookingCodeCreateOrConnectWithoutUserExternalInput
+    connect?: VertifyBookingCodeWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -13392,152 +15275,162 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type BookRoomUpdateOneRequiredWithoutUserExternalNestedInput = {
+  export type BookRoomUpdateOneWithoutUserExternalNestedInput = {
     create?: XOR<BookRoomCreateWithoutUserExternalInput, BookRoomUncheckedCreateWithoutUserExternalInput>
     connectOrCreate?: BookRoomCreateOrConnectWithoutUserExternalInput
     upsert?: BookRoomUpsertWithoutUserExternalInput
+    disconnect?: boolean
+    delete?: boolean
     connect?: BookRoomWhereUniqueInput
     update?: XOR<BookRoomUpdateWithoutUserExternalInput, BookRoomUncheckedUpdateWithoutUserExternalInput>
   }
 
-  export type UserInternalCreateNestedOneWithoutBranchInput = {
-    create?: XOR<UserInternalCreateWithoutBranchInput, UserInternalUncheckedCreateWithoutBranchInput>
-    connectOrCreate?: UserInternalCreateOrConnectWithoutBranchInput
+  export type VertifyBookingCodeUpdateOneWithoutUserExternalNestedInput = {
+    create?: XOR<VertifyBookingCodeCreateWithoutUserExternalInput, VertifyBookingCodeUncheckedCreateWithoutUserExternalInput>
+    connectOrCreate?: VertifyBookingCodeCreateOrConnectWithoutUserExternalInput
+    upsert?: VertifyBookingCodeUpsertWithoutUserExternalInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: VertifyBookingCodeWhereUniqueInput
+    update?: XOR<VertifyBookingCodeUpdateWithoutUserExternalInput, VertifyBookingCodeUncheckedUpdateWithoutUserExternalInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserInternalCreateNestedOneWithoutCoWorkInput = {
+    create?: XOR<UserInternalCreateWithoutCoWorkInput, UserInternalUncheckedCreateWithoutCoWorkInput>
+    connectOrCreate?: UserInternalCreateOrConnectWithoutCoWorkInput
     connect?: UserInternalWhereUniqueInput
   }
 
-  export type BranchToRoomCreateNestedManyWithoutBranchInput = {
-    create?: XOR<Enumerable<BranchToRoomCreateWithoutBranchInput>, Enumerable<BranchToRoomUncheckedCreateWithoutBranchInput>>
-    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutBranchInput>
-    createMany?: BranchToRoomCreateManyBranchInputEnvelope
+  export type BranchToRoomCreateNestedManyWithoutCoWorkInput = {
+    create?: XOR<Enumerable<BranchToRoomCreateWithoutCoWorkInput>, Enumerable<BranchToRoomUncheckedCreateWithoutCoWorkInput>>
+    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutCoWorkInput>
+    createMany?: BranchToRoomCreateManyCoWorkInputEnvelope
     connect?: Enumerable<BranchToRoomWhereUniqueInput>
   }
 
-  export type OpenCloseCreateNestedManyWithoutBranchInput = {
-    create?: XOR<Enumerable<OpenCloseCreateWithoutBranchInput>, Enumerable<OpenCloseUncheckedCreateWithoutBranchInput>>
-    connectOrCreate?: Enumerable<OpenCloseCreateOrConnectWithoutBranchInput>
-    createMany?: OpenCloseCreateManyBranchInputEnvelope
-    connect?: Enumerable<OpenCloseWhereUniqueInput>
+  export type OpenCloseCreateNestedOneWithoutCoWorkInput = {
+    create?: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
+    connectOrCreate?: OpenCloseCreateOrConnectWithoutCoWorkInput
+    connect?: OpenCloseWhereUniqueInput
   }
 
-  export type BranchToRoomUncheckedCreateNestedManyWithoutBranchInput = {
-    create?: XOR<Enumerable<BranchToRoomCreateWithoutBranchInput>, Enumerable<BranchToRoomUncheckedCreateWithoutBranchInput>>
-    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutBranchInput>
-    createMany?: BranchToRoomCreateManyBranchInputEnvelope
+  export type BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput = {
+    create?: XOR<Enumerable<BranchToRoomCreateWithoutCoWorkInput>, Enumerable<BranchToRoomUncheckedCreateWithoutCoWorkInput>>
+    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutCoWorkInput>
+    createMany?: BranchToRoomCreateManyCoWorkInputEnvelope
     connect?: Enumerable<BranchToRoomWhereUniqueInput>
   }
 
-  export type OpenCloseUncheckedCreateNestedManyWithoutBranchInput = {
-    create?: XOR<Enumerable<OpenCloseCreateWithoutBranchInput>, Enumerable<OpenCloseUncheckedCreateWithoutBranchInput>>
-    connectOrCreate?: Enumerable<OpenCloseCreateOrConnectWithoutBranchInput>
-    createMany?: OpenCloseCreateManyBranchInputEnvelope
-    connect?: Enumerable<OpenCloseWhereUniqueInput>
+  export type OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput = {
+    create?: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
+    connectOrCreate?: OpenCloseCreateOrConnectWithoutCoWorkInput
+    connect?: OpenCloseWhereUniqueInput
   }
 
-  export type UserInternalUpdateOneRequiredWithoutBranchNestedInput = {
-    create?: XOR<UserInternalCreateWithoutBranchInput, UserInternalUncheckedCreateWithoutBranchInput>
-    connectOrCreate?: UserInternalCreateOrConnectWithoutBranchInput
-    upsert?: UserInternalUpsertWithoutBranchInput
+  export type UserInternalUpdateOneRequiredWithoutCoWorkNestedInput = {
+    create?: XOR<UserInternalCreateWithoutCoWorkInput, UserInternalUncheckedCreateWithoutCoWorkInput>
+    connectOrCreate?: UserInternalCreateOrConnectWithoutCoWorkInput
+    upsert?: UserInternalUpsertWithoutCoWorkInput
     connect?: UserInternalWhereUniqueInput
-    update?: XOR<UserInternalUpdateWithoutBranchInput, UserInternalUncheckedUpdateWithoutBranchInput>
+    update?: XOR<UserInternalUpdateWithoutCoWorkInput, UserInternalUncheckedUpdateWithoutCoWorkInput>
   }
 
-  export type BranchToRoomUpdateManyWithoutBranchNestedInput = {
-    create?: XOR<Enumerable<BranchToRoomCreateWithoutBranchInput>, Enumerable<BranchToRoomUncheckedCreateWithoutBranchInput>>
-    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutBranchInput>
-    upsert?: Enumerable<BranchToRoomUpsertWithWhereUniqueWithoutBranchInput>
-    createMany?: BranchToRoomCreateManyBranchInputEnvelope
+  export type BranchToRoomUpdateManyWithoutCoWorkNestedInput = {
+    create?: XOR<Enumerable<BranchToRoomCreateWithoutCoWorkInput>, Enumerable<BranchToRoomUncheckedCreateWithoutCoWorkInput>>
+    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutCoWorkInput>
+    upsert?: Enumerable<BranchToRoomUpsertWithWhereUniqueWithoutCoWorkInput>
+    createMany?: BranchToRoomCreateManyCoWorkInputEnvelope
     set?: Enumerable<BranchToRoomWhereUniqueInput>
     disconnect?: Enumerable<BranchToRoomWhereUniqueInput>
     delete?: Enumerable<BranchToRoomWhereUniqueInput>
     connect?: Enumerable<BranchToRoomWhereUniqueInput>
-    update?: Enumerable<BranchToRoomUpdateWithWhereUniqueWithoutBranchInput>
-    updateMany?: Enumerable<BranchToRoomUpdateManyWithWhereWithoutBranchInput>
+    update?: Enumerable<BranchToRoomUpdateWithWhereUniqueWithoutCoWorkInput>
+    updateMany?: Enumerable<BranchToRoomUpdateManyWithWhereWithoutCoWorkInput>
     deleteMany?: Enumerable<BranchToRoomScalarWhereInput>
   }
 
-  export type OpenCloseUpdateManyWithoutBranchNestedInput = {
-    create?: XOR<Enumerable<OpenCloseCreateWithoutBranchInput>, Enumerable<OpenCloseUncheckedCreateWithoutBranchInput>>
-    connectOrCreate?: Enumerable<OpenCloseCreateOrConnectWithoutBranchInput>
-    upsert?: Enumerable<OpenCloseUpsertWithWhereUniqueWithoutBranchInput>
-    createMany?: OpenCloseCreateManyBranchInputEnvelope
-    set?: Enumerable<OpenCloseWhereUniqueInput>
-    disconnect?: Enumerable<OpenCloseWhereUniqueInput>
-    delete?: Enumerable<OpenCloseWhereUniqueInput>
-    connect?: Enumerable<OpenCloseWhereUniqueInput>
-    update?: Enumerable<OpenCloseUpdateWithWhereUniqueWithoutBranchInput>
-    updateMany?: Enumerable<OpenCloseUpdateManyWithWhereWithoutBranchInput>
-    deleteMany?: Enumerable<OpenCloseScalarWhereInput>
+  export type OpenCloseUpdateOneWithoutCoWorkNestedInput = {
+    create?: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
+    connectOrCreate?: OpenCloseCreateOrConnectWithoutCoWorkInput
+    upsert?: OpenCloseUpsertWithoutCoWorkInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: OpenCloseWhereUniqueInput
+    update?: XOR<OpenCloseUpdateWithoutCoWorkInput, OpenCloseUncheckedUpdateWithoutCoWorkInput>
   }
 
-  export type BranchToRoomUncheckedUpdateManyWithoutBranchNestedInput = {
-    create?: XOR<Enumerable<BranchToRoomCreateWithoutBranchInput>, Enumerable<BranchToRoomUncheckedCreateWithoutBranchInput>>
-    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutBranchInput>
-    upsert?: Enumerable<BranchToRoomUpsertWithWhereUniqueWithoutBranchInput>
-    createMany?: BranchToRoomCreateManyBranchInputEnvelope
+  export type BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput = {
+    create?: XOR<Enumerable<BranchToRoomCreateWithoutCoWorkInput>, Enumerable<BranchToRoomUncheckedCreateWithoutCoWorkInput>>
+    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutCoWorkInput>
+    upsert?: Enumerable<BranchToRoomUpsertWithWhereUniqueWithoutCoWorkInput>
+    createMany?: BranchToRoomCreateManyCoWorkInputEnvelope
     set?: Enumerable<BranchToRoomWhereUniqueInput>
     disconnect?: Enumerable<BranchToRoomWhereUniqueInput>
     delete?: Enumerable<BranchToRoomWhereUniqueInput>
     connect?: Enumerable<BranchToRoomWhereUniqueInput>
-    update?: Enumerable<BranchToRoomUpdateWithWhereUniqueWithoutBranchInput>
-    updateMany?: Enumerable<BranchToRoomUpdateManyWithWhereWithoutBranchInput>
+    update?: Enumerable<BranchToRoomUpdateWithWhereUniqueWithoutCoWorkInput>
+    updateMany?: Enumerable<BranchToRoomUpdateManyWithWhereWithoutCoWorkInput>
     deleteMany?: Enumerable<BranchToRoomScalarWhereInput>
   }
 
-  export type OpenCloseUncheckedUpdateManyWithoutBranchNestedInput = {
-    create?: XOR<Enumerable<OpenCloseCreateWithoutBranchInput>, Enumerable<OpenCloseUncheckedCreateWithoutBranchInput>>
-    connectOrCreate?: Enumerable<OpenCloseCreateOrConnectWithoutBranchInput>
-    upsert?: Enumerable<OpenCloseUpsertWithWhereUniqueWithoutBranchInput>
-    createMany?: OpenCloseCreateManyBranchInputEnvelope
-    set?: Enumerable<OpenCloseWhereUniqueInput>
-    disconnect?: Enumerable<OpenCloseWhereUniqueInput>
-    delete?: Enumerable<OpenCloseWhereUniqueInput>
-    connect?: Enumerable<OpenCloseWhereUniqueInput>
-    update?: Enumerable<OpenCloseUpdateWithWhereUniqueWithoutBranchInput>
-    updateMany?: Enumerable<OpenCloseUpdateManyWithWhereWithoutBranchInput>
-    deleteMany?: Enumerable<OpenCloseScalarWhereInput>
+  export type OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput = {
+    create?: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
+    connectOrCreate?: OpenCloseCreateOrConnectWithoutCoWorkInput
+    upsert?: OpenCloseUpsertWithoutCoWorkInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: OpenCloseWhereUniqueInput
+    update?: XOR<OpenCloseUpdateWithoutCoWorkInput, OpenCloseUncheckedUpdateWithoutCoWorkInput>
   }
 
-  export type BranchCreateNestedManyWithoutUserInternalInput = {
-    create?: XOR<Enumerable<BranchCreateWithoutUserInternalInput>, Enumerable<BranchUncheckedCreateWithoutUserInternalInput>>
-    connectOrCreate?: Enumerable<BranchCreateOrConnectWithoutUserInternalInput>
-    createMany?: BranchCreateManyUserInternalInputEnvelope
-    connect?: Enumerable<BranchWhereUniqueInput>
+  export type CoWorkCreateNestedManyWithoutUserInternalInput = {
+    create?: XOR<Enumerable<CoWorkCreateWithoutUserInternalInput>, Enumerable<CoWorkUncheckedCreateWithoutUserInternalInput>>
+    connectOrCreate?: Enumerable<CoWorkCreateOrConnectWithoutUserInternalInput>
+    createMany?: CoWorkCreateManyUserInternalInputEnvelope
+    connect?: Enumerable<CoWorkWhereUniqueInput>
   }
 
-  export type BranchUncheckedCreateNestedManyWithoutUserInternalInput = {
-    create?: XOR<Enumerable<BranchCreateWithoutUserInternalInput>, Enumerable<BranchUncheckedCreateWithoutUserInternalInput>>
-    connectOrCreate?: Enumerable<BranchCreateOrConnectWithoutUserInternalInput>
-    createMany?: BranchCreateManyUserInternalInputEnvelope
-    connect?: Enumerable<BranchWhereUniqueInput>
+  export type CoWorkUncheckedCreateNestedManyWithoutUserInternalInput = {
+    create?: XOR<Enumerable<CoWorkCreateWithoutUserInternalInput>, Enumerable<CoWorkUncheckedCreateWithoutUserInternalInput>>
+    connectOrCreate?: Enumerable<CoWorkCreateOrConnectWithoutUserInternalInput>
+    createMany?: CoWorkCreateManyUserInternalInputEnvelope
+    connect?: Enumerable<CoWorkWhereUniqueInput>
   }
 
-  export type BranchUpdateManyWithoutUserInternalNestedInput = {
-    create?: XOR<Enumerable<BranchCreateWithoutUserInternalInput>, Enumerable<BranchUncheckedCreateWithoutUserInternalInput>>
-    connectOrCreate?: Enumerable<BranchCreateOrConnectWithoutUserInternalInput>
-    upsert?: Enumerable<BranchUpsertWithWhereUniqueWithoutUserInternalInput>
-    createMany?: BranchCreateManyUserInternalInputEnvelope
-    set?: Enumerable<BranchWhereUniqueInput>
-    disconnect?: Enumerable<BranchWhereUniqueInput>
-    delete?: Enumerable<BranchWhereUniqueInput>
-    connect?: Enumerable<BranchWhereUniqueInput>
-    update?: Enumerable<BranchUpdateWithWhereUniqueWithoutUserInternalInput>
-    updateMany?: Enumerable<BranchUpdateManyWithWhereWithoutUserInternalInput>
-    deleteMany?: Enumerable<BranchScalarWhereInput>
+  export type CoWorkUpdateManyWithoutUserInternalNestedInput = {
+    create?: XOR<Enumerable<CoWorkCreateWithoutUserInternalInput>, Enumerable<CoWorkUncheckedCreateWithoutUserInternalInput>>
+    connectOrCreate?: Enumerable<CoWorkCreateOrConnectWithoutUserInternalInput>
+    upsert?: Enumerable<CoWorkUpsertWithWhereUniqueWithoutUserInternalInput>
+    createMany?: CoWorkCreateManyUserInternalInputEnvelope
+    set?: Enumerable<CoWorkWhereUniqueInput>
+    disconnect?: Enumerable<CoWorkWhereUniqueInput>
+    delete?: Enumerable<CoWorkWhereUniqueInput>
+    connect?: Enumerable<CoWorkWhereUniqueInput>
+    update?: Enumerable<CoWorkUpdateWithWhereUniqueWithoutUserInternalInput>
+    updateMany?: Enumerable<CoWorkUpdateManyWithWhereWithoutUserInternalInput>
+    deleteMany?: Enumerable<CoWorkScalarWhereInput>
   }
 
-  export type BranchUncheckedUpdateManyWithoutUserInternalNestedInput = {
-    create?: XOR<Enumerable<BranchCreateWithoutUserInternalInput>, Enumerable<BranchUncheckedCreateWithoutUserInternalInput>>
-    connectOrCreate?: Enumerable<BranchCreateOrConnectWithoutUserInternalInput>
-    upsert?: Enumerable<BranchUpsertWithWhereUniqueWithoutUserInternalInput>
-    createMany?: BranchCreateManyUserInternalInputEnvelope
-    set?: Enumerable<BranchWhereUniqueInput>
-    disconnect?: Enumerable<BranchWhereUniqueInput>
-    delete?: Enumerable<BranchWhereUniqueInput>
-    connect?: Enumerable<BranchWhereUniqueInput>
-    update?: Enumerable<BranchUpdateWithWhereUniqueWithoutUserInternalInput>
-    updateMany?: Enumerable<BranchUpdateManyWithWhereWithoutUserInternalInput>
-    deleteMany?: Enumerable<BranchScalarWhereInput>
+  export type CoWorkUncheckedUpdateManyWithoutUserInternalNestedInput = {
+    create?: XOR<Enumerable<CoWorkCreateWithoutUserInternalInput>, Enumerable<CoWorkUncheckedCreateWithoutUserInternalInput>>
+    connectOrCreate?: Enumerable<CoWorkCreateOrConnectWithoutUserInternalInput>
+    upsert?: Enumerable<CoWorkUpsertWithWhereUniqueWithoutUserInternalInput>
+    createMany?: CoWorkCreateManyUserInternalInputEnvelope
+    set?: Enumerable<CoWorkWhereUniqueInput>
+    disconnect?: Enumerable<CoWorkWhereUniqueInput>
+    delete?: Enumerable<CoWorkWhereUniqueInput>
+    connect?: Enumerable<CoWorkWhereUniqueInput>
+    update?: Enumerable<CoWorkUpdateWithWhereUniqueWithoutUserInternalInput>
+    updateMany?: Enumerable<CoWorkUpdateManyWithWhereWithoutUserInternalInput>
+    deleteMany?: Enumerable<CoWorkScalarWhereInput>
   }
 
   export type RoomRateCreateNestedManyWithoutRoomInput = {
@@ -13792,10 +15685,10 @@ export namespace Prisma {
     update?: XOR<FacilityUpdateWithoutFacilityToRoomInput, FacilityUncheckedUpdateWithoutFacilityToRoomInput>
   }
 
-  export type BranchCreateNestedOneWithoutBranchToRoomInput = {
-    create?: XOR<BranchCreateWithoutBranchToRoomInput, BranchUncheckedCreateWithoutBranchToRoomInput>
-    connectOrCreate?: BranchCreateOrConnectWithoutBranchToRoomInput
-    connect?: BranchWhereUniqueInput
+  export type CoWorkCreateNestedOneWithoutBranchToRoomInput = {
+    create?: XOR<CoWorkCreateWithoutBranchToRoomInput, CoWorkUncheckedCreateWithoutBranchToRoomInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutBranchToRoomInput
+    connect?: CoWorkWhereUniqueInput
   }
 
   export type RoomCreateNestedOneWithoutBranchToRoomInput = {
@@ -13818,12 +15711,12 @@ export namespace Prisma {
     connect?: Enumerable<BookRoomWhereUniqueInput>
   }
 
-  export type BranchUpdateOneRequiredWithoutBranchToRoomNestedInput = {
-    create?: XOR<BranchCreateWithoutBranchToRoomInput, BranchUncheckedCreateWithoutBranchToRoomInput>
-    connectOrCreate?: BranchCreateOrConnectWithoutBranchToRoomInput
-    upsert?: BranchUpsertWithoutBranchToRoomInput
-    connect?: BranchWhereUniqueInput
-    update?: XOR<BranchUpdateWithoutBranchToRoomInput, BranchUncheckedUpdateWithoutBranchToRoomInput>
+  export type CoWorkUpdateOneRequiredWithoutBranchToRoomNestedInput = {
+    create?: XOR<CoWorkCreateWithoutBranchToRoomInput, CoWorkUncheckedCreateWithoutBranchToRoomInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutBranchToRoomInput
+    upsert?: CoWorkUpsertWithoutBranchToRoomInput
+    connect?: CoWorkWhereUniqueInput
+    update?: XOR<CoWorkUpdateWithoutBranchToRoomInput, CoWorkUncheckedUpdateWithoutBranchToRoomInput>
   }
 
   export type RoomUpdateOneRequiredWithoutBranchToRoomNestedInput = {
@@ -13888,10 +15781,12 @@ export namespace Prisma {
     connect?: Enumerable<UserExternalWhereUniqueInput>
   }
 
-  export type BranchToRoomUpdateOneRequiredWithoutBookRoomNestedInput = {
+  export type BranchToRoomUpdateOneWithoutBookRoomNestedInput = {
     create?: XOR<BranchToRoomCreateWithoutBookRoomInput, BranchToRoomUncheckedCreateWithoutBookRoomInput>
     connectOrCreate?: BranchToRoomCreateOrConnectWithoutBookRoomInput
     upsert?: BranchToRoomUpsertWithoutBookRoomInput
+    disconnect?: boolean
+    delete?: boolean
     connect?: BranchToRoomWhereUniqueInput
     update?: XOR<BranchToRoomUpdateWithoutBookRoomInput, BranchToRoomUncheckedUpdateWithoutBookRoomInput>
   }
@@ -13932,22 +15827,64 @@ export namespace Prisma {
     deleteMany?: Enumerable<UserExternalScalarWhereInput>
   }
 
-  export type BranchCreateNestedOneWithoutOpenCloseInput = {
-    create?: XOR<BranchCreateWithoutOpenCloseInput, BranchUncheckedCreateWithoutOpenCloseInput>
-    connectOrCreate?: BranchCreateOrConnectWithoutOpenCloseInput
-    connect?: BranchWhereUniqueInput
+  export type CoWorkCreateNestedOneWithoutOpenCloseInput = {
+    create?: XOR<CoWorkCreateWithoutOpenCloseInput, CoWorkUncheckedCreateWithoutOpenCloseInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutOpenCloseInput
+    connect?: CoWorkWhereUniqueInput
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
 
-  export type BranchUpdateOneRequiredWithoutOpenCloseNestedInput = {
-    create?: XOR<BranchCreateWithoutOpenCloseInput, BranchUncheckedCreateWithoutOpenCloseInput>
-    connectOrCreate?: BranchCreateOrConnectWithoutOpenCloseInput
-    upsert?: BranchUpsertWithoutOpenCloseInput
-    connect?: BranchWhereUniqueInput
-    update?: XOR<BranchUpdateWithoutOpenCloseInput, BranchUncheckedUpdateWithoutOpenCloseInput>
+  export type CoWorkUpdateOneRequiredWithoutOpenCloseNestedInput = {
+    create?: XOR<CoWorkCreateWithoutOpenCloseInput, CoWorkUncheckedCreateWithoutOpenCloseInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutOpenCloseInput
+    upsert?: CoWorkUpsertWithoutOpenCloseInput
+    connect?: CoWorkWhereUniqueInput
+    update?: XOR<CoWorkUpdateWithoutOpenCloseInput, CoWorkUncheckedUpdateWithoutOpenCloseInput>
+  }
+
+  export type UserExternalCreateNestedManyWithoutVertifyBookingCodeInput = {
+    create?: XOR<Enumerable<UserExternalCreateWithoutVertifyBookingCodeInput>, Enumerable<UserExternalUncheckedCreateWithoutVertifyBookingCodeInput>>
+    connectOrCreate?: Enumerable<UserExternalCreateOrConnectWithoutVertifyBookingCodeInput>
+    createMany?: UserExternalCreateManyVertifyBookingCodeInputEnvelope
+    connect?: Enumerable<UserExternalWhereUniqueInput>
+  }
+
+  export type UserExternalUncheckedCreateNestedManyWithoutVertifyBookingCodeInput = {
+    create?: XOR<Enumerable<UserExternalCreateWithoutVertifyBookingCodeInput>, Enumerable<UserExternalUncheckedCreateWithoutVertifyBookingCodeInput>>
+    connectOrCreate?: Enumerable<UserExternalCreateOrConnectWithoutVertifyBookingCodeInput>
+    createMany?: UserExternalCreateManyVertifyBookingCodeInputEnvelope
+    connect?: Enumerable<UserExternalWhereUniqueInput>
+  }
+
+  export type UserExternalUpdateManyWithoutVertifyBookingCodeNestedInput = {
+    create?: XOR<Enumerable<UserExternalCreateWithoutVertifyBookingCodeInput>, Enumerable<UserExternalUncheckedCreateWithoutVertifyBookingCodeInput>>
+    connectOrCreate?: Enumerable<UserExternalCreateOrConnectWithoutVertifyBookingCodeInput>
+    upsert?: Enumerable<UserExternalUpsertWithWhereUniqueWithoutVertifyBookingCodeInput>
+    createMany?: UserExternalCreateManyVertifyBookingCodeInputEnvelope
+    set?: Enumerable<UserExternalWhereUniqueInput>
+    disconnect?: Enumerable<UserExternalWhereUniqueInput>
+    delete?: Enumerable<UserExternalWhereUniqueInput>
+    connect?: Enumerable<UserExternalWhereUniqueInput>
+    update?: Enumerable<UserExternalUpdateWithWhereUniqueWithoutVertifyBookingCodeInput>
+    updateMany?: Enumerable<UserExternalUpdateManyWithWhereWithoutVertifyBookingCodeInput>
+    deleteMany?: Enumerable<UserExternalScalarWhereInput>
+  }
+
+  export type UserExternalUncheckedUpdateManyWithoutVertifyBookingCodeNestedInput = {
+    create?: XOR<Enumerable<UserExternalCreateWithoutVertifyBookingCodeInput>, Enumerable<UserExternalUncheckedCreateWithoutVertifyBookingCodeInput>>
+    connectOrCreate?: Enumerable<UserExternalCreateOrConnectWithoutVertifyBookingCodeInput>
+    upsert?: Enumerable<UserExternalUpsertWithWhereUniqueWithoutVertifyBookingCodeInput>
+    createMany?: UserExternalCreateManyVertifyBookingCodeInputEnvelope
+    set?: Enumerable<UserExternalWhereUniqueInput>
+    disconnect?: Enumerable<UserExternalWhereUniqueInput>
+    delete?: Enumerable<UserExternalWhereUniqueInput>
+    connect?: Enumerable<UserExternalWhereUniqueInput>
+    update?: Enumerable<UserExternalUpdateWithWhereUniqueWithoutVertifyBookingCodeInput>
+    updateMany?: Enumerable<UserExternalUpdateManyWithWhereWithoutVertifyBookingCodeInput>
+    deleteMany?: Enumerable<UserExternalScalarWhereInput>
   }
 
   export type NestedIntFilter = {
@@ -13984,6 +15921,17 @@ export namespace Prisma {
     gt?: Date | string
     gte?: Date | string
     not?: NestedDateTimeFilter | Date | string
+  }
+
+  export type NestedIntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
   }
 
   export type NestedIntWithAggregatesFilter = {
@@ -14044,6 +15992,33 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter
   }
 
+  export type NestedIntNullableWithAggregatesFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableWithAggregatesFilter | number | null
+    _count?: NestedIntNullableFilter
+    _avg?: NestedFloatNullableFilter
+    _sum?: NestedIntNullableFilter
+    _min?: NestedIntNullableFilter
+    _max?: NestedIntNullableFilter
+  }
+
+  export type NestedFloatNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatNullableFilter | number | null
+  }
+
   export type NestedBoolFilter = {
     equals?: boolean
     not?: NestedBoolFilter | boolean
@@ -14062,13 +16037,13 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
-    branchToRoom: BranchToRoomCreateNestedOneWithoutBookRoomInput
+    branchToRoom?: BranchToRoomCreateNestedOneWithoutBookRoomInput
     roomRate: RoomRateCreateNestedOneWithoutBookRoomInput
   }
 
   export type BookRoomUncheckedCreateWithoutUserExternalInput = {
     id?: number
-    branchToRoomId: number
+    branchToRoomId?: number | null
     startTime: Date | string
     roomRateId: number
     status: string
@@ -14081,6 +16056,24 @@ export namespace Prisma {
     create: XOR<BookRoomCreateWithoutUserExternalInput, BookRoomUncheckedCreateWithoutUserExternalInput>
   }
 
+  export type VertifyBookingCodeCreateWithoutUserExternalInput = {
+    bookdate: Date | string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type VertifyBookingCodeUncheckedCreateWithoutUserExternalInput = {
+    id?: number
+    bookdate: Date | string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type VertifyBookingCodeCreateOrConnectWithoutUserExternalInput = {
+    where: VertifyBookingCodeWhereUniqueInput
+    create: XOR<VertifyBookingCodeCreateWithoutUserExternalInput, VertifyBookingCodeUncheckedCreateWithoutUserExternalInput>
+  }
+
   export type BookRoomUpsertWithoutUserExternalInput = {
     update: XOR<BookRoomUpdateWithoutUserExternalInput, BookRoomUncheckedUpdateWithoutUserExternalInput>
     create: XOR<BookRoomCreateWithoutUserExternalInput, BookRoomUncheckedCreateWithoutUserExternalInput>
@@ -14091,13 +16084,13 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchToRoom?: BranchToRoomUpdateOneRequiredWithoutBookRoomNestedInput
+    branchToRoom?: BranchToRoomUpdateOneWithoutBookRoomNestedInput
     roomRate?: RoomRateUpdateOneRequiredWithoutBookRoomNestedInput
   }
 
   export type BookRoomUncheckedUpdateWithoutUserExternalInput = {
     id?: IntFieldUpdateOperationsInput | number
-    branchToRoomId?: IntFieldUpdateOperationsInput | number
+    branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     roomRateId?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
@@ -14105,7 +16098,25 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserInternalCreateWithoutBranchInput = {
+  export type VertifyBookingCodeUpsertWithoutUserExternalInput = {
+    update: XOR<VertifyBookingCodeUpdateWithoutUserExternalInput, VertifyBookingCodeUncheckedUpdateWithoutUserExternalInput>
+    create: XOR<VertifyBookingCodeCreateWithoutUserExternalInput, VertifyBookingCodeUncheckedCreateWithoutUserExternalInput>
+  }
+
+  export type VertifyBookingCodeUpdateWithoutUserExternalInput = {
+    bookdate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VertifyBookingCodeUncheckedUpdateWithoutUserExternalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bookdate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserInternalCreateWithoutCoWorkInput = {
     name: string
     email: string
     tel: number
@@ -14114,7 +16125,7 @@ export namespace Prisma {
     updateAt?: Date | string
   }
 
-  export type UserInternalUncheckedCreateWithoutBranchInput = {
+  export type UserInternalUncheckedCreateWithoutCoWorkInput = {
     id?: number
     name: string
     email: string
@@ -14124,19 +16135,19 @@ export namespace Prisma {
     updateAt?: Date | string
   }
 
-  export type UserInternalCreateOrConnectWithoutBranchInput = {
+  export type UserInternalCreateOrConnectWithoutCoWorkInput = {
     where: UserInternalWhereUniqueInput
-    create: XOR<UserInternalCreateWithoutBranchInput, UserInternalUncheckedCreateWithoutBranchInput>
+    create: XOR<UserInternalCreateWithoutCoWorkInput, UserInternalUncheckedCreateWithoutCoWorkInput>
   }
 
-  export type BranchToRoomCreateWithoutBranchInput = {
+  export type BranchToRoomCreateWithoutCoWorkInput = {
     createAt?: Date | string
     updateAt?: Date | string
     room: RoomCreateNestedOneWithoutBranchToRoomInput
     BookRoom?: BookRoomCreateNestedManyWithoutBranchToRoomInput
   }
 
-  export type BranchToRoomUncheckedCreateWithoutBranchInput = {
+  export type BranchToRoomUncheckedCreateWithoutCoWorkInput = {
     id?: number
     roomId: number
     createAt?: Date | string
@@ -14144,51 +16155,94 @@ export namespace Prisma {
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutBranchToRoomInput
   }
 
-  export type BranchToRoomCreateOrConnectWithoutBranchInput = {
+  export type BranchToRoomCreateOrConnectWithoutCoWorkInput = {
     where: BranchToRoomWhereUniqueInput
-    create: XOR<BranchToRoomCreateWithoutBranchInput, BranchToRoomUncheckedCreateWithoutBranchInput>
+    create: XOR<BranchToRoomCreateWithoutCoWorkInput, BranchToRoomUncheckedCreateWithoutCoWorkInput>
   }
 
-  export type BranchToRoomCreateManyBranchInputEnvelope = {
-    data: Enumerable<BranchToRoomCreateManyBranchInput>
+  export type BranchToRoomCreateManyCoWorkInputEnvelope = {
+    data: Enumerable<BranchToRoomCreateManyCoWorkInput>
     skipDuplicates?: boolean
   }
 
-  export type OpenCloseCreateWithoutBranchInput = {
-    open: Date | string
-    close: Date | string
-    allDay: boolean
-    day: number
+  export type OpenCloseCreateWithoutCoWorkInput = {
+    openTimeMon: number
+    closeTimeMon: number
+    isOpenMon: boolean
+    isOpen24hoursMon: boolean
+    openTimeTue: number
+    closeTimeTue: number
+    isOpenTue: boolean
+    isOpen24hoursTue: boolean
+    openTimeWed: number
+    closeTimeWed: number
+    isOpenWed: boolean
+    isOpen24hoursWed: boolean
+    openTimeThurs: number
+    closeTimeThurs: number
+    isOpenThurs: boolean
+    isOpen24hoursThurs: boolean
+    openTimeFri: number
+    closeTimeFri: number
+    isOpenFri: boolean
+    isOpen24hoursFri: boolean
+    openTimeSat: number
+    closeTimeSat: number
+    isOpenSat: boolean
+    isOpen24hoursSat: boolean
+    openTimeSun: number
+    closeTimeSun: number
+    isOpenSun: boolean
+    isOpen24hoursSun: boolean
     createAt?: Date | string
     updateAt?: Date | string
   }
 
-  export type OpenCloseUncheckedCreateWithoutBranchInput = {
+  export type OpenCloseUncheckedCreateWithoutCoWorkInput = {
     id?: number
-    open: Date | string
-    close: Date | string
-    allDay: boolean
-    day: number
+    openTimeMon: number
+    closeTimeMon: number
+    isOpenMon: boolean
+    isOpen24hoursMon: boolean
+    openTimeTue: number
+    closeTimeTue: number
+    isOpenTue: boolean
+    isOpen24hoursTue: boolean
+    openTimeWed: number
+    closeTimeWed: number
+    isOpenWed: boolean
+    isOpen24hoursWed: boolean
+    openTimeThurs: number
+    closeTimeThurs: number
+    isOpenThurs: boolean
+    isOpen24hoursThurs: boolean
+    openTimeFri: number
+    closeTimeFri: number
+    isOpenFri: boolean
+    isOpen24hoursFri: boolean
+    openTimeSat: number
+    closeTimeSat: number
+    isOpenSat: boolean
+    isOpen24hoursSat: boolean
+    openTimeSun: number
+    closeTimeSun: number
+    isOpenSun: boolean
+    isOpen24hoursSun: boolean
     createAt?: Date | string
     updateAt?: Date | string
   }
 
-  export type OpenCloseCreateOrConnectWithoutBranchInput = {
+  export type OpenCloseCreateOrConnectWithoutCoWorkInput = {
     where: OpenCloseWhereUniqueInput
-    create: XOR<OpenCloseCreateWithoutBranchInput, OpenCloseUncheckedCreateWithoutBranchInput>
+    create: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
   }
 
-  export type OpenCloseCreateManyBranchInputEnvelope = {
-    data: Enumerable<OpenCloseCreateManyBranchInput>
-    skipDuplicates?: boolean
+  export type UserInternalUpsertWithoutCoWorkInput = {
+    update: XOR<UserInternalUpdateWithoutCoWorkInput, UserInternalUncheckedUpdateWithoutCoWorkInput>
+    create: XOR<UserInternalCreateWithoutCoWorkInput, UserInternalUncheckedCreateWithoutCoWorkInput>
   }
 
-  export type UserInternalUpsertWithoutBranchInput = {
-    update: XOR<UserInternalUpdateWithoutBranchInput, UserInternalUncheckedUpdateWithoutBranchInput>
-    create: XOR<UserInternalCreateWithoutBranchInput, UserInternalUncheckedCreateWithoutBranchInput>
-  }
-
-  export type UserInternalUpdateWithoutBranchInput = {
+  export type UserInternalUpdateWithoutCoWorkInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     tel?: IntFieldUpdateOperationsInput | number
@@ -14197,7 +16251,7 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserInternalUncheckedUpdateWithoutBranchInput = {
+  export type UserInternalUncheckedUpdateWithoutCoWorkInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -14207,18 +16261,18 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type BranchToRoomUpsertWithWhereUniqueWithoutBranchInput = {
+  export type BranchToRoomUpsertWithWhereUniqueWithoutCoWorkInput = {
     where: BranchToRoomWhereUniqueInput
-    update: XOR<BranchToRoomUpdateWithoutBranchInput, BranchToRoomUncheckedUpdateWithoutBranchInput>
-    create: XOR<BranchToRoomCreateWithoutBranchInput, BranchToRoomUncheckedCreateWithoutBranchInput>
+    update: XOR<BranchToRoomUpdateWithoutCoWorkInput, BranchToRoomUncheckedUpdateWithoutCoWorkInput>
+    create: XOR<BranchToRoomCreateWithoutCoWorkInput, BranchToRoomUncheckedCreateWithoutCoWorkInput>
   }
 
-  export type BranchToRoomUpdateWithWhereUniqueWithoutBranchInput = {
+  export type BranchToRoomUpdateWithWhereUniqueWithoutCoWorkInput = {
     where: BranchToRoomWhereUniqueInput
-    data: XOR<BranchToRoomUpdateWithoutBranchInput, BranchToRoomUncheckedUpdateWithoutBranchInput>
+    data: XOR<BranchToRoomUpdateWithoutCoWorkInput, BranchToRoomUncheckedUpdateWithoutCoWorkInput>
   }
 
-  export type BranchToRoomUpdateManyWithWhereWithoutBranchInput = {
+  export type BranchToRoomUpdateManyWithWhereWithoutCoWorkInput = {
     where: BranchToRoomScalarWhereInput
     data: XOR<BranchToRoomUpdateManyMutationInput, BranchToRoomUncheckedUpdateManyWithoutBranchToRoomInput>
   }
@@ -14228,93 +16282,135 @@ export namespace Prisma {
     OR?: Enumerable<BranchToRoomScalarWhereInput>
     NOT?: Enumerable<BranchToRoomScalarWhereInput>
     id?: IntFilter | number
-    branchId?: IntFilter | number
+    coWorkId?: IntFilter | number
     roomId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
   }
 
-  export type OpenCloseUpsertWithWhereUniqueWithoutBranchInput = {
-    where: OpenCloseWhereUniqueInput
-    update: XOR<OpenCloseUpdateWithoutBranchInput, OpenCloseUncheckedUpdateWithoutBranchInput>
-    create: XOR<OpenCloseCreateWithoutBranchInput, OpenCloseUncheckedCreateWithoutBranchInput>
+  export type OpenCloseUpsertWithoutCoWorkInput = {
+    update: XOR<OpenCloseUpdateWithoutCoWorkInput, OpenCloseUncheckedUpdateWithoutCoWorkInput>
+    create: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
   }
 
-  export type OpenCloseUpdateWithWhereUniqueWithoutBranchInput = {
-    where: OpenCloseWhereUniqueInput
-    data: XOR<OpenCloseUpdateWithoutBranchInput, OpenCloseUncheckedUpdateWithoutBranchInput>
+  export type OpenCloseUpdateWithoutCoWorkInput = {
+    openTimeMon?: IntFieldUpdateOperationsInput | number
+    closeTimeMon?: IntFieldUpdateOperationsInput | number
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    openTimeTue?: IntFieldUpdateOperationsInput | number
+    closeTimeTue?: IntFieldUpdateOperationsInput | number
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    openTimeWed?: IntFieldUpdateOperationsInput | number
+    closeTimeWed?: IntFieldUpdateOperationsInput | number
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    openTimeThurs?: IntFieldUpdateOperationsInput | number
+    closeTimeThurs?: IntFieldUpdateOperationsInput | number
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    openTimeFri?: IntFieldUpdateOperationsInput | number
+    closeTimeFri?: IntFieldUpdateOperationsInput | number
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSat?: IntFieldUpdateOperationsInput | number
+    closeTimeSat?: IntFieldUpdateOperationsInput | number
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSun?: IntFieldUpdateOperationsInput | number
+    closeTimeSun?: IntFieldUpdateOperationsInput | number
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type OpenCloseUpdateManyWithWhereWithoutBranchInput = {
-    where: OpenCloseScalarWhereInput
-    data: XOR<OpenCloseUpdateManyMutationInput, OpenCloseUncheckedUpdateManyWithoutOpenCloseInput>
+  export type OpenCloseUncheckedUpdateWithoutCoWorkInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    openTimeMon?: IntFieldUpdateOperationsInput | number
+    closeTimeMon?: IntFieldUpdateOperationsInput | number
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    openTimeTue?: IntFieldUpdateOperationsInput | number
+    closeTimeTue?: IntFieldUpdateOperationsInput | number
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    openTimeWed?: IntFieldUpdateOperationsInput | number
+    closeTimeWed?: IntFieldUpdateOperationsInput | number
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    openTimeThurs?: IntFieldUpdateOperationsInput | number
+    closeTimeThurs?: IntFieldUpdateOperationsInput | number
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    openTimeFri?: IntFieldUpdateOperationsInput | number
+    closeTimeFri?: IntFieldUpdateOperationsInput | number
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSat?: IntFieldUpdateOperationsInput | number
+    closeTimeSat?: IntFieldUpdateOperationsInput | number
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    openTimeSun?: IntFieldUpdateOperationsInput | number
+    closeTimeSun?: IntFieldUpdateOperationsInput | number
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type OpenCloseScalarWhereInput = {
-    AND?: Enumerable<OpenCloseScalarWhereInput>
-    OR?: Enumerable<OpenCloseScalarWhereInput>
-    NOT?: Enumerable<OpenCloseScalarWhereInput>
-    id?: IntFilter | number
-    open?: DateTimeFilter | Date | string
-    close?: DateTimeFilter | Date | string
-    allDay?: BoolFilter | boolean
-    branchId?: IntFilter | number
-    day?: IntFilter | number
-    createAt?: DateTimeFilter | Date | string
-    updateAt?: DateTimeFilter | Date | string
-  }
-
-  export type BranchCreateWithoutUserInternalInput = {
+  export type CoWorkCreateWithoutUserInternalInput = {
     name: string
     description: string
     location: string
     tel: number
     picture: string
-    BranchToRoom?: BranchToRoomCreateNestedManyWithoutBranchInput
-    OpenClose?: OpenCloseCreateNestedManyWithoutBranchInput
+    BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
+    OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
   }
 
-  export type BranchUncheckedCreateWithoutUserInternalInput = {
+  export type CoWorkUncheckedCreateWithoutUserInternalInput = {
     id?: number
     name: string
     description: string
     location: string
     tel: number
     picture: string
-    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutBranchInput
-    OpenClose?: OpenCloseUncheckedCreateNestedManyWithoutBranchInput
+    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
+    OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
   }
 
-  export type BranchCreateOrConnectWithoutUserInternalInput = {
-    where: BranchWhereUniqueInput
-    create: XOR<BranchCreateWithoutUserInternalInput, BranchUncheckedCreateWithoutUserInternalInput>
+  export type CoWorkCreateOrConnectWithoutUserInternalInput = {
+    where: CoWorkWhereUniqueInput
+    create: XOR<CoWorkCreateWithoutUserInternalInput, CoWorkUncheckedCreateWithoutUserInternalInput>
   }
 
-  export type BranchCreateManyUserInternalInputEnvelope = {
-    data: Enumerable<BranchCreateManyUserInternalInput>
+  export type CoWorkCreateManyUserInternalInputEnvelope = {
+    data: Enumerable<CoWorkCreateManyUserInternalInput>
     skipDuplicates?: boolean
   }
 
-  export type BranchUpsertWithWhereUniqueWithoutUserInternalInput = {
-    where: BranchWhereUniqueInput
-    update: XOR<BranchUpdateWithoutUserInternalInput, BranchUncheckedUpdateWithoutUserInternalInput>
-    create: XOR<BranchCreateWithoutUserInternalInput, BranchUncheckedCreateWithoutUserInternalInput>
+  export type CoWorkUpsertWithWhereUniqueWithoutUserInternalInput = {
+    where: CoWorkWhereUniqueInput
+    update: XOR<CoWorkUpdateWithoutUserInternalInput, CoWorkUncheckedUpdateWithoutUserInternalInput>
+    create: XOR<CoWorkCreateWithoutUserInternalInput, CoWorkUncheckedCreateWithoutUserInternalInput>
   }
 
-  export type BranchUpdateWithWhereUniqueWithoutUserInternalInput = {
-    where: BranchWhereUniqueInput
-    data: XOR<BranchUpdateWithoutUserInternalInput, BranchUncheckedUpdateWithoutUserInternalInput>
+  export type CoWorkUpdateWithWhereUniqueWithoutUserInternalInput = {
+    where: CoWorkWhereUniqueInput
+    data: XOR<CoWorkUpdateWithoutUserInternalInput, CoWorkUncheckedUpdateWithoutUserInternalInput>
   }
 
-  export type BranchUpdateManyWithWhereWithoutUserInternalInput = {
-    where: BranchScalarWhereInput
-    data: XOR<BranchUpdateManyMutationInput, BranchUncheckedUpdateManyWithoutBranchInput>
+  export type CoWorkUpdateManyWithWhereWithoutUserInternalInput = {
+    where: CoWorkScalarWhereInput
+    data: XOR<CoWorkUpdateManyMutationInput, CoWorkUncheckedUpdateManyWithoutCoWorkInput>
   }
 
-  export type BranchScalarWhereInput = {
-    AND?: Enumerable<BranchScalarWhereInput>
-    OR?: Enumerable<BranchScalarWhereInput>
-    NOT?: Enumerable<BranchScalarWhereInput>
+  export type CoWorkScalarWhereInput = {
+    AND?: Enumerable<CoWorkScalarWhereInput>
+    OR?: Enumerable<CoWorkScalarWhereInput>
+    NOT?: Enumerable<CoWorkScalarWhereInput>
     id?: IntFilter | number
     name?: StringFilter | string
     description?: StringFilter | string
@@ -14326,7 +16422,7 @@ export namespace Prisma {
 
   export type RoomRateCreateWithoutRoomInput = {
     price: number
-    time: Date | string
+    time: string
     createAt?: Date | string
     updateAt?: Date | string
     BookRoom?: BookRoomCreateNestedManyWithoutRoomRateInput
@@ -14335,7 +16431,7 @@ export namespace Prisma {
   export type RoomRateUncheckedCreateWithoutRoomInput = {
     id?: number
     price: number
-    time: Date | string
+    time: string
     createAt?: Date | string
     updateAt?: Date | string
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutRoomRateInput
@@ -14377,13 +16473,13 @@ export namespace Prisma {
   export type BranchToRoomCreateWithoutRoomInput = {
     createAt?: Date | string
     updateAt?: Date | string
-    branch: BranchCreateNestedOneWithoutBranchToRoomInput
+    coWork: CoWorkCreateNestedOneWithoutBranchToRoomInput
     BookRoom?: BookRoomCreateNestedManyWithoutBranchToRoomInput
   }
 
   export type BranchToRoomUncheckedCreateWithoutRoomInput = {
     id?: number
-    branchId: number
+    coWorkId: number
     createAt?: Date | string
     updateAt?: Date | string
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutBranchToRoomInput
@@ -14421,7 +16517,7 @@ export namespace Prisma {
     NOT?: Enumerable<RoomRateScalarWhereInput>
     id?: IntFilter | number
     price?: IntFilter | number
-    time?: DateTimeFilter | Date | string
+    time?: StringFilter | string
     roomId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
@@ -14499,13 +16595,13 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
-    branchToRoom: BranchToRoomCreateNestedOneWithoutBookRoomInput
+    branchToRoom?: BranchToRoomCreateNestedOneWithoutBookRoomInput
     UserExternal?: UserExternalCreateNestedManyWithoutBookRoomInput
   }
 
   export type BookRoomUncheckedCreateWithoutRoomRateInput = {
     id?: number
-    branchToRoomId: number
+    branchToRoomId?: number | null
     startTime: Date | string
     status: string
     createAt?: Date | string
@@ -14568,7 +16664,7 @@ export namespace Prisma {
     OR?: Enumerable<BookRoomScalarWhereInput>
     NOT?: Enumerable<BookRoomScalarWhereInput>
     id?: IntFilter | number
-    branchToRoomId?: IntFilter | number
+    branchToRoomId?: IntNullableFilter | number | null
     startTime?: DateTimeFilter | Date | string
     roomRateId?: IntFilter | number
     status?: StringFilter | string
@@ -14699,17 +16795,17 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type BranchCreateWithoutBranchToRoomInput = {
+  export type CoWorkCreateWithoutBranchToRoomInput = {
     name: string
     description: string
     location: string
     tel: number
     picture: string
-    userInternal: UserInternalCreateNestedOneWithoutBranchInput
-    OpenClose?: OpenCloseCreateNestedManyWithoutBranchInput
+    userInternal: UserInternalCreateNestedOneWithoutCoWorkInput
+    OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
   }
 
-  export type BranchUncheckedCreateWithoutBranchToRoomInput = {
+  export type CoWorkUncheckedCreateWithoutBranchToRoomInput = {
     id?: number
     name: string
     description: string
@@ -14717,12 +16813,12 @@ export namespace Prisma {
     tel: number
     picture: string
     userInternalId: number
-    OpenClose?: OpenCloseUncheckedCreateNestedManyWithoutBranchInput
+    OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
   }
 
-  export type BranchCreateOrConnectWithoutBranchToRoomInput = {
-    where: BranchWhereUniqueInput
-    create: XOR<BranchCreateWithoutBranchToRoomInput, BranchUncheckedCreateWithoutBranchToRoomInput>
+  export type CoWorkCreateOrConnectWithoutBranchToRoomInput = {
+    where: CoWorkWhereUniqueInput
+    create: XOR<CoWorkCreateWithoutBranchToRoomInput, CoWorkUncheckedCreateWithoutBranchToRoomInput>
   }
 
   export type RoomCreateWithoutBranchToRoomInput = {
@@ -14778,22 +16874,22 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type BranchUpsertWithoutBranchToRoomInput = {
-    update: XOR<BranchUpdateWithoutBranchToRoomInput, BranchUncheckedUpdateWithoutBranchToRoomInput>
-    create: XOR<BranchCreateWithoutBranchToRoomInput, BranchUncheckedCreateWithoutBranchToRoomInput>
+  export type CoWorkUpsertWithoutBranchToRoomInput = {
+    update: XOR<CoWorkUpdateWithoutBranchToRoomInput, CoWorkUncheckedUpdateWithoutBranchToRoomInput>
+    create: XOR<CoWorkCreateWithoutBranchToRoomInput, CoWorkUncheckedCreateWithoutBranchToRoomInput>
   }
 
-  export type BranchUpdateWithoutBranchToRoomInput = {
+  export type CoWorkUpdateWithoutBranchToRoomInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     tel?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
-    userInternal?: UserInternalUpdateOneRequiredWithoutBranchNestedInput
-    OpenClose?: OpenCloseUpdateManyWithoutBranchNestedInput
+    userInternal?: UserInternalUpdateOneRequiredWithoutCoWorkNestedInput
+    OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
   }
 
-  export type BranchUncheckedUpdateWithoutBranchToRoomInput = {
+  export type CoWorkUncheckedUpdateWithoutBranchToRoomInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -14801,7 +16897,7 @@ export namespace Prisma {
     tel?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
     userInternalId?: IntFieldUpdateOperationsInput | number
-    OpenClose?: OpenCloseUncheckedUpdateManyWithoutBranchNestedInput
+    OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
   }
 
   export type RoomUpsertWithoutBranchToRoomInput = {
@@ -14847,13 +16943,13 @@ export namespace Prisma {
   export type BranchToRoomCreateWithoutBookRoomInput = {
     createAt?: Date | string
     updateAt?: Date | string
-    branch: BranchCreateNestedOneWithoutBranchToRoomInput
+    coWork: CoWorkCreateNestedOneWithoutBranchToRoomInput
     room: RoomCreateNestedOneWithoutBranchToRoomInput
   }
 
   export type BranchToRoomUncheckedCreateWithoutBookRoomInput = {
     id?: number
-    branchId: number
+    coWorkId: number
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
@@ -14866,7 +16962,7 @@ export namespace Prisma {
 
   export type RoomRateCreateWithoutBookRoomInput = {
     price: number
-    time: Date | string
+    time: string
     createAt?: Date | string
     updateAt?: Date | string
     room: RoomCreateNestedOneWithoutRoomPriceInput
@@ -14875,7 +16971,7 @@ export namespace Prisma {
   export type RoomRateUncheckedCreateWithoutBookRoomInput = {
     id?: number
     price: number
-    time: Date | string
+    time: string
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
@@ -14893,6 +16989,7 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
+    vertifyBookingCode?: VertifyBookingCodeCreateNestedOneWithoutUserExternalInput
   }
 
   export type UserExternalUncheckedCreateWithoutBookRoomInput = {
@@ -14903,6 +17000,7 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
+    vertifyBookingCodeId?: number | null
   }
 
   export type UserExternalCreateOrConnectWithoutBookRoomInput = {
@@ -14923,13 +17021,13 @@ export namespace Prisma {
   export type BranchToRoomUpdateWithoutBookRoomInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branch?: BranchUpdateOneRequiredWithoutBranchToRoomNestedInput
+    coWork?: CoWorkUpdateOneRequiredWithoutBranchToRoomNestedInput
     room?: RoomUpdateOneRequiredWithoutBranchToRoomNestedInput
   }
 
   export type BranchToRoomUncheckedUpdateWithoutBookRoomInput = {
     id?: IntFieldUpdateOperationsInput | number
-    branchId?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14942,7 +17040,7 @@ export namespace Prisma {
 
   export type RoomRateUpdateWithoutBookRoomInput = {
     price?: IntFieldUpdateOperationsInput | number
-    time?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     room?: RoomUpdateOneRequiredWithoutRoomPriceNestedInput
@@ -14951,7 +17049,7 @@ export namespace Prisma {
   export type RoomRateUncheckedUpdateWithoutBookRoomInput = {
     id?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
-    time?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14984,20 +17082,21 @@ export namespace Prisma {
     password?: StringFilter | string
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    bookRoomId?: IntFilter | number
+    bookRoomId?: IntNullableFilter | number | null
+    vertifyBookingCodeId?: IntNullableFilter | number | null
   }
 
-  export type BranchCreateWithoutOpenCloseInput = {
+  export type CoWorkCreateWithoutOpenCloseInput = {
     name: string
     description: string
     location: string
     tel: number
     picture: string
-    userInternal: UserInternalCreateNestedOneWithoutBranchInput
-    BranchToRoom?: BranchToRoomCreateNestedManyWithoutBranchInput
+    userInternal: UserInternalCreateNestedOneWithoutCoWorkInput
+    BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
   }
 
-  export type BranchUncheckedCreateWithoutOpenCloseInput = {
+  export type CoWorkUncheckedCreateWithoutOpenCloseInput = {
     id?: number
     name: string
     description: string
@@ -15005,30 +17104,30 @@ export namespace Prisma {
     tel: number
     picture: string
     userInternalId: number
-    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutBranchInput
+    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
   }
 
-  export type BranchCreateOrConnectWithoutOpenCloseInput = {
-    where: BranchWhereUniqueInput
-    create: XOR<BranchCreateWithoutOpenCloseInput, BranchUncheckedCreateWithoutOpenCloseInput>
+  export type CoWorkCreateOrConnectWithoutOpenCloseInput = {
+    where: CoWorkWhereUniqueInput
+    create: XOR<CoWorkCreateWithoutOpenCloseInput, CoWorkUncheckedCreateWithoutOpenCloseInput>
   }
 
-  export type BranchUpsertWithoutOpenCloseInput = {
-    update: XOR<BranchUpdateWithoutOpenCloseInput, BranchUncheckedUpdateWithoutOpenCloseInput>
-    create: XOR<BranchCreateWithoutOpenCloseInput, BranchUncheckedCreateWithoutOpenCloseInput>
+  export type CoWorkUpsertWithoutOpenCloseInput = {
+    update: XOR<CoWorkUpdateWithoutOpenCloseInput, CoWorkUncheckedUpdateWithoutOpenCloseInput>
+    create: XOR<CoWorkCreateWithoutOpenCloseInput, CoWorkUncheckedCreateWithoutOpenCloseInput>
   }
 
-  export type BranchUpdateWithoutOpenCloseInput = {
+  export type CoWorkUpdateWithoutOpenCloseInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     tel?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
-    userInternal?: UserInternalUpdateOneRequiredWithoutBranchNestedInput
-    BranchToRoom?: BranchToRoomUpdateManyWithoutBranchNestedInput
+    userInternal?: UserInternalUpdateOneRequiredWithoutCoWorkNestedInput
+    BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
   }
 
-  export type BranchUncheckedUpdateWithoutOpenCloseInput = {
+  export type CoWorkUncheckedUpdateWithoutOpenCloseInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -15036,34 +17135,71 @@ export namespace Prisma {
     tel?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
     userInternalId?: IntFieldUpdateOperationsInput | number
-    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutBranchNestedInput
+    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
   }
 
-  export type BranchToRoomCreateManyBranchInput = {
+  export type UserExternalCreateWithoutVertifyBookingCodeInput = {
+    name: string
+    email: string
+    tel: number
+    password: string
+    createAt?: Date | string
+    updateAt?: Date | string
+    bookRoom?: BookRoomCreateNestedOneWithoutUserExternalInput
+  }
+
+  export type UserExternalUncheckedCreateWithoutVertifyBookingCodeInput = {
+    id?: number
+    name: string
+    email: string
+    tel: number
+    password: string
+    createAt?: Date | string
+    updateAt?: Date | string
+    bookRoomId?: number | null
+  }
+
+  export type UserExternalCreateOrConnectWithoutVertifyBookingCodeInput = {
+    where: UserExternalWhereUniqueInput
+    create: XOR<UserExternalCreateWithoutVertifyBookingCodeInput, UserExternalUncheckedCreateWithoutVertifyBookingCodeInput>
+  }
+
+  export type UserExternalCreateManyVertifyBookingCodeInputEnvelope = {
+    data: Enumerable<UserExternalCreateManyVertifyBookingCodeInput>
+    skipDuplicates?: boolean
+  }
+
+  export type UserExternalUpsertWithWhereUniqueWithoutVertifyBookingCodeInput = {
+    where: UserExternalWhereUniqueInput
+    update: XOR<UserExternalUpdateWithoutVertifyBookingCodeInput, UserExternalUncheckedUpdateWithoutVertifyBookingCodeInput>
+    create: XOR<UserExternalCreateWithoutVertifyBookingCodeInput, UserExternalUncheckedCreateWithoutVertifyBookingCodeInput>
+  }
+
+  export type UserExternalUpdateWithWhereUniqueWithoutVertifyBookingCodeInput = {
+    where: UserExternalWhereUniqueInput
+    data: XOR<UserExternalUpdateWithoutVertifyBookingCodeInput, UserExternalUncheckedUpdateWithoutVertifyBookingCodeInput>
+  }
+
+  export type UserExternalUpdateManyWithWhereWithoutVertifyBookingCodeInput = {
+    where: UserExternalScalarWhereInput
+    data: XOR<UserExternalUpdateManyMutationInput, UserExternalUncheckedUpdateManyWithoutUserExternalInput>
+  }
+
+  export type BranchToRoomCreateManyCoWorkInput = {
     id?: number
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
   }
 
-  export type OpenCloseCreateManyBranchInput = {
-    id?: number
-    open: Date | string
-    close: Date | string
-    allDay: boolean
-    day: number
-    createAt?: Date | string
-    updateAt?: Date | string
-  }
-
-  export type BranchToRoomUpdateWithoutBranchInput = {
+  export type BranchToRoomUpdateWithoutCoWorkInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     room?: RoomUpdateOneRequiredWithoutBranchToRoomNestedInput
     BookRoom?: BookRoomUpdateManyWithoutBranchToRoomNestedInput
   }
 
-  export type BranchToRoomUncheckedUpdateWithoutBranchInput = {
+  export type BranchToRoomUncheckedUpdateWithoutCoWorkInput = {
     id?: IntFieldUpdateOperationsInput | number
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15078,36 +17214,7 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type OpenCloseUpdateWithoutBranchInput = {
-    open?: DateTimeFieldUpdateOperationsInput | Date | string
-    close?: DateTimeFieldUpdateOperationsInput | Date | string
-    allDay?: BoolFieldUpdateOperationsInput | boolean
-    day?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type OpenCloseUncheckedUpdateWithoutBranchInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    open?: DateTimeFieldUpdateOperationsInput | Date | string
-    close?: DateTimeFieldUpdateOperationsInput | Date | string
-    allDay?: BoolFieldUpdateOperationsInput | boolean
-    day?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type OpenCloseUncheckedUpdateManyWithoutOpenCloseInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    open?: DateTimeFieldUpdateOperationsInput | Date | string
-    close?: DateTimeFieldUpdateOperationsInput | Date | string
-    allDay?: BoolFieldUpdateOperationsInput | boolean
-    day?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type BranchCreateManyUserInternalInput = {
+  export type CoWorkCreateManyUserInternalInput = {
     id?: number
     name: string
     description: string
@@ -15116,28 +17223,28 @@ export namespace Prisma {
     picture: string
   }
 
-  export type BranchUpdateWithoutUserInternalInput = {
+  export type CoWorkUpdateWithoutUserInternalInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     tel?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
-    BranchToRoom?: BranchToRoomUpdateManyWithoutBranchNestedInput
-    OpenClose?: OpenCloseUpdateManyWithoutBranchNestedInput
+    BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
+    OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
   }
 
-  export type BranchUncheckedUpdateWithoutUserInternalInput = {
+  export type CoWorkUncheckedUpdateWithoutUserInternalInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     tel?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
-    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutBranchNestedInput
-    OpenClose?: OpenCloseUncheckedUpdateManyWithoutBranchNestedInput
+    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
+    OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
   }
 
-  export type BranchUncheckedUpdateManyWithoutBranchInput = {
+  export type CoWorkUncheckedUpdateManyWithoutCoWorkInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -15149,7 +17256,7 @@ export namespace Prisma {
   export type RoomRateCreateManyRoomInput = {
     id?: number
     price: number
-    time: Date | string
+    time: string
     createAt?: Date | string
     updateAt?: Date | string
   }
@@ -15163,14 +17270,14 @@ export namespace Prisma {
 
   export type BranchToRoomCreateManyRoomInput = {
     id?: number
-    branchId: number
+    coWorkId: number
     createAt?: Date | string
     updateAt?: Date | string
   }
 
   export type RoomRateUpdateWithoutRoomInput = {
     price?: IntFieldUpdateOperationsInput | number
-    time?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     BookRoom?: BookRoomUpdateManyWithoutRoomRateNestedInput
@@ -15179,7 +17286,7 @@ export namespace Prisma {
   export type RoomRateUncheckedUpdateWithoutRoomInput = {
     id?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
-    time?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     BookRoom?: BookRoomUncheckedUpdateManyWithoutRoomRateNestedInput
@@ -15188,7 +17295,7 @@ export namespace Prisma {
   export type RoomRateUncheckedUpdateManyWithoutRoomPriceInput = {
     id?: IntFieldUpdateOperationsInput | number
     price?: IntFieldUpdateOperationsInput | number
-    time?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15216,13 +17323,13 @@ export namespace Prisma {
   export type BranchToRoomUpdateWithoutRoomInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branch?: BranchUpdateOneRequiredWithoutBranchToRoomNestedInput
+    coWork?: CoWorkUpdateOneRequiredWithoutBranchToRoomNestedInput
     BookRoom?: BookRoomUpdateManyWithoutBranchToRoomNestedInput
   }
 
   export type BranchToRoomUncheckedUpdateWithoutRoomInput = {
     id?: IntFieldUpdateOperationsInput | number
-    branchId?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     BookRoom?: BookRoomUncheckedUpdateManyWithoutBranchToRoomNestedInput
@@ -15230,7 +17337,7 @@ export namespace Prisma {
 
   export type BookRoomCreateManyRoomRateInput = {
     id?: number
-    branchToRoomId: number
+    branchToRoomId?: number | null
     startTime: Date | string
     status: string
     createAt?: Date | string
@@ -15242,13 +17349,13 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchToRoom?: BranchToRoomUpdateOneRequiredWithoutBookRoomNestedInput
+    branchToRoom?: BranchToRoomUpdateOneWithoutBookRoomNestedInput
     UserExternal?: UserExternalUpdateManyWithoutBookRoomNestedInput
   }
 
   export type BookRoomUncheckedUpdateWithoutRoomRateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    branchToRoomId?: IntFieldUpdateOperationsInput | number
+    branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15258,7 +17365,7 @@ export namespace Prisma {
 
   export type BookRoomUncheckedUpdateManyWithoutBookRoomInput = {
     id?: IntFieldUpdateOperationsInput | number
-    branchToRoomId?: IntFieldUpdateOperationsInput | number
+    branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15321,6 +17428,7 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
+    vertifyBookingCodeId?: number | null
   }
 
   export type UserExternalUpdateWithoutBookRoomInput = {
@@ -15330,6 +17438,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vertifyBookingCode?: VertifyBookingCodeUpdateOneWithoutUserExternalNestedInput
   }
 
   export type UserExternalUncheckedUpdateWithoutBookRoomInput = {
@@ -15340,6 +17449,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vertifyBookingCodeId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type UserExternalUncheckedUpdateManyWithoutUserExternalInput = {
@@ -15350,6 +17460,39 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vertifyBookingCodeId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type UserExternalCreateManyVertifyBookingCodeInput = {
+    id?: number
+    name: string
+    email: string
+    tel: number
+    password: string
+    createAt?: Date | string
+    updateAt?: Date | string
+    bookRoomId?: number | null
+  }
+
+  export type UserExternalUpdateWithoutVertifyBookingCodeInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tel?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookRoom?: BookRoomUpdateOneWithoutUserExternalNestedInput
+  }
+
+  export type UserExternalUncheckedUpdateWithoutVertifyBookingCodeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tel?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookRoomId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
 

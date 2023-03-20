@@ -99,7 +99,15 @@ exports.Prisma.BookRoomScalarFieldEnum = makeEnum({
   updateAt: 'updateAt'
 });
 
-exports.Prisma.BranchScalarFieldEnum = makeEnum({
+exports.Prisma.BranchToRoomScalarFieldEnum = makeEnum({
+  id: 'id',
+  coWorkId: 'coWorkId',
+  roomId: 'roomId',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
+exports.Prisma.CoWorkScalarFieldEnum = makeEnum({
   id: 'id',
   name: 'name',
   description: 'description',
@@ -107,14 +115,6 @@ exports.Prisma.BranchScalarFieldEnum = makeEnum({
   tel: 'tel',
   picture: 'picture',
   userInternalId: 'userInternalId'
-});
-
-exports.Prisma.BranchToRoomScalarFieldEnum = makeEnum({
-  id: 'id',
-  branchId: 'branchId',
-  roomId: 'roomId',
-  createAt: 'createAt',
-  updateAt: 'updateAt'
 });
 
 exports.Prisma.FacilityScalarFieldEnum = makeEnum({
@@ -134,11 +134,35 @@ exports.Prisma.FacilityToRoomScalarFieldEnum = makeEnum({
 
 exports.Prisma.OpenCloseScalarFieldEnum = makeEnum({
   id: 'id',
-  open: 'open',
-  close: 'close',
-  allDay: 'allDay',
-  branchId: 'branchId',
-  day: 'day',
+  openTimeMon: 'openTimeMon',
+  closeTimeMon: 'closeTimeMon',
+  isOpenMon: 'isOpenMon',
+  isOpen24hoursMon: 'isOpen24hoursMon',
+  openTimeTue: 'openTimeTue',
+  closeTimeTue: 'closeTimeTue',
+  isOpenTue: 'isOpenTue',
+  isOpen24hoursTue: 'isOpen24hoursTue',
+  openTimeWed: 'openTimeWed',
+  closeTimeWed: 'closeTimeWed',
+  isOpenWed: 'isOpenWed',
+  isOpen24hoursWed: 'isOpen24hoursWed',
+  openTimeThurs: 'openTimeThurs',
+  closeTimeThurs: 'closeTimeThurs',
+  isOpenThurs: 'isOpenThurs',
+  isOpen24hoursThurs: 'isOpen24hoursThurs',
+  openTimeFri: 'openTimeFri',
+  closeTimeFri: 'closeTimeFri',
+  isOpenFri: 'isOpenFri',
+  isOpen24hoursFri: 'isOpen24hoursFri',
+  openTimeSat: 'openTimeSat',
+  closeTimeSat: 'closeTimeSat',
+  isOpenSat: 'isOpenSat',
+  isOpen24hoursSat: 'isOpen24hoursSat',
+  openTimeSun: 'openTimeSun',
+  closeTimeSun: 'closeTimeSun',
+  isOpenSun: 'isOpenSun',
+  isOpen24hoursSun: 'isOpen24hoursSun',
+  coWorkId: 'coWorkId',
   createAt: 'createAt',
   updateAt: 'updateAt'
 });
@@ -185,7 +209,8 @@ exports.Prisma.UserExternalScalarFieldEnum = makeEnum({
   password: 'password',
   createAt: 'createAt',
   updateAt: 'updateAt',
-  bookRoomId: 'bookRoomId'
+  bookRoomId: 'bookRoomId',
+  vertifyBookingCodeId: 'vertifyBookingCodeId'
 });
 
 exports.Prisma.UserInternalScalarFieldEnum = makeEnum({
@@ -198,10 +223,17 @@ exports.Prisma.UserInternalScalarFieldEnum = makeEnum({
   updateAt: 'updateAt'
 });
 
+exports.Prisma.VertifyBookingCodeScalarFieldEnum = makeEnum({
+  id: 'id',
+  bookdate: 'bookdate',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
 
 exports.Prisma.ModelName = makeEnum({
   UserExternal: 'UserExternal',
-  Branch: 'Branch',
+  CoWork: 'CoWork',
   UserInternal: 'UserInternal',
   Room: 'Room',
   RoomRate: 'RoomRate',
@@ -209,7 +241,8 @@ exports.Prisma.ModelName = makeEnum({
   FacilityToRoom: 'FacilityToRoom',
   BranchToRoom: 'BranchToRoom',
   BookRoom: 'BookRoom',
-  OpenClose: 'OpenClose'
+  OpenClose: 'OpenClose',
+  VertifyBookingCode: 'VertifyBookingCode'
 });
 
 /**
