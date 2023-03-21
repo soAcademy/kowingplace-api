@@ -123,7 +123,8 @@ exports.Prisma.DurationCategoryScalarFieldEnum = makeEnum({
   id: 'id',
   duration: 'duration',
   createAt: 'createAt',
-  updateAt: 'updateAt'
+  updateAt: 'updateAt',
+  openCloseId: 'openCloseId'
 });
 
 exports.Prisma.FacilityScalarFieldEnum = makeEnum({

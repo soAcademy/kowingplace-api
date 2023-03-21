@@ -1,7 +1,7 @@
 model UserExternal {
   id       Int        @id @default(autoincrement())
   name     String
-  email    String
+  email    String     @unique
   tel      String
   password String
   createAt DateTime   @default(now())
@@ -14,24 +14,24 @@ model CoWork {
   name             String
   description      String
   location         String
-  tel              Int
+  tel              String
   picture          String
-  userInternal     UserInternal       @relation(fields: [userInternalId], references: [id])
-  userInternalId   Int
   BranchToRoom     BranchToRoom[]
   OpenClose        OpenClose?
   FacilityToCoWork FacilityToCoWork[]
+  UserInternal     UserInternal?      @relation(fields: [userInternalId], references: [id])
+  userInternalId   Int?
 }
 
 model UserInternal {
   id       Int      @id @default(autoincrement())
   name     String
-  email    String
+  email    String   @unique
   tel      String
   password String
-  coWork   CoWork[]
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
+  coWork   CoWork[]
 }
 
 model Room {
@@ -40,29 +40,30 @@ model Room {
   capacity     Int
   createAt     DateTime       @default(now())
   updateAt     DateTime       @updatedAt
-  //FacilityToRoom FacilityToRoom[]
   BranchToRoom BranchToRoom[]
   RoomRate     RoomRate[]
 }
 
 model RoomRate {
   id                 Int              @id @default(autoincrement())
-  price              Int
+  price              Int?
   createAt           DateTime         @default(now())
   updateAt           DateTime         @updatedAt
   BookRoom           BookRoom[]
   duration           durationCategory @relation(fields: [durationCategoryId], references: [id])
   durationCategoryId Int
-  room               Room             @relation(fields: [roomId], references: [id])
-  roomId             Int
+  room               Room?            @relation(fields: [roomId], references: [id])
+  roomId             Int?
 }
 
 model durationCategory {
-  id       Int        @id @default(autoincrement())
-  duration String
-  createAt DateTime   @default(now())
-  updateAt DateTime   @updatedAt
-  RoomRate RoomRate[]
+  id          Int        @id @default(autoincrement())
+  duration    Int        @unique
+  createAt    DateTime   @default(now())
+  updateAt    DateTime   @updatedAt
+  RoomRate    RoomRate[]
+  openclose   OpenClose? @relation(fields: [openCloseId], references: [id])
+  openCloseId Int?
 }
 
 model Facility {
@@ -122,7 +123,7 @@ model BookRoom {
 }
 
 model OpenClose {
-  id                 Int      @id @default(autoincrement())
+  id                 Int                @id @default(autoincrement())
   openTimeMon        Int
   closeTimeMon       Int
   isOpenMon          Boolean
@@ -151,10 +152,11 @@ model OpenClose {
   closeTimeSun       Int
   isOpenSun          Boolean
   isOpen24hoursSun   Boolean
-  coWork             CoWork   @relation(fields: [coWorkId], references: [id])
-  coWorkId           Int      @unique
-  createAt           DateTime @default(now())
-  updateAt           DateTime @updatedAt
+  coWork             CoWork             @relation(fields: [coWorkId], references: [id])
+  coWorkId           Int                @unique
+  createAt           DateTime           @default(now())
+  updateAt           DateTime           @updatedAt
+  durationCategory   durationCategory[]
 }
 
 model VertifyBookingCode {

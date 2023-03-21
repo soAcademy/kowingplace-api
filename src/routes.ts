@@ -1,12 +1,15 @@
 import {
+  createCoWorkDetailHandler,
+  createRoomInternalHandler,
   createUserExternalHandler,
   createUserInternalHandler,
-  filterPriceHandler,
   getCoWork24HrsHandler,
   getCoWorkUserChooseHandler,
   getCoworkRecommentHandler,
   getUserConfirmBookingHandler,
+  updateCoWorkDetailHandler,
 } from "./kowingPlace/kowingPlace.handler";
+import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
 
 export const AppRoutes = [
   {
@@ -40,20 +43,27 @@ export const AppRoutes = [
     method: "post",
     action: getUserConfirmBookingHandler,
   },
-  {
-    path: "/kowing/filterPrice",
-    method: "post",
-    action: filterPriceHandler, //OK
-  },
+
   //-------------- internal part ----------------
   {
     path: "/kowing/createUserInternal",
     method: "post",
     action: createUserInternalHandler, //OK
   },
-  // {
-  //   path: "/kowing/",
-  //   method: "post",
-  //   action: ,
-  // },
+  {
+    path: "/kowing/createRoomInternal",
+    method: "post",
+    action: createRoomInternalHandler,
+  },
+
+  {
+    path: "/kowing/createCoWorkDetail",
+    method: "post",
+    action: createCoWorkDetailHandler,
+  },
+  {
+    path: "/kowing/updateCoWorkDetail",
+    method: "post",
+    action: updateCoWorkDetailHandler,
+  },
 ];
