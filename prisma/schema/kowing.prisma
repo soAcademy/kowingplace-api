@@ -19,8 +19,9 @@ model CoWork {
   BranchToRoom     BranchToRoom[]
   OpenClose        OpenClose?
   FacilityToCoWork FacilityToCoWork[]
-  UserInternal     UserInternal?      @relation(fields: [userInternalId], references: [id])
-  userInternalId   Int?
+  userInternal     UserInternal?      @relation(fields: [userInternalId], references: [id])
+  userInternalId   Int?               @unique //make one to one
+  BookRoom         BookRoom[]
 }
 
 model UserInternal {
@@ -31,7 +32,7 @@ model UserInternal {
   password String
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
-  coWork   CoWork[]
+  coWork   CoWork?
 }
 
 model Room {
@@ -96,20 +97,19 @@ model FacilityToCoWork {
 // }
 
 model BranchToRoom {
-  id       Int        @id @default(autoincrement())
-  coWork   CoWork     @relation(fields: [coWorkId], references: [id])
+  id       Int      @id @default(autoincrement())
+  coWork   CoWork   @relation(fields: [coWorkId], references: [id])
   coWorkId Int
-  room     Room       @relation(fields: [roomId], references: [id])
+  room     Room     @relation(fields: [roomId], references: [id])
   roomId   Int
-  createAt DateTime   @default(now())
-  updateAt DateTime   @updatedAt
-  BookRoom BookRoom[]
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 }
 
 model BookRoom {
   id                   Int                @id @default(autoincrement())
-  branchToRoom         BranchToRoom?      @relation(fields: [branchToRoomId], references: [id])
-  branchToRoomId       Int?
+  cowork               CoWork             @relation(fields: [coWorkId], references: [id])
+  coWorkId             Int
   startTime            DateTime
   roomRate             RoomRate           @relation(fields: [roomRateId], references: [id])
   roomRateId           Int

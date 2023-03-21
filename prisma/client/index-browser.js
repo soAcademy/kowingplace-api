@@ -91,7 +91,7 @@ function makeEnum(x) { return x; }
 
 exports.Prisma.BookRoomScalarFieldEnum = makeEnum({
   id: 'id',
-  branchToRoomId: 'branchToRoomId',
+  coWorkId: 'coWorkId',
   startTime: 'startTime',
   roomRateId: 'roomRateId',
   status: 'status',

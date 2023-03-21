@@ -5,9 +5,13 @@ import {
   createUserInternalHandler,
   getCoWork24HrsHandler,
   getCoWorkUserChooseHandler,
-  getCoworkRecommentHandler,
-  getUserConfirmBookingHandler,
+  getCoworkByUserIdHandler,
+  getCoworkHandler,
+  getRoomByCoWorkIdHandler,
   updateCoWorkDetailHandler,
+  updateRoomInternalHandler,
+  getVerifyCodeByUserConfirmBookingHandler,
+  showBookDetailInternalByCoWorkHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
 
@@ -17,7 +21,6 @@ export const AppRoutes = [
     method: "get",
     action: (req: any, res: any) => res.send("hello 7470"),
   },
-  //-------------- external part ----------------
   {
     path: "/kowing/createUserExternal",
     method: "post",
@@ -29,22 +32,20 @@ export const AppRoutes = [
     action: getCoWork24HrsHandler, //OK
   },
   {
-    path: "/kowing/getCoworkRecomment",
+    path: "/kowing/getCowork",
     method: "post",
-    action: getCoworkRecommentHandler,
+    action: getCoworkHandler, //OK
   },
   {
     path: "/kowing/getCoWorkUserChoose",
     method: "post",
-    action: getCoWorkUserChooseHandler,
+    action: getCoWorkUserChooseHandler, //Ok
   },
   {
-    path: "/kowing/getUserConfirmBooking",
+    path: "/kowing/getVerifyCodeByUserConfirmBooking",
     method: "post",
-    action: getUserConfirmBookingHandler,
+    action: getVerifyCodeByUserConfirmBookingHandler,
   },
-
-  //-------------- internal part ----------------
   {
     path: "/kowing/createUserInternal",
     method: "post",
@@ -53,17 +54,36 @@ export const AppRoutes = [
   {
     path: "/kowing/createRoomInternal",
     method: "post",
-    action: createRoomInternalHandler,
+    action: createRoomInternalHandler, //Ok
   },
-
   {
     path: "/kowing/createCoWorkDetail",
     method: "post",
-    action: createCoWorkDetailHandler,
+    action: createCoWorkDetailHandler, //Ok
   },
   {
     path: "/kowing/updateCoWorkDetail",
     method: "post",
-    action: updateCoWorkDetailHandler,
+    action: updateCoWorkDetailHandler, //Ok
+  },
+  {
+    path: "/kowing/updateRoomInternal",
+    method: "post",
+    action: updateRoomInternalHandler, //OK
+  },
+  {
+    path: "/kowing/getRoomByCoWorkId",
+    method: "post",
+    action: getRoomByCoWorkIdHandler, //Ok
+  },
+  {
+    path: "/kowing/getCoworkByUserId",
+    method: "post",
+    action: getCoworkByUserIdHandler, //OK
+  },
+  {
+    path: "/kowing/showBookDetailInternalByCoWork",
+    method: "post",
+    action: showBookDetailInternalByCoWorkHandler,
   },
 ];

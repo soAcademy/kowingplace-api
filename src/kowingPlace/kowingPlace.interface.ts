@@ -18,14 +18,13 @@ export interface IGetCoWorkUserChoose
 
 //-------------------------------------------------
 
-export const getUserConfirmBookingCodec = t.type({
+export const getVerifyCodeByUserConfirmBookingCodec = t.type({
   startTime: t.string,
-  time: t.string,
   roomId: t.number,
   coWorkId: t.number,
   userExId: t.number,
 });
 export interface IGetUserConfirmBooking
-  extends t.TypeOf<typeof getUserConfirmBookingCodec> {}
+  extends t.TypeOf<typeof getVerifyCodeByUserConfirmBookingCodec> {}
 
 //-------------------------------------------------

@@ -42,37 +42,53 @@ export const getCoWork24Hrs = async () => {
   return get24hrsOpen;
 };
 
-export const getCoworkRecomment = async () => {
-  const getAllCoWork = await prisma.coWork.findMany({});
-};
+export const getCowork = () => prisma.coWork.findMany({});
 //let p'mac Math random at frontend
 
-// //filter price/day
-// export const filterPrice = () =>
-//   prisma.roomRate.findMany({
-//     select: {
-//       price: true,
-//     },
-//   });
+export const getRoomByCoWorkId = (args: { coWorkId: number }) =>
+  prisma.coWork.findUnique({
+    where: {
+      id: args.coWorkId,
+    },
+    include: {
+      BranchToRoom: {
+        where: {
+          coWorkId: args.coWorkId,
+        },
+        include: {
+          room: true,
+        },
+      },
+    },
+  });
+
+export const getCoworkByUserId = (args: { userInternalId: number }) =>
+  prisma.userInternal.findUnique({
+    where: {
+      id: args.userInternalId,
+    },
+    include: {
+      coWork: true,
+    },
+  });
 
 export const getCoWorkUserChoose = (args: IGetCoWorkUserChoose) =>
   prisma.coWork.findUnique({
     where: {
       id: args.id,
     },
-    include: {
-      UserInternal: true,
-    },
   });
 
 //vertify code
-export const getUserConfirmBooking = async (args: IGetUserConfirmBooking) => {
-  const verifyCode = `${args.userExId}${args.coWorkId}${args.roomId}`;
+export const getVerifyCodeByUserConfirmBooking = async (
+  args: IGetUserConfirmBooking
+) => {
+  const verifyCode = `KOWING${args.userExId}${args.coWorkId}${args.roomId}`;
 
   const getBookData = await prisma.bookRoom.create({
     data: {
-      startTime: args.startTime,
-      branchToRoom: {
+      startTime: new Date(args.startTime),
+      cowork: {
         connect: {
           id: args.coWorkId,
         },
@@ -90,7 +106,7 @@ export const getUserConfirmBooking = async (args: IGetUserConfirmBooking) => {
       },
       vertifyCode: {
         create: {
-          bookdate: args.startTime,
+          bookdate: new Date(args.startTime),
           verifyCode: verifyCode,
         },
       },
@@ -122,66 +138,116 @@ export const createUserInternal = (args: {
   });
 
 //เส้นโชว์ ห้องประชุมทั้งหมด / ชื่อผู้ใช้ / booking detail
-export const showBookDetailInternal = async () => {
-  const bookDetailData = await prisma.bookRoom.findMany({
+export const showBookDetailInternalByCoWork = async (args: {
+  coWorkId: number;
+}) => {
+  const bookDetailData = await prisma.coWork.findUnique({
+    where: {
+      id: args.coWorkId,
+    },
     select: {
-      branchToRoom: {
+      BookRoom: {
+        select: {
+          startTime: true,
+          status: true,
+          roomRate: {
+            select: {
+              duration: true,
+              roomId: true,
+            },
+          },
+          UserExternal: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+      BranchToRoom: {
         select: {
           room: true,
         },
       },
-      UserExternal: {
-        select: {
-          name: true,
-        },
-      },
-      roomRate: {
-        select: {
-          duration: true,
-        },
-      },
-      startTime: true,
-      status: true,
     },
   });
   return bookDetailData;
 };
 
-//-------------------------------####------------------------------
 export const createRoomInternal = async (args: {
   name: string;
   capacity: number;
-  rates: { price: number; duration: number }[];
+  rates: { price: number; durationId: number }[];
   coworkId: number;
 }) => {
   const createRoom = await prisma.branchToRoom.create({
     data: {
       coWork: {
         connect: {
-          id: 9,
+          id: args.coworkId,
         },
       },
       room: {
         create: {
-          name: "ห้องประชุมมมม",
-          capacity: 3,
+          name: args.name,
+          capacity: args.capacity,
           RoomRate: {
-            create: [
-              {
-                price: 231,
-                duration: {
-                  create: {
-                    duration: 2,
-                  },
+            create: args.rates.map((r) => ({
+              price: r.price,
+              duration: {
+                connect: {
+                  id: r.durationId,
                 },
               },
-            ],
+            })),
           },
         },
       },
     },
   });
   return createRoom;
+};
+
+export const updateRoomInternal = async (args: {
+  branchToRoomId: number;
+  coWorkId: number;
+  name: string;
+  capacity: number;
+  rates: { price: number; durationId: number; roomRateId: number }[];
+}) => {
+  const updateRoom = await prisma.branchToRoom.update({
+    where: {
+      id: args.branchToRoomId,
+    },
+    data: {
+      coWork: {
+        connect: {
+          id: args.coWorkId,
+        },
+      },
+      room: {
+        update: {
+          name: args.name,
+          capacity: args.capacity,
+          RoomRate: {
+            update: args.rates.map((r) => ({
+              where: {
+                id: r.roomRateId,
+              },
+              data: {
+                price: r.price,
+                duration: {
+                  connect: {
+                    id: r.durationId,
+                  },
+                },
+              },
+            })),
+          },
+        },
+      },
+    },
+  });
+  return updateRoom;
 };
 
 //-------------------------------------------------------------
@@ -240,103 +306,4 @@ export const updateCoWorkDetail = async (args: {
   return coWorkupdate;
 };
 
-// export const createRoomRate = async (args: {
-//   price: number;
-//   durationId: number;
-//   roomId: number;
-// }) => {
-//   const createCardRoom = await prisma.roomRate.create({
-//     data: {
-//       price: args.price,
-//       durationCategoryId: args.durationId,
-//       room: {
-//         connect: {
-//           id: args.roomId || undefined,
-//         },
-//       },
-//     },
-//     select: {
-//       price: true,
-//       durationCategoryId: true,
-//     },
-//   });
-//   return createCardRoom;
-// };
-
 //-------------------------------------------------------------
-
-// interface IRoom {
-//   name: string;
-//   capacity: number;
-//   price: {
-//     durationId: number;
-//     price: number;
-//     roomRateId?: number;
-//     isDeleted: boolean;
-//   }[];
-//   roomId?: number;
-//   coWorkId: number;
-//   isDeleted: boolean;
-// }
-// export const createOrUpdateRoomInternal = async (args: IRoom[]) => {
-//   let resultRoom;
-//   let resultPrice;
-//   for (const roomKey in args) {
-//     const room = args[roomKey];
-//     resultRoom = await prisma.room.upsert({
-//       where: { id: room.roomId },
-//       create: {
-//         name: room.name,
-//         capacity: room.capacity,
-//         BranchToRoom: {
-//           create: {
-//             coWork: {
-//               connect: { id: room.coWorkId },
-//             },
-//           },
-//         },
-//       },
-//       update: {
-//         name: room.name,
-//         capacity: room.capacity,
-//       },
-//     });
-
-//     for (const priceKey in room.price) {
-//       const price = room.price[priceKey];
-//       if (price.isDeleted) {
-//         await prisma.roomRate.delete({
-//           where: { id: price.roomRateId },
-//         });
-//         continue;
-//       }
-//       resultPrice = await prisma.roomRate.upsert({
-//         where: { id: price.roomRateId },
-//         create: {
-//           price: price.price,
-//           duration: {
-//             connect: { id: price.durationId },
-//           },
-//           room: { connect: { id: room.roomId } },
-//         },
-//         update: {
-//           price: price.price,
-//           duration: {
-//             connect: { id: price.durationId },
-//           },
-//           room: { connect: { id: room.roomId } },
-//         },
-//       });
-//     }
-//   }
-//   return { room: resultRoom, price: resultPrice };
-// };
-
-//-------------------------------------------------------------
-
-// const UserBookRoom ={
-//   "nameUser" : "boeing",
-//   "จองห้องไหน" : "ห้องประชุม 1",
-//   "เวลาที่จะไปใช้บริการ" : "09.00",
-//   ""
-// }

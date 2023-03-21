@@ -6,9 +6,13 @@ import {
   createUserInternal,
   getCoWork24Hrs,
   getCoWorkUserChoose,
-  getCoworkRecomment,
-  getUserConfirmBooking,
+  getCowork,
+  getCoworkByUserId,
+  getRoomByCoWorkId,
   updateCoWorkDetail,
+  updateRoomInternal,
+  getVerifyCodeByUserConfirmBooking,
+  showBookDetailInternalByCoWork,
 } from "./kowingPlace.resolver";
 
 export const createUserExternalHandler = async (
@@ -37,12 +41,9 @@ export const getCoWork24HrsHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const getCoworkRecommentHandler = async (
-  req: Request,
-  res: Response
-) => {
+export const getCoworkHandler = async (req: Request, res: Response) => {
   try {
-    const result = await getCoworkRecomment();
+    const result = await getCowork();
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({
@@ -65,13 +66,13 @@ export const getCoWorkUserChooseHandler = async (
     });
   }
 };
-export const getUserConfirmBookingHandler = async (
+export const getVerifyCodeByUserConfirmBookingHandler = async (
   req: Request,
   res: Response
 ) => {
   const args = req.body;
   try {
-    const result = await getUserConfirmBooking(args);
+    const result = await getVerifyCodeByUserConfirmBooking(args);
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({
@@ -79,8 +80,6 @@ export const getUserConfirmBookingHandler = async (
     });
   }
 };
-
-//----------------- internal -------------------
 
 export const createUserInternalHandler = async (
   req: Request,
@@ -126,6 +125,7 @@ export const createCoWorkDetailHandler = async (
     });
   }
 };
+
 export const updateCoWorkDetailHandler = async (
   req: Request,
   res: Response
@@ -133,6 +133,58 @@ export const updateCoWorkDetailHandler = async (
   const args = req.body;
   try {
     const result = await updateCoWorkDetail(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+
+export const updateRoomInternalHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await updateRoomInternal(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+
+export const getRoomByCoWorkIdHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  try {
+    const result = await getRoomByCoWorkId(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const getCoworkByUserIdHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  try {
+    const result = await getCoworkByUserId(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const showBookDetailInternalByCoWorkHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await showBookDetailInternalByCoWork(args);
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({
