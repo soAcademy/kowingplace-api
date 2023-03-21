@@ -58,7 +58,7 @@ model RoomRate {
 
 model durationCategory {
   id          Int        @id @default(autoincrement())
-  duration    Int        @unique
+  duration    Int
   createAt    DateTime   @default(now())
   updateAt    DateTime   @updatedAt
   RoomRate    RoomRate[]

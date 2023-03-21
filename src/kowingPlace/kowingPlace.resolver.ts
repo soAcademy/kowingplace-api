@@ -154,35 +154,30 @@ export const createRoomInternal = async (args: {
   rates: { price: number; duration: number }[];
   coworkId: number;
 }) => {
-  const createRoom = await prisma.room.create({
+  const createRoom = await prisma.branchToRoom.create({
     data: {
-      name: args.name,
-      capacity: args.capacity,
-      RoomRate: {
-        create: args.rates.map((r) => ({
-          price: r.price,
-          duration: {
-            connectOrCreate: {
-              where: {
-                duration: r.duration,
-              },
-              create: {
-                duration: r.duration,
-              },
-            },
-          },
-        })),
+      coWork: {
+        connect: {
+          id: 9,
+        },
       },
-      BranchToRoom: {
-        create: [
-          {
-            coWork: {
-              connect: {
-                id: args.coworkId,
+      room: {
+        create: {
+          name: "ห้องประชุมมมม",
+          capacity: 3,
+          RoomRate: {
+            create: [
+              {
+                price: 231,
+                duration: {
+                  create: {
+                    duration: 2,
+                  },
+                },
               },
-            },
+            ],
           },
-        ],
+        },
       },
     },
   });

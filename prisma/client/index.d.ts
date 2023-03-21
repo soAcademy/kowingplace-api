@@ -14398,7 +14398,6 @@ export namespace Prisma {
 
   export type durationCategoryWhereUniqueInput = {
     id?: number
-    duration?: number
   }
 
   export type durationCategoryOrderByWithAggregationInput = {

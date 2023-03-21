@@ -29,9 +29,8 @@ model CoWork {
   BranchToRoom     BranchToRoom[]
   OpenClose        OpenClose?
   FacilityToCoWork FacilityToCoWork[]
-
-  UserInternal   UserInternal? @relation(fields: [userInternalId], references: [id])
-  userInternalId Int?
+  UserInternal     UserInternal?      @relation(fields: [userInternalId], references: [id])
+  userInternalId   Int?
 }
 
 model UserInternal {
@@ -51,7 +50,6 @@ model Room {
   capacity     Int
   createAt     DateTime       @default(now())
   updateAt     DateTime       @updatedAt
-  //FacilityToRoom FacilityToRoom[]
   BranchToRoom BranchToRoom[]
   RoomRate     RoomRate[]
 }
@@ -70,7 +68,7 @@ model RoomRate {
 
 model durationCategory {
   id          Int        @id @default(autoincrement())
-  duration    Int        @unique
+  duration    Int
   createAt    DateTime   @default(now())
   updateAt    DateTime   @updatedAt
   RoomRate    RoomRate[]
