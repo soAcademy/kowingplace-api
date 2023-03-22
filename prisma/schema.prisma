@@ -32,6 +32,7 @@ model CoWork {
   userInternal     UserInternal?      @relation(fields: [userInternalId], references: [id])
   userInternalId   Int?               @unique //make one to one
   bookRoom         BookRoom[]
+  Room             Room[]
 }
 
 model UserInternal {
@@ -51,6 +52,8 @@ model Room {
   capacity     Int
   createAt     DateTime       @default(now())
   updateAt     DateTime       @updatedAt
+  coWork       CoWork         @relation(fields: [coWorkId], references: [id])
+  coWorkId     Int
   BranchToRoom BranchToRoom[]
   RoomRate     RoomRate[]
 }

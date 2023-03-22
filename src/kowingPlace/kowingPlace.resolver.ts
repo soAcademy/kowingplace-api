@@ -1,4 +1,4 @@
-import { date } from "fp-ts";
+import { date, random } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
   ICreateCoWorkDetail,
@@ -52,8 +52,25 @@ export const getCoWork24Hrs = async () => {
   return get24hrsOpen;
 };
 
-export const getCowork = () => prisma.coWork.findMany({});
-//let p'mac Math random at frontend
+// export const getCoworks = async () => {
+//   const coWork = await prisma.coWork.findMany({});
+
+//   while (coWork.length < 10) {
+//     let randomCoWorkIndex = Math.floor(Math.random() * coWork.length);
+//     let randomCowork = coWork[randomCoWorkIndex];
+//     console.log(randomCowork);
+//     return randomCowork;
+//   }
+// };
+
+export const getCoworks = async () => {
+  const coWork = await prisma.coWork.findMany({});
+  const recomendCowork = [];
+  for (let i = 0; i < 10; i++) {
+    const randomNumber = Math.floor(Math.random() * coWork.length);
+    recomendCowork.push(coWork[randomNumber]);
+  }
+};
 
 export const getRoomByCoWorkId = (args: IGgetRoomByCoWorkIdCodec) =>
   prisma.coWork.findUnique({
