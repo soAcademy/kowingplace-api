@@ -2,13 +2,16 @@ import { date } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
   ICreateCoWorkDetail,
+  ICreateFacility,
   ICreateFacilityIn,
   ICreateRoomInternal,
   ICreateUserExternal,
   ICreateUserInternal,
   IGetCoWorkUserChoose,
+  IGetCoworkByUserId,
   IGetStatusUserBookInternal,
   IGetUserConfirmBooking,
+  IGgetRoomByCoWorkIdCodec,
   IShowBookDetailInternalByCoWork,
   IUpdateCoWorkDetail,
 } from "./kowingPlace.interface";
@@ -52,7 +55,7 @@ export const getCoWork24Hrs = async () => {
 export const getCowork = () => prisma.coWork.findMany({});
 //let p'mac Math random at frontend
 
-export const getRoomByCoWorkId = (args: { coWorkId: number }) =>
+export const getRoomByCoWorkId = (args: IGgetRoomByCoWorkIdCodec) =>
   prisma.coWork.findUnique({
     where: {
       id: args.coWorkId,
@@ -69,7 +72,7 @@ export const getRoomByCoWorkId = (args: { coWorkId: number }) =>
     },
   });
 
-export const getCoworkByUserId = (args: { userInternalId: number }) =>
+export const getCoworkByUserId = (args: IGetCoworkByUserId) =>
   prisma.userInternal.findUnique({
     where: {
       id: args.userInternalId,
@@ -291,5 +294,12 @@ export const getStatusUserBookInternal = (args: IGetStatusUserBookInternal) =>
     },
     data: {
       status: "Arrived",
+    },
+  });
+
+export const createFacility = (args: ICreateFacility) =>
+  prisma.facility.create({
+    data: {
+      name: args.name,
     },
   });

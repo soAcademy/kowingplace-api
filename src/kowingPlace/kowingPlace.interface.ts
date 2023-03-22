@@ -124,3 +124,28 @@ export const getStatusUserBookInternalCodec = t.type({
 });
 export interface IGetStatusUserBookInternal
   extends t.TypeOf<typeof getStatusUserBookInternalCodec> {}
+
+//-------------------------------------------------
+
+export const createFacilityCodec = t.type({
+  name: t.string,
+});
+export interface ICreateFacility extends t.TypeOf<typeof createFacilityCodec> {}
+
+//-------------------------------------------------
+
+export const getRoomByCoWorkIdCodec = t.type({
+  coWorkId: t.number,
+});
+export interface IGgetRoomByCoWorkIdCodec
+  extends t.TypeOf<typeof getRoomByCoWorkIdCodec> {}
+
+//-------------------------------------------------
+
+export const getCoworkByUserIdCodec = t.type({
+  userInternalId: t.number,
+});
+export interface IGetCoworkByUserId
+  extends t.TypeOf<typeof getCoworkByUserIdCodec> {}
+
+//-------------------------------------------------
