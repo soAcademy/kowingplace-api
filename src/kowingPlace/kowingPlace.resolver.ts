@@ -70,6 +70,9 @@ export const getCoworks = async () => {
     const randomNumber = Math.floor(Math.random() * coWork.length);
     recomendCowork.push(coWork[randomNumber]);
   }
+  console.log(recomendCowork);
+
+  return recomendCowork;
 };
 
 export const getRoomByCoWorkId = (args: IGgetRoomByCoWorkIdCodec) =>

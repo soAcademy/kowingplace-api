@@ -6,7 +6,7 @@ import {
   createUserInternal,
   getCoWork24Hrs,
   getCoWorkUserChoose,
-  getCowork,
+  getCoworks,
   getCoworkByUserId,
   getRoomByCoWorkId,
   updateCoWorkDetail,
@@ -43,9 +43,9 @@ export const getCoWork24HrsHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const getCoworkHandler = async (req: Request, res: Response) => {
+export const getCoworksHandler = async (req: Request, res: Response) => {
   try {
-    const result = await getCowork();
+    const result = await getCoworks();
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({
