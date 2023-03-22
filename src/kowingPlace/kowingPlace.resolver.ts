@@ -1,9 +1,16 @@
 import { date } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
+  ICreateCoWorkDetail,
+  ICreateFacilityIn,
+  ICreateRoomInternal,
   ICreateUserExternal,
+  ICreateUserInternal,
   IGetCoWorkUserChoose,
+  IGetStatusUserBookInternal,
   IGetUserConfirmBooking,
+  IShowBookDetailInternalByCoWork,
+  IUpdateCoWorkDetail,
 } from "./kowingPlace.interface";
 export const prisma = new PrismaClient();
 
@@ -122,12 +129,7 @@ export const getVerifyCodeByUserConfirmBooking = async (
   return getBookData;
 };
 
-export const createUserInternal = (args: {
-  name: string;
-  email: string;
-  tel: string;
-  password: string;
-}) =>
+export const createUserInternal = (args: ICreateUserInternal) =>
   prisma.userInternal.create({
     data: {
       name: args.name,
@@ -138,15 +140,15 @@ export const createUserInternal = (args: {
   });
 
 //เส้นโชว์ ห้องประชุมทั้งหมด / ชื่อผู้ใช้ / booking detail
-export const showBookDetailInternalByCoWork = async (args: {
-  coWorkId: number;
-}) => {
+export const showBookDetailInternalByCoWork = async (
+  args: IShowBookDetailInternalByCoWork
+) => {
   const bookDetailData = await prisma.coWork.findUnique({
     where: {
       id: args.coWorkId,
     },
     select: {
-      BookRoom: {
+      bookRoom: {
         select: {
           startTime: true,
           status: true,
@@ -173,12 +175,7 @@ export const showBookDetailInternalByCoWork = async (args: {
   return bookDetailData;
 };
 
-export const createRoomInternal = async (args: {
-  name: string;
-  capacity: number;
-  rates: { price: number; durationId: number }[];
-  coworkId: number;
-}) => {
+export const createRoomInternal = async (args: ICreateRoomInternal) => {
   const createRoom = await prisma.branchToRoom.create({
     data: {
       coWork: {
@@ -250,25 +247,14 @@ export const updateRoomInternal = async (args: {
   return updateRoom;
 };
 
-//-------------------------------------------------------------
-
-export const createFacilityIn = (args: { name: string }) =>
+export const createFacilityIn = (args: ICreateFacilityIn) =>
   prisma.facility.createMany({
     data: {
       name: args.name,
     },
   });
 
-//-------------------------------------------------------------
-
-export const createCoWorkDetail = async (args: {
-  name: string;
-  description: string;
-  location: string;
-  tel: string;
-  picture: string;
-  userInternalId: number;
-}) => {
+export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
   const coWorkCreate = await prisma.coWork.create({
     data: {
       name: args.name,
@@ -282,15 +268,7 @@ export const createCoWorkDetail = async (args: {
   return coWorkCreate;
 };
 
-export const updateCoWorkDetail = async (args: {
-  name: string;
-  description: string;
-  location: string;
-  tel: string;
-  picture: string;
-  userInternalId: number;
-  coWorkId: number;
-}) => {
+export const updateCoWorkDetail = async (args: IUpdateCoWorkDetail) => {
   const coWorkupdate = await prisma.coWork.update({
     where: {
       id: args.coWorkId,
@@ -306,4 +284,12 @@ export const updateCoWorkDetail = async (args: {
   return coWorkupdate;
 };
 
-//-------------------------------------------------------------
+export const getStatusUserBookInternal = (args: IGetStatusUserBookInternal) =>
+  prisma.bookRoom.update({
+    where: {
+      id: args.coWorkId,
+    },
+    data: {
+      status: "Arrived",
+    },
+  });

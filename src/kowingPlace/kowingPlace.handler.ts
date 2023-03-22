@@ -13,6 +13,7 @@ import {
   updateRoomInternal,
   getVerifyCodeByUserConfirmBooking,
   showBookDetailInternalByCoWork,
+  getStatusUserBookInternal,
 } from "./kowingPlace.resolver";
 
 export const createUserExternalHandler = async (
@@ -185,6 +186,21 @@ export const showBookDetailInternalByCoWorkHandler = async (
   const args = req.body;
   try {
     const result = await showBookDetailInternalByCoWork(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+
+export const getStatusUserBookInternalHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await getStatusUserBookInternal(args);
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({

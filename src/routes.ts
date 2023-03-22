@@ -12,6 +12,7 @@ import {
   updateRoomInternalHandler,
   getVerifyCodeByUserConfirmBookingHandler,
   showBookDetailInternalByCoWorkHandler,
+  getStatusUserBookInternalHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
 
@@ -84,6 +85,11 @@ export const AppRoutes = [
   {
     path: "/kowing/showBookDetailInternalByCoWork",
     method: "post",
-    action: showBookDetailInternalByCoWorkHandler,
+    action: showBookDetailInternalByCoWorkHandler, //OK
+  },
+  {
+    path: "/kowing/getStatusUserBookInternal",
+    method: "post",
+    action: getStatusUserBookInternalHandler, //OK
   },
 ];

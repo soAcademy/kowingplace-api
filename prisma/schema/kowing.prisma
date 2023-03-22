@@ -21,7 +21,7 @@ model CoWork {
   FacilityToCoWork FacilityToCoWork[]
   userInternal     UserInternal?      @relation(fields: [userInternalId], references: [id])
   userInternalId   Int?               @unique //make one to one
-  BookRoom         BookRoom[]
+  bookRoom         BookRoom[]
 }
 
 model UserInternal {
@@ -59,7 +59,7 @@ model RoomRate {
 
 model durationCategory {
   id          Int        @id @default(autoincrement())
-  duration    Int
+  duration    Int        @default(1)
   createAt    DateTime   @default(now())
   updateAt    DateTime   @updatedAt
   RoomRate    RoomRate[]
@@ -120,6 +120,7 @@ model BookRoom {
   userExternalId       Int
   vertifyCode          VertifyBookingCode @relation(fields: [vertifyBookingCodeId], references: [id])
   vertifyBookingCodeId Int
+  //date
 }
 
 model OpenClose {
@@ -165,9 +166,5 @@ model VertifyBookingCode {
   bookdate   DateTime
   createAt   DateTime   @default(now())
   updateAt   DateTime   @updatedAt
-  BookRoom   BookRoom[]
+  bookRoom   BookRoom[]
 }
-
-//how do we should the data about 24 hours for filter in the frontend
-//check the many to many again 
-//should we have to focus on the Co-working can have many branch in this website
