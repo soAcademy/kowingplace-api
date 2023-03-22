@@ -65,14 +65,21 @@ export const getCoWork24Hrs = async () => {
 
 export const getCoworks = async () => {
   const coWork = await prisma.coWork.findMany({});
-  const recomendCowork = [];
-  for (let i = 0; i < 10; i++) {
-    const randomNumber = Math.floor(Math.random() * coWork.length);
-    recomendCowork.push(coWork[randomNumber]);
-  }
-  console.log(recomendCowork);
 
-  return recomendCowork;
+  const numIndex = [];
+  for (let i = 0; i < coWork.length; i++) {
+    console.log(i);
+    numIndex.push(i);
+  }
+  numIndex.sort((a, b) => Math.random() - 0.5);
+
+  const recommendCowork = [];
+  for (let i = 0; i < numIndex.length; i++) {
+    console.log(i);
+    recommendCowork.push(coWork[numIndex[i]]);
+  }
+
+  return recommendCowork;
 };
 
 export const getRoomByCoWorkId = (args: IGgetRoomByCoWorkIdCodec) =>
@@ -291,6 +298,75 @@ export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
   return coWorkCreate;
 };
 
+export const createOpenClose = (args: {
+  coWorkId: number;
+  openTimeMon: number;
+  closeTimeMon: number;
+  isOpenMon: boolean;
+  isOpen24hoursMon: boolean;
+  openTimeTue: number;
+  closeTimeTue: number;
+  isOpenTue: boolean;
+  isOpen24hoursTue: boolean;
+  openTimeWed: number;
+  closeTimeWed: number;
+  isOpenWed: boolean;
+  isOpen24hoursWed: boolean;
+  openTimeThurs: number;
+  closeTimeThurs: number;
+  isOpenThurs: boolean;
+  isOpen24hoursThurs: boolean;
+  openTimeFri: number;
+  closeTimeFri: number;
+  isOpenFri: boolean;
+  isOpen24hoursFri: boolean;
+  openTimeSat: number;
+  closeTimeSat: number;
+  isOpenSat: boolean;
+  isOpen24hoursSat: boolean;
+  openTimeSun: number;
+  closeTimeSun: number;
+  isOpenSun: boolean;
+  isOpen24hoursSun: boolean;
+}) =>
+  prisma.openClose.create({
+    data: {
+      openTimeMon: args.openTimeMon,
+      closeTimeMon: args.closeTimeMon,
+      isOpenMon: args.isOpenMon,
+      isOpen24hoursMon: args.isOpen24hoursMon,
+      openTimeTue: args.openTimeTue,
+      closeTimeTue: args.closeTimeTue,
+      isOpenTue: args.isOpenTue,
+      isOpen24hoursTue: args.isOpen24hoursTue,
+      openTimeWed: args.closeTimeWed,
+      closeTimeWed: args.closeTimeWed,
+      isOpenWed: args.isOpenWed,
+      isOpen24hoursWed: args.isOpen24hoursWed,
+      openTimeThurs: args.openTimeThurs,
+      closeTimeThurs: args.closeTimeThurs,
+      isOpenThurs: args.isOpen24hoursThurs,
+      isOpen24hoursThurs: args.isOpen24hoursThurs,
+      openTimeFri: args.openTimeFri,
+      closeTimeFri: args.closeTimeFri,
+      isOpenFri: args.isOpenFri,
+      isOpen24hoursFri: args.isOpen24hoursFri,
+      openTimeSat: args.openTimeSat,
+      closeTimeSat: args.closeTimeSat,
+      isOpenSat: args.isOpenSat,
+      isOpen24hoursSat: args.isOpen24hoursSat,
+      openTimeSun: args.openTimeSat,
+      closeTimeSun: args.closeTimeSun,
+      isOpenSun: args.isOpenSun,
+      isOpen24hoursSun: args.isOpen24hoursSun,
+      coWork: {
+        connect: {
+          id: args.coWorkId,
+        },
+      },
+    },
+  });
+
 export const updateCoWorkDetail = async (args: IUpdateCoWorkDetail) => {
   const coWorkupdate = await prisma.coWork.update({
     where: {
@@ -310,7 +386,7 @@ export const updateCoWorkDetail = async (args: IUpdateCoWorkDetail) => {
 export const getStatusUserBookInternal = (args: IGetStatusUserBookInternal) =>
   prisma.bookRoom.update({
     where: {
-      id: args.coWorkId,
+      id: args.bookRoomId,
     },
     data: {
       status: "Arrived",

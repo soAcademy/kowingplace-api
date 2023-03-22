@@ -14,6 +14,7 @@ import {
   getStatusUserBookInternalHandler,
   createFacilityHandler,
   getCoworksHandler,
+  createOpenCloseHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
 
@@ -92,11 +93,16 @@ export const AppRoutes = [
   {
     path: "/kowing/getStatusUserBookInternal",
     method: "post",
-    action: getStatusUserBookInternalHandler,
+    action: getStatusUserBookInternalHandler, //Ok
   },
   {
     path: "/kowing/getCoworks",
     method: "post",
-    action: getCoworksHandler,
+    action: getCoworksHandler, //OK  //with random
+  },
+  {
+    path: "/kowing/createOpenClose",
+    method: "post",
+    action: createOpenCloseHandler,
   },
 ];

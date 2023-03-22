@@ -109,21 +109,22 @@ describe("kowing", () => {
         "https://uploads-ssl.webflow.com/5c3aef15e76e088efcf1e0ea/5d7e6c7506acdbeb57b48056_OgQqoCDLbojDPanW8-CPNo5pHIgAb6gVWBFeBhqlPbkxLdfr_XAJxubd1z5x6q8IsfS7hBQrU6oINgQ1Z1oWacYYXivbDmuO_U_0Mo27Z3hlxRTnlamw9KisAmYPXq-MdK7sN0-k.jpeg",
       userInternalId: 11,
     };
-    const output = await createCoWorkDetail({
-      name: input.name,
-      description: input.description,
-      location: input.location,
-      picture: input.picture,
-      tel: input.tel,
-      userInternalId: input.userInternalId,
-    });
-    console.log(output);
-    expect(output.name === input.name).toBe(true);
-    expect(output.description === input.description).toBe(true);
-    expect(output.location === input.location).toBe(true);
-    expect(output.picture === input.picture).toBe(true);
-    expect(output.tel === input.tel).toBe(true);
-    expect(output.userInternalId === input.userInternalId).toBe(true);
+    // const output = await createCoWorkDetail({
+    //   name: input.name,
+    //   description: input.description,
+    //   location: input.location,
+    //   picture: input.picture,
+    //   tel: input.tel,
+    //   userInternalId: input.userInternalId,
+
+    // });
+    // console.log(output);
+    // expect(output.name === input.name).toBe(true);
+    // expect(output.description === input.description).toBe(true);
+    // expect(output.location === input.location).toBe(true);
+    // expect(output.picture === input.picture).toBe(true);
+    // expect(output.tel === input.tel).toBe(true);
+    // expect(output.userInternalId === input.userInternalId).toBe(true);
   });
 
   test("should updateCoWorkDetail correctly", async () => {

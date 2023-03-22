@@ -120,7 +120,7 @@ export interface IUpdateCoWorkDetail
 //-------------------------------------------------
 
 export const getStatusUserBookInternalCodec = t.type({
-  coWorkId: t.number,
+  bookRoomId: t.number,
 });
 export interface IGetStatusUserBookInternal
   extends t.TypeOf<typeof getStatusUserBookInternalCodec> {}

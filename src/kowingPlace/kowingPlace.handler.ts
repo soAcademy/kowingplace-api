@@ -15,6 +15,7 @@ import {
   showBookDetailInternalByCoWork,
   getStatusUserBookInternal,
   createFacility,
+  createOpenClose,
 } from "./kowingPlace.resolver";
 
 export const createUserExternalHandler = async (
@@ -213,6 +214,18 @@ export const createFacilityHandler = async (req: Request, res: Response) => {
   const args = req.body;
   try {
     const result = await createFacility(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+
+export const createOpenCloseHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  try {
+    const result = await createOpenClose(args);
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({
