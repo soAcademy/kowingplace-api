@@ -15,7 +15,8 @@
     "test": "jest --verbose",
     "test:trivia": "jest -- src/trivia",
     "test:twitter": "jest -- src/twitter",
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "vercel-build": "prisma generate && prisma migrate deploy"
   },
   "dependencies": {
     "@prisma/client": "4.11.0",
