@@ -283,7 +283,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/khunboeing/sprinttech/kowingplace-api/prisma/client",
+      "value": "/Users/panasun/sprinttech/kowingplace-api/prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -292,7 +292,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin"
+        "value": "darwin-arm64"
       },
       {
         "fromEnvVar": null,
@@ -340,9 +340,6 @@ warnEnvConflicts({
 const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
-
-path.join(__dirname, "libquery_engine-darwin.dylib.node");
-path.join(process.cwd(), "prisma/client/libquery_engine-darwin.dylib.node")
 
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
 path.join(process.cwd(), "prisma/client/libquery_engine-darwin-arm64.dylib.node")

@@ -23,11 +23,6 @@ export const AppRoutes = [
     method: "get",
     action: (req: any, res: any) => res.send("hello 7470"),
   },
-  // {
-  //   path: "/vv/a2",
-  //   method: "post",
-  //   action: (req: any, res: any) => createTimeOpenCloseHandler2(req, res),
-  // },
   {
     path: "/kowing/createUserExternal",
     method: "post",

@@ -227,6 +227,8 @@ export const createTimeOpenCloseHandler = async (
   res: Response
 ) => {
   const args = req.body;
+  console.log(args);
+  createTimeOpenCloseCodec.decode(args)._tag === "Right" ? "OK" : "NO";
   try {
     const result = await createTimeOpenClose(args);
     res.status(200).json(result);
