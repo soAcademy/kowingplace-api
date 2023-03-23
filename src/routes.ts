@@ -13,7 +13,7 @@ import {
   getStatusUserBookInternalHandler,
   createFacilityHandler,
   getCoworksHandler,
-  createTimeOpenCloseHandler2,
+  createTimeOpenCloseHandler,
 } from "./kowingPlace/kowingPlace.handler";
 // import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
 
@@ -23,11 +23,11 @@ export const AppRoutes = [
     method: "get",
     action: (req: any, res: any) => res.send("hello 7470"),
   },
-  {
-    path: "/vv/a2",
-    method: "post",
-    action: (req: any, res: any) => createTimeOpenCloseHandler2(req, res),
-  },
+  // {
+  //   path: "/vv/a2",
+  //   method: "post",
+  //   action: (req: any, res: any) => createTimeOpenCloseHandler2(req, res),
+  // },
   {
     path: "/kowing/createUserExternal",
     method: "post",
@@ -37,12 +37,12 @@ export const AppRoutes = [
   {
     path: "/kowing/getCoWorkUserChoose",
     method: "post",
-    action: getCoWorkUserChooseHandler, //Ok
+    action: getCoWorkUserChooseHandler, //OK
   },
   {
     path: "/kowing/getVerifyCodeByUserConfirmBooking",
     method: "post",
-    action: getVerifyCodeByUserConfirmBookingHandler,
+    action: getVerifyCodeByUserConfirmBookingHandler, //OK
   },
   {
     path: "/kowing/createUserInternal",
@@ -99,9 +99,9 @@ export const AppRoutes = [
     method: "post",
     action: getCoworksHandler, //OK  //with random
   },
-  // {
-  //   path: "/kowing/createTimeOpenClose",
-  //   method: "post",
-  //   action: createTimeOpenCloseHandler,
-  // },
+  {
+    path: "/kowing/createTimeOpenClose",
+    method: "post",
+    action: createTimeOpenCloseHandler,
+  },
 ];
