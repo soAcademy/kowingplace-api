@@ -148,32 +148,32 @@ export type OpenClose = {
   id: number
   openTimeMon: number
   closeTimeMon: number
-  isOpenMon: boolean
   isOpen24hoursMon: boolean
+  isOpenMon: boolean
   openTimeTue: number
   closeTimeTue: number
-  isOpenTue: boolean
   isOpen24hoursTue: boolean
+  isOpenTue: boolean
   openTimeWed: number
   closeTimeWed: number
-  isOpenWed: boolean
   isOpen24hoursWed: boolean
+  isOpenWed: boolean
   openTimeThurs: number
   closeTimeThurs: number
-  isOpenThurs: boolean
   isOpen24hoursThurs: boolean
+  isOpenThurs: boolean
   openTimeFri: number
   closeTimeFri: number
-  isOpenFri: boolean
   isOpen24hoursFri: boolean
+  isOpenFri: boolean
   openTimeSat: number
   closeTimeSat: number
-  isOpenSat: boolean
   isOpen24hoursSat: boolean
+  isOpenSat: boolean
   openTimeSun: number
   closeTimeSun: number
-  isOpenSun: boolean
   isOpen24hoursSun: boolean
+  isOpenSun: boolean
   coWorkId: number
   createAt: Date
   updateAt: Date
@@ -11559,32 +11559,32 @@ export namespace Prisma {
     id: number | null
     openTimeMon: number | null
     closeTimeMon: number | null
-    isOpenMon: boolean | null
     isOpen24hoursMon: boolean | null
+    isOpenMon: boolean | null
     openTimeTue: number | null
     closeTimeTue: number | null
-    isOpenTue: boolean | null
     isOpen24hoursTue: boolean | null
+    isOpenTue: boolean | null
     openTimeWed: number | null
     closeTimeWed: number | null
-    isOpenWed: boolean | null
     isOpen24hoursWed: boolean | null
+    isOpenWed: boolean | null
     openTimeThurs: number | null
     closeTimeThurs: number | null
-    isOpenThurs: boolean | null
     isOpen24hoursThurs: boolean | null
+    isOpenThurs: boolean | null
     openTimeFri: number | null
     closeTimeFri: number | null
-    isOpenFri: boolean | null
     isOpen24hoursFri: boolean | null
+    isOpenFri: boolean | null
     openTimeSat: number | null
     closeTimeSat: number | null
-    isOpenSat: boolean | null
     isOpen24hoursSat: boolean | null
+    isOpenSat: boolean | null
     openTimeSun: number | null
     closeTimeSun: number | null
-    isOpenSun: boolean | null
     isOpen24hoursSun: boolean | null
+    isOpenSun: boolean | null
     coWorkId: number | null
     createAt: Date | null
     updateAt: Date | null
@@ -11594,32 +11594,32 @@ export namespace Prisma {
     id: number | null
     openTimeMon: number | null
     closeTimeMon: number | null
-    isOpenMon: boolean | null
     isOpen24hoursMon: boolean | null
+    isOpenMon: boolean | null
     openTimeTue: number | null
     closeTimeTue: number | null
-    isOpenTue: boolean | null
     isOpen24hoursTue: boolean | null
+    isOpenTue: boolean | null
     openTimeWed: number | null
     closeTimeWed: number | null
-    isOpenWed: boolean | null
     isOpen24hoursWed: boolean | null
+    isOpenWed: boolean | null
     openTimeThurs: number | null
     closeTimeThurs: number | null
-    isOpenThurs: boolean | null
     isOpen24hoursThurs: boolean | null
+    isOpenThurs: boolean | null
     openTimeFri: number | null
     closeTimeFri: number | null
-    isOpenFri: boolean | null
     isOpen24hoursFri: boolean | null
+    isOpenFri: boolean | null
     openTimeSat: number | null
     closeTimeSat: number | null
-    isOpenSat: boolean | null
     isOpen24hoursSat: boolean | null
+    isOpenSat: boolean | null
     openTimeSun: number | null
     closeTimeSun: number | null
-    isOpenSun: boolean | null
     isOpen24hoursSun: boolean | null
+    isOpenSun: boolean | null
     coWorkId: number | null
     createAt: Date | null
     updateAt: Date | null
@@ -11629,32 +11629,32 @@ export namespace Prisma {
     id: number
     openTimeMon: number
     closeTimeMon: number
-    isOpenMon: number
     isOpen24hoursMon: number
+    isOpenMon: number
     openTimeTue: number
     closeTimeTue: number
-    isOpenTue: number
     isOpen24hoursTue: number
+    isOpenTue: number
     openTimeWed: number
     closeTimeWed: number
-    isOpenWed: number
     isOpen24hoursWed: number
+    isOpenWed: number
     openTimeThurs: number
     closeTimeThurs: number
-    isOpenThurs: number
     isOpen24hoursThurs: number
+    isOpenThurs: number
     openTimeFri: number
     closeTimeFri: number
-    isOpenFri: number
     isOpen24hoursFri: number
+    isOpenFri: number
     openTimeSat: number
     closeTimeSat: number
-    isOpenSat: number
     isOpen24hoursSat: number
+    isOpenSat: number
     openTimeSun: number
     closeTimeSun: number
-    isOpenSun: number
     isOpen24hoursSun: number
+    isOpenSun: number
     coWorkId: number
     createAt: number
     updateAt: number
@@ -11704,32 +11704,32 @@ export namespace Prisma {
     id?: true
     openTimeMon?: true
     closeTimeMon?: true
-    isOpenMon?: true
     isOpen24hoursMon?: true
+    isOpenMon?: true
     openTimeTue?: true
     closeTimeTue?: true
-    isOpenTue?: true
     isOpen24hoursTue?: true
+    isOpenTue?: true
     openTimeWed?: true
     closeTimeWed?: true
-    isOpenWed?: true
     isOpen24hoursWed?: true
+    isOpenWed?: true
     openTimeThurs?: true
     closeTimeThurs?: true
-    isOpenThurs?: true
     isOpen24hoursThurs?: true
+    isOpenThurs?: true
     openTimeFri?: true
     closeTimeFri?: true
-    isOpenFri?: true
     isOpen24hoursFri?: true
+    isOpenFri?: true
     openTimeSat?: true
     closeTimeSat?: true
-    isOpenSat?: true
     isOpen24hoursSat?: true
+    isOpenSat?: true
     openTimeSun?: true
     closeTimeSun?: true
-    isOpenSun?: true
     isOpen24hoursSun?: true
+    isOpenSun?: true
     coWorkId?: true
     createAt?: true
     updateAt?: true
@@ -11739,32 +11739,32 @@ export namespace Prisma {
     id?: true
     openTimeMon?: true
     closeTimeMon?: true
-    isOpenMon?: true
     isOpen24hoursMon?: true
+    isOpenMon?: true
     openTimeTue?: true
     closeTimeTue?: true
-    isOpenTue?: true
     isOpen24hoursTue?: true
+    isOpenTue?: true
     openTimeWed?: true
     closeTimeWed?: true
-    isOpenWed?: true
     isOpen24hoursWed?: true
+    isOpenWed?: true
     openTimeThurs?: true
     closeTimeThurs?: true
-    isOpenThurs?: true
     isOpen24hoursThurs?: true
+    isOpenThurs?: true
     openTimeFri?: true
     closeTimeFri?: true
-    isOpenFri?: true
     isOpen24hoursFri?: true
+    isOpenFri?: true
     openTimeSat?: true
     closeTimeSat?: true
-    isOpenSat?: true
     isOpen24hoursSat?: true
+    isOpenSat?: true
     openTimeSun?: true
     closeTimeSun?: true
-    isOpenSun?: true
     isOpen24hoursSun?: true
+    isOpenSun?: true
     coWorkId?: true
     createAt?: true
     updateAt?: true
@@ -11774,32 +11774,32 @@ export namespace Prisma {
     id?: true
     openTimeMon?: true
     closeTimeMon?: true
-    isOpenMon?: true
     isOpen24hoursMon?: true
+    isOpenMon?: true
     openTimeTue?: true
     closeTimeTue?: true
-    isOpenTue?: true
     isOpen24hoursTue?: true
+    isOpenTue?: true
     openTimeWed?: true
     closeTimeWed?: true
-    isOpenWed?: true
     isOpen24hoursWed?: true
+    isOpenWed?: true
     openTimeThurs?: true
     closeTimeThurs?: true
-    isOpenThurs?: true
     isOpen24hoursThurs?: true
+    isOpenThurs?: true
     openTimeFri?: true
     closeTimeFri?: true
-    isOpenFri?: true
     isOpen24hoursFri?: true
+    isOpenFri?: true
     openTimeSat?: true
     closeTimeSat?: true
-    isOpenSat?: true
     isOpen24hoursSat?: true
+    isOpenSat?: true
     openTimeSun?: true
     closeTimeSun?: true
-    isOpenSun?: true
     isOpen24hoursSun?: true
+    isOpenSun?: true
     coWorkId?: true
     createAt?: true
     updateAt?: true
@@ -11897,32 +11897,32 @@ export namespace Prisma {
     id: number
     openTimeMon: number
     closeTimeMon: number
-    isOpenMon: boolean
     isOpen24hoursMon: boolean
+    isOpenMon: boolean
     openTimeTue: number
     closeTimeTue: number
-    isOpenTue: boolean
     isOpen24hoursTue: boolean
+    isOpenTue: boolean
     openTimeWed: number
     closeTimeWed: number
-    isOpenWed: boolean
     isOpen24hoursWed: boolean
+    isOpenWed: boolean
     openTimeThurs: number
     closeTimeThurs: number
-    isOpenThurs: boolean
     isOpen24hoursThurs: boolean
+    isOpenThurs: boolean
     openTimeFri: number
     closeTimeFri: number
-    isOpenFri: boolean
     isOpen24hoursFri: boolean
+    isOpenFri: boolean
     openTimeSat: number
     closeTimeSat: number
-    isOpenSat: boolean
     isOpen24hoursSat: boolean
+    isOpenSat: boolean
     openTimeSun: number
     closeTimeSun: number
-    isOpenSun: boolean
     isOpen24hoursSun: boolean
+    isOpenSun: boolean
     coWorkId: number
     createAt: Date
     updateAt: Date
@@ -11951,32 +11951,32 @@ export namespace Prisma {
     id?: boolean
     openTimeMon?: boolean
     closeTimeMon?: boolean
-    isOpenMon?: boolean
     isOpen24hoursMon?: boolean
+    isOpenMon?: boolean
     openTimeTue?: boolean
     closeTimeTue?: boolean
-    isOpenTue?: boolean
     isOpen24hoursTue?: boolean
+    isOpenTue?: boolean
     openTimeWed?: boolean
     closeTimeWed?: boolean
-    isOpenWed?: boolean
     isOpen24hoursWed?: boolean
+    isOpenWed?: boolean
     openTimeThurs?: boolean
     closeTimeThurs?: boolean
-    isOpenThurs?: boolean
     isOpen24hoursThurs?: boolean
+    isOpenThurs?: boolean
     openTimeFri?: boolean
     closeTimeFri?: boolean
-    isOpenFri?: boolean
     isOpen24hoursFri?: boolean
+    isOpenFri?: boolean
     openTimeSat?: boolean
     closeTimeSat?: boolean
-    isOpenSat?: boolean
     isOpen24hoursSat?: boolean
+    isOpenSat?: boolean
     openTimeSun?: boolean
     closeTimeSun?: boolean
-    isOpenSun?: boolean
     isOpen24hoursSun?: boolean
+    isOpenSun?: boolean
     coWorkId?: boolean
     createAt?: boolean
     updateAt?: boolean
@@ -13848,32 +13848,32 @@ export namespace Prisma {
     id: 'id',
     openTimeMon: 'openTimeMon',
     closeTimeMon: 'closeTimeMon',
-    isOpenMon: 'isOpenMon',
     isOpen24hoursMon: 'isOpen24hoursMon',
+    isOpenMon: 'isOpenMon',
     openTimeTue: 'openTimeTue',
     closeTimeTue: 'closeTimeTue',
-    isOpenTue: 'isOpenTue',
     isOpen24hoursTue: 'isOpen24hoursTue',
+    isOpenTue: 'isOpenTue',
     openTimeWed: 'openTimeWed',
     closeTimeWed: 'closeTimeWed',
-    isOpenWed: 'isOpenWed',
     isOpen24hoursWed: 'isOpen24hoursWed',
+    isOpenWed: 'isOpenWed',
     openTimeThurs: 'openTimeThurs',
     closeTimeThurs: 'closeTimeThurs',
-    isOpenThurs: 'isOpenThurs',
     isOpen24hoursThurs: 'isOpen24hoursThurs',
+    isOpenThurs: 'isOpenThurs',
     openTimeFri: 'openTimeFri',
     closeTimeFri: 'closeTimeFri',
-    isOpenFri: 'isOpenFri',
     isOpen24hoursFri: 'isOpen24hoursFri',
+    isOpenFri: 'isOpenFri',
     openTimeSat: 'openTimeSat',
     closeTimeSat: 'closeTimeSat',
-    isOpenSat: 'isOpenSat',
     isOpen24hoursSat: 'isOpen24hoursSat',
+    isOpenSat: 'isOpenSat',
     openTimeSun: 'openTimeSun',
     closeTimeSun: 'closeTimeSun',
-    isOpenSun: 'isOpenSun',
     isOpen24hoursSun: 'isOpen24hoursSun',
+    isOpenSun: 'isOpenSun',
     coWorkId: 'coWorkId',
     createAt: 'createAt',
     updateAt: 'updateAt'
@@ -14539,32 +14539,32 @@ export namespace Prisma {
     id?: IntFilter | number
     openTimeMon?: IntFilter | number
     closeTimeMon?: IntFilter | number
-    isOpenMon?: BoolFilter | boolean
     isOpen24hoursMon?: BoolFilter | boolean
+    isOpenMon?: BoolFilter | boolean
     openTimeTue?: IntFilter | number
     closeTimeTue?: IntFilter | number
-    isOpenTue?: BoolFilter | boolean
     isOpen24hoursTue?: BoolFilter | boolean
+    isOpenTue?: BoolFilter | boolean
     openTimeWed?: IntFilter | number
     closeTimeWed?: IntFilter | number
-    isOpenWed?: BoolFilter | boolean
     isOpen24hoursWed?: BoolFilter | boolean
+    isOpenWed?: BoolFilter | boolean
     openTimeThurs?: IntFilter | number
     closeTimeThurs?: IntFilter | number
-    isOpenThurs?: BoolFilter | boolean
     isOpen24hoursThurs?: BoolFilter | boolean
+    isOpenThurs?: BoolFilter | boolean
     openTimeFri?: IntFilter | number
     closeTimeFri?: IntFilter | number
-    isOpenFri?: BoolFilter | boolean
     isOpen24hoursFri?: BoolFilter | boolean
+    isOpenFri?: BoolFilter | boolean
     openTimeSat?: IntFilter | number
     closeTimeSat?: IntFilter | number
-    isOpenSat?: BoolFilter | boolean
     isOpen24hoursSat?: BoolFilter | boolean
+    isOpenSat?: BoolFilter | boolean
     openTimeSun?: IntFilter | number
     closeTimeSun?: IntFilter | number
-    isOpenSun?: BoolFilter | boolean
     isOpen24hoursSun?: BoolFilter | boolean
+    isOpenSun?: BoolFilter | boolean
     coWorkId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
@@ -14576,32 +14576,32 @@ export namespace Prisma {
     id?: SortOrder
     openTimeMon?: SortOrder
     closeTimeMon?: SortOrder
-    isOpenMon?: SortOrder
     isOpen24hoursMon?: SortOrder
+    isOpenMon?: SortOrder
     openTimeTue?: SortOrder
     closeTimeTue?: SortOrder
-    isOpenTue?: SortOrder
     isOpen24hoursTue?: SortOrder
+    isOpenTue?: SortOrder
     openTimeWed?: SortOrder
     closeTimeWed?: SortOrder
-    isOpenWed?: SortOrder
     isOpen24hoursWed?: SortOrder
+    isOpenWed?: SortOrder
     openTimeThurs?: SortOrder
     closeTimeThurs?: SortOrder
-    isOpenThurs?: SortOrder
     isOpen24hoursThurs?: SortOrder
+    isOpenThurs?: SortOrder
     openTimeFri?: SortOrder
     closeTimeFri?: SortOrder
-    isOpenFri?: SortOrder
     isOpen24hoursFri?: SortOrder
+    isOpenFri?: SortOrder
     openTimeSat?: SortOrder
     closeTimeSat?: SortOrder
-    isOpenSat?: SortOrder
     isOpen24hoursSat?: SortOrder
+    isOpenSat?: SortOrder
     openTimeSun?: SortOrder
     closeTimeSun?: SortOrder
-    isOpenSun?: SortOrder
     isOpen24hoursSun?: SortOrder
+    isOpenSun?: SortOrder
     coWorkId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
@@ -14618,32 +14618,32 @@ export namespace Prisma {
     id?: SortOrder
     openTimeMon?: SortOrder
     closeTimeMon?: SortOrder
-    isOpenMon?: SortOrder
     isOpen24hoursMon?: SortOrder
+    isOpenMon?: SortOrder
     openTimeTue?: SortOrder
     closeTimeTue?: SortOrder
-    isOpenTue?: SortOrder
     isOpen24hoursTue?: SortOrder
+    isOpenTue?: SortOrder
     openTimeWed?: SortOrder
     closeTimeWed?: SortOrder
-    isOpenWed?: SortOrder
     isOpen24hoursWed?: SortOrder
+    isOpenWed?: SortOrder
     openTimeThurs?: SortOrder
     closeTimeThurs?: SortOrder
-    isOpenThurs?: SortOrder
     isOpen24hoursThurs?: SortOrder
+    isOpenThurs?: SortOrder
     openTimeFri?: SortOrder
     closeTimeFri?: SortOrder
-    isOpenFri?: SortOrder
     isOpen24hoursFri?: SortOrder
+    isOpenFri?: SortOrder
     openTimeSat?: SortOrder
     closeTimeSat?: SortOrder
-    isOpenSat?: SortOrder
     isOpen24hoursSat?: SortOrder
+    isOpenSat?: SortOrder
     openTimeSun?: SortOrder
     closeTimeSun?: SortOrder
-    isOpenSun?: SortOrder
     isOpen24hoursSun?: SortOrder
+    isOpenSun?: SortOrder
     coWorkId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
@@ -14661,32 +14661,32 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter | number
     openTimeMon?: IntWithAggregatesFilter | number
     closeTimeMon?: IntWithAggregatesFilter | number
-    isOpenMon?: BoolWithAggregatesFilter | boolean
     isOpen24hoursMon?: BoolWithAggregatesFilter | boolean
+    isOpenMon?: BoolWithAggregatesFilter | boolean
     openTimeTue?: IntWithAggregatesFilter | number
     closeTimeTue?: IntWithAggregatesFilter | number
-    isOpenTue?: BoolWithAggregatesFilter | boolean
     isOpen24hoursTue?: BoolWithAggregatesFilter | boolean
+    isOpenTue?: BoolWithAggregatesFilter | boolean
     openTimeWed?: IntWithAggregatesFilter | number
     closeTimeWed?: IntWithAggregatesFilter | number
-    isOpenWed?: BoolWithAggregatesFilter | boolean
     isOpen24hoursWed?: BoolWithAggregatesFilter | boolean
+    isOpenWed?: BoolWithAggregatesFilter | boolean
     openTimeThurs?: IntWithAggregatesFilter | number
     closeTimeThurs?: IntWithAggregatesFilter | number
-    isOpenThurs?: BoolWithAggregatesFilter | boolean
     isOpen24hoursThurs?: BoolWithAggregatesFilter | boolean
+    isOpenThurs?: BoolWithAggregatesFilter | boolean
     openTimeFri?: IntWithAggregatesFilter | number
     closeTimeFri?: IntWithAggregatesFilter | number
-    isOpenFri?: BoolWithAggregatesFilter | boolean
     isOpen24hoursFri?: BoolWithAggregatesFilter | boolean
+    isOpenFri?: BoolWithAggregatesFilter | boolean
     openTimeSat?: IntWithAggregatesFilter | number
     closeTimeSat?: IntWithAggregatesFilter | number
-    isOpenSat?: BoolWithAggregatesFilter | boolean
     isOpen24hoursSat?: BoolWithAggregatesFilter | boolean
+    isOpenSat?: BoolWithAggregatesFilter | boolean
     openTimeSun?: IntWithAggregatesFilter | number
     closeTimeSun?: IntWithAggregatesFilter | number
-    isOpenSun?: BoolWithAggregatesFilter | boolean
     isOpen24hoursSun?: BoolWithAggregatesFilter | boolean
+    isOpenSun?: BoolWithAggregatesFilter | boolean
     coWorkId?: IntWithAggregatesFilter | number
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
@@ -15376,32 +15376,32 @@ export namespace Prisma {
   export type OpenCloseCreateInput = {
     openTimeMon: number
     closeTimeMon: number
-    isOpenMon: boolean
     isOpen24hoursMon: boolean
+    isOpenMon: boolean
     openTimeTue: number
     closeTimeTue: number
-    isOpenTue: boolean
     isOpen24hoursTue: boolean
+    isOpenTue: boolean
     openTimeWed: number
     closeTimeWed: number
-    isOpenWed: boolean
     isOpen24hoursWed: boolean
+    isOpenWed: boolean
     openTimeThurs: number
     closeTimeThurs: number
-    isOpenThurs: boolean
     isOpen24hoursThurs: boolean
+    isOpenThurs: boolean
     openTimeFri: number
     closeTimeFri: number
-    isOpenFri: boolean
     isOpen24hoursFri: boolean
+    isOpenFri: boolean
     openTimeSat: number
     closeTimeSat: number
-    isOpenSat: boolean
     isOpen24hoursSat: boolean
+    isOpenSat: boolean
     openTimeSun: number
     closeTimeSun: number
-    isOpenSun: boolean
     isOpen24hoursSun: boolean
+    isOpenSun: boolean
     createAt?: Date | string
     updateAt?: Date | string
     coWork: CoWorkCreateNestedOneWithoutOpenCloseInput
@@ -15412,32 +15412,32 @@ export namespace Prisma {
     id?: number
     openTimeMon: number
     closeTimeMon: number
-    isOpenMon: boolean
     isOpen24hoursMon: boolean
+    isOpenMon: boolean
     openTimeTue: number
     closeTimeTue: number
-    isOpenTue: boolean
     isOpen24hoursTue: boolean
+    isOpenTue: boolean
     openTimeWed: number
     closeTimeWed: number
-    isOpenWed: boolean
     isOpen24hoursWed: boolean
+    isOpenWed: boolean
     openTimeThurs: number
     closeTimeThurs: number
-    isOpenThurs: boolean
     isOpen24hoursThurs: boolean
+    isOpenThurs: boolean
     openTimeFri: number
     closeTimeFri: number
-    isOpenFri: boolean
     isOpen24hoursFri: boolean
+    isOpenFri: boolean
     openTimeSat: number
     closeTimeSat: number
-    isOpenSat: boolean
     isOpen24hoursSat: boolean
+    isOpenSat: boolean
     openTimeSun: number
     closeTimeSun: number
-    isOpenSun: boolean
     isOpen24hoursSun: boolean
+    isOpenSun: boolean
     coWorkId: number
     createAt?: Date | string
     updateAt?: Date | string
@@ -15447,32 +15447,32 @@ export namespace Prisma {
   export type OpenCloseUpdateInput = {
     openTimeMon?: IntFieldUpdateOperationsInput | number
     closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     openTimeTue?: IntFieldUpdateOperationsInput | number
     closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     openTimeWed?: IntFieldUpdateOperationsInput | number
     closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     openTimeThurs?: IntFieldUpdateOperationsInput | number
     closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     openTimeFri?: IntFieldUpdateOperationsInput | number
     closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     openTimeSat?: IntFieldUpdateOperationsInput | number
     closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     openTimeSun?: IntFieldUpdateOperationsInput | number
     closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     coWork?: CoWorkUpdateOneRequiredWithoutOpenCloseNestedInput
@@ -15483,32 +15483,32 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     openTimeMon?: IntFieldUpdateOperationsInput | number
     closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     openTimeTue?: IntFieldUpdateOperationsInput | number
     closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     openTimeWed?: IntFieldUpdateOperationsInput | number
     closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     openTimeThurs?: IntFieldUpdateOperationsInput | number
     closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     openTimeFri?: IntFieldUpdateOperationsInput | number
     closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     openTimeSat?: IntFieldUpdateOperationsInput | number
     closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     openTimeSun?: IntFieldUpdateOperationsInput | number
     closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     coWorkId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15519,32 +15519,32 @@ export namespace Prisma {
     id?: number
     openTimeMon: number
     closeTimeMon: number
-    isOpenMon: boolean
     isOpen24hoursMon: boolean
+    isOpenMon: boolean
     openTimeTue: number
     closeTimeTue: number
-    isOpenTue: boolean
     isOpen24hoursTue: boolean
+    isOpenTue: boolean
     openTimeWed: number
     closeTimeWed: number
-    isOpenWed: boolean
     isOpen24hoursWed: boolean
+    isOpenWed: boolean
     openTimeThurs: number
     closeTimeThurs: number
-    isOpenThurs: boolean
     isOpen24hoursThurs: boolean
+    isOpenThurs: boolean
     openTimeFri: number
     closeTimeFri: number
-    isOpenFri: boolean
     isOpen24hoursFri: boolean
+    isOpenFri: boolean
     openTimeSat: number
     closeTimeSat: number
-    isOpenSat: boolean
     isOpen24hoursSat: boolean
+    isOpenSat: boolean
     openTimeSun: number
     closeTimeSun: number
-    isOpenSun: boolean
     isOpen24hoursSun: boolean
+    isOpenSun: boolean
     coWorkId: number
     createAt?: Date | string
     updateAt?: Date | string
@@ -15553,32 +15553,32 @@ export namespace Prisma {
   export type OpenCloseUpdateManyMutationInput = {
     openTimeMon?: IntFieldUpdateOperationsInput | number
     closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     openTimeTue?: IntFieldUpdateOperationsInput | number
     closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     openTimeWed?: IntFieldUpdateOperationsInput | number
     closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     openTimeThurs?: IntFieldUpdateOperationsInput | number
     closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     openTimeFri?: IntFieldUpdateOperationsInput | number
     closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     openTimeSat?: IntFieldUpdateOperationsInput | number
     closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     openTimeSun?: IntFieldUpdateOperationsInput | number
     closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15587,32 +15587,32 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     openTimeMon?: IntFieldUpdateOperationsInput | number
     closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     openTimeTue?: IntFieldUpdateOperationsInput | number
     closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     openTimeWed?: IntFieldUpdateOperationsInput | number
     closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     openTimeThurs?: IntFieldUpdateOperationsInput | number
     closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     openTimeFri?: IntFieldUpdateOperationsInput | number
     closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     openTimeSat?: IntFieldUpdateOperationsInput | number
     closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     openTimeSun?: IntFieldUpdateOperationsInput | number
     closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     coWorkId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16271,32 +16271,32 @@ export namespace Prisma {
     id?: SortOrder
     openTimeMon?: SortOrder
     closeTimeMon?: SortOrder
-    isOpenMon?: SortOrder
     isOpen24hoursMon?: SortOrder
+    isOpenMon?: SortOrder
     openTimeTue?: SortOrder
     closeTimeTue?: SortOrder
-    isOpenTue?: SortOrder
     isOpen24hoursTue?: SortOrder
+    isOpenTue?: SortOrder
     openTimeWed?: SortOrder
     closeTimeWed?: SortOrder
-    isOpenWed?: SortOrder
     isOpen24hoursWed?: SortOrder
+    isOpenWed?: SortOrder
     openTimeThurs?: SortOrder
     closeTimeThurs?: SortOrder
-    isOpenThurs?: SortOrder
     isOpen24hoursThurs?: SortOrder
+    isOpenThurs?: SortOrder
     openTimeFri?: SortOrder
     closeTimeFri?: SortOrder
-    isOpenFri?: SortOrder
     isOpen24hoursFri?: SortOrder
+    isOpenFri?: SortOrder
     openTimeSat?: SortOrder
     closeTimeSat?: SortOrder
-    isOpenSat?: SortOrder
     isOpen24hoursSat?: SortOrder
+    isOpenSat?: SortOrder
     openTimeSun?: SortOrder
     closeTimeSun?: SortOrder
-    isOpenSun?: SortOrder
     isOpen24hoursSun?: SortOrder
+    isOpenSun?: SortOrder
     coWorkId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
@@ -16325,32 +16325,32 @@ export namespace Prisma {
     id?: SortOrder
     openTimeMon?: SortOrder
     closeTimeMon?: SortOrder
-    isOpenMon?: SortOrder
     isOpen24hoursMon?: SortOrder
+    isOpenMon?: SortOrder
     openTimeTue?: SortOrder
     closeTimeTue?: SortOrder
-    isOpenTue?: SortOrder
     isOpen24hoursTue?: SortOrder
+    isOpenTue?: SortOrder
     openTimeWed?: SortOrder
     closeTimeWed?: SortOrder
-    isOpenWed?: SortOrder
     isOpen24hoursWed?: SortOrder
+    isOpenWed?: SortOrder
     openTimeThurs?: SortOrder
     closeTimeThurs?: SortOrder
-    isOpenThurs?: SortOrder
     isOpen24hoursThurs?: SortOrder
+    isOpenThurs?: SortOrder
     openTimeFri?: SortOrder
     closeTimeFri?: SortOrder
-    isOpenFri?: SortOrder
     isOpen24hoursFri?: SortOrder
+    isOpenFri?: SortOrder
     openTimeSat?: SortOrder
     closeTimeSat?: SortOrder
-    isOpenSat?: SortOrder
     isOpen24hoursSat?: SortOrder
+    isOpenSat?: SortOrder
     openTimeSun?: SortOrder
     closeTimeSun?: SortOrder
-    isOpenSun?: SortOrder
     isOpen24hoursSun?: SortOrder
+    isOpenSun?: SortOrder
     coWorkId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
@@ -16360,32 +16360,32 @@ export namespace Prisma {
     id?: SortOrder
     openTimeMon?: SortOrder
     closeTimeMon?: SortOrder
-    isOpenMon?: SortOrder
     isOpen24hoursMon?: SortOrder
+    isOpenMon?: SortOrder
     openTimeTue?: SortOrder
     closeTimeTue?: SortOrder
-    isOpenTue?: SortOrder
     isOpen24hoursTue?: SortOrder
+    isOpenTue?: SortOrder
     openTimeWed?: SortOrder
     closeTimeWed?: SortOrder
-    isOpenWed?: SortOrder
     isOpen24hoursWed?: SortOrder
+    isOpenWed?: SortOrder
     openTimeThurs?: SortOrder
     closeTimeThurs?: SortOrder
-    isOpenThurs?: SortOrder
     isOpen24hoursThurs?: SortOrder
+    isOpenThurs?: SortOrder
     openTimeFri?: SortOrder
     closeTimeFri?: SortOrder
-    isOpenFri?: SortOrder
     isOpen24hoursFri?: SortOrder
+    isOpenFri?: SortOrder
     openTimeSat?: SortOrder
     closeTimeSat?: SortOrder
-    isOpenSat?: SortOrder
     isOpen24hoursSat?: SortOrder
+    isOpenSat?: SortOrder
     openTimeSun?: SortOrder
     closeTimeSun?: SortOrder
-    isOpenSun?: SortOrder
     isOpen24hoursSun?: SortOrder
+    isOpenSun?: SortOrder
     coWorkId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
@@ -17425,32 +17425,32 @@ export namespace Prisma {
   export type OpenCloseCreateWithoutCoWorkInput = {
     openTimeMon: number
     closeTimeMon: number
-    isOpenMon: boolean
     isOpen24hoursMon: boolean
+    isOpenMon: boolean
     openTimeTue: number
     closeTimeTue: number
-    isOpenTue: boolean
     isOpen24hoursTue: boolean
+    isOpenTue: boolean
     openTimeWed: number
     closeTimeWed: number
-    isOpenWed: boolean
     isOpen24hoursWed: boolean
+    isOpenWed: boolean
     openTimeThurs: number
     closeTimeThurs: number
-    isOpenThurs: boolean
     isOpen24hoursThurs: boolean
+    isOpenThurs: boolean
     openTimeFri: number
     closeTimeFri: number
-    isOpenFri: boolean
     isOpen24hoursFri: boolean
+    isOpenFri: boolean
     openTimeSat: number
     closeTimeSat: number
-    isOpenSat: boolean
     isOpen24hoursSat: boolean
+    isOpenSat: boolean
     openTimeSun: number
     closeTimeSun: number
-    isOpenSun: boolean
     isOpen24hoursSun: boolean
+    isOpenSun: boolean
     createAt?: Date | string
     updateAt?: Date | string
     durationCategory?: durationCategoryCreateNestedManyWithoutOpencloseInput
@@ -17460,32 +17460,32 @@ export namespace Prisma {
     id?: number
     openTimeMon: number
     closeTimeMon: number
-    isOpenMon: boolean
     isOpen24hoursMon: boolean
+    isOpenMon: boolean
     openTimeTue: number
     closeTimeTue: number
-    isOpenTue: boolean
     isOpen24hoursTue: boolean
+    isOpenTue: boolean
     openTimeWed: number
     closeTimeWed: number
-    isOpenWed: boolean
     isOpen24hoursWed: boolean
+    isOpenWed: boolean
     openTimeThurs: number
     closeTimeThurs: number
-    isOpenThurs: boolean
     isOpen24hoursThurs: boolean
+    isOpenThurs: boolean
     openTimeFri: number
     closeTimeFri: number
-    isOpenFri: boolean
     isOpen24hoursFri: boolean
+    isOpenFri: boolean
     openTimeSat: number
     closeTimeSat: number
-    isOpenSat: boolean
     isOpen24hoursSat: boolean
+    isOpenSat: boolean
     openTimeSun: number
     closeTimeSun: number
-    isOpenSun: boolean
     isOpen24hoursSun: boolean
+    isOpenSun: boolean
     createAt?: Date | string
     updateAt?: Date | string
     durationCategory?: durationCategoryUncheckedCreateNestedManyWithoutOpencloseInput
@@ -17609,32 +17609,32 @@ export namespace Prisma {
   export type OpenCloseUpdateWithoutCoWorkInput = {
     openTimeMon?: IntFieldUpdateOperationsInput | number
     closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     openTimeTue?: IntFieldUpdateOperationsInput | number
     closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     openTimeWed?: IntFieldUpdateOperationsInput | number
     closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     openTimeThurs?: IntFieldUpdateOperationsInput | number
     closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     openTimeFri?: IntFieldUpdateOperationsInput | number
     closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     openTimeSat?: IntFieldUpdateOperationsInput | number
     closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     openTimeSun?: IntFieldUpdateOperationsInput | number
     closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationCategory?: durationCategoryUpdateManyWithoutOpencloseNestedInput
@@ -17644,32 +17644,32 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     openTimeMon?: IntFieldUpdateOperationsInput | number
     closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     openTimeTue?: IntFieldUpdateOperationsInput | number
     closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     openTimeWed?: IntFieldUpdateOperationsInput | number
     closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     openTimeThurs?: IntFieldUpdateOperationsInput | number
     closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     openTimeFri?: IntFieldUpdateOperationsInput | number
     closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     openTimeSat?: IntFieldUpdateOperationsInput | number
     closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     openTimeSun?: IntFieldUpdateOperationsInput | number
     closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationCategory?: durationCategoryUncheckedUpdateManyWithoutOpencloseNestedInput
@@ -18057,32 +18057,32 @@ export namespace Prisma {
   export type OpenCloseCreateWithoutDurationCategoryInput = {
     openTimeMon: number
     closeTimeMon: number
-    isOpenMon: boolean
     isOpen24hoursMon: boolean
+    isOpenMon: boolean
     openTimeTue: number
     closeTimeTue: number
-    isOpenTue: boolean
     isOpen24hoursTue: boolean
+    isOpenTue: boolean
     openTimeWed: number
     closeTimeWed: number
-    isOpenWed: boolean
     isOpen24hoursWed: boolean
+    isOpenWed: boolean
     openTimeThurs: number
     closeTimeThurs: number
-    isOpenThurs: boolean
     isOpen24hoursThurs: boolean
+    isOpenThurs: boolean
     openTimeFri: number
     closeTimeFri: number
-    isOpenFri: boolean
     isOpen24hoursFri: boolean
+    isOpenFri: boolean
     openTimeSat: number
     closeTimeSat: number
-    isOpenSat: boolean
     isOpen24hoursSat: boolean
+    isOpenSat: boolean
     openTimeSun: number
     closeTimeSun: number
-    isOpenSun: boolean
     isOpen24hoursSun: boolean
+    isOpenSun: boolean
     createAt?: Date | string
     updateAt?: Date | string
     coWork: CoWorkCreateNestedOneWithoutOpenCloseInput
@@ -18092,32 +18092,32 @@ export namespace Prisma {
     id?: number
     openTimeMon: number
     closeTimeMon: number
-    isOpenMon: boolean
     isOpen24hoursMon: boolean
+    isOpenMon: boolean
     openTimeTue: number
     closeTimeTue: number
-    isOpenTue: boolean
     isOpen24hoursTue: boolean
+    isOpenTue: boolean
     openTimeWed: number
     closeTimeWed: number
-    isOpenWed: boolean
     isOpen24hoursWed: boolean
+    isOpenWed: boolean
     openTimeThurs: number
     closeTimeThurs: number
-    isOpenThurs: boolean
     isOpen24hoursThurs: boolean
+    isOpenThurs: boolean
     openTimeFri: number
     closeTimeFri: number
-    isOpenFri: boolean
     isOpen24hoursFri: boolean
+    isOpenFri: boolean
     openTimeSat: number
     closeTimeSat: number
-    isOpenSat: boolean
     isOpen24hoursSat: boolean
+    isOpenSat: boolean
     openTimeSun: number
     closeTimeSun: number
-    isOpenSun: boolean
     isOpen24hoursSun: boolean
+    isOpenSun: boolean
     coWorkId: number
     createAt?: Date | string
     updateAt?: Date | string
@@ -18152,32 +18152,32 @@ export namespace Prisma {
   export type OpenCloseUpdateWithoutDurationCategoryInput = {
     openTimeMon?: IntFieldUpdateOperationsInput | number
     closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     openTimeTue?: IntFieldUpdateOperationsInput | number
     closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     openTimeWed?: IntFieldUpdateOperationsInput | number
     closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     openTimeThurs?: IntFieldUpdateOperationsInput | number
     closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     openTimeFri?: IntFieldUpdateOperationsInput | number
     closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     openTimeSat?: IntFieldUpdateOperationsInput | number
     closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     openTimeSun?: IntFieldUpdateOperationsInput | number
     closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     coWork?: CoWorkUpdateOneRequiredWithoutOpenCloseNestedInput
@@ -18187,32 +18187,32 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     openTimeMon?: IntFieldUpdateOperationsInput | number
     closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
+    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
     openTimeTue?: IntFieldUpdateOperationsInput | number
     closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
+    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
     openTimeWed?: IntFieldUpdateOperationsInput | number
     closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
+    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
     openTimeThurs?: IntFieldUpdateOperationsInput | number
     closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
+    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
     openTimeFri?: IntFieldUpdateOperationsInput | number
     closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
+    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
     openTimeSat?: IntFieldUpdateOperationsInput | number
     closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
     openTimeSun?: IntFieldUpdateOperationsInput | number
     closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
+    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
     coWorkId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string

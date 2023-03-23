@@ -127,32 +127,32 @@ model OpenClose {
   id                 Int                @id @default(autoincrement())
   openTimeMon        Int
   closeTimeMon       Int
-  isOpenMon          Boolean
   isOpen24hoursMon   Boolean
+  isOpenMon          Boolean
   openTimeTue        Int
   closeTimeTue       Int
-  isOpenTue          Boolean
   isOpen24hoursTue   Boolean
+  isOpenTue          Boolean
   openTimeWed        Int
   closeTimeWed       Int
-  isOpenWed          Boolean
   isOpen24hoursWed   Boolean
+  isOpenWed          Boolean
   openTimeThurs      Int
   closeTimeThurs     Int
-  isOpenThurs        Boolean
   isOpen24hoursThurs Boolean
+  isOpenThurs        Boolean
   openTimeFri        Int
   closeTimeFri       Int
-  isOpenFri          Boolean
   isOpen24hoursFri   Boolean
+  isOpenFri          Boolean
   openTimeSat        Int
   closeTimeSat       Int
-  isOpenSat          Boolean
   isOpen24hoursSat   Boolean
+  isOpenSat          Boolean
   openTimeSun        Int
   closeTimeSun       Int
-  isOpenSun          Boolean
   isOpen24hoursSun   Boolean
+  isOpenSun          Boolean
   coWork             CoWork             @relation(fields: [coWorkId], references: [id])
   coWorkId           Int                @unique
   createAt           DateTime           @default(now())
