@@ -222,26 +222,16 @@ export const createFacilityHandler = async (req: Request, res: Response) => {
   }
 };
 
-// export const createTimeOpenCloseHandler2 = (req: Request, res: Response) => {
-//   const args = req.body;
-//   console.log(args);
-// createTimeOpenCloseCodec.decode(args)._tag === "Right" ? "OK" : "NO";
-// try {
-//   const result = await createTimeOpenClose(args);
-//   res.status(200).json(result);
-// } catch (e) {
-//   res.status(500).json({
-//     error: String(e),
-//   });
-// }
-// };
-
-export const createTimeOpenCloseHandler2 = (req: Request, res: Response) => {
-  try {
-    res.status(200).json({ result: 4 });
-  } catch (e) {
-    res.status(500).json({
-      error: String(e),
-    });
-  }
+export const createTimeOpenCloseHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  console.log(args);
+createTimeOpenCloseCodec.decode(args)._tag === "Right" ? "OK" : "NO";
+try {
+  const result = await createTimeOpenClose(args);
+  res.status(200).json(result);
+} catch (e) {
+  res.status(500).json({
+    error: String(e),
+  });
+}
 };
