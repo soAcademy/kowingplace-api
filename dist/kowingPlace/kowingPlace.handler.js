@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createOpenCloseHandler = exports.createFacilityHandler = exports.getStatusUserBookInternalHandler = exports.showBookDetailInternalByCoWorkHandler = exports.getCoworkByUserIdHandler = exports.getRoomByCoWorkIdHandler = exports.updateRoomInternalHandler = exports.updateCoWorkDetailHandler = exports.createCoWorkDetailHandler = exports.createRoomInternalHandler = exports.createUserInternalHandler = exports.getVerifyCodeByUserConfirmBookingHandler = exports.getCoWorkUserChooseHandler = exports.getCoworksHandler = exports.getCoWork24HrsHandler = exports.createUserExternalHandler = void 0;
+exports.createTimeOpenCloseHandler2 = exports.createFacilityHandler = exports.getStatusUserBookInternalHandler = exports.showBookDetailInternalByCoWorkHandler = exports.getCoworkByUserIdHandler = exports.getRoomByCoWorkIdHandler = exports.updateRoomInternalHandler = exports.updateCoWorkDetailHandler = exports.createCoWorkDetailHandler = exports.createRoomInternalHandler = exports.createUserInternalHandler = exports.getVerifyCodeByUserConfirmBookingHandler = exports.getCoWorkUserChooseHandler = exports.getCoworksHandler = exports.createUserExternalHandler = void 0;
 const kowingPlace_resolver_1 = require("./kowingPlace.resolver");
 const createUserExternalHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const args = req.body;
@@ -24,18 +24,16 @@ const createUserExternalHandler = (req, res) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.createUserExternalHandler = createUserExternalHandler;
-const getCoWork24HrsHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield (0, kowingPlace_resolver_1.getCoWork24Hrs)();
-        res.status(200).json(result);
-    }
-    catch (e) {
-        res.status(500).json({
-            error: String(e),
-        });
-    }
-});
-exports.getCoWork24HrsHandler = getCoWork24HrsHandler;
+// export const getCoWork24HrsHandler = async (req: Request, res: Response) => {
+//   try {
+//     const result = await getCoWork24Hrs();
+//     res.status(200).json(result);
+//   } catch (e) {
+//     res.status(500).json({
+//       error: String(e),
+//     });
+//   }
+// };
 const getCoworksHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, kowingPlace_resolver_1.getCoworks)();
@@ -204,10 +202,23 @@ const createFacilityHandler = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.createFacilityHandler = createFacilityHandler;
-const createOpenCloseHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// export const createTimeOpenCloseHandler2 = (req: Request, res: Response) => {
+//   const args = req.body;
+//   console.log(args);
+// createTimeOpenCloseCodec.decode(args)._tag === "Right" ? "OK" : "NO";
+// try {
+//   const result = await createTimeOpenClose(args);
+//   res.status(200).json(result);
+// } catch (e) {
+//   res.status(500).json({
+//     error: String(e),
+//   });
+// }
+// };
+const createTimeOpenCloseHandler2 = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const args = req.body;
     try {
-        const result = yield (0, kowingPlace_resolver_1.createOpenClose)(args);
+        const result = yield (0, kowingPlace_resolver_1.createFacility)(args);
         res.status(200).json(result);
     }
     catch (e) {
@@ -216,4 +227,4 @@ const createOpenCloseHandler = (req, res) => __awaiter(void 0, void 0, void 0, f
         });
     }
 });
-exports.createOpenCloseHandler = createOpenCloseHandler;
+exports.createTimeOpenCloseHandler2 = createTimeOpenCloseHandler2;

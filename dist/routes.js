@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppRoutes = void 0;
 const kowingPlace_handler_1 = require("./kowingPlace/kowingPlace.handler");
+// import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
 exports.AppRoutes = [
     {
         path: "/server/boeing",
@@ -12,11 +13,6 @@ exports.AppRoutes = [
         path: "/kowing/createUserExternal",
         method: "post",
         action: kowingPlace_handler_1.createUserExternalHandler, //OK
-    },
-    {
-        path: "/kowing/getCoWork24Hrs",
-        method: "post",
-        action: kowingPlace_handler_1.getCoWork24HrsHandler, //OK
     },
     {
         path: "/kowing/getCoWorkUserChoose",
@@ -84,8 +80,13 @@ exports.AppRoutes = [
         action: kowingPlace_handler_1.getCoworksHandler, //OK  //with random
     },
     {
-        path: "/kowing/createOpenClose",
+        path: "/kowing/a2",
         method: "post",
-        action: kowingPlace_handler_1.createOpenCloseHandler,
+        action: kowingPlace_handler_1.createTimeOpenCloseHandler2,
     },
+    // {
+    //   path: "/kowing/createTimeOpenClose",
+    //   method: "post",
+    //   action: createTimeOpenCloseHandler,
+    // },
 ];

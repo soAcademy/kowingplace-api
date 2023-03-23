@@ -141,45 +141,6 @@ export type BookRoom = {
 }
 
 /**
- * Model OpenClose
- * 
- */
-export type OpenClose = {
-  id: number
-  openTimeMon: number
-  closeTimeMon: number
-  isOpen24hoursMon: boolean
-  isOpenMon: boolean
-  openTimeTue: number
-  closeTimeTue: number
-  isOpen24hoursTue: boolean
-  isOpenTue: boolean
-  openTimeWed: number
-  closeTimeWed: number
-  isOpen24hoursWed: boolean
-  isOpenWed: boolean
-  openTimeThurs: number
-  closeTimeThurs: number
-  isOpen24hoursThurs: boolean
-  isOpenThurs: boolean
-  openTimeFri: number
-  closeTimeFri: number
-  isOpen24hoursFri: boolean
-  isOpenFri: boolean
-  openTimeSat: number
-  closeTimeSat: number
-  isOpen24hoursSat: boolean
-  isOpenSat: boolean
-  openTimeSun: number
-  closeTimeSun: number
-  isOpen24hoursSun: boolean
-  isOpenSun: boolean
-  coWorkId: number
-  createAt: Date
-  updateAt: Date
-}
-
-/**
  * Model VertifyBookingCode
  * 
  */
@@ -187,6 +148,60 @@ export type VertifyBookingCode = {
   id: number
   verifyCode: string
   bookdate: Date
+  createAt: Date
+  updateAt: Date
+}
+
+/**
+ * Model Open
+ * 
+ */
+export type Open = {
+  id: number
+  monOpen: number
+  tueOpen: number
+  wedOpen: number
+  thursOpen: number
+  friOpen: number
+  satOpen: number
+  sunOpen: number
+  coWorkId: number
+  createAt: Date
+  updateAt: Date
+}
+
+/**
+ * Model Close
+ * 
+ */
+export type Close = {
+  id: number
+  monClose: number
+  tueClose: number
+  wedClose: number
+  thursClose: number
+  friClose: number
+  satClose: number
+  sunClose: number
+  coWorkId: number
+  createAt: Date
+  updateAt: Date
+}
+
+/**
+ * Model OpenClose24Hours
+ * 
+ */
+export type OpenClose24Hours = {
+  id: number
+  mon24hours: boolean
+  tue24hours: boolean
+  wed24hours: boolean
+  thurs24hours: boolean
+  fri24hours: boolean
+  sat24hours: boolean
+  sun24hours: boolean
+  coWorkId: number
   createAt: Date
   updateAt: Date
 }
@@ -410,16 +425,6 @@ export class PrismaClient<
   get bookRoom(): Prisma.BookRoomDelegate<GlobalReject>;
 
   /**
-   * `prisma.openClose`: Exposes CRUD operations for the **OpenClose** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more OpenCloses
-    * const openCloses = await prisma.openClose.findMany()
-    * ```
-    */
-  get openClose(): Prisma.OpenCloseDelegate<GlobalReject>;
-
-  /**
    * `prisma.vertifyBookingCode`: Exposes CRUD operations for the **VertifyBookingCode** model.
     * Example usage:
     * ```ts
@@ -428,6 +433,36 @@ export class PrismaClient<
     * ```
     */
   get vertifyBookingCode(): Prisma.VertifyBookingCodeDelegate<GlobalReject>;
+
+  /**
+   * `prisma.open`: Exposes CRUD operations for the **Open** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Opens
+    * const opens = await prisma.open.findMany()
+    * ```
+    */
+  get open(): Prisma.OpenDelegate<GlobalReject>;
+
+  /**
+   * `prisma.close`: Exposes CRUD operations for the **Close** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Closes
+    * const closes = await prisma.close.findMany()
+    * ```
+    */
+  get close(): Prisma.CloseDelegate<GlobalReject>;
+
+  /**
+   * `prisma.openClose24Hours`: Exposes CRUD operations for the **OpenClose24Hours** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OpenClose24Hours
+    * const openClose24Hours = await prisma.openClose24Hours.findMany()
+    * ```
+    */
+  get openClose24Hours(): Prisma.OpenClose24HoursDelegate<GlobalReject>;
 }
 
 export namespace Prisma {
@@ -907,8 +942,10 @@ export namespace Prisma {
     FacilityToCoWork: 'FacilityToCoWork',
     BranchToRoom: 'BranchToRoom',
     BookRoom: 'BookRoom',
-    OpenClose: 'OpenClose',
-    VertifyBookingCode: 'VertifyBookingCode'
+    VertifyBookingCode: 'VertifyBookingCode',
+    Open: 'Open',
+    Close: 'Close',
+    OpenClose24Hours: 'OpenClose24Hours'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1329,49 +1366,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the FacilityCountOutputType
      */
     select?: FacilityCountOutputTypeSelect | null
-  }
-
-
-
-  /**
-   * Count Type OpenCloseCountOutputType
-   */
-
-
-  export type OpenCloseCountOutputType = {
-    durationCategory: number
-  }
-
-  export type OpenCloseCountOutputTypeSelect = {
-    durationCategory?: boolean
-  }
-
-  export type OpenCloseCountOutputTypeGetPayload<S extends boolean | null | undefined | OpenCloseCountOutputTypeArgs> =
-    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? OpenCloseCountOutputType :
-    S extends undefined ? never :
-    S extends { include: any } & (OpenCloseCountOutputTypeArgs)
-    ? OpenCloseCountOutputType 
-    : S extends { select: any } & (OpenCloseCountOutputTypeArgs)
-      ? {
-    [P in TruthyKeys<S['select']>]:
-    P extends keyof OpenCloseCountOutputType ? OpenCloseCountOutputType[P] : never
-  } 
-      : OpenCloseCountOutputType
-
-
-
-
-  // Custom InputTypes
-
-  /**
-   * OpenCloseCountOutputType without action
-   */
-  export type OpenCloseCountOutputTypeArgs = {
-    /**
-     * Select specific fields to fetch from the OpenCloseCountOutputType
-     */
-    select?: OpenCloseCountOutputTypeSelect | null
   }
 
 
@@ -2650,20 +2644,24 @@ export namespace Prisma {
     picture?: boolean
     userInternalId?: boolean
     BranchToRoom?: boolean | CoWork$BranchToRoomArgs
-    OpenClose?: boolean | OpenCloseArgs
     FacilityToCoWork?: boolean | CoWork$FacilityToCoWorkArgs
     userInternal?: boolean | UserInternalArgs
     bookRoom?: boolean | CoWork$bookRoomArgs
+    Close?: boolean | CloseArgs
+    Open?: boolean | OpenArgs
+    OpenClose24Hours?: boolean | OpenClose24HoursArgs
     _count?: boolean | CoWorkCountOutputTypeArgs
   }
 
 
   export type CoWorkInclude = {
     BranchToRoom?: boolean | CoWork$BranchToRoomArgs
-    OpenClose?: boolean | OpenCloseArgs
     FacilityToCoWork?: boolean | CoWork$FacilityToCoWorkArgs
     userInternal?: boolean | UserInternalArgs
     bookRoom?: boolean | CoWork$bookRoomArgs
+    Close?: boolean | CloseArgs
+    Open?: boolean | OpenArgs
+    OpenClose24Hours?: boolean | OpenClose24HoursArgs
     _count?: boolean | CoWorkCountOutputTypeArgs
   }
 
@@ -2675,20 +2673,24 @@ export namespace Prisma {
     ? CoWork  & {
     [P in TruthyKeys<S['include']>]:
         P extends 'BranchToRoom' ? Array < BranchToRoomGetPayload<S['include'][P]>>  :
-        P extends 'OpenClose' ? OpenCloseGetPayload<S['include'][P]> | null :
         P extends 'FacilityToCoWork' ? Array < FacilityToCoWorkGetPayload<S['include'][P]>>  :
         P extends 'userInternal' ? UserInternalGetPayload<S['include'][P]> | null :
         P extends 'bookRoom' ? Array < BookRoomGetPayload<S['include'][P]>>  :
+        P extends 'Close' ? CloseGetPayload<S['include'][P]> | null :
+        P extends 'Open' ? OpenGetPayload<S['include'][P]> | null :
+        P extends 'OpenClose24Hours' ? OpenClose24HoursGetPayload<S['include'][P]> | null :
         P extends '_count' ? CoWorkCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (CoWorkArgs | CoWorkFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
         P extends 'BranchToRoom' ? Array < BranchToRoomGetPayload<S['select'][P]>>  :
-        P extends 'OpenClose' ? OpenCloseGetPayload<S['select'][P]> | null :
         P extends 'FacilityToCoWork' ? Array < FacilityToCoWorkGetPayload<S['select'][P]>>  :
         P extends 'userInternal' ? UserInternalGetPayload<S['select'][P]> | null :
         P extends 'bookRoom' ? Array < BookRoomGetPayload<S['select'][P]>>  :
+        P extends 'Close' ? CloseGetPayload<S['select'][P]> | null :
+        P extends 'Open' ? OpenGetPayload<S['select'][P]> | null :
+        P extends 'OpenClose24Hours' ? OpenClose24HoursGetPayload<S['select'][P]> | null :
         P extends '_count' ? CoWorkCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof CoWork ? CoWork[P] : never
   } 
       : CoWork
@@ -3063,13 +3065,17 @@ export namespace Prisma {
 
     BranchToRoom<T extends CoWork$BranchToRoomArgs= {}>(args?: Subset<T, CoWork$BranchToRoomArgs>): Prisma.PrismaPromise<Array<BranchToRoomGetPayload<T>>| Null>;
 
-    OpenClose<T extends OpenCloseArgs= {}>(args?: Subset<T, OpenCloseArgs>): Prisma__OpenCloseClient<OpenCloseGetPayload<T> | Null>;
-
     FacilityToCoWork<T extends CoWork$FacilityToCoWorkArgs= {}>(args?: Subset<T, CoWork$FacilityToCoWorkArgs>): Prisma.PrismaPromise<Array<FacilityToCoWorkGetPayload<T>>| Null>;
 
     userInternal<T extends UserInternalArgs= {}>(args?: Subset<T, UserInternalArgs>): Prisma__UserInternalClient<UserInternalGetPayload<T> | Null>;
 
     bookRoom<T extends CoWork$bookRoomArgs= {}>(args?: Subset<T, CoWork$bookRoomArgs>): Prisma.PrismaPromise<Array<BookRoomGetPayload<T>>| Null>;
+
+    Close<T extends CloseArgs= {}>(args?: Subset<T, CloseArgs>): Prisma__CloseClient<CloseGetPayload<T> | Null>;
+
+    Open<T extends OpenArgs= {}>(args?: Subset<T, OpenArgs>): Prisma__OpenClient<OpenGetPayload<T> | Null>;
+
+    OpenClose24Hours<T extends OpenClose24HoursArgs= {}>(args?: Subset<T, OpenClose24HoursArgs>): Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -6738,14 +6744,12 @@ export namespace Prisma {
     updateAt?: boolean
     openCloseId?: boolean
     RoomRate?: boolean | durationCategory$RoomRateArgs
-    openclose?: boolean | OpenCloseArgs
     _count?: boolean | DurationCategoryCountOutputTypeArgs
   }
 
 
   export type durationCategoryInclude = {
     RoomRate?: boolean | durationCategory$RoomRateArgs
-    openclose?: boolean | OpenCloseArgs
     _count?: boolean | DurationCategoryCountOutputTypeArgs
   }
 
@@ -6757,14 +6761,12 @@ export namespace Prisma {
     ? durationCategory  & {
     [P in TruthyKeys<S['include']>]:
         P extends 'RoomRate' ? Array < RoomRateGetPayload<S['include'][P]>>  :
-        P extends 'openclose' ? OpenCloseGetPayload<S['include'][P]> | null :
         P extends '_count' ? DurationCategoryCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (durationCategoryArgs | durationCategoryFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
         P extends 'RoomRate' ? Array < RoomRateGetPayload<S['select'][P]>>  :
-        P extends 'openclose' ? OpenCloseGetPayload<S['select'][P]> | null :
         P extends '_count' ? DurationCategoryCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof durationCategory ? durationCategory[P] : never
   } 
       : durationCategory
@@ -7138,8 +7140,6 @@ export namespace Prisma {
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
     RoomRate<T extends durationCategory$RoomRateArgs= {}>(args?: Subset<T, durationCategory$RoomRateArgs>): Prisma.PrismaPromise<Array<RoomRateGetPayload<T>>| Null>;
-
-    openclose<T extends OpenCloseArgs= {}>(args?: Subset<T, OpenCloseArgs>): Prisma__OpenCloseClient<OpenCloseGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -11505,1278 +11505,6 @@ export namespace Prisma {
 
 
   /**
-   * Model OpenClose
-   */
-
-
-  export type AggregateOpenClose = {
-    _count: OpenCloseCountAggregateOutputType | null
-    _avg: OpenCloseAvgAggregateOutputType | null
-    _sum: OpenCloseSumAggregateOutputType | null
-    _min: OpenCloseMinAggregateOutputType | null
-    _max: OpenCloseMaxAggregateOutputType | null
-  }
-
-  export type OpenCloseAvgAggregateOutputType = {
-    id: number | null
-    openTimeMon: number | null
-    closeTimeMon: number | null
-    openTimeTue: number | null
-    closeTimeTue: number | null
-    openTimeWed: number | null
-    closeTimeWed: number | null
-    openTimeThurs: number | null
-    closeTimeThurs: number | null
-    openTimeFri: number | null
-    closeTimeFri: number | null
-    openTimeSat: number | null
-    closeTimeSat: number | null
-    openTimeSun: number | null
-    closeTimeSun: number | null
-    coWorkId: number | null
-  }
-
-  export type OpenCloseSumAggregateOutputType = {
-    id: number | null
-    openTimeMon: number | null
-    closeTimeMon: number | null
-    openTimeTue: number | null
-    closeTimeTue: number | null
-    openTimeWed: number | null
-    closeTimeWed: number | null
-    openTimeThurs: number | null
-    closeTimeThurs: number | null
-    openTimeFri: number | null
-    closeTimeFri: number | null
-    openTimeSat: number | null
-    closeTimeSat: number | null
-    openTimeSun: number | null
-    closeTimeSun: number | null
-    coWorkId: number | null
-  }
-
-  export type OpenCloseMinAggregateOutputType = {
-    id: number | null
-    openTimeMon: number | null
-    closeTimeMon: number | null
-    isOpen24hoursMon: boolean | null
-    isOpenMon: boolean | null
-    openTimeTue: number | null
-    closeTimeTue: number | null
-    isOpen24hoursTue: boolean | null
-    isOpenTue: boolean | null
-    openTimeWed: number | null
-    closeTimeWed: number | null
-    isOpen24hoursWed: boolean | null
-    isOpenWed: boolean | null
-    openTimeThurs: number | null
-    closeTimeThurs: number | null
-    isOpen24hoursThurs: boolean | null
-    isOpenThurs: boolean | null
-    openTimeFri: number | null
-    closeTimeFri: number | null
-    isOpen24hoursFri: boolean | null
-    isOpenFri: boolean | null
-    openTimeSat: number | null
-    closeTimeSat: number | null
-    isOpen24hoursSat: boolean | null
-    isOpenSat: boolean | null
-    openTimeSun: number | null
-    closeTimeSun: number | null
-    isOpen24hoursSun: boolean | null
-    isOpenSun: boolean | null
-    coWorkId: number | null
-    createAt: Date | null
-    updateAt: Date | null
-  }
-
-  export type OpenCloseMaxAggregateOutputType = {
-    id: number | null
-    openTimeMon: number | null
-    closeTimeMon: number | null
-    isOpen24hoursMon: boolean | null
-    isOpenMon: boolean | null
-    openTimeTue: number | null
-    closeTimeTue: number | null
-    isOpen24hoursTue: boolean | null
-    isOpenTue: boolean | null
-    openTimeWed: number | null
-    closeTimeWed: number | null
-    isOpen24hoursWed: boolean | null
-    isOpenWed: boolean | null
-    openTimeThurs: number | null
-    closeTimeThurs: number | null
-    isOpen24hoursThurs: boolean | null
-    isOpenThurs: boolean | null
-    openTimeFri: number | null
-    closeTimeFri: number | null
-    isOpen24hoursFri: boolean | null
-    isOpenFri: boolean | null
-    openTimeSat: number | null
-    closeTimeSat: number | null
-    isOpen24hoursSat: boolean | null
-    isOpenSat: boolean | null
-    openTimeSun: number | null
-    closeTimeSun: number | null
-    isOpen24hoursSun: boolean | null
-    isOpenSun: boolean | null
-    coWorkId: number | null
-    createAt: Date | null
-    updateAt: Date | null
-  }
-
-  export type OpenCloseCountAggregateOutputType = {
-    id: number
-    openTimeMon: number
-    closeTimeMon: number
-    isOpen24hoursMon: number
-    isOpenMon: number
-    openTimeTue: number
-    closeTimeTue: number
-    isOpen24hoursTue: number
-    isOpenTue: number
-    openTimeWed: number
-    closeTimeWed: number
-    isOpen24hoursWed: number
-    isOpenWed: number
-    openTimeThurs: number
-    closeTimeThurs: number
-    isOpen24hoursThurs: number
-    isOpenThurs: number
-    openTimeFri: number
-    closeTimeFri: number
-    isOpen24hoursFri: number
-    isOpenFri: number
-    openTimeSat: number
-    closeTimeSat: number
-    isOpen24hoursSat: number
-    isOpenSat: number
-    openTimeSun: number
-    closeTimeSun: number
-    isOpen24hoursSun: number
-    isOpenSun: number
-    coWorkId: number
-    createAt: number
-    updateAt: number
-    _all: number
-  }
-
-
-  export type OpenCloseAvgAggregateInputType = {
-    id?: true
-    openTimeMon?: true
-    closeTimeMon?: true
-    openTimeTue?: true
-    closeTimeTue?: true
-    openTimeWed?: true
-    closeTimeWed?: true
-    openTimeThurs?: true
-    closeTimeThurs?: true
-    openTimeFri?: true
-    closeTimeFri?: true
-    openTimeSat?: true
-    closeTimeSat?: true
-    openTimeSun?: true
-    closeTimeSun?: true
-    coWorkId?: true
-  }
-
-  export type OpenCloseSumAggregateInputType = {
-    id?: true
-    openTimeMon?: true
-    closeTimeMon?: true
-    openTimeTue?: true
-    closeTimeTue?: true
-    openTimeWed?: true
-    closeTimeWed?: true
-    openTimeThurs?: true
-    closeTimeThurs?: true
-    openTimeFri?: true
-    closeTimeFri?: true
-    openTimeSat?: true
-    closeTimeSat?: true
-    openTimeSun?: true
-    closeTimeSun?: true
-    coWorkId?: true
-  }
-
-  export type OpenCloseMinAggregateInputType = {
-    id?: true
-    openTimeMon?: true
-    closeTimeMon?: true
-    isOpen24hoursMon?: true
-    isOpenMon?: true
-    openTimeTue?: true
-    closeTimeTue?: true
-    isOpen24hoursTue?: true
-    isOpenTue?: true
-    openTimeWed?: true
-    closeTimeWed?: true
-    isOpen24hoursWed?: true
-    isOpenWed?: true
-    openTimeThurs?: true
-    closeTimeThurs?: true
-    isOpen24hoursThurs?: true
-    isOpenThurs?: true
-    openTimeFri?: true
-    closeTimeFri?: true
-    isOpen24hoursFri?: true
-    isOpenFri?: true
-    openTimeSat?: true
-    closeTimeSat?: true
-    isOpen24hoursSat?: true
-    isOpenSat?: true
-    openTimeSun?: true
-    closeTimeSun?: true
-    isOpen24hoursSun?: true
-    isOpenSun?: true
-    coWorkId?: true
-    createAt?: true
-    updateAt?: true
-  }
-
-  export type OpenCloseMaxAggregateInputType = {
-    id?: true
-    openTimeMon?: true
-    closeTimeMon?: true
-    isOpen24hoursMon?: true
-    isOpenMon?: true
-    openTimeTue?: true
-    closeTimeTue?: true
-    isOpen24hoursTue?: true
-    isOpenTue?: true
-    openTimeWed?: true
-    closeTimeWed?: true
-    isOpen24hoursWed?: true
-    isOpenWed?: true
-    openTimeThurs?: true
-    closeTimeThurs?: true
-    isOpen24hoursThurs?: true
-    isOpenThurs?: true
-    openTimeFri?: true
-    closeTimeFri?: true
-    isOpen24hoursFri?: true
-    isOpenFri?: true
-    openTimeSat?: true
-    closeTimeSat?: true
-    isOpen24hoursSat?: true
-    isOpenSat?: true
-    openTimeSun?: true
-    closeTimeSun?: true
-    isOpen24hoursSun?: true
-    isOpenSun?: true
-    coWorkId?: true
-    createAt?: true
-    updateAt?: true
-  }
-
-  export type OpenCloseCountAggregateInputType = {
-    id?: true
-    openTimeMon?: true
-    closeTimeMon?: true
-    isOpen24hoursMon?: true
-    isOpenMon?: true
-    openTimeTue?: true
-    closeTimeTue?: true
-    isOpen24hoursTue?: true
-    isOpenTue?: true
-    openTimeWed?: true
-    closeTimeWed?: true
-    isOpen24hoursWed?: true
-    isOpenWed?: true
-    openTimeThurs?: true
-    closeTimeThurs?: true
-    isOpen24hoursThurs?: true
-    isOpenThurs?: true
-    openTimeFri?: true
-    closeTimeFri?: true
-    isOpen24hoursFri?: true
-    isOpenFri?: true
-    openTimeSat?: true
-    closeTimeSat?: true
-    isOpen24hoursSat?: true
-    isOpenSat?: true
-    openTimeSun?: true
-    closeTimeSun?: true
-    isOpen24hoursSun?: true
-    isOpenSun?: true
-    coWorkId?: true
-    createAt?: true
-    updateAt?: true
-    _all?: true
-  }
-
-  export type OpenCloseAggregateArgs = {
-    /**
-     * Filter which OpenClose to aggregate.
-     */
-    where?: OpenCloseWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of OpenCloses to fetch.
-     */
-    orderBy?: Enumerable<OpenCloseOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: OpenCloseWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` OpenCloses from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` OpenCloses.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned OpenCloses
-    **/
-    _count?: true | OpenCloseCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: OpenCloseAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: OpenCloseSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: OpenCloseMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: OpenCloseMaxAggregateInputType
-  }
-
-  export type GetOpenCloseAggregateType<T extends OpenCloseAggregateArgs> = {
-        [P in keyof T & keyof AggregateOpenClose]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateOpenClose[P]>
-      : GetScalarType<T[P], AggregateOpenClose[P]>
-  }
-
-
-
-
-  export type OpenCloseGroupByArgs = {
-    where?: OpenCloseWhereInput
-    orderBy?: Enumerable<OpenCloseOrderByWithAggregationInput>
-    by: OpenCloseScalarFieldEnum[]
-    having?: OpenCloseScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: OpenCloseCountAggregateInputType | true
-    _avg?: OpenCloseAvgAggregateInputType
-    _sum?: OpenCloseSumAggregateInputType
-    _min?: OpenCloseMinAggregateInputType
-    _max?: OpenCloseMaxAggregateInputType
-  }
-
-
-  export type OpenCloseGroupByOutputType = {
-    id: number
-    openTimeMon: number
-    closeTimeMon: number
-    isOpen24hoursMon: boolean
-    isOpenMon: boolean
-    openTimeTue: number
-    closeTimeTue: number
-    isOpen24hoursTue: boolean
-    isOpenTue: boolean
-    openTimeWed: number
-    closeTimeWed: number
-    isOpen24hoursWed: boolean
-    isOpenWed: boolean
-    openTimeThurs: number
-    closeTimeThurs: number
-    isOpen24hoursThurs: boolean
-    isOpenThurs: boolean
-    openTimeFri: number
-    closeTimeFri: number
-    isOpen24hoursFri: boolean
-    isOpenFri: boolean
-    openTimeSat: number
-    closeTimeSat: number
-    isOpen24hoursSat: boolean
-    isOpenSat: boolean
-    openTimeSun: number
-    closeTimeSun: number
-    isOpen24hoursSun: boolean
-    isOpenSun: boolean
-    coWorkId: number
-    createAt: Date
-    updateAt: Date
-    _count: OpenCloseCountAggregateOutputType | null
-    _avg: OpenCloseAvgAggregateOutputType | null
-    _sum: OpenCloseSumAggregateOutputType | null
-    _min: OpenCloseMinAggregateOutputType | null
-    _max: OpenCloseMaxAggregateOutputType | null
-  }
-
-  type GetOpenCloseGroupByPayload<T extends OpenCloseGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickArray<OpenCloseGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof OpenCloseGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], OpenCloseGroupByOutputType[P]>
-            : GetScalarType<T[P], OpenCloseGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type OpenCloseSelect = {
-    id?: boolean
-    openTimeMon?: boolean
-    closeTimeMon?: boolean
-    isOpen24hoursMon?: boolean
-    isOpenMon?: boolean
-    openTimeTue?: boolean
-    closeTimeTue?: boolean
-    isOpen24hoursTue?: boolean
-    isOpenTue?: boolean
-    openTimeWed?: boolean
-    closeTimeWed?: boolean
-    isOpen24hoursWed?: boolean
-    isOpenWed?: boolean
-    openTimeThurs?: boolean
-    closeTimeThurs?: boolean
-    isOpen24hoursThurs?: boolean
-    isOpenThurs?: boolean
-    openTimeFri?: boolean
-    closeTimeFri?: boolean
-    isOpen24hoursFri?: boolean
-    isOpenFri?: boolean
-    openTimeSat?: boolean
-    closeTimeSat?: boolean
-    isOpen24hoursSat?: boolean
-    isOpenSat?: boolean
-    openTimeSun?: boolean
-    closeTimeSun?: boolean
-    isOpen24hoursSun?: boolean
-    isOpenSun?: boolean
-    coWorkId?: boolean
-    createAt?: boolean
-    updateAt?: boolean
-    coWork?: boolean | CoWorkArgs
-    durationCategory?: boolean | OpenClose$durationCategoryArgs
-    _count?: boolean | OpenCloseCountOutputTypeArgs
-  }
-
-
-  export type OpenCloseInclude = {
-    coWork?: boolean | CoWorkArgs
-    durationCategory?: boolean | OpenClose$durationCategoryArgs
-    _count?: boolean | OpenCloseCountOutputTypeArgs
-  }
-
-  export type OpenCloseGetPayload<S extends boolean | null | undefined | OpenCloseArgs> =
-    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? OpenClose :
-    S extends undefined ? never :
-    S extends { include: any } & (OpenCloseArgs | OpenCloseFindManyArgs)
-    ? OpenClose  & {
-    [P in TruthyKeys<S['include']>]:
-        P extends 'coWork' ? CoWorkGetPayload<S['include'][P]> :
-        P extends 'durationCategory' ? Array < durationCategoryGetPayload<S['include'][P]>>  :
-        P extends '_count' ? OpenCloseCountOutputTypeGetPayload<S['include'][P]> :  never
-  } 
-    : S extends { select: any } & (OpenCloseArgs | OpenCloseFindManyArgs)
-      ? {
-    [P in TruthyKeys<S['select']>]:
-        P extends 'coWork' ? CoWorkGetPayload<S['select'][P]> :
-        P extends 'durationCategory' ? Array < durationCategoryGetPayload<S['select'][P]>>  :
-        P extends '_count' ? OpenCloseCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof OpenClose ? OpenClose[P] : never
-  } 
-      : OpenClose
-
-
-  type OpenCloseCountArgs = 
-    Omit<OpenCloseFindManyArgs, 'select' | 'include'> & {
-      select?: OpenCloseCountAggregateInputType | true
-    }
-
-  export interface OpenCloseDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
-
-    /**
-     * Find zero or one OpenClose that matches the filter.
-     * @param {OpenCloseFindUniqueArgs} args - Arguments to find a OpenClose
-     * @example
-     * // Get one OpenClose
-     * const openClose = await prisma.openClose.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends OpenCloseFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, OpenCloseFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'OpenClose'> extends True ? Prisma__OpenCloseClient<OpenCloseGetPayload<T>> : Prisma__OpenCloseClient<OpenCloseGetPayload<T> | null, null>
-
-    /**
-     * Find one OpenClose that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {OpenCloseFindUniqueOrThrowArgs} args - Arguments to find a OpenClose
-     * @example
-     * // Get one OpenClose
-     * const openClose = await prisma.openClose.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends OpenCloseFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, OpenCloseFindUniqueOrThrowArgs>
-    ): Prisma__OpenCloseClient<OpenCloseGetPayload<T>>
-
-    /**
-     * Find the first OpenClose that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OpenCloseFindFirstArgs} args - Arguments to find a OpenClose
-     * @example
-     * // Get one OpenClose
-     * const openClose = await prisma.openClose.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends OpenCloseFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, OpenCloseFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'OpenClose'> extends True ? Prisma__OpenCloseClient<OpenCloseGetPayload<T>> : Prisma__OpenCloseClient<OpenCloseGetPayload<T> | null, null>
-
-    /**
-     * Find the first OpenClose that matches the filter or
-     * throw `NotFoundError` if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OpenCloseFindFirstOrThrowArgs} args - Arguments to find a OpenClose
-     * @example
-     * // Get one OpenClose
-     * const openClose = await prisma.openClose.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends OpenCloseFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, OpenCloseFindFirstOrThrowArgs>
-    ): Prisma__OpenCloseClient<OpenCloseGetPayload<T>>
-
-    /**
-     * Find zero or more OpenCloses that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OpenCloseFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all OpenCloses
-     * const openCloses = await prisma.openClose.findMany()
-     * 
-     * // Get first 10 OpenCloses
-     * const openCloses = await prisma.openClose.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const openCloseWithIdOnly = await prisma.openClose.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends OpenCloseFindManyArgs>(
-      args?: SelectSubset<T, OpenCloseFindManyArgs>
-    ): Prisma.PrismaPromise<Array<OpenCloseGetPayload<T>>>
-
-    /**
-     * Create a OpenClose.
-     * @param {OpenCloseCreateArgs} args - Arguments to create a OpenClose.
-     * @example
-     * // Create one OpenClose
-     * const OpenClose = await prisma.openClose.create({
-     *   data: {
-     *     // ... data to create a OpenClose
-     *   }
-     * })
-     * 
-    **/
-    create<T extends OpenCloseCreateArgs>(
-      args: SelectSubset<T, OpenCloseCreateArgs>
-    ): Prisma__OpenCloseClient<OpenCloseGetPayload<T>>
-
-    /**
-     * Create many OpenCloses.
-     *     @param {OpenCloseCreateManyArgs} args - Arguments to create many OpenCloses.
-     *     @example
-     *     // Create many OpenCloses
-     *     const openClose = await prisma.openClose.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends OpenCloseCreateManyArgs>(
-      args?: SelectSubset<T, OpenCloseCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a OpenClose.
-     * @param {OpenCloseDeleteArgs} args - Arguments to delete one OpenClose.
-     * @example
-     * // Delete one OpenClose
-     * const OpenClose = await prisma.openClose.delete({
-     *   where: {
-     *     // ... filter to delete one OpenClose
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends OpenCloseDeleteArgs>(
-      args: SelectSubset<T, OpenCloseDeleteArgs>
-    ): Prisma__OpenCloseClient<OpenCloseGetPayload<T>>
-
-    /**
-     * Update one OpenClose.
-     * @param {OpenCloseUpdateArgs} args - Arguments to update one OpenClose.
-     * @example
-     * // Update one OpenClose
-     * const openClose = await prisma.openClose.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends OpenCloseUpdateArgs>(
-      args: SelectSubset<T, OpenCloseUpdateArgs>
-    ): Prisma__OpenCloseClient<OpenCloseGetPayload<T>>
-
-    /**
-     * Delete zero or more OpenCloses.
-     * @param {OpenCloseDeleteManyArgs} args - Arguments to filter OpenCloses to delete.
-     * @example
-     * // Delete a few OpenCloses
-     * const { count } = await prisma.openClose.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends OpenCloseDeleteManyArgs>(
-      args?: SelectSubset<T, OpenCloseDeleteManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more OpenCloses.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OpenCloseUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many OpenCloses
-     * const openClose = await prisma.openClose.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends OpenCloseUpdateManyArgs>(
-      args: SelectSubset<T, OpenCloseUpdateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one OpenClose.
-     * @param {OpenCloseUpsertArgs} args - Arguments to update or create a OpenClose.
-     * @example
-     * // Update or create a OpenClose
-     * const openClose = await prisma.openClose.upsert({
-     *   create: {
-     *     // ... data to create a OpenClose
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the OpenClose we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends OpenCloseUpsertArgs>(
-      args: SelectSubset<T, OpenCloseUpsertArgs>
-    ): Prisma__OpenCloseClient<OpenCloseGetPayload<T>>
-
-    /**
-     * Count the number of OpenCloses.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OpenCloseCountArgs} args - Arguments to filter OpenCloses to count.
-     * @example
-     * // Count the number of OpenCloses
-     * const count = await prisma.openClose.count({
-     *   where: {
-     *     // ... the filter for the OpenCloses we want to count
-     *   }
-     * })
-    **/
-    count<T extends OpenCloseCountArgs>(
-      args?: Subset<T, OpenCloseCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends _Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], OpenCloseCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a OpenClose.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OpenCloseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends OpenCloseAggregateArgs>(args: Subset<T, OpenCloseAggregateArgs>): Prisma.PrismaPromise<GetOpenCloseAggregateType<T>>
-
-    /**
-     * Group by OpenClose.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OpenCloseGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends OpenCloseGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: OpenCloseGroupByArgs['orderBy'] }
-        : { orderBy?: OpenCloseGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, OpenCloseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOpenCloseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for OpenClose.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export class Prisma__OpenCloseClient<T, Null = never> implements Prisma.PrismaPromise<T> {
-    private readonly _dmmf;
-    private readonly _queryType;
-    private readonly _rootField;
-    private readonly _clientMethod;
-    private readonly _args;
-    private readonly _dataPath;
-    private readonly _errorFormat;
-    private readonly _measurePerformance?;
-    private _isList;
-    private _callsite;
-    private _requestPromise?;
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
-
-    coWork<T extends CoWorkArgs= {}>(args?: Subset<T, CoWorkArgs>): Prisma__CoWorkClient<CoWorkGetPayload<T> | Null>;
-
-    durationCategory<T extends OpenClose$durationCategoryArgs= {}>(args?: Subset<T, OpenClose$durationCategoryArgs>): Prisma.PrismaPromise<Array<durationCategoryGetPayload<T>>| Null>;
-
-    private get _document();
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
-  }
-
-
-
-  // Custom InputTypes
-
-  /**
-   * OpenClose base type for findUnique actions
-   */
-  export type OpenCloseFindUniqueArgsBase = {
-    /**
-     * Select specific fields to fetch from the OpenClose
-     */
-    select?: OpenCloseSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: OpenCloseInclude | null
-    /**
-     * Filter, which OpenClose to fetch.
-     */
-    where: OpenCloseWhereUniqueInput
-  }
-
-  /**
-   * OpenClose findUnique
-   */
-  export interface OpenCloseFindUniqueArgs extends OpenCloseFindUniqueArgsBase {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
-
-  /**
-   * OpenClose findUniqueOrThrow
-   */
-  export type OpenCloseFindUniqueOrThrowArgs = {
-    /**
-     * Select specific fields to fetch from the OpenClose
-     */
-    select?: OpenCloseSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: OpenCloseInclude | null
-    /**
-     * Filter, which OpenClose to fetch.
-     */
-    where: OpenCloseWhereUniqueInput
-  }
-
-
-  /**
-   * OpenClose base type for findFirst actions
-   */
-  export type OpenCloseFindFirstArgsBase = {
-    /**
-     * Select specific fields to fetch from the OpenClose
-     */
-    select?: OpenCloseSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: OpenCloseInclude | null
-    /**
-     * Filter, which OpenClose to fetch.
-     */
-    where?: OpenCloseWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of OpenCloses to fetch.
-     */
-    orderBy?: Enumerable<OpenCloseOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for OpenCloses.
-     */
-    cursor?: OpenCloseWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` OpenCloses from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` OpenCloses.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of OpenCloses.
-     */
-    distinct?: Enumerable<OpenCloseScalarFieldEnum>
-  }
-
-  /**
-   * OpenClose findFirst
-   */
-  export interface OpenCloseFindFirstArgs extends OpenCloseFindFirstArgsBase {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
-
-  /**
-   * OpenClose findFirstOrThrow
-   */
-  export type OpenCloseFindFirstOrThrowArgs = {
-    /**
-     * Select specific fields to fetch from the OpenClose
-     */
-    select?: OpenCloseSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: OpenCloseInclude | null
-    /**
-     * Filter, which OpenClose to fetch.
-     */
-    where?: OpenCloseWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of OpenCloses to fetch.
-     */
-    orderBy?: Enumerable<OpenCloseOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for OpenCloses.
-     */
-    cursor?: OpenCloseWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` OpenCloses from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` OpenCloses.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of OpenCloses.
-     */
-    distinct?: Enumerable<OpenCloseScalarFieldEnum>
-  }
-
-
-  /**
-   * OpenClose findMany
-   */
-  export type OpenCloseFindManyArgs = {
-    /**
-     * Select specific fields to fetch from the OpenClose
-     */
-    select?: OpenCloseSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: OpenCloseInclude | null
-    /**
-     * Filter, which OpenCloses to fetch.
-     */
-    where?: OpenCloseWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of OpenCloses to fetch.
-     */
-    orderBy?: Enumerable<OpenCloseOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing OpenCloses.
-     */
-    cursor?: OpenCloseWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` OpenCloses from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` OpenCloses.
-     */
-    skip?: number
-    distinct?: Enumerable<OpenCloseScalarFieldEnum>
-  }
-
-
-  /**
-   * OpenClose create
-   */
-  export type OpenCloseCreateArgs = {
-    /**
-     * Select specific fields to fetch from the OpenClose
-     */
-    select?: OpenCloseSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: OpenCloseInclude | null
-    /**
-     * The data needed to create a OpenClose.
-     */
-    data: XOR<OpenCloseCreateInput, OpenCloseUncheckedCreateInput>
-  }
-
-
-  /**
-   * OpenClose createMany
-   */
-  export type OpenCloseCreateManyArgs = {
-    /**
-     * The data used to create many OpenCloses.
-     */
-    data: Enumerable<OpenCloseCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * OpenClose update
-   */
-  export type OpenCloseUpdateArgs = {
-    /**
-     * Select specific fields to fetch from the OpenClose
-     */
-    select?: OpenCloseSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: OpenCloseInclude | null
-    /**
-     * The data needed to update a OpenClose.
-     */
-    data: XOR<OpenCloseUpdateInput, OpenCloseUncheckedUpdateInput>
-    /**
-     * Choose, which OpenClose to update.
-     */
-    where: OpenCloseWhereUniqueInput
-  }
-
-
-  /**
-   * OpenClose updateMany
-   */
-  export type OpenCloseUpdateManyArgs = {
-    /**
-     * The data used to update OpenCloses.
-     */
-    data: XOR<OpenCloseUpdateManyMutationInput, OpenCloseUncheckedUpdateManyInput>
-    /**
-     * Filter which OpenCloses to update
-     */
-    where?: OpenCloseWhereInput
-  }
-
-
-  /**
-   * OpenClose upsert
-   */
-  export type OpenCloseUpsertArgs = {
-    /**
-     * Select specific fields to fetch from the OpenClose
-     */
-    select?: OpenCloseSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: OpenCloseInclude | null
-    /**
-     * The filter to search for the OpenClose to update in case it exists.
-     */
-    where: OpenCloseWhereUniqueInput
-    /**
-     * In case the OpenClose found by the `where` argument doesn't exist, create a new OpenClose with this data.
-     */
-    create: XOR<OpenCloseCreateInput, OpenCloseUncheckedCreateInput>
-    /**
-     * In case the OpenClose was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<OpenCloseUpdateInput, OpenCloseUncheckedUpdateInput>
-  }
-
-
-  /**
-   * OpenClose delete
-   */
-  export type OpenCloseDeleteArgs = {
-    /**
-     * Select specific fields to fetch from the OpenClose
-     */
-    select?: OpenCloseSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: OpenCloseInclude | null
-    /**
-     * Filter which OpenClose to delete.
-     */
-    where: OpenCloseWhereUniqueInput
-  }
-
-
-  /**
-   * OpenClose deleteMany
-   */
-  export type OpenCloseDeleteManyArgs = {
-    /**
-     * Filter which OpenCloses to delete
-     */
-    where?: OpenCloseWhereInput
-  }
-
-
-  /**
-   * OpenClose.durationCategory
-   */
-  export type OpenClose$durationCategoryArgs = {
-    /**
-     * Select specific fields to fetch from the durationCategory
-     */
-    select?: durationCategorySelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: durationCategoryInclude | null
-    where?: durationCategoryWhereInput
-    orderBy?: Enumerable<durationCategoryOrderByWithRelationInput>
-    cursor?: durationCategoryWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Enumerable<DurationCategoryScalarFieldEnum>
-  }
-
-
-  /**
-   * OpenClose without action
-   */
-  export type OpenCloseArgs = {
-    /**
-     * Select specific fields to fetch from the OpenClose
-     */
-    select?: OpenCloseSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: OpenCloseInclude | null
-  }
-
-
-
-  /**
    * Model VertifyBookingCode
    */
 
@@ -13767,6 +12495,3113 @@ export namespace Prisma {
 
 
   /**
+   * Model Open
+   */
+
+
+  export type AggregateOpen = {
+    _count: OpenCountAggregateOutputType | null
+    _avg: OpenAvgAggregateOutputType | null
+    _sum: OpenSumAggregateOutputType | null
+    _min: OpenMinAggregateOutputType | null
+    _max: OpenMaxAggregateOutputType | null
+  }
+
+  export type OpenAvgAggregateOutputType = {
+    id: number | null
+    monOpen: number | null
+    tueOpen: number | null
+    wedOpen: number | null
+    thursOpen: number | null
+    friOpen: number | null
+    satOpen: number | null
+    sunOpen: number | null
+    coWorkId: number | null
+  }
+
+  export type OpenSumAggregateOutputType = {
+    id: number | null
+    monOpen: number | null
+    tueOpen: number | null
+    wedOpen: number | null
+    thursOpen: number | null
+    friOpen: number | null
+    satOpen: number | null
+    sunOpen: number | null
+    coWorkId: number | null
+  }
+
+  export type OpenMinAggregateOutputType = {
+    id: number | null
+    monOpen: number | null
+    tueOpen: number | null
+    wedOpen: number | null
+    thursOpen: number | null
+    friOpen: number | null
+    satOpen: number | null
+    sunOpen: number | null
+    coWorkId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type OpenMaxAggregateOutputType = {
+    id: number | null
+    monOpen: number | null
+    tueOpen: number | null
+    wedOpen: number | null
+    thursOpen: number | null
+    friOpen: number | null
+    satOpen: number | null
+    sunOpen: number | null
+    coWorkId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type OpenCountAggregateOutputType = {
+    id: number
+    monOpen: number
+    tueOpen: number
+    wedOpen: number
+    thursOpen: number
+    friOpen: number
+    satOpen: number
+    sunOpen: number
+    coWorkId: number
+    createAt: number
+    updateAt: number
+    _all: number
+  }
+
+
+  export type OpenAvgAggregateInputType = {
+    id?: true
+    monOpen?: true
+    tueOpen?: true
+    wedOpen?: true
+    thursOpen?: true
+    friOpen?: true
+    satOpen?: true
+    sunOpen?: true
+    coWorkId?: true
+  }
+
+  export type OpenSumAggregateInputType = {
+    id?: true
+    monOpen?: true
+    tueOpen?: true
+    wedOpen?: true
+    thursOpen?: true
+    friOpen?: true
+    satOpen?: true
+    sunOpen?: true
+    coWorkId?: true
+  }
+
+  export type OpenMinAggregateInputType = {
+    id?: true
+    monOpen?: true
+    tueOpen?: true
+    wedOpen?: true
+    thursOpen?: true
+    friOpen?: true
+    satOpen?: true
+    sunOpen?: true
+    coWorkId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type OpenMaxAggregateInputType = {
+    id?: true
+    monOpen?: true
+    tueOpen?: true
+    wedOpen?: true
+    thursOpen?: true
+    friOpen?: true
+    satOpen?: true
+    sunOpen?: true
+    coWorkId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type OpenCountAggregateInputType = {
+    id?: true
+    monOpen?: true
+    tueOpen?: true
+    wedOpen?: true
+    thursOpen?: true
+    friOpen?: true
+    satOpen?: true
+    sunOpen?: true
+    coWorkId?: true
+    createAt?: true
+    updateAt?: true
+    _all?: true
+  }
+
+  export type OpenAggregateArgs = {
+    /**
+     * Filter which Open to aggregate.
+     */
+    where?: OpenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Opens to fetch.
+     */
+    orderBy?: Enumerable<OpenOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OpenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Opens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Opens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Opens
+    **/
+    _count?: true | OpenCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OpenAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OpenSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OpenMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OpenMaxAggregateInputType
+  }
+
+  export type GetOpenAggregateType<T extends OpenAggregateArgs> = {
+        [P in keyof T & keyof AggregateOpen]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOpen[P]>
+      : GetScalarType<T[P], AggregateOpen[P]>
+  }
+
+
+
+
+  export type OpenGroupByArgs = {
+    where?: OpenWhereInput
+    orderBy?: Enumerable<OpenOrderByWithAggregationInput>
+    by: OpenScalarFieldEnum[]
+    having?: OpenScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OpenCountAggregateInputType | true
+    _avg?: OpenAvgAggregateInputType
+    _sum?: OpenSumAggregateInputType
+    _min?: OpenMinAggregateInputType
+    _max?: OpenMaxAggregateInputType
+  }
+
+
+  export type OpenGroupByOutputType = {
+    id: number
+    monOpen: number
+    tueOpen: number
+    wedOpen: number
+    thursOpen: number
+    friOpen: number
+    satOpen: number
+    sunOpen: number
+    coWorkId: number
+    createAt: Date
+    updateAt: Date
+    _count: OpenCountAggregateOutputType | null
+    _avg: OpenAvgAggregateOutputType | null
+    _sum: OpenSumAggregateOutputType | null
+    _min: OpenMinAggregateOutputType | null
+    _max: OpenMaxAggregateOutputType | null
+  }
+
+  type GetOpenGroupByPayload<T extends OpenGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<OpenGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OpenGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OpenGroupByOutputType[P]>
+            : GetScalarType<T[P], OpenGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OpenSelect = {
+    id?: boolean
+    monOpen?: boolean
+    tueOpen?: boolean
+    wedOpen?: boolean
+    thursOpen?: boolean
+    friOpen?: boolean
+    satOpen?: boolean
+    sunOpen?: boolean
+    coWorkId?: boolean
+    createAt?: boolean
+    updateAt?: boolean
+    cowork?: boolean | CoWorkArgs
+  }
+
+
+  export type OpenInclude = {
+    cowork?: boolean | CoWorkArgs
+  }
+
+  export type OpenGetPayload<S extends boolean | null | undefined | OpenArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? Open :
+    S extends undefined ? never :
+    S extends { include: any } & (OpenArgs | OpenFindManyArgs)
+    ? Open  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'cowork' ? CoWorkGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (OpenArgs | OpenFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'cowork' ? CoWorkGetPayload<S['select'][P]> :  P extends keyof Open ? Open[P] : never
+  } 
+      : Open
+
+
+  type OpenCountArgs = 
+    Omit<OpenFindManyArgs, 'select' | 'include'> & {
+      select?: OpenCountAggregateInputType | true
+    }
+
+  export interface OpenDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one Open that matches the filter.
+     * @param {OpenFindUniqueArgs} args - Arguments to find a Open
+     * @example
+     * // Get one Open
+     * const open = await prisma.open.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends OpenFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, OpenFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Open'> extends True ? Prisma__OpenClient<OpenGetPayload<T>> : Prisma__OpenClient<OpenGetPayload<T> | null, null>
+
+    /**
+     * Find one Open that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {OpenFindUniqueOrThrowArgs} args - Arguments to find a Open
+     * @example
+     * // Get one Open
+     * const open = await prisma.open.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends OpenFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, OpenFindUniqueOrThrowArgs>
+    ): Prisma__OpenClient<OpenGetPayload<T>>
+
+    /**
+     * Find the first Open that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenFindFirstArgs} args - Arguments to find a Open
+     * @example
+     * // Get one Open
+     * const open = await prisma.open.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends OpenFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, OpenFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Open'> extends True ? Prisma__OpenClient<OpenGetPayload<T>> : Prisma__OpenClient<OpenGetPayload<T> | null, null>
+
+    /**
+     * Find the first Open that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenFindFirstOrThrowArgs} args - Arguments to find a Open
+     * @example
+     * // Get one Open
+     * const open = await prisma.open.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends OpenFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, OpenFindFirstOrThrowArgs>
+    ): Prisma__OpenClient<OpenGetPayload<T>>
+
+    /**
+     * Find zero or more Opens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Opens
+     * const opens = await prisma.open.findMany()
+     * 
+     * // Get first 10 Opens
+     * const opens = await prisma.open.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const openWithIdOnly = await prisma.open.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends OpenFindManyArgs>(
+      args?: SelectSubset<T, OpenFindManyArgs>
+    ): Prisma.PrismaPromise<Array<OpenGetPayload<T>>>
+
+    /**
+     * Create a Open.
+     * @param {OpenCreateArgs} args - Arguments to create a Open.
+     * @example
+     * // Create one Open
+     * const Open = await prisma.open.create({
+     *   data: {
+     *     // ... data to create a Open
+     *   }
+     * })
+     * 
+    **/
+    create<T extends OpenCreateArgs>(
+      args: SelectSubset<T, OpenCreateArgs>
+    ): Prisma__OpenClient<OpenGetPayload<T>>
+
+    /**
+     * Create many Opens.
+     *     @param {OpenCreateManyArgs} args - Arguments to create many Opens.
+     *     @example
+     *     // Create many Opens
+     *     const open = await prisma.open.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends OpenCreateManyArgs>(
+      args?: SelectSubset<T, OpenCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Open.
+     * @param {OpenDeleteArgs} args - Arguments to delete one Open.
+     * @example
+     * // Delete one Open
+     * const Open = await prisma.open.delete({
+     *   where: {
+     *     // ... filter to delete one Open
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends OpenDeleteArgs>(
+      args: SelectSubset<T, OpenDeleteArgs>
+    ): Prisma__OpenClient<OpenGetPayload<T>>
+
+    /**
+     * Update one Open.
+     * @param {OpenUpdateArgs} args - Arguments to update one Open.
+     * @example
+     * // Update one Open
+     * const open = await prisma.open.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends OpenUpdateArgs>(
+      args: SelectSubset<T, OpenUpdateArgs>
+    ): Prisma__OpenClient<OpenGetPayload<T>>
+
+    /**
+     * Delete zero or more Opens.
+     * @param {OpenDeleteManyArgs} args - Arguments to filter Opens to delete.
+     * @example
+     * // Delete a few Opens
+     * const { count } = await prisma.open.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends OpenDeleteManyArgs>(
+      args?: SelectSubset<T, OpenDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Opens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Opens
+     * const open = await prisma.open.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends OpenUpdateManyArgs>(
+      args: SelectSubset<T, OpenUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Open.
+     * @param {OpenUpsertArgs} args - Arguments to update or create a Open.
+     * @example
+     * // Update or create a Open
+     * const open = await prisma.open.upsert({
+     *   create: {
+     *     // ... data to create a Open
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Open we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends OpenUpsertArgs>(
+      args: SelectSubset<T, OpenUpsertArgs>
+    ): Prisma__OpenClient<OpenGetPayload<T>>
+
+    /**
+     * Count the number of Opens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenCountArgs} args - Arguments to filter Opens to count.
+     * @example
+     * // Count the number of Opens
+     * const count = await prisma.open.count({
+     *   where: {
+     *     // ... the filter for the Opens we want to count
+     *   }
+     * })
+    **/
+    count<T extends OpenCountArgs>(
+      args?: Subset<T, OpenCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OpenCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Open.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OpenAggregateArgs>(args: Subset<T, OpenAggregateArgs>): Prisma.PrismaPromise<GetOpenAggregateType<T>>
+
+    /**
+     * Group by Open.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OpenGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OpenGroupByArgs['orderBy'] }
+        : { orderBy?: OpenGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OpenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOpenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Open.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__OpenClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    cowork<T extends CoWorkArgs= {}>(args?: Subset<T, CoWorkArgs>): Prisma__CoWorkClient<CoWorkGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * Open base type for findUnique actions
+   */
+  export type OpenFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the Open
+     */
+    select?: OpenSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenInclude | null
+    /**
+     * Filter, which Open to fetch.
+     */
+    where: OpenWhereUniqueInput
+  }
+
+  /**
+   * Open findUnique
+   */
+  export interface OpenFindUniqueArgs extends OpenFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Open findUniqueOrThrow
+   */
+  export type OpenFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Open
+     */
+    select?: OpenSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenInclude | null
+    /**
+     * Filter, which Open to fetch.
+     */
+    where: OpenWhereUniqueInput
+  }
+
+
+  /**
+   * Open base type for findFirst actions
+   */
+  export type OpenFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the Open
+     */
+    select?: OpenSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenInclude | null
+    /**
+     * Filter, which Open to fetch.
+     */
+    where?: OpenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Opens to fetch.
+     */
+    orderBy?: Enumerable<OpenOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Opens.
+     */
+    cursor?: OpenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Opens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Opens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Opens.
+     */
+    distinct?: Enumerable<OpenScalarFieldEnum>
+  }
+
+  /**
+   * Open findFirst
+   */
+  export interface OpenFindFirstArgs extends OpenFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Open findFirstOrThrow
+   */
+  export type OpenFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Open
+     */
+    select?: OpenSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenInclude | null
+    /**
+     * Filter, which Open to fetch.
+     */
+    where?: OpenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Opens to fetch.
+     */
+    orderBy?: Enumerable<OpenOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Opens.
+     */
+    cursor?: OpenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Opens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Opens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Opens.
+     */
+    distinct?: Enumerable<OpenScalarFieldEnum>
+  }
+
+
+  /**
+   * Open findMany
+   */
+  export type OpenFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the Open
+     */
+    select?: OpenSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenInclude | null
+    /**
+     * Filter, which Opens to fetch.
+     */
+    where?: OpenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Opens to fetch.
+     */
+    orderBy?: Enumerable<OpenOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Opens.
+     */
+    cursor?: OpenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Opens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Opens.
+     */
+    skip?: number
+    distinct?: Enumerable<OpenScalarFieldEnum>
+  }
+
+
+  /**
+   * Open create
+   */
+  export type OpenCreateArgs = {
+    /**
+     * Select specific fields to fetch from the Open
+     */
+    select?: OpenSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenInclude | null
+    /**
+     * The data needed to create a Open.
+     */
+    data: XOR<OpenCreateInput, OpenUncheckedCreateInput>
+  }
+
+
+  /**
+   * Open createMany
+   */
+  export type OpenCreateManyArgs = {
+    /**
+     * The data used to create many Opens.
+     */
+    data: Enumerable<OpenCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Open update
+   */
+  export type OpenUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the Open
+     */
+    select?: OpenSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenInclude | null
+    /**
+     * The data needed to update a Open.
+     */
+    data: XOR<OpenUpdateInput, OpenUncheckedUpdateInput>
+    /**
+     * Choose, which Open to update.
+     */
+    where: OpenWhereUniqueInput
+  }
+
+
+  /**
+   * Open updateMany
+   */
+  export type OpenUpdateManyArgs = {
+    /**
+     * The data used to update Opens.
+     */
+    data: XOR<OpenUpdateManyMutationInput, OpenUncheckedUpdateManyInput>
+    /**
+     * Filter which Opens to update
+     */
+    where?: OpenWhereInput
+  }
+
+
+  /**
+   * Open upsert
+   */
+  export type OpenUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the Open
+     */
+    select?: OpenSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenInclude | null
+    /**
+     * The filter to search for the Open to update in case it exists.
+     */
+    where: OpenWhereUniqueInput
+    /**
+     * In case the Open found by the `where` argument doesn't exist, create a new Open with this data.
+     */
+    create: XOR<OpenCreateInput, OpenUncheckedCreateInput>
+    /**
+     * In case the Open was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OpenUpdateInput, OpenUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Open delete
+   */
+  export type OpenDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the Open
+     */
+    select?: OpenSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenInclude | null
+    /**
+     * Filter which Open to delete.
+     */
+    where: OpenWhereUniqueInput
+  }
+
+
+  /**
+   * Open deleteMany
+   */
+  export type OpenDeleteManyArgs = {
+    /**
+     * Filter which Opens to delete
+     */
+    where?: OpenWhereInput
+  }
+
+
+  /**
+   * Open without action
+   */
+  export type OpenArgs = {
+    /**
+     * Select specific fields to fetch from the Open
+     */
+    select?: OpenSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenInclude | null
+  }
+
+
+
+  /**
+   * Model Close
+   */
+
+
+  export type AggregateClose = {
+    _count: CloseCountAggregateOutputType | null
+    _avg: CloseAvgAggregateOutputType | null
+    _sum: CloseSumAggregateOutputType | null
+    _min: CloseMinAggregateOutputType | null
+    _max: CloseMaxAggregateOutputType | null
+  }
+
+  export type CloseAvgAggregateOutputType = {
+    id: number | null
+    monClose: number | null
+    tueClose: number | null
+    wedClose: number | null
+    thursClose: number | null
+    friClose: number | null
+    satClose: number | null
+    sunClose: number | null
+    coWorkId: number | null
+  }
+
+  export type CloseSumAggregateOutputType = {
+    id: number | null
+    monClose: number | null
+    tueClose: number | null
+    wedClose: number | null
+    thursClose: number | null
+    friClose: number | null
+    satClose: number | null
+    sunClose: number | null
+    coWorkId: number | null
+  }
+
+  export type CloseMinAggregateOutputType = {
+    id: number | null
+    monClose: number | null
+    tueClose: number | null
+    wedClose: number | null
+    thursClose: number | null
+    friClose: number | null
+    satClose: number | null
+    sunClose: number | null
+    coWorkId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type CloseMaxAggregateOutputType = {
+    id: number | null
+    monClose: number | null
+    tueClose: number | null
+    wedClose: number | null
+    thursClose: number | null
+    friClose: number | null
+    satClose: number | null
+    sunClose: number | null
+    coWorkId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type CloseCountAggregateOutputType = {
+    id: number
+    monClose: number
+    tueClose: number
+    wedClose: number
+    thursClose: number
+    friClose: number
+    satClose: number
+    sunClose: number
+    coWorkId: number
+    createAt: number
+    updateAt: number
+    _all: number
+  }
+
+
+  export type CloseAvgAggregateInputType = {
+    id?: true
+    monClose?: true
+    tueClose?: true
+    wedClose?: true
+    thursClose?: true
+    friClose?: true
+    satClose?: true
+    sunClose?: true
+    coWorkId?: true
+  }
+
+  export type CloseSumAggregateInputType = {
+    id?: true
+    monClose?: true
+    tueClose?: true
+    wedClose?: true
+    thursClose?: true
+    friClose?: true
+    satClose?: true
+    sunClose?: true
+    coWorkId?: true
+  }
+
+  export type CloseMinAggregateInputType = {
+    id?: true
+    monClose?: true
+    tueClose?: true
+    wedClose?: true
+    thursClose?: true
+    friClose?: true
+    satClose?: true
+    sunClose?: true
+    coWorkId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type CloseMaxAggregateInputType = {
+    id?: true
+    monClose?: true
+    tueClose?: true
+    wedClose?: true
+    thursClose?: true
+    friClose?: true
+    satClose?: true
+    sunClose?: true
+    coWorkId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type CloseCountAggregateInputType = {
+    id?: true
+    monClose?: true
+    tueClose?: true
+    wedClose?: true
+    thursClose?: true
+    friClose?: true
+    satClose?: true
+    sunClose?: true
+    coWorkId?: true
+    createAt?: true
+    updateAt?: true
+    _all?: true
+  }
+
+  export type CloseAggregateArgs = {
+    /**
+     * Filter which Close to aggregate.
+     */
+    where?: CloseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Closes to fetch.
+     */
+    orderBy?: Enumerable<CloseOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CloseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Closes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Closes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Closes
+    **/
+    _count?: true | CloseCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CloseAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CloseSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CloseMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CloseMaxAggregateInputType
+  }
+
+  export type GetCloseAggregateType<T extends CloseAggregateArgs> = {
+        [P in keyof T & keyof AggregateClose]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClose[P]>
+      : GetScalarType<T[P], AggregateClose[P]>
+  }
+
+
+
+
+  export type CloseGroupByArgs = {
+    where?: CloseWhereInput
+    orderBy?: Enumerable<CloseOrderByWithAggregationInput>
+    by: CloseScalarFieldEnum[]
+    having?: CloseScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CloseCountAggregateInputType | true
+    _avg?: CloseAvgAggregateInputType
+    _sum?: CloseSumAggregateInputType
+    _min?: CloseMinAggregateInputType
+    _max?: CloseMaxAggregateInputType
+  }
+
+
+  export type CloseGroupByOutputType = {
+    id: number
+    monClose: number
+    tueClose: number
+    wedClose: number
+    thursClose: number
+    friClose: number
+    satClose: number
+    sunClose: number
+    coWorkId: number
+    createAt: Date
+    updateAt: Date
+    _count: CloseCountAggregateOutputType | null
+    _avg: CloseAvgAggregateOutputType | null
+    _sum: CloseSumAggregateOutputType | null
+    _min: CloseMinAggregateOutputType | null
+    _max: CloseMaxAggregateOutputType | null
+  }
+
+  type GetCloseGroupByPayload<T extends CloseGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<CloseGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CloseGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CloseGroupByOutputType[P]>
+            : GetScalarType<T[P], CloseGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CloseSelect = {
+    id?: boolean
+    monClose?: boolean
+    tueClose?: boolean
+    wedClose?: boolean
+    thursClose?: boolean
+    friClose?: boolean
+    satClose?: boolean
+    sunClose?: boolean
+    coWorkId?: boolean
+    createAt?: boolean
+    updateAt?: boolean
+    cowork?: boolean | CoWorkArgs
+  }
+
+
+  export type CloseInclude = {
+    cowork?: boolean | CoWorkArgs
+  }
+
+  export type CloseGetPayload<S extends boolean | null | undefined | CloseArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? Close :
+    S extends undefined ? never :
+    S extends { include: any } & (CloseArgs | CloseFindManyArgs)
+    ? Close  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'cowork' ? CoWorkGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (CloseArgs | CloseFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'cowork' ? CoWorkGetPayload<S['select'][P]> :  P extends keyof Close ? Close[P] : never
+  } 
+      : Close
+
+
+  type CloseCountArgs = 
+    Omit<CloseFindManyArgs, 'select' | 'include'> & {
+      select?: CloseCountAggregateInputType | true
+    }
+
+  export interface CloseDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one Close that matches the filter.
+     * @param {CloseFindUniqueArgs} args - Arguments to find a Close
+     * @example
+     * // Get one Close
+     * const close = await prisma.close.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends CloseFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, CloseFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Close'> extends True ? Prisma__CloseClient<CloseGetPayload<T>> : Prisma__CloseClient<CloseGetPayload<T> | null, null>
+
+    /**
+     * Find one Close that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {CloseFindUniqueOrThrowArgs} args - Arguments to find a Close
+     * @example
+     * // Get one Close
+     * const close = await prisma.close.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends CloseFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, CloseFindUniqueOrThrowArgs>
+    ): Prisma__CloseClient<CloseGetPayload<T>>
+
+    /**
+     * Find the first Close that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CloseFindFirstArgs} args - Arguments to find a Close
+     * @example
+     * // Get one Close
+     * const close = await prisma.close.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends CloseFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, CloseFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Close'> extends True ? Prisma__CloseClient<CloseGetPayload<T>> : Prisma__CloseClient<CloseGetPayload<T> | null, null>
+
+    /**
+     * Find the first Close that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CloseFindFirstOrThrowArgs} args - Arguments to find a Close
+     * @example
+     * // Get one Close
+     * const close = await prisma.close.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends CloseFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, CloseFindFirstOrThrowArgs>
+    ): Prisma__CloseClient<CloseGetPayload<T>>
+
+    /**
+     * Find zero or more Closes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CloseFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Closes
+     * const closes = await prisma.close.findMany()
+     * 
+     * // Get first 10 Closes
+     * const closes = await prisma.close.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const closeWithIdOnly = await prisma.close.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends CloseFindManyArgs>(
+      args?: SelectSubset<T, CloseFindManyArgs>
+    ): Prisma.PrismaPromise<Array<CloseGetPayload<T>>>
+
+    /**
+     * Create a Close.
+     * @param {CloseCreateArgs} args - Arguments to create a Close.
+     * @example
+     * // Create one Close
+     * const Close = await prisma.close.create({
+     *   data: {
+     *     // ... data to create a Close
+     *   }
+     * })
+     * 
+    **/
+    create<T extends CloseCreateArgs>(
+      args: SelectSubset<T, CloseCreateArgs>
+    ): Prisma__CloseClient<CloseGetPayload<T>>
+
+    /**
+     * Create many Closes.
+     *     @param {CloseCreateManyArgs} args - Arguments to create many Closes.
+     *     @example
+     *     // Create many Closes
+     *     const close = await prisma.close.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends CloseCreateManyArgs>(
+      args?: SelectSubset<T, CloseCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Close.
+     * @param {CloseDeleteArgs} args - Arguments to delete one Close.
+     * @example
+     * // Delete one Close
+     * const Close = await prisma.close.delete({
+     *   where: {
+     *     // ... filter to delete one Close
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends CloseDeleteArgs>(
+      args: SelectSubset<T, CloseDeleteArgs>
+    ): Prisma__CloseClient<CloseGetPayload<T>>
+
+    /**
+     * Update one Close.
+     * @param {CloseUpdateArgs} args - Arguments to update one Close.
+     * @example
+     * // Update one Close
+     * const close = await prisma.close.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends CloseUpdateArgs>(
+      args: SelectSubset<T, CloseUpdateArgs>
+    ): Prisma__CloseClient<CloseGetPayload<T>>
+
+    /**
+     * Delete zero or more Closes.
+     * @param {CloseDeleteManyArgs} args - Arguments to filter Closes to delete.
+     * @example
+     * // Delete a few Closes
+     * const { count } = await prisma.close.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends CloseDeleteManyArgs>(
+      args?: SelectSubset<T, CloseDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Closes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CloseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Closes
+     * const close = await prisma.close.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends CloseUpdateManyArgs>(
+      args: SelectSubset<T, CloseUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Close.
+     * @param {CloseUpsertArgs} args - Arguments to update or create a Close.
+     * @example
+     * // Update or create a Close
+     * const close = await prisma.close.upsert({
+     *   create: {
+     *     // ... data to create a Close
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Close we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends CloseUpsertArgs>(
+      args: SelectSubset<T, CloseUpsertArgs>
+    ): Prisma__CloseClient<CloseGetPayload<T>>
+
+    /**
+     * Count the number of Closes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CloseCountArgs} args - Arguments to filter Closes to count.
+     * @example
+     * // Count the number of Closes
+     * const count = await prisma.close.count({
+     *   where: {
+     *     // ... the filter for the Closes we want to count
+     *   }
+     * })
+    **/
+    count<T extends CloseCountArgs>(
+      args?: Subset<T, CloseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CloseCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Close.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CloseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CloseAggregateArgs>(args: Subset<T, CloseAggregateArgs>): Prisma.PrismaPromise<GetCloseAggregateType<T>>
+
+    /**
+     * Group by Close.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CloseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CloseGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CloseGroupByArgs['orderBy'] }
+        : { orderBy?: CloseGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CloseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCloseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Close.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__CloseClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    cowork<T extends CoWorkArgs= {}>(args?: Subset<T, CoWorkArgs>): Prisma__CoWorkClient<CoWorkGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * Close base type for findUnique actions
+   */
+  export type CloseFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the Close
+     */
+    select?: CloseSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CloseInclude | null
+    /**
+     * Filter, which Close to fetch.
+     */
+    where: CloseWhereUniqueInput
+  }
+
+  /**
+   * Close findUnique
+   */
+  export interface CloseFindUniqueArgs extends CloseFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Close findUniqueOrThrow
+   */
+  export type CloseFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Close
+     */
+    select?: CloseSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CloseInclude | null
+    /**
+     * Filter, which Close to fetch.
+     */
+    where: CloseWhereUniqueInput
+  }
+
+
+  /**
+   * Close base type for findFirst actions
+   */
+  export type CloseFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the Close
+     */
+    select?: CloseSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CloseInclude | null
+    /**
+     * Filter, which Close to fetch.
+     */
+    where?: CloseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Closes to fetch.
+     */
+    orderBy?: Enumerable<CloseOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Closes.
+     */
+    cursor?: CloseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Closes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Closes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Closes.
+     */
+    distinct?: Enumerable<CloseScalarFieldEnum>
+  }
+
+  /**
+   * Close findFirst
+   */
+  export interface CloseFindFirstArgs extends CloseFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Close findFirstOrThrow
+   */
+  export type CloseFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Close
+     */
+    select?: CloseSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CloseInclude | null
+    /**
+     * Filter, which Close to fetch.
+     */
+    where?: CloseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Closes to fetch.
+     */
+    orderBy?: Enumerable<CloseOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Closes.
+     */
+    cursor?: CloseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Closes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Closes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Closes.
+     */
+    distinct?: Enumerable<CloseScalarFieldEnum>
+  }
+
+
+  /**
+   * Close findMany
+   */
+  export type CloseFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the Close
+     */
+    select?: CloseSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CloseInclude | null
+    /**
+     * Filter, which Closes to fetch.
+     */
+    where?: CloseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Closes to fetch.
+     */
+    orderBy?: Enumerable<CloseOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Closes.
+     */
+    cursor?: CloseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Closes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Closes.
+     */
+    skip?: number
+    distinct?: Enumerable<CloseScalarFieldEnum>
+  }
+
+
+  /**
+   * Close create
+   */
+  export type CloseCreateArgs = {
+    /**
+     * Select specific fields to fetch from the Close
+     */
+    select?: CloseSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CloseInclude | null
+    /**
+     * The data needed to create a Close.
+     */
+    data: XOR<CloseCreateInput, CloseUncheckedCreateInput>
+  }
+
+
+  /**
+   * Close createMany
+   */
+  export type CloseCreateManyArgs = {
+    /**
+     * The data used to create many Closes.
+     */
+    data: Enumerable<CloseCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Close update
+   */
+  export type CloseUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the Close
+     */
+    select?: CloseSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CloseInclude | null
+    /**
+     * The data needed to update a Close.
+     */
+    data: XOR<CloseUpdateInput, CloseUncheckedUpdateInput>
+    /**
+     * Choose, which Close to update.
+     */
+    where: CloseWhereUniqueInput
+  }
+
+
+  /**
+   * Close updateMany
+   */
+  export type CloseUpdateManyArgs = {
+    /**
+     * The data used to update Closes.
+     */
+    data: XOR<CloseUpdateManyMutationInput, CloseUncheckedUpdateManyInput>
+    /**
+     * Filter which Closes to update
+     */
+    where?: CloseWhereInput
+  }
+
+
+  /**
+   * Close upsert
+   */
+  export type CloseUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the Close
+     */
+    select?: CloseSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CloseInclude | null
+    /**
+     * The filter to search for the Close to update in case it exists.
+     */
+    where: CloseWhereUniqueInput
+    /**
+     * In case the Close found by the `where` argument doesn't exist, create a new Close with this data.
+     */
+    create: XOR<CloseCreateInput, CloseUncheckedCreateInput>
+    /**
+     * In case the Close was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CloseUpdateInput, CloseUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Close delete
+   */
+  export type CloseDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the Close
+     */
+    select?: CloseSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CloseInclude | null
+    /**
+     * Filter which Close to delete.
+     */
+    where: CloseWhereUniqueInput
+  }
+
+
+  /**
+   * Close deleteMany
+   */
+  export type CloseDeleteManyArgs = {
+    /**
+     * Filter which Closes to delete
+     */
+    where?: CloseWhereInput
+  }
+
+
+  /**
+   * Close without action
+   */
+  export type CloseArgs = {
+    /**
+     * Select specific fields to fetch from the Close
+     */
+    select?: CloseSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CloseInclude | null
+  }
+
+
+
+  /**
+   * Model OpenClose24Hours
+   */
+
+
+  export type AggregateOpenClose24Hours = {
+    _count: OpenClose24HoursCountAggregateOutputType | null
+    _avg: OpenClose24HoursAvgAggregateOutputType | null
+    _sum: OpenClose24HoursSumAggregateOutputType | null
+    _min: OpenClose24HoursMinAggregateOutputType | null
+    _max: OpenClose24HoursMaxAggregateOutputType | null
+  }
+
+  export type OpenClose24HoursAvgAggregateOutputType = {
+    id: number | null
+    coWorkId: number | null
+  }
+
+  export type OpenClose24HoursSumAggregateOutputType = {
+    id: number | null
+    coWorkId: number | null
+  }
+
+  export type OpenClose24HoursMinAggregateOutputType = {
+    id: number | null
+    mon24hours: boolean | null
+    tue24hours: boolean | null
+    wed24hours: boolean | null
+    thurs24hours: boolean | null
+    fri24hours: boolean | null
+    sat24hours: boolean | null
+    sun24hours: boolean | null
+    coWorkId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type OpenClose24HoursMaxAggregateOutputType = {
+    id: number | null
+    mon24hours: boolean | null
+    tue24hours: boolean | null
+    wed24hours: boolean | null
+    thurs24hours: boolean | null
+    fri24hours: boolean | null
+    sat24hours: boolean | null
+    sun24hours: boolean | null
+    coWorkId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type OpenClose24HoursCountAggregateOutputType = {
+    id: number
+    mon24hours: number
+    tue24hours: number
+    wed24hours: number
+    thurs24hours: number
+    fri24hours: number
+    sat24hours: number
+    sun24hours: number
+    coWorkId: number
+    createAt: number
+    updateAt: number
+    _all: number
+  }
+
+
+  export type OpenClose24HoursAvgAggregateInputType = {
+    id?: true
+    coWorkId?: true
+  }
+
+  export type OpenClose24HoursSumAggregateInputType = {
+    id?: true
+    coWorkId?: true
+  }
+
+  export type OpenClose24HoursMinAggregateInputType = {
+    id?: true
+    mon24hours?: true
+    tue24hours?: true
+    wed24hours?: true
+    thurs24hours?: true
+    fri24hours?: true
+    sat24hours?: true
+    sun24hours?: true
+    coWorkId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type OpenClose24HoursMaxAggregateInputType = {
+    id?: true
+    mon24hours?: true
+    tue24hours?: true
+    wed24hours?: true
+    thurs24hours?: true
+    fri24hours?: true
+    sat24hours?: true
+    sun24hours?: true
+    coWorkId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type OpenClose24HoursCountAggregateInputType = {
+    id?: true
+    mon24hours?: true
+    tue24hours?: true
+    wed24hours?: true
+    thurs24hours?: true
+    fri24hours?: true
+    sat24hours?: true
+    sun24hours?: true
+    coWorkId?: true
+    createAt?: true
+    updateAt?: true
+    _all?: true
+  }
+
+  export type OpenClose24HoursAggregateArgs = {
+    /**
+     * Filter which OpenClose24Hours to aggregate.
+     */
+    where?: OpenClose24HoursWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OpenClose24Hours to fetch.
+     */
+    orderBy?: Enumerable<OpenClose24HoursOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OpenClose24HoursWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OpenClose24Hours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OpenClose24Hours.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OpenClose24Hours
+    **/
+    _count?: true | OpenClose24HoursCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OpenClose24HoursAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OpenClose24HoursSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OpenClose24HoursMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OpenClose24HoursMaxAggregateInputType
+  }
+
+  export type GetOpenClose24HoursAggregateType<T extends OpenClose24HoursAggregateArgs> = {
+        [P in keyof T & keyof AggregateOpenClose24Hours]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOpenClose24Hours[P]>
+      : GetScalarType<T[P], AggregateOpenClose24Hours[P]>
+  }
+
+
+
+
+  export type OpenClose24HoursGroupByArgs = {
+    where?: OpenClose24HoursWhereInput
+    orderBy?: Enumerable<OpenClose24HoursOrderByWithAggregationInput>
+    by: OpenClose24HoursScalarFieldEnum[]
+    having?: OpenClose24HoursScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OpenClose24HoursCountAggregateInputType | true
+    _avg?: OpenClose24HoursAvgAggregateInputType
+    _sum?: OpenClose24HoursSumAggregateInputType
+    _min?: OpenClose24HoursMinAggregateInputType
+    _max?: OpenClose24HoursMaxAggregateInputType
+  }
+
+
+  export type OpenClose24HoursGroupByOutputType = {
+    id: number
+    mon24hours: boolean
+    tue24hours: boolean
+    wed24hours: boolean
+    thurs24hours: boolean
+    fri24hours: boolean
+    sat24hours: boolean
+    sun24hours: boolean
+    coWorkId: number
+    createAt: Date
+    updateAt: Date
+    _count: OpenClose24HoursCountAggregateOutputType | null
+    _avg: OpenClose24HoursAvgAggregateOutputType | null
+    _sum: OpenClose24HoursSumAggregateOutputType | null
+    _min: OpenClose24HoursMinAggregateOutputType | null
+    _max: OpenClose24HoursMaxAggregateOutputType | null
+  }
+
+  type GetOpenClose24HoursGroupByPayload<T extends OpenClose24HoursGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<OpenClose24HoursGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OpenClose24HoursGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OpenClose24HoursGroupByOutputType[P]>
+            : GetScalarType<T[P], OpenClose24HoursGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OpenClose24HoursSelect = {
+    id?: boolean
+    mon24hours?: boolean
+    tue24hours?: boolean
+    wed24hours?: boolean
+    thurs24hours?: boolean
+    fri24hours?: boolean
+    sat24hours?: boolean
+    sun24hours?: boolean
+    coWorkId?: boolean
+    createAt?: boolean
+    updateAt?: boolean
+    cowork?: boolean | CoWorkArgs
+  }
+
+
+  export type OpenClose24HoursInclude = {
+    cowork?: boolean | CoWorkArgs
+  }
+
+  export type OpenClose24HoursGetPayload<S extends boolean | null | undefined | OpenClose24HoursArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? OpenClose24Hours :
+    S extends undefined ? never :
+    S extends { include: any } & (OpenClose24HoursArgs | OpenClose24HoursFindManyArgs)
+    ? OpenClose24Hours  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'cowork' ? CoWorkGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (OpenClose24HoursArgs | OpenClose24HoursFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'cowork' ? CoWorkGetPayload<S['select'][P]> :  P extends keyof OpenClose24Hours ? OpenClose24Hours[P] : never
+  } 
+      : OpenClose24Hours
+
+
+  type OpenClose24HoursCountArgs = 
+    Omit<OpenClose24HoursFindManyArgs, 'select' | 'include'> & {
+      select?: OpenClose24HoursCountAggregateInputType | true
+    }
+
+  export interface OpenClose24HoursDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one OpenClose24Hours that matches the filter.
+     * @param {OpenClose24HoursFindUniqueArgs} args - Arguments to find a OpenClose24Hours
+     * @example
+     * // Get one OpenClose24Hours
+     * const openClose24Hours = await prisma.openClose24Hours.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends OpenClose24HoursFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, OpenClose24HoursFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'OpenClose24Hours'> extends True ? Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T>> : Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T> | null, null>
+
+    /**
+     * Find one OpenClose24Hours that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {OpenClose24HoursFindUniqueOrThrowArgs} args - Arguments to find a OpenClose24Hours
+     * @example
+     * // Get one OpenClose24Hours
+     * const openClose24Hours = await prisma.openClose24Hours.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends OpenClose24HoursFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, OpenClose24HoursFindUniqueOrThrowArgs>
+    ): Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T>>
+
+    /**
+     * Find the first OpenClose24Hours that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenClose24HoursFindFirstArgs} args - Arguments to find a OpenClose24Hours
+     * @example
+     * // Get one OpenClose24Hours
+     * const openClose24Hours = await prisma.openClose24Hours.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends OpenClose24HoursFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, OpenClose24HoursFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'OpenClose24Hours'> extends True ? Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T>> : Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T> | null, null>
+
+    /**
+     * Find the first OpenClose24Hours that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenClose24HoursFindFirstOrThrowArgs} args - Arguments to find a OpenClose24Hours
+     * @example
+     * // Get one OpenClose24Hours
+     * const openClose24Hours = await prisma.openClose24Hours.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends OpenClose24HoursFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, OpenClose24HoursFindFirstOrThrowArgs>
+    ): Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T>>
+
+    /**
+     * Find zero or more OpenClose24Hours that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenClose24HoursFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OpenClose24Hours
+     * const openClose24Hours = await prisma.openClose24Hours.findMany()
+     * 
+     * // Get first 10 OpenClose24Hours
+     * const openClose24Hours = await prisma.openClose24Hours.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const openClose24HoursWithIdOnly = await prisma.openClose24Hours.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends OpenClose24HoursFindManyArgs>(
+      args?: SelectSubset<T, OpenClose24HoursFindManyArgs>
+    ): Prisma.PrismaPromise<Array<OpenClose24HoursGetPayload<T>>>
+
+    /**
+     * Create a OpenClose24Hours.
+     * @param {OpenClose24HoursCreateArgs} args - Arguments to create a OpenClose24Hours.
+     * @example
+     * // Create one OpenClose24Hours
+     * const OpenClose24Hours = await prisma.openClose24Hours.create({
+     *   data: {
+     *     // ... data to create a OpenClose24Hours
+     *   }
+     * })
+     * 
+    **/
+    create<T extends OpenClose24HoursCreateArgs>(
+      args: SelectSubset<T, OpenClose24HoursCreateArgs>
+    ): Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T>>
+
+    /**
+     * Create many OpenClose24Hours.
+     *     @param {OpenClose24HoursCreateManyArgs} args - Arguments to create many OpenClose24Hours.
+     *     @example
+     *     // Create many OpenClose24Hours
+     *     const openClose24Hours = await prisma.openClose24Hours.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends OpenClose24HoursCreateManyArgs>(
+      args?: SelectSubset<T, OpenClose24HoursCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a OpenClose24Hours.
+     * @param {OpenClose24HoursDeleteArgs} args - Arguments to delete one OpenClose24Hours.
+     * @example
+     * // Delete one OpenClose24Hours
+     * const OpenClose24Hours = await prisma.openClose24Hours.delete({
+     *   where: {
+     *     // ... filter to delete one OpenClose24Hours
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends OpenClose24HoursDeleteArgs>(
+      args: SelectSubset<T, OpenClose24HoursDeleteArgs>
+    ): Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T>>
+
+    /**
+     * Update one OpenClose24Hours.
+     * @param {OpenClose24HoursUpdateArgs} args - Arguments to update one OpenClose24Hours.
+     * @example
+     * // Update one OpenClose24Hours
+     * const openClose24Hours = await prisma.openClose24Hours.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends OpenClose24HoursUpdateArgs>(
+      args: SelectSubset<T, OpenClose24HoursUpdateArgs>
+    ): Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T>>
+
+    /**
+     * Delete zero or more OpenClose24Hours.
+     * @param {OpenClose24HoursDeleteManyArgs} args - Arguments to filter OpenClose24Hours to delete.
+     * @example
+     * // Delete a few OpenClose24Hours
+     * const { count } = await prisma.openClose24Hours.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends OpenClose24HoursDeleteManyArgs>(
+      args?: SelectSubset<T, OpenClose24HoursDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OpenClose24Hours.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenClose24HoursUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OpenClose24Hours
+     * const openClose24Hours = await prisma.openClose24Hours.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends OpenClose24HoursUpdateManyArgs>(
+      args: SelectSubset<T, OpenClose24HoursUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one OpenClose24Hours.
+     * @param {OpenClose24HoursUpsertArgs} args - Arguments to update or create a OpenClose24Hours.
+     * @example
+     * // Update or create a OpenClose24Hours
+     * const openClose24Hours = await prisma.openClose24Hours.upsert({
+     *   create: {
+     *     // ... data to create a OpenClose24Hours
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OpenClose24Hours we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends OpenClose24HoursUpsertArgs>(
+      args: SelectSubset<T, OpenClose24HoursUpsertArgs>
+    ): Prisma__OpenClose24HoursClient<OpenClose24HoursGetPayload<T>>
+
+    /**
+     * Count the number of OpenClose24Hours.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenClose24HoursCountArgs} args - Arguments to filter OpenClose24Hours to count.
+     * @example
+     * // Count the number of OpenClose24Hours
+     * const count = await prisma.openClose24Hours.count({
+     *   where: {
+     *     // ... the filter for the OpenClose24Hours we want to count
+     *   }
+     * })
+    **/
+    count<T extends OpenClose24HoursCountArgs>(
+      args?: Subset<T, OpenClose24HoursCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OpenClose24HoursCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OpenClose24Hours.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenClose24HoursAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OpenClose24HoursAggregateArgs>(args: Subset<T, OpenClose24HoursAggregateArgs>): Prisma.PrismaPromise<GetOpenClose24HoursAggregateType<T>>
+
+    /**
+     * Group by OpenClose24Hours.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OpenClose24HoursGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OpenClose24HoursGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OpenClose24HoursGroupByArgs['orderBy'] }
+        : { orderBy?: OpenClose24HoursGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OpenClose24HoursGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOpenClose24HoursGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OpenClose24Hours.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__OpenClose24HoursClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    cowork<T extends CoWorkArgs= {}>(args?: Subset<T, CoWorkArgs>): Prisma__CoWorkClient<CoWorkGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * OpenClose24Hours base type for findUnique actions
+   */
+  export type OpenClose24HoursFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the OpenClose24Hours
+     */
+    select?: OpenClose24HoursSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenClose24HoursInclude | null
+    /**
+     * Filter, which OpenClose24Hours to fetch.
+     */
+    where: OpenClose24HoursWhereUniqueInput
+  }
+
+  /**
+   * OpenClose24Hours findUnique
+   */
+  export interface OpenClose24HoursFindUniqueArgs extends OpenClose24HoursFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * OpenClose24Hours findUniqueOrThrow
+   */
+  export type OpenClose24HoursFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the OpenClose24Hours
+     */
+    select?: OpenClose24HoursSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenClose24HoursInclude | null
+    /**
+     * Filter, which OpenClose24Hours to fetch.
+     */
+    where: OpenClose24HoursWhereUniqueInput
+  }
+
+
+  /**
+   * OpenClose24Hours base type for findFirst actions
+   */
+  export type OpenClose24HoursFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the OpenClose24Hours
+     */
+    select?: OpenClose24HoursSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenClose24HoursInclude | null
+    /**
+     * Filter, which OpenClose24Hours to fetch.
+     */
+    where?: OpenClose24HoursWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OpenClose24Hours to fetch.
+     */
+    orderBy?: Enumerable<OpenClose24HoursOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OpenClose24Hours.
+     */
+    cursor?: OpenClose24HoursWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OpenClose24Hours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OpenClose24Hours.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OpenClose24Hours.
+     */
+    distinct?: Enumerable<OpenClose24HoursScalarFieldEnum>
+  }
+
+  /**
+   * OpenClose24Hours findFirst
+   */
+  export interface OpenClose24HoursFindFirstArgs extends OpenClose24HoursFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * OpenClose24Hours findFirstOrThrow
+   */
+  export type OpenClose24HoursFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the OpenClose24Hours
+     */
+    select?: OpenClose24HoursSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenClose24HoursInclude | null
+    /**
+     * Filter, which OpenClose24Hours to fetch.
+     */
+    where?: OpenClose24HoursWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OpenClose24Hours to fetch.
+     */
+    orderBy?: Enumerable<OpenClose24HoursOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OpenClose24Hours.
+     */
+    cursor?: OpenClose24HoursWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OpenClose24Hours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OpenClose24Hours.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OpenClose24Hours.
+     */
+    distinct?: Enumerable<OpenClose24HoursScalarFieldEnum>
+  }
+
+
+  /**
+   * OpenClose24Hours findMany
+   */
+  export type OpenClose24HoursFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the OpenClose24Hours
+     */
+    select?: OpenClose24HoursSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenClose24HoursInclude | null
+    /**
+     * Filter, which OpenClose24Hours to fetch.
+     */
+    where?: OpenClose24HoursWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OpenClose24Hours to fetch.
+     */
+    orderBy?: Enumerable<OpenClose24HoursOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OpenClose24Hours.
+     */
+    cursor?: OpenClose24HoursWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OpenClose24Hours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OpenClose24Hours.
+     */
+    skip?: number
+    distinct?: Enumerable<OpenClose24HoursScalarFieldEnum>
+  }
+
+
+  /**
+   * OpenClose24Hours create
+   */
+  export type OpenClose24HoursCreateArgs = {
+    /**
+     * Select specific fields to fetch from the OpenClose24Hours
+     */
+    select?: OpenClose24HoursSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenClose24HoursInclude | null
+    /**
+     * The data needed to create a OpenClose24Hours.
+     */
+    data: XOR<OpenClose24HoursCreateInput, OpenClose24HoursUncheckedCreateInput>
+  }
+
+
+  /**
+   * OpenClose24Hours createMany
+   */
+  export type OpenClose24HoursCreateManyArgs = {
+    /**
+     * The data used to create many OpenClose24Hours.
+     */
+    data: Enumerable<OpenClose24HoursCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * OpenClose24Hours update
+   */
+  export type OpenClose24HoursUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the OpenClose24Hours
+     */
+    select?: OpenClose24HoursSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenClose24HoursInclude | null
+    /**
+     * The data needed to update a OpenClose24Hours.
+     */
+    data: XOR<OpenClose24HoursUpdateInput, OpenClose24HoursUncheckedUpdateInput>
+    /**
+     * Choose, which OpenClose24Hours to update.
+     */
+    where: OpenClose24HoursWhereUniqueInput
+  }
+
+
+  /**
+   * OpenClose24Hours updateMany
+   */
+  export type OpenClose24HoursUpdateManyArgs = {
+    /**
+     * The data used to update OpenClose24Hours.
+     */
+    data: XOR<OpenClose24HoursUpdateManyMutationInput, OpenClose24HoursUncheckedUpdateManyInput>
+    /**
+     * Filter which OpenClose24Hours to update
+     */
+    where?: OpenClose24HoursWhereInput
+  }
+
+
+  /**
+   * OpenClose24Hours upsert
+   */
+  export type OpenClose24HoursUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the OpenClose24Hours
+     */
+    select?: OpenClose24HoursSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenClose24HoursInclude | null
+    /**
+     * The filter to search for the OpenClose24Hours to update in case it exists.
+     */
+    where: OpenClose24HoursWhereUniqueInput
+    /**
+     * In case the OpenClose24Hours found by the `where` argument doesn't exist, create a new OpenClose24Hours with this data.
+     */
+    create: XOR<OpenClose24HoursCreateInput, OpenClose24HoursUncheckedCreateInput>
+    /**
+     * In case the OpenClose24Hours was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OpenClose24HoursUpdateInput, OpenClose24HoursUncheckedUpdateInput>
+  }
+
+
+  /**
+   * OpenClose24Hours delete
+   */
+  export type OpenClose24HoursDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the OpenClose24Hours
+     */
+    select?: OpenClose24HoursSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenClose24HoursInclude | null
+    /**
+     * Filter which OpenClose24Hours to delete.
+     */
+    where: OpenClose24HoursWhereUniqueInput
+  }
+
+
+  /**
+   * OpenClose24Hours deleteMany
+   */
+  export type OpenClose24HoursDeleteManyArgs = {
+    /**
+     * Filter which OpenClose24Hours to delete
+     */
+    where?: OpenClose24HoursWhereInput
+  }
+
+
+  /**
+   * OpenClose24Hours without action
+   */
+  export type OpenClose24HoursArgs = {
+    /**
+     * Select specific fields to fetch from the OpenClose24Hours
+     */
+    select?: OpenClose24HoursSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OpenClose24HoursInclude | null
+  }
+
+
+
+  /**
    * Enums
    */
 
@@ -13797,6 +15632,23 @@ export namespace Prisma {
   };
 
   export type BranchToRoomScalarFieldEnum = (typeof BranchToRoomScalarFieldEnum)[keyof typeof BranchToRoomScalarFieldEnum]
+
+
+  export const CloseScalarFieldEnum: {
+    id: 'id',
+    monClose: 'monClose',
+    tueClose: 'tueClose',
+    wedClose: 'wedClose',
+    thursClose: 'thursClose',
+    friClose: 'friClose',
+    satClose: 'satClose',
+    sunClose: 'sunClose',
+    coWorkId: 'coWorkId',
+    createAt: 'createAt',
+    updateAt: 'updateAt'
+  };
+
+  export type CloseScalarFieldEnum = (typeof CloseScalarFieldEnum)[keyof typeof CloseScalarFieldEnum]
 
 
   export const CoWorkScalarFieldEnum: {
@@ -13844,42 +15696,38 @@ export namespace Prisma {
   export type FacilityToCoWorkScalarFieldEnum = (typeof FacilityToCoWorkScalarFieldEnum)[keyof typeof FacilityToCoWorkScalarFieldEnum]
 
 
-  export const OpenCloseScalarFieldEnum: {
+  export const OpenClose24HoursScalarFieldEnum: {
     id: 'id',
-    openTimeMon: 'openTimeMon',
-    closeTimeMon: 'closeTimeMon',
-    isOpen24hoursMon: 'isOpen24hoursMon',
-    isOpenMon: 'isOpenMon',
-    openTimeTue: 'openTimeTue',
-    closeTimeTue: 'closeTimeTue',
-    isOpen24hoursTue: 'isOpen24hoursTue',
-    isOpenTue: 'isOpenTue',
-    openTimeWed: 'openTimeWed',
-    closeTimeWed: 'closeTimeWed',
-    isOpen24hoursWed: 'isOpen24hoursWed',
-    isOpenWed: 'isOpenWed',
-    openTimeThurs: 'openTimeThurs',
-    closeTimeThurs: 'closeTimeThurs',
-    isOpen24hoursThurs: 'isOpen24hoursThurs',
-    isOpenThurs: 'isOpenThurs',
-    openTimeFri: 'openTimeFri',
-    closeTimeFri: 'closeTimeFri',
-    isOpen24hoursFri: 'isOpen24hoursFri',
-    isOpenFri: 'isOpenFri',
-    openTimeSat: 'openTimeSat',
-    closeTimeSat: 'closeTimeSat',
-    isOpen24hoursSat: 'isOpen24hoursSat',
-    isOpenSat: 'isOpenSat',
-    openTimeSun: 'openTimeSun',
-    closeTimeSun: 'closeTimeSun',
-    isOpen24hoursSun: 'isOpen24hoursSun',
-    isOpenSun: 'isOpenSun',
+    mon24hours: 'mon24hours',
+    tue24hours: 'tue24hours',
+    wed24hours: 'wed24hours',
+    thurs24hours: 'thurs24hours',
+    fri24hours: 'fri24hours',
+    sat24hours: 'sat24hours',
+    sun24hours: 'sun24hours',
     coWorkId: 'coWorkId',
     createAt: 'createAt',
     updateAt: 'updateAt'
   };
 
-  export type OpenCloseScalarFieldEnum = (typeof OpenCloseScalarFieldEnum)[keyof typeof OpenCloseScalarFieldEnum]
+  export type OpenClose24HoursScalarFieldEnum = (typeof OpenClose24HoursScalarFieldEnum)[keyof typeof OpenClose24HoursScalarFieldEnum]
+
+
+  export const OpenScalarFieldEnum: {
+    id: 'id',
+    monOpen: 'monOpen',
+    tueOpen: 'tueOpen',
+    wedOpen: 'wedOpen',
+    thursOpen: 'thursOpen',
+    friOpen: 'friOpen',
+    satOpen: 'satOpen',
+    sunOpen: 'sunOpen',
+    coWorkId: 'coWorkId',
+    createAt: 'createAt',
+    updateAt: 'updateAt'
+  };
+
+  export type OpenScalarFieldEnum = (typeof OpenScalarFieldEnum)[keyof typeof OpenScalarFieldEnum]
 
 
   export const QueryMode: {
@@ -14043,10 +15891,12 @@ export namespace Prisma {
     picture?: StringFilter | string
     userInternalId?: IntNullableFilter | number | null
     BranchToRoom?: BranchToRoomListRelationFilter
-    OpenClose?: XOR<OpenCloseRelationFilter, OpenCloseWhereInput> | null
     FacilityToCoWork?: FacilityToCoWorkListRelationFilter
     userInternal?: XOR<UserInternalRelationFilter, UserInternalWhereInput> | null
     bookRoom?: BookRoomListRelationFilter
+    Close?: XOR<CloseRelationFilter, CloseWhereInput> | null
+    Open?: XOR<OpenRelationFilter, OpenWhereInput> | null
+    OpenClose24Hours?: XOR<OpenClose24HoursRelationFilter, OpenClose24HoursWhereInput> | null
   }
 
   export type CoWorkOrderByWithRelationInput = {
@@ -14058,10 +15908,12 @@ export namespace Prisma {
     picture?: SortOrder
     userInternalId?: SortOrder
     BranchToRoom?: BranchToRoomOrderByRelationAggregateInput
-    OpenClose?: OpenCloseOrderByWithRelationInput
     FacilityToCoWork?: FacilityToCoWorkOrderByRelationAggregateInput
     userInternal?: UserInternalOrderByWithRelationInput
     bookRoom?: BookRoomOrderByRelationAggregateInput
+    Close?: CloseOrderByWithRelationInput
+    Open?: OpenOrderByWithRelationInput
+    OpenClose24Hours?: OpenClose24HoursOrderByWithRelationInput
   }
 
   export type CoWorkWhereUniqueInput = {
@@ -14273,7 +16125,6 @@ export namespace Prisma {
     updateAt?: DateTimeFilter | Date | string
     openCloseId?: IntNullableFilter | number | null
     RoomRate?: RoomRateListRelationFilter
-    openclose?: XOR<OpenCloseRelationFilter, OpenCloseWhereInput> | null
   }
 
   export type durationCategoryOrderByWithRelationInput = {
@@ -14283,7 +16134,6 @@ export namespace Prisma {
     updateAt?: SortOrder
     openCloseId?: SortOrder
     RoomRate?: RoomRateOrderByRelationAggregateInput
-    openclose?: OpenCloseOrderByWithRelationInput
   }
 
   export type durationCategoryWhereUniqueInput = {
@@ -14532,166 +16382,6 @@ export namespace Prisma {
     vertifyBookingCodeId?: IntWithAggregatesFilter | number
   }
 
-  export type OpenCloseWhereInput = {
-    AND?: Enumerable<OpenCloseWhereInput>
-    OR?: Enumerable<OpenCloseWhereInput>
-    NOT?: Enumerable<OpenCloseWhereInput>
-    id?: IntFilter | number
-    openTimeMon?: IntFilter | number
-    closeTimeMon?: IntFilter | number
-    isOpen24hoursMon?: BoolFilter | boolean
-    isOpenMon?: BoolFilter | boolean
-    openTimeTue?: IntFilter | number
-    closeTimeTue?: IntFilter | number
-    isOpen24hoursTue?: BoolFilter | boolean
-    isOpenTue?: BoolFilter | boolean
-    openTimeWed?: IntFilter | number
-    closeTimeWed?: IntFilter | number
-    isOpen24hoursWed?: BoolFilter | boolean
-    isOpenWed?: BoolFilter | boolean
-    openTimeThurs?: IntFilter | number
-    closeTimeThurs?: IntFilter | number
-    isOpen24hoursThurs?: BoolFilter | boolean
-    isOpenThurs?: BoolFilter | boolean
-    openTimeFri?: IntFilter | number
-    closeTimeFri?: IntFilter | number
-    isOpen24hoursFri?: BoolFilter | boolean
-    isOpenFri?: BoolFilter | boolean
-    openTimeSat?: IntFilter | number
-    closeTimeSat?: IntFilter | number
-    isOpen24hoursSat?: BoolFilter | boolean
-    isOpenSat?: BoolFilter | boolean
-    openTimeSun?: IntFilter | number
-    closeTimeSun?: IntFilter | number
-    isOpen24hoursSun?: BoolFilter | boolean
-    isOpenSun?: BoolFilter | boolean
-    coWorkId?: IntFilter | number
-    createAt?: DateTimeFilter | Date | string
-    updateAt?: DateTimeFilter | Date | string
-    coWork?: XOR<CoWorkRelationFilter, CoWorkWhereInput>
-    durationCategory?: DurationCategoryListRelationFilter
-  }
-
-  export type OpenCloseOrderByWithRelationInput = {
-    id?: SortOrder
-    openTimeMon?: SortOrder
-    closeTimeMon?: SortOrder
-    isOpen24hoursMon?: SortOrder
-    isOpenMon?: SortOrder
-    openTimeTue?: SortOrder
-    closeTimeTue?: SortOrder
-    isOpen24hoursTue?: SortOrder
-    isOpenTue?: SortOrder
-    openTimeWed?: SortOrder
-    closeTimeWed?: SortOrder
-    isOpen24hoursWed?: SortOrder
-    isOpenWed?: SortOrder
-    openTimeThurs?: SortOrder
-    closeTimeThurs?: SortOrder
-    isOpen24hoursThurs?: SortOrder
-    isOpenThurs?: SortOrder
-    openTimeFri?: SortOrder
-    closeTimeFri?: SortOrder
-    isOpen24hoursFri?: SortOrder
-    isOpenFri?: SortOrder
-    openTimeSat?: SortOrder
-    closeTimeSat?: SortOrder
-    isOpen24hoursSat?: SortOrder
-    isOpenSat?: SortOrder
-    openTimeSun?: SortOrder
-    closeTimeSun?: SortOrder
-    isOpen24hoursSun?: SortOrder
-    isOpenSun?: SortOrder
-    coWorkId?: SortOrder
-    createAt?: SortOrder
-    updateAt?: SortOrder
-    coWork?: CoWorkOrderByWithRelationInput
-    durationCategory?: durationCategoryOrderByRelationAggregateInput
-  }
-
-  export type OpenCloseWhereUniqueInput = {
-    id?: number
-    coWorkId?: number
-  }
-
-  export type OpenCloseOrderByWithAggregationInput = {
-    id?: SortOrder
-    openTimeMon?: SortOrder
-    closeTimeMon?: SortOrder
-    isOpen24hoursMon?: SortOrder
-    isOpenMon?: SortOrder
-    openTimeTue?: SortOrder
-    closeTimeTue?: SortOrder
-    isOpen24hoursTue?: SortOrder
-    isOpenTue?: SortOrder
-    openTimeWed?: SortOrder
-    closeTimeWed?: SortOrder
-    isOpen24hoursWed?: SortOrder
-    isOpenWed?: SortOrder
-    openTimeThurs?: SortOrder
-    closeTimeThurs?: SortOrder
-    isOpen24hoursThurs?: SortOrder
-    isOpenThurs?: SortOrder
-    openTimeFri?: SortOrder
-    closeTimeFri?: SortOrder
-    isOpen24hoursFri?: SortOrder
-    isOpenFri?: SortOrder
-    openTimeSat?: SortOrder
-    closeTimeSat?: SortOrder
-    isOpen24hoursSat?: SortOrder
-    isOpenSat?: SortOrder
-    openTimeSun?: SortOrder
-    closeTimeSun?: SortOrder
-    isOpen24hoursSun?: SortOrder
-    isOpenSun?: SortOrder
-    coWorkId?: SortOrder
-    createAt?: SortOrder
-    updateAt?: SortOrder
-    _count?: OpenCloseCountOrderByAggregateInput
-    _avg?: OpenCloseAvgOrderByAggregateInput
-    _max?: OpenCloseMaxOrderByAggregateInput
-    _min?: OpenCloseMinOrderByAggregateInput
-    _sum?: OpenCloseSumOrderByAggregateInput
-  }
-
-  export type OpenCloseScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<OpenCloseScalarWhereWithAggregatesInput>
-    OR?: Enumerable<OpenCloseScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<OpenCloseScalarWhereWithAggregatesInput>
-    id?: IntWithAggregatesFilter | number
-    openTimeMon?: IntWithAggregatesFilter | number
-    closeTimeMon?: IntWithAggregatesFilter | number
-    isOpen24hoursMon?: BoolWithAggregatesFilter | boolean
-    isOpenMon?: BoolWithAggregatesFilter | boolean
-    openTimeTue?: IntWithAggregatesFilter | number
-    closeTimeTue?: IntWithAggregatesFilter | number
-    isOpen24hoursTue?: BoolWithAggregatesFilter | boolean
-    isOpenTue?: BoolWithAggregatesFilter | boolean
-    openTimeWed?: IntWithAggregatesFilter | number
-    closeTimeWed?: IntWithAggregatesFilter | number
-    isOpen24hoursWed?: BoolWithAggregatesFilter | boolean
-    isOpenWed?: BoolWithAggregatesFilter | boolean
-    openTimeThurs?: IntWithAggregatesFilter | number
-    closeTimeThurs?: IntWithAggregatesFilter | number
-    isOpen24hoursThurs?: BoolWithAggregatesFilter | boolean
-    isOpenThurs?: BoolWithAggregatesFilter | boolean
-    openTimeFri?: IntWithAggregatesFilter | number
-    closeTimeFri?: IntWithAggregatesFilter | number
-    isOpen24hoursFri?: BoolWithAggregatesFilter | boolean
-    isOpenFri?: BoolWithAggregatesFilter | boolean
-    openTimeSat?: IntWithAggregatesFilter | number
-    closeTimeSat?: IntWithAggregatesFilter | number
-    isOpen24hoursSat?: BoolWithAggregatesFilter | boolean
-    isOpenSat?: BoolWithAggregatesFilter | boolean
-    openTimeSun?: IntWithAggregatesFilter | number
-    closeTimeSun?: IntWithAggregatesFilter | number
-    isOpen24hoursSun?: BoolWithAggregatesFilter | boolean
-    isOpenSun?: BoolWithAggregatesFilter | boolean
-    coWorkId?: IntWithAggregatesFilter | number
-    createAt?: DateTimeWithAggregatesFilter | Date | string
-    updateAt?: DateTimeWithAggregatesFilter | Date | string
-  }
-
   export type VertifyBookingCodeWhereInput = {
     AND?: Enumerable<VertifyBookingCodeWhereInput>
     OR?: Enumerable<VertifyBookingCodeWhereInput>
@@ -14737,6 +16427,228 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter | number
     verifyCode?: StringWithAggregatesFilter | string
     bookdate?: DateTimeWithAggregatesFilter | Date | string
+    createAt?: DateTimeWithAggregatesFilter | Date | string
+    updateAt?: DateTimeWithAggregatesFilter | Date | string
+  }
+
+  export type OpenWhereInput = {
+    AND?: Enumerable<OpenWhereInput>
+    OR?: Enumerable<OpenWhereInput>
+    NOT?: Enumerable<OpenWhereInput>
+    id?: IntFilter | number
+    monOpen?: IntFilter | number
+    tueOpen?: IntFilter | number
+    wedOpen?: IntFilter | number
+    thursOpen?: IntFilter | number
+    friOpen?: IntFilter | number
+    satOpen?: IntFilter | number
+    sunOpen?: IntFilter | number
+    coWorkId?: IntFilter | number
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
+    cowork?: XOR<CoWorkRelationFilter, CoWorkWhereInput>
+  }
+
+  export type OpenOrderByWithRelationInput = {
+    id?: SortOrder
+    monOpen?: SortOrder
+    tueOpen?: SortOrder
+    wedOpen?: SortOrder
+    thursOpen?: SortOrder
+    friOpen?: SortOrder
+    satOpen?: SortOrder
+    sunOpen?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    cowork?: CoWorkOrderByWithRelationInput
+  }
+
+  export type OpenWhereUniqueInput = {
+    id?: number
+    coWorkId?: number
+  }
+
+  export type OpenOrderByWithAggregationInput = {
+    id?: SortOrder
+    monOpen?: SortOrder
+    tueOpen?: SortOrder
+    wedOpen?: SortOrder
+    thursOpen?: SortOrder
+    friOpen?: SortOrder
+    satOpen?: SortOrder
+    sunOpen?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    _count?: OpenCountOrderByAggregateInput
+    _avg?: OpenAvgOrderByAggregateInput
+    _max?: OpenMaxOrderByAggregateInput
+    _min?: OpenMinOrderByAggregateInput
+    _sum?: OpenSumOrderByAggregateInput
+  }
+
+  export type OpenScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<OpenScalarWhereWithAggregatesInput>
+    OR?: Enumerable<OpenScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<OpenScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    monOpen?: IntWithAggregatesFilter | number
+    tueOpen?: IntWithAggregatesFilter | number
+    wedOpen?: IntWithAggregatesFilter | number
+    thursOpen?: IntWithAggregatesFilter | number
+    friOpen?: IntWithAggregatesFilter | number
+    satOpen?: IntWithAggregatesFilter | number
+    sunOpen?: IntWithAggregatesFilter | number
+    coWorkId?: IntWithAggregatesFilter | number
+    createAt?: DateTimeWithAggregatesFilter | Date | string
+    updateAt?: DateTimeWithAggregatesFilter | Date | string
+  }
+
+  export type CloseWhereInput = {
+    AND?: Enumerable<CloseWhereInput>
+    OR?: Enumerable<CloseWhereInput>
+    NOT?: Enumerable<CloseWhereInput>
+    id?: IntFilter | number
+    monClose?: IntFilter | number
+    tueClose?: IntFilter | number
+    wedClose?: IntFilter | number
+    thursClose?: IntFilter | number
+    friClose?: IntFilter | number
+    satClose?: IntFilter | number
+    sunClose?: IntFilter | number
+    coWorkId?: IntFilter | number
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
+    cowork?: XOR<CoWorkRelationFilter, CoWorkWhereInput>
+  }
+
+  export type CloseOrderByWithRelationInput = {
+    id?: SortOrder
+    monClose?: SortOrder
+    tueClose?: SortOrder
+    wedClose?: SortOrder
+    thursClose?: SortOrder
+    friClose?: SortOrder
+    satClose?: SortOrder
+    sunClose?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    cowork?: CoWorkOrderByWithRelationInput
+  }
+
+  export type CloseWhereUniqueInput = {
+    id?: number
+    coWorkId?: number
+  }
+
+  export type CloseOrderByWithAggregationInput = {
+    id?: SortOrder
+    monClose?: SortOrder
+    tueClose?: SortOrder
+    wedClose?: SortOrder
+    thursClose?: SortOrder
+    friClose?: SortOrder
+    satClose?: SortOrder
+    sunClose?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    _count?: CloseCountOrderByAggregateInput
+    _avg?: CloseAvgOrderByAggregateInput
+    _max?: CloseMaxOrderByAggregateInput
+    _min?: CloseMinOrderByAggregateInput
+    _sum?: CloseSumOrderByAggregateInput
+  }
+
+  export type CloseScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<CloseScalarWhereWithAggregatesInput>
+    OR?: Enumerable<CloseScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<CloseScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    monClose?: IntWithAggregatesFilter | number
+    tueClose?: IntWithAggregatesFilter | number
+    wedClose?: IntWithAggregatesFilter | number
+    thursClose?: IntWithAggregatesFilter | number
+    friClose?: IntWithAggregatesFilter | number
+    satClose?: IntWithAggregatesFilter | number
+    sunClose?: IntWithAggregatesFilter | number
+    coWorkId?: IntWithAggregatesFilter | number
+    createAt?: DateTimeWithAggregatesFilter | Date | string
+    updateAt?: DateTimeWithAggregatesFilter | Date | string
+  }
+
+  export type OpenClose24HoursWhereInput = {
+    AND?: Enumerable<OpenClose24HoursWhereInput>
+    OR?: Enumerable<OpenClose24HoursWhereInput>
+    NOT?: Enumerable<OpenClose24HoursWhereInput>
+    id?: IntFilter | number
+    mon24hours?: BoolFilter | boolean
+    tue24hours?: BoolFilter | boolean
+    wed24hours?: BoolFilter | boolean
+    thurs24hours?: BoolFilter | boolean
+    fri24hours?: BoolFilter | boolean
+    sat24hours?: BoolFilter | boolean
+    sun24hours?: BoolFilter | boolean
+    coWorkId?: IntFilter | number
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
+    cowork?: XOR<CoWorkRelationFilter, CoWorkWhereInput>
+  }
+
+  export type OpenClose24HoursOrderByWithRelationInput = {
+    id?: SortOrder
+    mon24hours?: SortOrder
+    tue24hours?: SortOrder
+    wed24hours?: SortOrder
+    thurs24hours?: SortOrder
+    fri24hours?: SortOrder
+    sat24hours?: SortOrder
+    sun24hours?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    cowork?: CoWorkOrderByWithRelationInput
+  }
+
+  export type OpenClose24HoursWhereUniqueInput = {
+    id?: number
+    coWorkId?: number
+  }
+
+  export type OpenClose24HoursOrderByWithAggregationInput = {
+    id?: SortOrder
+    mon24hours?: SortOrder
+    tue24hours?: SortOrder
+    wed24hours?: SortOrder
+    thurs24hours?: SortOrder
+    fri24hours?: SortOrder
+    sat24hours?: SortOrder
+    sun24hours?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    _count?: OpenClose24HoursCountOrderByAggregateInput
+    _avg?: OpenClose24HoursAvgOrderByAggregateInput
+    _max?: OpenClose24HoursMaxOrderByAggregateInput
+    _min?: OpenClose24HoursMinOrderByAggregateInput
+    _sum?: OpenClose24HoursSumOrderByAggregateInput
+  }
+
+  export type OpenClose24HoursScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<OpenClose24HoursScalarWhereWithAggregatesInput>
+    OR?: Enumerable<OpenClose24HoursScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<OpenClose24HoursScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    mon24hours?: BoolWithAggregatesFilter | boolean
+    tue24hours?: BoolWithAggregatesFilter | boolean
+    wed24hours?: BoolWithAggregatesFilter | boolean
+    thurs24hours?: BoolWithAggregatesFilter | boolean
+    fri24hours?: BoolWithAggregatesFilter | boolean
+    sat24hours?: BoolWithAggregatesFilter | boolean
+    sun24hours?: BoolWithAggregatesFilter | boolean
+    coWorkId?: IntWithAggregatesFilter | number
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
   }
@@ -14819,10 +16731,12 @@ export namespace Prisma {
     tel: string
     picture: string
     BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
-    OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
     FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
     userInternal?: UserInternalCreateNestedOneWithoutCoWorkInput
     bookRoom?: BookRoomCreateNestedManyWithoutCoworkInput
+    Close?: CloseCreateNestedOneWithoutCoworkInput
+    Open?: OpenCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursCreateNestedOneWithoutCoworkInput
   }
 
   export type CoWorkUncheckedCreateInput = {
@@ -14834,9 +16748,11 @@ export namespace Prisma {
     picture: string
     userInternalId?: number | null
     BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
-    OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
     FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
     bookRoom?: BookRoomUncheckedCreateNestedManyWithoutCoworkInput
+    Close?: CloseUncheckedCreateNestedOneWithoutCoworkInput
+    Open?: OpenUncheckedCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedCreateNestedOneWithoutCoworkInput
   }
 
   export type CoWorkUpdateInput = {
@@ -14846,10 +16762,12 @@ export namespace Prisma {
     tel?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
-    OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
     FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
     userInternal?: UserInternalUpdateOneWithoutCoWorkNestedInput
     bookRoom?: BookRoomUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUpdateOneWithoutCoworkNestedInput
   }
 
   export type CoWorkUncheckedUpdateInput = {
@@ -14861,9 +16779,11 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     userInternalId?: NullableIntFieldUpdateOperationsInput | number | null
     BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
-    OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
     FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
     bookRoom?: BookRoomUncheckedUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUncheckedUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUncheckedUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedUpdateOneWithoutCoworkNestedInput
   }
 
   export type CoWorkCreateManyInput = {
@@ -15089,16 +17009,16 @@ export namespace Prisma {
   }
 
   export type durationCategoryCreateInput = {
-    duration?: number
+    duration: number
     createAt?: Date | string
     updateAt?: Date | string
+    openCloseId?: number | null
     RoomRate?: RoomRateCreateNestedManyWithoutDurationInput
-    openclose?: OpenCloseCreateNestedOneWithoutDurationCategoryInput
   }
 
   export type durationCategoryUncheckedCreateInput = {
     id?: number
-    duration?: number
+    duration: number
     createAt?: Date | string
     updateAt?: Date | string
     openCloseId?: number | null
@@ -15109,8 +17029,8 @@ export namespace Prisma {
     duration?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openCloseId?: NullableIntFieldUpdateOperationsInput | number | null
     RoomRate?: RoomRateUpdateManyWithoutDurationNestedInput
-    openclose?: OpenCloseUpdateOneWithoutDurationCategoryNestedInput
   }
 
   export type durationCategoryUncheckedUpdateInput = {
@@ -15124,7 +17044,7 @@ export namespace Prisma {
 
   export type durationCategoryCreateManyInput = {
     id?: number
-    duration?: number
+    duration: number
     createAt?: Date | string
     updateAt?: Date | string
     openCloseId?: number | null
@@ -15134,6 +17054,7 @@ export namespace Prisma {
     duration?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openCloseId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type durationCategoryUncheckedUpdateManyInput = {
@@ -15373,251 +17294,6 @@ export namespace Prisma {
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type OpenCloseCreateInput = {
-    openTimeMon: number
-    closeTimeMon: number
-    isOpen24hoursMon: boolean
-    isOpenMon: boolean
-    openTimeTue: number
-    closeTimeTue: number
-    isOpen24hoursTue: boolean
-    isOpenTue: boolean
-    openTimeWed: number
-    closeTimeWed: number
-    isOpen24hoursWed: boolean
-    isOpenWed: boolean
-    openTimeThurs: number
-    closeTimeThurs: number
-    isOpen24hoursThurs: boolean
-    isOpenThurs: boolean
-    openTimeFri: number
-    closeTimeFri: number
-    isOpen24hoursFri: boolean
-    isOpenFri: boolean
-    openTimeSat: number
-    closeTimeSat: number
-    isOpen24hoursSat: boolean
-    isOpenSat: boolean
-    openTimeSun: number
-    closeTimeSun: number
-    isOpen24hoursSun: boolean
-    isOpenSun: boolean
-    createAt?: Date | string
-    updateAt?: Date | string
-    coWork: CoWorkCreateNestedOneWithoutOpenCloseInput
-    durationCategory?: durationCategoryCreateNestedManyWithoutOpencloseInput
-  }
-
-  export type OpenCloseUncheckedCreateInput = {
-    id?: number
-    openTimeMon: number
-    closeTimeMon: number
-    isOpen24hoursMon: boolean
-    isOpenMon: boolean
-    openTimeTue: number
-    closeTimeTue: number
-    isOpen24hoursTue: boolean
-    isOpenTue: boolean
-    openTimeWed: number
-    closeTimeWed: number
-    isOpen24hoursWed: boolean
-    isOpenWed: boolean
-    openTimeThurs: number
-    closeTimeThurs: number
-    isOpen24hoursThurs: boolean
-    isOpenThurs: boolean
-    openTimeFri: number
-    closeTimeFri: number
-    isOpen24hoursFri: boolean
-    isOpenFri: boolean
-    openTimeSat: number
-    closeTimeSat: number
-    isOpen24hoursSat: boolean
-    isOpenSat: boolean
-    openTimeSun: number
-    closeTimeSun: number
-    isOpen24hoursSun: boolean
-    isOpenSun: boolean
-    coWorkId: number
-    createAt?: Date | string
-    updateAt?: Date | string
-    durationCategory?: durationCategoryUncheckedCreateNestedManyWithoutOpencloseInput
-  }
-
-  export type OpenCloseUpdateInput = {
-    openTimeMon?: IntFieldUpdateOperationsInput | number
-    closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
-    openTimeTue?: IntFieldUpdateOperationsInput | number
-    closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
-    openTimeWed?: IntFieldUpdateOperationsInput | number
-    closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
-    openTimeThurs?: IntFieldUpdateOperationsInput | number
-    closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
-    openTimeFri?: IntFieldUpdateOperationsInput | number
-    closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSat?: IntFieldUpdateOperationsInput | number
-    closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSun?: IntFieldUpdateOperationsInput | number
-    closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    coWork?: CoWorkUpdateOneRequiredWithoutOpenCloseNestedInput
-    durationCategory?: durationCategoryUpdateManyWithoutOpencloseNestedInput
-  }
-
-  export type OpenCloseUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    openTimeMon?: IntFieldUpdateOperationsInput | number
-    closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
-    openTimeTue?: IntFieldUpdateOperationsInput | number
-    closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
-    openTimeWed?: IntFieldUpdateOperationsInput | number
-    closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
-    openTimeThurs?: IntFieldUpdateOperationsInput | number
-    closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
-    openTimeFri?: IntFieldUpdateOperationsInput | number
-    closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSat?: IntFieldUpdateOperationsInput | number
-    closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSun?: IntFieldUpdateOperationsInput | number
-    closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
-    coWorkId?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    durationCategory?: durationCategoryUncheckedUpdateManyWithoutOpencloseNestedInput
-  }
-
-  export type OpenCloseCreateManyInput = {
-    id?: number
-    openTimeMon: number
-    closeTimeMon: number
-    isOpen24hoursMon: boolean
-    isOpenMon: boolean
-    openTimeTue: number
-    closeTimeTue: number
-    isOpen24hoursTue: boolean
-    isOpenTue: boolean
-    openTimeWed: number
-    closeTimeWed: number
-    isOpen24hoursWed: boolean
-    isOpenWed: boolean
-    openTimeThurs: number
-    closeTimeThurs: number
-    isOpen24hoursThurs: boolean
-    isOpenThurs: boolean
-    openTimeFri: number
-    closeTimeFri: number
-    isOpen24hoursFri: boolean
-    isOpenFri: boolean
-    openTimeSat: number
-    closeTimeSat: number
-    isOpen24hoursSat: boolean
-    isOpenSat: boolean
-    openTimeSun: number
-    closeTimeSun: number
-    isOpen24hoursSun: boolean
-    isOpenSun: boolean
-    coWorkId: number
-    createAt?: Date | string
-    updateAt?: Date | string
-  }
-
-  export type OpenCloseUpdateManyMutationInput = {
-    openTimeMon?: IntFieldUpdateOperationsInput | number
-    closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
-    openTimeTue?: IntFieldUpdateOperationsInput | number
-    closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
-    openTimeWed?: IntFieldUpdateOperationsInput | number
-    closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
-    openTimeThurs?: IntFieldUpdateOperationsInput | number
-    closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
-    openTimeFri?: IntFieldUpdateOperationsInput | number
-    closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSat?: IntFieldUpdateOperationsInput | number
-    closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSun?: IntFieldUpdateOperationsInput | number
-    closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type OpenCloseUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    openTimeMon?: IntFieldUpdateOperationsInput | number
-    closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
-    openTimeTue?: IntFieldUpdateOperationsInput | number
-    closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
-    openTimeWed?: IntFieldUpdateOperationsInput | number
-    closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
-    openTimeThurs?: IntFieldUpdateOperationsInput | number
-    closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
-    openTimeFri?: IntFieldUpdateOperationsInput | number
-    closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSat?: IntFieldUpdateOperationsInput | number
-    closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSun?: IntFieldUpdateOperationsInput | number
-    closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
-    coWorkId?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type VertifyBookingCodeCreateInput = {
     verifyCode: string
     bookdate: Date | string
@@ -15671,6 +17347,288 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     verifyCode?: StringFieldUpdateOperationsInput | string
     bookdate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenCreateInput = {
+    monOpen: number
+    tueOpen: number
+    wedOpen: number
+    thursOpen: number
+    friOpen: number
+    satOpen: number
+    sunOpen: number
+    createAt?: Date | string
+    updateAt?: Date | string
+    cowork: CoWorkCreateNestedOneWithoutOpenInput
+  }
+
+  export type OpenUncheckedCreateInput = {
+    id?: number
+    monOpen: number
+    tueOpen: number
+    wedOpen: number
+    thursOpen: number
+    friOpen: number
+    satOpen: number
+    sunOpen: number
+    coWorkId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type OpenUpdateInput = {
+    monOpen?: IntFieldUpdateOperationsInput | number
+    tueOpen?: IntFieldUpdateOperationsInput | number
+    wedOpen?: IntFieldUpdateOperationsInput | number
+    thursOpen?: IntFieldUpdateOperationsInput | number
+    friOpen?: IntFieldUpdateOperationsInput | number
+    satOpen?: IntFieldUpdateOperationsInput | number
+    sunOpen?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cowork?: CoWorkUpdateOneRequiredWithoutOpenNestedInput
+  }
+
+  export type OpenUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    monOpen?: IntFieldUpdateOperationsInput | number
+    tueOpen?: IntFieldUpdateOperationsInput | number
+    wedOpen?: IntFieldUpdateOperationsInput | number
+    thursOpen?: IntFieldUpdateOperationsInput | number
+    friOpen?: IntFieldUpdateOperationsInput | number
+    satOpen?: IntFieldUpdateOperationsInput | number
+    sunOpen?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenCreateManyInput = {
+    id?: number
+    monOpen: number
+    tueOpen: number
+    wedOpen: number
+    thursOpen: number
+    friOpen: number
+    satOpen: number
+    sunOpen: number
+    coWorkId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type OpenUpdateManyMutationInput = {
+    monOpen?: IntFieldUpdateOperationsInput | number
+    tueOpen?: IntFieldUpdateOperationsInput | number
+    wedOpen?: IntFieldUpdateOperationsInput | number
+    thursOpen?: IntFieldUpdateOperationsInput | number
+    friOpen?: IntFieldUpdateOperationsInput | number
+    satOpen?: IntFieldUpdateOperationsInput | number
+    sunOpen?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    monOpen?: IntFieldUpdateOperationsInput | number
+    tueOpen?: IntFieldUpdateOperationsInput | number
+    wedOpen?: IntFieldUpdateOperationsInput | number
+    thursOpen?: IntFieldUpdateOperationsInput | number
+    friOpen?: IntFieldUpdateOperationsInput | number
+    satOpen?: IntFieldUpdateOperationsInput | number
+    sunOpen?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CloseCreateInput = {
+    monClose: number
+    tueClose: number
+    wedClose: number
+    thursClose: number
+    friClose: number
+    satClose: number
+    sunClose: number
+    createAt?: Date | string
+    updateAt?: Date | string
+    cowork: CoWorkCreateNestedOneWithoutCloseInput
+  }
+
+  export type CloseUncheckedCreateInput = {
+    id?: number
+    monClose: number
+    tueClose: number
+    wedClose: number
+    thursClose: number
+    friClose: number
+    satClose: number
+    sunClose: number
+    coWorkId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type CloseUpdateInput = {
+    monClose?: IntFieldUpdateOperationsInput | number
+    tueClose?: IntFieldUpdateOperationsInput | number
+    wedClose?: IntFieldUpdateOperationsInput | number
+    thursClose?: IntFieldUpdateOperationsInput | number
+    friClose?: IntFieldUpdateOperationsInput | number
+    satClose?: IntFieldUpdateOperationsInput | number
+    sunClose?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cowork?: CoWorkUpdateOneRequiredWithoutCloseNestedInput
+  }
+
+  export type CloseUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    monClose?: IntFieldUpdateOperationsInput | number
+    tueClose?: IntFieldUpdateOperationsInput | number
+    wedClose?: IntFieldUpdateOperationsInput | number
+    thursClose?: IntFieldUpdateOperationsInput | number
+    friClose?: IntFieldUpdateOperationsInput | number
+    satClose?: IntFieldUpdateOperationsInput | number
+    sunClose?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CloseCreateManyInput = {
+    id?: number
+    monClose: number
+    tueClose: number
+    wedClose: number
+    thursClose: number
+    friClose: number
+    satClose: number
+    sunClose: number
+    coWorkId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type CloseUpdateManyMutationInput = {
+    monClose?: IntFieldUpdateOperationsInput | number
+    tueClose?: IntFieldUpdateOperationsInput | number
+    wedClose?: IntFieldUpdateOperationsInput | number
+    thursClose?: IntFieldUpdateOperationsInput | number
+    friClose?: IntFieldUpdateOperationsInput | number
+    satClose?: IntFieldUpdateOperationsInput | number
+    sunClose?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CloseUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    monClose?: IntFieldUpdateOperationsInput | number
+    tueClose?: IntFieldUpdateOperationsInput | number
+    wedClose?: IntFieldUpdateOperationsInput | number
+    thursClose?: IntFieldUpdateOperationsInput | number
+    friClose?: IntFieldUpdateOperationsInput | number
+    satClose?: IntFieldUpdateOperationsInput | number
+    sunClose?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenClose24HoursCreateInput = {
+    mon24hours: boolean
+    tue24hours: boolean
+    wed24hours: boolean
+    thurs24hours: boolean
+    fri24hours: boolean
+    sat24hours: boolean
+    sun24hours: boolean
+    createAt?: Date | string
+    updateAt?: Date | string
+    cowork: CoWorkCreateNestedOneWithoutOpenClose24HoursInput
+  }
+
+  export type OpenClose24HoursUncheckedCreateInput = {
+    id?: number
+    mon24hours: boolean
+    tue24hours: boolean
+    wed24hours: boolean
+    thurs24hours: boolean
+    fri24hours: boolean
+    sat24hours: boolean
+    sun24hours: boolean
+    coWorkId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type OpenClose24HoursUpdateInput = {
+    mon24hours?: BoolFieldUpdateOperationsInput | boolean
+    tue24hours?: BoolFieldUpdateOperationsInput | boolean
+    wed24hours?: BoolFieldUpdateOperationsInput | boolean
+    thurs24hours?: BoolFieldUpdateOperationsInput | boolean
+    fri24hours?: BoolFieldUpdateOperationsInput | boolean
+    sat24hours?: BoolFieldUpdateOperationsInput | boolean
+    sun24hours?: BoolFieldUpdateOperationsInput | boolean
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cowork?: CoWorkUpdateOneRequiredWithoutOpenClose24HoursNestedInput
+  }
+
+  export type OpenClose24HoursUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mon24hours?: BoolFieldUpdateOperationsInput | boolean
+    tue24hours?: BoolFieldUpdateOperationsInput | boolean
+    wed24hours?: BoolFieldUpdateOperationsInput | boolean
+    thurs24hours?: BoolFieldUpdateOperationsInput | boolean
+    fri24hours?: BoolFieldUpdateOperationsInput | boolean
+    sat24hours?: BoolFieldUpdateOperationsInput | boolean
+    sun24hours?: BoolFieldUpdateOperationsInput | boolean
+    coWorkId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenClose24HoursCreateManyInput = {
+    id?: number
+    mon24hours: boolean
+    tue24hours: boolean
+    wed24hours: boolean
+    thurs24hours: boolean
+    fri24hours: boolean
+    sat24hours: boolean
+    sun24hours: boolean
+    coWorkId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type OpenClose24HoursUpdateManyMutationInput = {
+    mon24hours?: BoolFieldUpdateOperationsInput | boolean
+    tue24hours?: BoolFieldUpdateOperationsInput | boolean
+    wed24hours?: BoolFieldUpdateOperationsInput | boolean
+    thurs24hours?: BoolFieldUpdateOperationsInput | boolean
+    fri24hours?: BoolFieldUpdateOperationsInput | boolean
+    sat24hours?: BoolFieldUpdateOperationsInput | boolean
+    sun24hours?: BoolFieldUpdateOperationsInput | boolean
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenClose24HoursUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mon24hours?: BoolFieldUpdateOperationsInput | boolean
+    tue24hours?: BoolFieldUpdateOperationsInput | boolean
+    wed24hours?: BoolFieldUpdateOperationsInput | boolean
+    thurs24hours?: BoolFieldUpdateOperationsInput | boolean
+    fri24hours?: BoolFieldUpdateOperationsInput | boolean
+    sat24hours?: BoolFieldUpdateOperationsInput | boolean
+    sun24hours?: BoolFieldUpdateOperationsInput | boolean
+    coWorkId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15825,11 +17783,6 @@ export namespace Prisma {
     none?: BranchToRoomWhereInput
   }
 
-  export type OpenCloseRelationFilter = {
-    is?: OpenCloseWhereInput | null
-    isNot?: OpenCloseWhereInput | null
-  }
-
   export type FacilityToCoWorkListRelationFilter = {
     every?: FacilityToCoWorkWhereInput
     some?: FacilityToCoWorkWhereInput
@@ -15839,6 +17792,21 @@ export namespace Prisma {
   export type UserInternalRelationFilter = {
     is?: UserInternalWhereInput | null
     isNot?: UserInternalWhereInput | null
+  }
+
+  export type CloseRelationFilter = {
+    is?: CloseWhereInput | null
+    isNot?: CloseWhereInput | null
+  }
+
+  export type OpenRelationFilter = {
+    is?: OpenWhereInput | null
+    isNot?: OpenWhereInput | null
+  }
+
+  export type OpenClose24HoursRelationFilter = {
+    is?: OpenClose24HoursWhereInput | null
+    isNot?: OpenClose24HoursWhereInput | null
   }
 
   export type BranchToRoomOrderByRelationAggregateInput = {
@@ -16252,172 +18220,6 @@ export namespace Prisma {
     vertifyBookingCodeId?: SortOrder
   }
 
-  export type BoolFilter = {
-    equals?: boolean
-    not?: NestedBoolFilter | boolean
-  }
-
-  export type DurationCategoryListRelationFilter = {
-    every?: durationCategoryWhereInput
-    some?: durationCategoryWhereInput
-    none?: durationCategoryWhereInput
-  }
-
-  export type durationCategoryOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type OpenCloseCountOrderByAggregateInput = {
-    id?: SortOrder
-    openTimeMon?: SortOrder
-    closeTimeMon?: SortOrder
-    isOpen24hoursMon?: SortOrder
-    isOpenMon?: SortOrder
-    openTimeTue?: SortOrder
-    closeTimeTue?: SortOrder
-    isOpen24hoursTue?: SortOrder
-    isOpenTue?: SortOrder
-    openTimeWed?: SortOrder
-    closeTimeWed?: SortOrder
-    isOpen24hoursWed?: SortOrder
-    isOpenWed?: SortOrder
-    openTimeThurs?: SortOrder
-    closeTimeThurs?: SortOrder
-    isOpen24hoursThurs?: SortOrder
-    isOpenThurs?: SortOrder
-    openTimeFri?: SortOrder
-    closeTimeFri?: SortOrder
-    isOpen24hoursFri?: SortOrder
-    isOpenFri?: SortOrder
-    openTimeSat?: SortOrder
-    closeTimeSat?: SortOrder
-    isOpen24hoursSat?: SortOrder
-    isOpenSat?: SortOrder
-    openTimeSun?: SortOrder
-    closeTimeSun?: SortOrder
-    isOpen24hoursSun?: SortOrder
-    isOpenSun?: SortOrder
-    coWorkId?: SortOrder
-    createAt?: SortOrder
-    updateAt?: SortOrder
-  }
-
-  export type OpenCloseAvgOrderByAggregateInput = {
-    id?: SortOrder
-    openTimeMon?: SortOrder
-    closeTimeMon?: SortOrder
-    openTimeTue?: SortOrder
-    closeTimeTue?: SortOrder
-    openTimeWed?: SortOrder
-    closeTimeWed?: SortOrder
-    openTimeThurs?: SortOrder
-    closeTimeThurs?: SortOrder
-    openTimeFri?: SortOrder
-    closeTimeFri?: SortOrder
-    openTimeSat?: SortOrder
-    closeTimeSat?: SortOrder
-    openTimeSun?: SortOrder
-    closeTimeSun?: SortOrder
-    coWorkId?: SortOrder
-  }
-
-  export type OpenCloseMaxOrderByAggregateInput = {
-    id?: SortOrder
-    openTimeMon?: SortOrder
-    closeTimeMon?: SortOrder
-    isOpen24hoursMon?: SortOrder
-    isOpenMon?: SortOrder
-    openTimeTue?: SortOrder
-    closeTimeTue?: SortOrder
-    isOpen24hoursTue?: SortOrder
-    isOpenTue?: SortOrder
-    openTimeWed?: SortOrder
-    closeTimeWed?: SortOrder
-    isOpen24hoursWed?: SortOrder
-    isOpenWed?: SortOrder
-    openTimeThurs?: SortOrder
-    closeTimeThurs?: SortOrder
-    isOpen24hoursThurs?: SortOrder
-    isOpenThurs?: SortOrder
-    openTimeFri?: SortOrder
-    closeTimeFri?: SortOrder
-    isOpen24hoursFri?: SortOrder
-    isOpenFri?: SortOrder
-    openTimeSat?: SortOrder
-    closeTimeSat?: SortOrder
-    isOpen24hoursSat?: SortOrder
-    isOpenSat?: SortOrder
-    openTimeSun?: SortOrder
-    closeTimeSun?: SortOrder
-    isOpen24hoursSun?: SortOrder
-    isOpenSun?: SortOrder
-    coWorkId?: SortOrder
-    createAt?: SortOrder
-    updateAt?: SortOrder
-  }
-
-  export type OpenCloseMinOrderByAggregateInput = {
-    id?: SortOrder
-    openTimeMon?: SortOrder
-    closeTimeMon?: SortOrder
-    isOpen24hoursMon?: SortOrder
-    isOpenMon?: SortOrder
-    openTimeTue?: SortOrder
-    closeTimeTue?: SortOrder
-    isOpen24hoursTue?: SortOrder
-    isOpenTue?: SortOrder
-    openTimeWed?: SortOrder
-    closeTimeWed?: SortOrder
-    isOpen24hoursWed?: SortOrder
-    isOpenWed?: SortOrder
-    openTimeThurs?: SortOrder
-    closeTimeThurs?: SortOrder
-    isOpen24hoursThurs?: SortOrder
-    isOpenThurs?: SortOrder
-    openTimeFri?: SortOrder
-    closeTimeFri?: SortOrder
-    isOpen24hoursFri?: SortOrder
-    isOpenFri?: SortOrder
-    openTimeSat?: SortOrder
-    closeTimeSat?: SortOrder
-    isOpen24hoursSat?: SortOrder
-    isOpenSat?: SortOrder
-    openTimeSun?: SortOrder
-    closeTimeSun?: SortOrder
-    isOpen24hoursSun?: SortOrder
-    isOpenSun?: SortOrder
-    coWorkId?: SortOrder
-    createAt?: SortOrder
-    updateAt?: SortOrder
-  }
-
-  export type OpenCloseSumOrderByAggregateInput = {
-    id?: SortOrder
-    openTimeMon?: SortOrder
-    closeTimeMon?: SortOrder
-    openTimeTue?: SortOrder
-    closeTimeTue?: SortOrder
-    openTimeWed?: SortOrder
-    closeTimeWed?: SortOrder
-    openTimeThurs?: SortOrder
-    closeTimeThurs?: SortOrder
-    openTimeFri?: SortOrder
-    closeTimeFri?: SortOrder
-    openTimeSat?: SortOrder
-    closeTimeSat?: SortOrder
-    openTimeSun?: SortOrder
-    closeTimeSun?: SortOrder
-    coWorkId?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter = {
-    equals?: boolean
-    not?: NestedBoolWithAggregatesFilter | boolean
-    _count?: NestedIntFilter
-    _min?: NestedBoolFilter
-    _max?: NestedBoolFilter
-  }
-
   export type VertifyBookingCodeCountOrderByAggregateInput = {
     id?: SortOrder
     verifyCode?: SortOrder
@@ -16448,6 +18250,203 @@ export namespace Prisma {
 
   export type VertifyBookingCodeSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type OpenCountOrderByAggregateInput = {
+    id?: SortOrder
+    monOpen?: SortOrder
+    tueOpen?: SortOrder
+    wedOpen?: SortOrder
+    thursOpen?: SortOrder
+    friOpen?: SortOrder
+    satOpen?: SortOrder
+    sunOpen?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type OpenAvgOrderByAggregateInput = {
+    id?: SortOrder
+    monOpen?: SortOrder
+    tueOpen?: SortOrder
+    wedOpen?: SortOrder
+    thursOpen?: SortOrder
+    friOpen?: SortOrder
+    satOpen?: SortOrder
+    sunOpen?: SortOrder
+    coWorkId?: SortOrder
+  }
+
+  export type OpenMaxOrderByAggregateInput = {
+    id?: SortOrder
+    monOpen?: SortOrder
+    tueOpen?: SortOrder
+    wedOpen?: SortOrder
+    thursOpen?: SortOrder
+    friOpen?: SortOrder
+    satOpen?: SortOrder
+    sunOpen?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type OpenMinOrderByAggregateInput = {
+    id?: SortOrder
+    monOpen?: SortOrder
+    tueOpen?: SortOrder
+    wedOpen?: SortOrder
+    thursOpen?: SortOrder
+    friOpen?: SortOrder
+    satOpen?: SortOrder
+    sunOpen?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type OpenSumOrderByAggregateInput = {
+    id?: SortOrder
+    monOpen?: SortOrder
+    tueOpen?: SortOrder
+    wedOpen?: SortOrder
+    thursOpen?: SortOrder
+    friOpen?: SortOrder
+    satOpen?: SortOrder
+    sunOpen?: SortOrder
+    coWorkId?: SortOrder
+  }
+
+  export type CloseCountOrderByAggregateInput = {
+    id?: SortOrder
+    monClose?: SortOrder
+    tueClose?: SortOrder
+    wedClose?: SortOrder
+    thursClose?: SortOrder
+    friClose?: SortOrder
+    satClose?: SortOrder
+    sunClose?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type CloseAvgOrderByAggregateInput = {
+    id?: SortOrder
+    monClose?: SortOrder
+    tueClose?: SortOrder
+    wedClose?: SortOrder
+    thursClose?: SortOrder
+    friClose?: SortOrder
+    satClose?: SortOrder
+    sunClose?: SortOrder
+    coWorkId?: SortOrder
+  }
+
+  export type CloseMaxOrderByAggregateInput = {
+    id?: SortOrder
+    monClose?: SortOrder
+    tueClose?: SortOrder
+    wedClose?: SortOrder
+    thursClose?: SortOrder
+    friClose?: SortOrder
+    satClose?: SortOrder
+    sunClose?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type CloseMinOrderByAggregateInput = {
+    id?: SortOrder
+    monClose?: SortOrder
+    tueClose?: SortOrder
+    wedClose?: SortOrder
+    thursClose?: SortOrder
+    friClose?: SortOrder
+    satClose?: SortOrder
+    sunClose?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type CloseSumOrderByAggregateInput = {
+    id?: SortOrder
+    monClose?: SortOrder
+    tueClose?: SortOrder
+    wedClose?: SortOrder
+    thursClose?: SortOrder
+    friClose?: SortOrder
+    satClose?: SortOrder
+    sunClose?: SortOrder
+    coWorkId?: SortOrder
+  }
+
+  export type BoolFilter = {
+    equals?: boolean
+    not?: NestedBoolFilter | boolean
+  }
+
+  export type OpenClose24HoursCountOrderByAggregateInput = {
+    id?: SortOrder
+    mon24hours?: SortOrder
+    tue24hours?: SortOrder
+    wed24hours?: SortOrder
+    thurs24hours?: SortOrder
+    fri24hours?: SortOrder
+    sat24hours?: SortOrder
+    sun24hours?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type OpenClose24HoursAvgOrderByAggregateInput = {
+    id?: SortOrder
+    coWorkId?: SortOrder
+  }
+
+  export type OpenClose24HoursMaxOrderByAggregateInput = {
+    id?: SortOrder
+    mon24hours?: SortOrder
+    tue24hours?: SortOrder
+    wed24hours?: SortOrder
+    thurs24hours?: SortOrder
+    fri24hours?: SortOrder
+    sat24hours?: SortOrder
+    sun24hours?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type OpenClose24HoursMinOrderByAggregateInput = {
+    id?: SortOrder
+    mon24hours?: SortOrder
+    tue24hours?: SortOrder
+    wed24hours?: SortOrder
+    thurs24hours?: SortOrder
+    fri24hours?: SortOrder
+    sat24hours?: SortOrder
+    sun24hours?: SortOrder
+    coWorkId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type OpenClose24HoursSumOrderByAggregateInput = {
+    id?: SortOrder
+    coWorkId?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter = {
+    equals?: boolean
+    not?: NestedBoolWithAggregatesFilter | boolean
+    _count?: NestedIntFilter
+    _min?: NestedBoolFilter
+    _max?: NestedBoolFilter
   }
 
   export type BookRoomCreateNestedManyWithoutUserExternalInput = {
@@ -16515,12 +18514,6 @@ export namespace Prisma {
     connect?: Enumerable<BranchToRoomWhereUniqueInput>
   }
 
-  export type OpenCloseCreateNestedOneWithoutCoWorkInput = {
-    create?: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
-    connectOrCreate?: OpenCloseCreateOrConnectWithoutCoWorkInput
-    connect?: OpenCloseWhereUniqueInput
-  }
-
   export type FacilityToCoWorkCreateNestedManyWithoutCoWorkInput = {
     create?: XOR<Enumerable<FacilityToCoWorkCreateWithoutCoWorkInput>, Enumerable<FacilityToCoWorkUncheckedCreateWithoutCoWorkInput>>
     connectOrCreate?: Enumerable<FacilityToCoWorkCreateOrConnectWithoutCoWorkInput>
@@ -16541,17 +18534,29 @@ export namespace Prisma {
     connect?: Enumerable<BookRoomWhereUniqueInput>
   }
 
+  export type CloseCreateNestedOneWithoutCoworkInput = {
+    create?: XOR<CloseCreateWithoutCoworkInput, CloseUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: CloseCreateOrConnectWithoutCoworkInput
+    connect?: CloseWhereUniqueInput
+  }
+
+  export type OpenCreateNestedOneWithoutCoworkInput = {
+    create?: XOR<OpenCreateWithoutCoworkInput, OpenUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: OpenCreateOrConnectWithoutCoworkInput
+    connect?: OpenWhereUniqueInput
+  }
+
+  export type OpenClose24HoursCreateNestedOneWithoutCoworkInput = {
+    create?: XOR<OpenClose24HoursCreateWithoutCoworkInput, OpenClose24HoursUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: OpenClose24HoursCreateOrConnectWithoutCoworkInput
+    connect?: OpenClose24HoursWhereUniqueInput
+  }
+
   export type BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput = {
     create?: XOR<Enumerable<BranchToRoomCreateWithoutCoWorkInput>, Enumerable<BranchToRoomUncheckedCreateWithoutCoWorkInput>>
     connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutCoWorkInput>
     createMany?: BranchToRoomCreateManyCoWorkInputEnvelope
     connect?: Enumerable<BranchToRoomWhereUniqueInput>
-  }
-
-  export type OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput = {
-    create?: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
-    connectOrCreate?: OpenCloseCreateOrConnectWithoutCoWorkInput
-    connect?: OpenCloseWhereUniqueInput
   }
 
   export type FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput = {
@@ -16568,6 +18573,24 @@ export namespace Prisma {
     connect?: Enumerable<BookRoomWhereUniqueInput>
   }
 
+  export type CloseUncheckedCreateNestedOneWithoutCoworkInput = {
+    create?: XOR<CloseCreateWithoutCoworkInput, CloseUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: CloseCreateOrConnectWithoutCoworkInput
+    connect?: CloseWhereUniqueInput
+  }
+
+  export type OpenUncheckedCreateNestedOneWithoutCoworkInput = {
+    create?: XOR<OpenCreateWithoutCoworkInput, OpenUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: OpenCreateOrConnectWithoutCoworkInput
+    connect?: OpenWhereUniqueInput
+  }
+
+  export type OpenClose24HoursUncheckedCreateNestedOneWithoutCoworkInput = {
+    create?: XOR<OpenClose24HoursCreateWithoutCoworkInput, OpenClose24HoursUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: OpenClose24HoursCreateOrConnectWithoutCoworkInput
+    connect?: OpenClose24HoursWhereUniqueInput
+  }
+
   export type BranchToRoomUpdateManyWithoutCoWorkNestedInput = {
     create?: XOR<Enumerable<BranchToRoomCreateWithoutCoWorkInput>, Enumerable<BranchToRoomUncheckedCreateWithoutCoWorkInput>>
     connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutCoWorkInput>
@@ -16580,16 +18603,6 @@ export namespace Prisma {
     update?: Enumerable<BranchToRoomUpdateWithWhereUniqueWithoutCoWorkInput>
     updateMany?: Enumerable<BranchToRoomUpdateManyWithWhereWithoutCoWorkInput>
     deleteMany?: Enumerable<BranchToRoomScalarWhereInput>
-  }
-
-  export type OpenCloseUpdateOneWithoutCoWorkNestedInput = {
-    create?: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
-    connectOrCreate?: OpenCloseCreateOrConnectWithoutCoWorkInput
-    upsert?: OpenCloseUpsertWithoutCoWorkInput
-    disconnect?: boolean
-    delete?: boolean
-    connect?: OpenCloseWhereUniqueInput
-    update?: XOR<OpenCloseUpdateWithoutCoWorkInput, OpenCloseUncheckedUpdateWithoutCoWorkInput>
   }
 
   export type FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput = {
@@ -16630,6 +18643,36 @@ export namespace Prisma {
     deleteMany?: Enumerable<BookRoomScalarWhereInput>
   }
 
+  export type CloseUpdateOneWithoutCoworkNestedInput = {
+    create?: XOR<CloseCreateWithoutCoworkInput, CloseUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: CloseCreateOrConnectWithoutCoworkInput
+    upsert?: CloseUpsertWithoutCoworkInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: CloseWhereUniqueInput
+    update?: XOR<CloseUpdateWithoutCoworkInput, CloseUncheckedUpdateWithoutCoworkInput>
+  }
+
+  export type OpenUpdateOneWithoutCoworkNestedInput = {
+    create?: XOR<OpenCreateWithoutCoworkInput, OpenUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: OpenCreateOrConnectWithoutCoworkInput
+    upsert?: OpenUpsertWithoutCoworkInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: OpenWhereUniqueInput
+    update?: XOR<OpenUpdateWithoutCoworkInput, OpenUncheckedUpdateWithoutCoworkInput>
+  }
+
+  export type OpenClose24HoursUpdateOneWithoutCoworkNestedInput = {
+    create?: XOR<OpenClose24HoursCreateWithoutCoworkInput, OpenClose24HoursUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: OpenClose24HoursCreateOrConnectWithoutCoworkInput
+    upsert?: OpenClose24HoursUpsertWithoutCoworkInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: OpenClose24HoursWhereUniqueInput
+    update?: XOR<OpenClose24HoursUpdateWithoutCoworkInput, OpenClose24HoursUncheckedUpdateWithoutCoworkInput>
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -16650,16 +18693,6 @@ export namespace Prisma {
     update?: Enumerable<BranchToRoomUpdateWithWhereUniqueWithoutCoWorkInput>
     updateMany?: Enumerable<BranchToRoomUpdateManyWithWhereWithoutCoWorkInput>
     deleteMany?: Enumerable<BranchToRoomScalarWhereInput>
-  }
-
-  export type OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput = {
-    create?: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
-    connectOrCreate?: OpenCloseCreateOrConnectWithoutCoWorkInput
-    upsert?: OpenCloseUpsertWithoutCoWorkInput
-    disconnect?: boolean
-    delete?: boolean
-    connect?: OpenCloseWhereUniqueInput
-    update?: XOR<OpenCloseUpdateWithoutCoWorkInput, OpenCloseUncheckedUpdateWithoutCoWorkInput>
   }
 
   export type FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput = {
@@ -16688,6 +18721,36 @@ export namespace Prisma {
     update?: Enumerable<BookRoomUpdateWithWhereUniqueWithoutCoworkInput>
     updateMany?: Enumerable<BookRoomUpdateManyWithWhereWithoutCoworkInput>
     deleteMany?: Enumerable<BookRoomScalarWhereInput>
+  }
+
+  export type CloseUncheckedUpdateOneWithoutCoworkNestedInput = {
+    create?: XOR<CloseCreateWithoutCoworkInput, CloseUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: CloseCreateOrConnectWithoutCoworkInput
+    upsert?: CloseUpsertWithoutCoworkInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: CloseWhereUniqueInput
+    update?: XOR<CloseUpdateWithoutCoworkInput, CloseUncheckedUpdateWithoutCoworkInput>
+  }
+
+  export type OpenUncheckedUpdateOneWithoutCoworkNestedInput = {
+    create?: XOR<OpenCreateWithoutCoworkInput, OpenUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: OpenCreateOrConnectWithoutCoworkInput
+    upsert?: OpenUpsertWithoutCoworkInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: OpenWhereUniqueInput
+    update?: XOR<OpenUpdateWithoutCoworkInput, OpenUncheckedUpdateWithoutCoworkInput>
+  }
+
+  export type OpenClose24HoursUncheckedUpdateOneWithoutCoworkNestedInput = {
+    create?: XOR<OpenClose24HoursCreateWithoutCoworkInput, OpenClose24HoursUncheckedCreateWithoutCoworkInput>
+    connectOrCreate?: OpenClose24HoursCreateOrConnectWithoutCoworkInput
+    upsert?: OpenClose24HoursUpsertWithoutCoworkInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: OpenClose24HoursWhereUniqueInput
+    update?: XOR<OpenClose24HoursUpdateWithoutCoworkInput, OpenClose24HoursUncheckedUpdateWithoutCoworkInput>
   }
 
   export type CoWorkCreateNestedOneWithoutUserInternalInput = {
@@ -16885,12 +18948,6 @@ export namespace Prisma {
     connect?: Enumerable<RoomRateWhereUniqueInput>
   }
 
-  export type OpenCloseCreateNestedOneWithoutDurationCategoryInput = {
-    create?: XOR<OpenCloseCreateWithoutDurationCategoryInput, OpenCloseUncheckedCreateWithoutDurationCategoryInput>
-    connectOrCreate?: OpenCloseCreateOrConnectWithoutDurationCategoryInput
-    connect?: OpenCloseWhereUniqueInput
-  }
-
   export type RoomRateUncheckedCreateNestedManyWithoutDurationInput = {
     create?: XOR<Enumerable<RoomRateCreateWithoutDurationInput>, Enumerable<RoomRateUncheckedCreateWithoutDurationInput>>
     connectOrCreate?: Enumerable<RoomRateCreateOrConnectWithoutDurationInput>
@@ -16910,16 +18967,6 @@ export namespace Prisma {
     update?: Enumerable<RoomRateUpdateWithWhereUniqueWithoutDurationInput>
     updateMany?: Enumerable<RoomRateUpdateManyWithWhereWithoutDurationInput>
     deleteMany?: Enumerable<RoomRateScalarWhereInput>
-  }
-
-  export type OpenCloseUpdateOneWithoutDurationCategoryNestedInput = {
-    create?: XOR<OpenCloseCreateWithoutDurationCategoryInput, OpenCloseUncheckedCreateWithoutDurationCategoryInput>
-    connectOrCreate?: OpenCloseCreateOrConnectWithoutDurationCategoryInput
-    upsert?: OpenCloseUpsertWithoutDurationCategoryInput
-    disconnect?: boolean
-    delete?: boolean
-    connect?: OpenCloseWhereUniqueInput
-    update?: XOR<OpenCloseUpdateWithoutDurationCategoryInput, OpenCloseUncheckedUpdateWithoutDurationCategoryInput>
   }
 
   export type RoomRateUncheckedUpdateManyWithoutDurationNestedInput = {
@@ -17090,66 +19137,6 @@ export namespace Prisma {
     update?: XOR<VertifyBookingCodeUpdateWithoutBookRoomInput, VertifyBookingCodeUncheckedUpdateWithoutBookRoomInput>
   }
 
-  export type CoWorkCreateNestedOneWithoutOpenCloseInput = {
-    create?: XOR<CoWorkCreateWithoutOpenCloseInput, CoWorkUncheckedCreateWithoutOpenCloseInput>
-    connectOrCreate?: CoWorkCreateOrConnectWithoutOpenCloseInput
-    connect?: CoWorkWhereUniqueInput
-  }
-
-  export type durationCategoryCreateNestedManyWithoutOpencloseInput = {
-    create?: XOR<Enumerable<durationCategoryCreateWithoutOpencloseInput>, Enumerable<durationCategoryUncheckedCreateWithoutOpencloseInput>>
-    connectOrCreate?: Enumerable<durationCategoryCreateOrConnectWithoutOpencloseInput>
-    createMany?: durationCategoryCreateManyOpencloseInputEnvelope
-    connect?: Enumerable<durationCategoryWhereUniqueInput>
-  }
-
-  export type durationCategoryUncheckedCreateNestedManyWithoutOpencloseInput = {
-    create?: XOR<Enumerable<durationCategoryCreateWithoutOpencloseInput>, Enumerable<durationCategoryUncheckedCreateWithoutOpencloseInput>>
-    connectOrCreate?: Enumerable<durationCategoryCreateOrConnectWithoutOpencloseInput>
-    createMany?: durationCategoryCreateManyOpencloseInputEnvelope
-    connect?: Enumerable<durationCategoryWhereUniqueInput>
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type CoWorkUpdateOneRequiredWithoutOpenCloseNestedInput = {
-    create?: XOR<CoWorkCreateWithoutOpenCloseInput, CoWorkUncheckedCreateWithoutOpenCloseInput>
-    connectOrCreate?: CoWorkCreateOrConnectWithoutOpenCloseInput
-    upsert?: CoWorkUpsertWithoutOpenCloseInput
-    connect?: CoWorkWhereUniqueInput
-    update?: XOR<CoWorkUpdateWithoutOpenCloseInput, CoWorkUncheckedUpdateWithoutOpenCloseInput>
-  }
-
-  export type durationCategoryUpdateManyWithoutOpencloseNestedInput = {
-    create?: XOR<Enumerable<durationCategoryCreateWithoutOpencloseInput>, Enumerable<durationCategoryUncheckedCreateWithoutOpencloseInput>>
-    connectOrCreate?: Enumerable<durationCategoryCreateOrConnectWithoutOpencloseInput>
-    upsert?: Enumerable<durationCategoryUpsertWithWhereUniqueWithoutOpencloseInput>
-    createMany?: durationCategoryCreateManyOpencloseInputEnvelope
-    set?: Enumerable<durationCategoryWhereUniqueInput>
-    disconnect?: Enumerable<durationCategoryWhereUniqueInput>
-    delete?: Enumerable<durationCategoryWhereUniqueInput>
-    connect?: Enumerable<durationCategoryWhereUniqueInput>
-    update?: Enumerable<durationCategoryUpdateWithWhereUniqueWithoutOpencloseInput>
-    updateMany?: Enumerable<durationCategoryUpdateManyWithWhereWithoutOpencloseInput>
-    deleteMany?: Enumerable<durationCategoryScalarWhereInput>
-  }
-
-  export type durationCategoryUncheckedUpdateManyWithoutOpencloseNestedInput = {
-    create?: XOR<Enumerable<durationCategoryCreateWithoutOpencloseInput>, Enumerable<durationCategoryUncheckedCreateWithoutOpencloseInput>>
-    connectOrCreate?: Enumerable<durationCategoryCreateOrConnectWithoutOpencloseInput>
-    upsert?: Enumerable<durationCategoryUpsertWithWhereUniqueWithoutOpencloseInput>
-    createMany?: durationCategoryCreateManyOpencloseInputEnvelope
-    set?: Enumerable<durationCategoryWhereUniqueInput>
-    disconnect?: Enumerable<durationCategoryWhereUniqueInput>
-    delete?: Enumerable<durationCategoryWhereUniqueInput>
-    connect?: Enumerable<durationCategoryWhereUniqueInput>
-    update?: Enumerable<durationCategoryUpdateWithWhereUniqueWithoutOpencloseInput>
-    updateMany?: Enumerable<durationCategoryUpdateManyWithWhereWithoutOpencloseInput>
-    deleteMany?: Enumerable<durationCategoryScalarWhereInput>
-  }
-
   export type BookRoomCreateNestedManyWithoutVertifyCodeInput = {
     create?: XOR<Enumerable<BookRoomCreateWithoutVertifyCodeInput>, Enumerable<BookRoomUncheckedCreateWithoutVertifyCodeInput>>
     connectOrCreate?: Enumerable<BookRoomCreateOrConnectWithoutVertifyCodeInput>
@@ -17190,6 +19177,52 @@ export namespace Prisma {
     update?: Enumerable<BookRoomUpdateWithWhereUniqueWithoutVertifyCodeInput>
     updateMany?: Enumerable<BookRoomUpdateManyWithWhereWithoutVertifyCodeInput>
     deleteMany?: Enumerable<BookRoomScalarWhereInput>
+  }
+
+  export type CoWorkCreateNestedOneWithoutOpenInput = {
+    create?: XOR<CoWorkCreateWithoutOpenInput, CoWorkUncheckedCreateWithoutOpenInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutOpenInput
+    connect?: CoWorkWhereUniqueInput
+  }
+
+  export type CoWorkUpdateOneRequiredWithoutOpenNestedInput = {
+    create?: XOR<CoWorkCreateWithoutOpenInput, CoWorkUncheckedCreateWithoutOpenInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutOpenInput
+    upsert?: CoWorkUpsertWithoutOpenInput
+    connect?: CoWorkWhereUniqueInput
+    update?: XOR<CoWorkUpdateWithoutOpenInput, CoWorkUncheckedUpdateWithoutOpenInput>
+  }
+
+  export type CoWorkCreateNestedOneWithoutCloseInput = {
+    create?: XOR<CoWorkCreateWithoutCloseInput, CoWorkUncheckedCreateWithoutCloseInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutCloseInput
+    connect?: CoWorkWhereUniqueInput
+  }
+
+  export type CoWorkUpdateOneRequiredWithoutCloseNestedInput = {
+    create?: XOR<CoWorkCreateWithoutCloseInput, CoWorkUncheckedCreateWithoutCloseInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutCloseInput
+    upsert?: CoWorkUpsertWithoutCloseInput
+    connect?: CoWorkWhereUniqueInput
+    update?: XOR<CoWorkUpdateWithoutCloseInput, CoWorkUncheckedUpdateWithoutCloseInput>
+  }
+
+  export type CoWorkCreateNestedOneWithoutOpenClose24HoursInput = {
+    create?: XOR<CoWorkCreateWithoutOpenClose24HoursInput, CoWorkUncheckedCreateWithoutOpenClose24HoursInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutOpenClose24HoursInput
+    connect?: CoWorkWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type CoWorkUpdateOneRequiredWithoutOpenClose24HoursNestedInput = {
+    create?: XOR<CoWorkCreateWithoutOpenClose24HoursInput, CoWorkUncheckedCreateWithoutOpenClose24HoursInput>
+    connectOrCreate?: CoWorkCreateOrConnectWithoutOpenClose24HoursInput
+    upsert?: CoWorkUpsertWithoutOpenClose24HoursInput
+    connect?: CoWorkWhereUniqueInput
+    update?: XOR<CoWorkUpdateWithoutOpenClose24HoursInput, CoWorkUncheckedUpdateWithoutOpenClose24HoursInput>
   }
 
   export type NestedIntFilter = {
@@ -17422,80 +19455,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type OpenCloseCreateWithoutCoWorkInput = {
-    openTimeMon: number
-    closeTimeMon: number
-    isOpen24hoursMon: boolean
-    isOpenMon: boolean
-    openTimeTue: number
-    closeTimeTue: number
-    isOpen24hoursTue: boolean
-    isOpenTue: boolean
-    openTimeWed: number
-    closeTimeWed: number
-    isOpen24hoursWed: boolean
-    isOpenWed: boolean
-    openTimeThurs: number
-    closeTimeThurs: number
-    isOpen24hoursThurs: boolean
-    isOpenThurs: boolean
-    openTimeFri: number
-    closeTimeFri: number
-    isOpen24hoursFri: boolean
-    isOpenFri: boolean
-    openTimeSat: number
-    closeTimeSat: number
-    isOpen24hoursSat: boolean
-    isOpenSat: boolean
-    openTimeSun: number
-    closeTimeSun: number
-    isOpen24hoursSun: boolean
-    isOpenSun: boolean
-    createAt?: Date | string
-    updateAt?: Date | string
-    durationCategory?: durationCategoryCreateNestedManyWithoutOpencloseInput
-  }
-
-  export type OpenCloseUncheckedCreateWithoutCoWorkInput = {
-    id?: number
-    openTimeMon: number
-    closeTimeMon: number
-    isOpen24hoursMon: boolean
-    isOpenMon: boolean
-    openTimeTue: number
-    closeTimeTue: number
-    isOpen24hoursTue: boolean
-    isOpenTue: boolean
-    openTimeWed: number
-    closeTimeWed: number
-    isOpen24hoursWed: boolean
-    isOpenWed: boolean
-    openTimeThurs: number
-    closeTimeThurs: number
-    isOpen24hoursThurs: boolean
-    isOpenThurs: boolean
-    openTimeFri: number
-    closeTimeFri: number
-    isOpen24hoursFri: boolean
-    isOpenFri: boolean
-    openTimeSat: number
-    closeTimeSat: number
-    isOpen24hoursSat: boolean
-    isOpenSat: boolean
-    openTimeSun: number
-    closeTimeSun: number
-    isOpen24hoursSun: boolean
-    isOpenSun: boolean
-    createAt?: Date | string
-    updateAt?: Date | string
-    durationCategory?: durationCategoryUncheckedCreateNestedManyWithoutOpencloseInput
-  }
-
-  export type OpenCloseCreateOrConnectWithoutCoWorkInput = {
-    where: OpenCloseWhereUniqueInput
-    create: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
-  }
-
   export type FacilityToCoWorkCreateWithoutCoWorkInput = {
     createAt?: Date | string
     updateAt?: Date | string
@@ -17574,6 +19533,96 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CloseCreateWithoutCoworkInput = {
+    monClose: number
+    tueClose: number
+    wedClose: number
+    thursClose: number
+    friClose: number
+    satClose: number
+    sunClose: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type CloseUncheckedCreateWithoutCoworkInput = {
+    id?: number
+    monClose: number
+    tueClose: number
+    wedClose: number
+    thursClose: number
+    friClose: number
+    satClose: number
+    sunClose: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type CloseCreateOrConnectWithoutCoworkInput = {
+    where: CloseWhereUniqueInput
+    create: XOR<CloseCreateWithoutCoworkInput, CloseUncheckedCreateWithoutCoworkInput>
+  }
+
+  export type OpenCreateWithoutCoworkInput = {
+    monOpen: number
+    tueOpen: number
+    wedOpen: number
+    thursOpen: number
+    friOpen: number
+    satOpen: number
+    sunOpen: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type OpenUncheckedCreateWithoutCoworkInput = {
+    id?: number
+    monOpen: number
+    tueOpen: number
+    wedOpen: number
+    thursOpen: number
+    friOpen: number
+    satOpen: number
+    sunOpen: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type OpenCreateOrConnectWithoutCoworkInput = {
+    where: OpenWhereUniqueInput
+    create: XOR<OpenCreateWithoutCoworkInput, OpenUncheckedCreateWithoutCoworkInput>
+  }
+
+  export type OpenClose24HoursCreateWithoutCoworkInput = {
+    mon24hours: boolean
+    tue24hours: boolean
+    wed24hours: boolean
+    thurs24hours: boolean
+    fri24hours: boolean
+    sat24hours: boolean
+    sun24hours: boolean
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type OpenClose24HoursUncheckedCreateWithoutCoworkInput = {
+    id?: number
+    mon24hours: boolean
+    tue24hours: boolean
+    wed24hours: boolean
+    thurs24hours: boolean
+    fri24hours: boolean
+    sat24hours: boolean
+    sun24hours: boolean
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type OpenClose24HoursCreateOrConnectWithoutCoworkInput = {
+    where: OpenClose24HoursWhereUniqueInput
+    create: XOR<OpenClose24HoursCreateWithoutCoworkInput, OpenClose24HoursUncheckedCreateWithoutCoworkInput>
+  }
+
   export type BranchToRoomUpsertWithWhereUniqueWithoutCoWorkInput = {
     where: BranchToRoomWhereUniqueInput
     update: XOR<BranchToRoomUpdateWithoutCoWorkInput, BranchToRoomUncheckedUpdateWithoutCoWorkInput>
@@ -17599,80 +19648,6 @@ export namespace Prisma {
     roomId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-  }
-
-  export type OpenCloseUpsertWithoutCoWorkInput = {
-    update: XOR<OpenCloseUpdateWithoutCoWorkInput, OpenCloseUncheckedUpdateWithoutCoWorkInput>
-    create: XOR<OpenCloseCreateWithoutCoWorkInput, OpenCloseUncheckedCreateWithoutCoWorkInput>
-  }
-
-  export type OpenCloseUpdateWithoutCoWorkInput = {
-    openTimeMon?: IntFieldUpdateOperationsInput | number
-    closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
-    openTimeTue?: IntFieldUpdateOperationsInput | number
-    closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
-    openTimeWed?: IntFieldUpdateOperationsInput | number
-    closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
-    openTimeThurs?: IntFieldUpdateOperationsInput | number
-    closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
-    openTimeFri?: IntFieldUpdateOperationsInput | number
-    closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSat?: IntFieldUpdateOperationsInput | number
-    closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSun?: IntFieldUpdateOperationsInput | number
-    closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    durationCategory?: durationCategoryUpdateManyWithoutOpencloseNestedInput
-  }
-
-  export type OpenCloseUncheckedUpdateWithoutCoWorkInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    openTimeMon?: IntFieldUpdateOperationsInput | number
-    closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
-    openTimeTue?: IntFieldUpdateOperationsInput | number
-    closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
-    openTimeWed?: IntFieldUpdateOperationsInput | number
-    closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
-    openTimeThurs?: IntFieldUpdateOperationsInput | number
-    closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
-    openTimeFri?: IntFieldUpdateOperationsInput | number
-    closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSat?: IntFieldUpdateOperationsInput | number
-    closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSun?: IntFieldUpdateOperationsInput | number
-    closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    durationCategory?: durationCategoryUncheckedUpdateManyWithoutOpencloseNestedInput
   }
 
   export type FacilityToCoWorkUpsertWithWhereUniqueWithoutCoWorkInput = {
@@ -17742,6 +19717,96 @@ export namespace Prisma {
     data: XOR<BookRoomUpdateManyMutationInput, BookRoomUncheckedUpdateManyWithoutBookRoomInput>
   }
 
+  export type CloseUpsertWithoutCoworkInput = {
+    update: XOR<CloseUpdateWithoutCoworkInput, CloseUncheckedUpdateWithoutCoworkInput>
+    create: XOR<CloseCreateWithoutCoworkInput, CloseUncheckedCreateWithoutCoworkInput>
+  }
+
+  export type CloseUpdateWithoutCoworkInput = {
+    monClose?: IntFieldUpdateOperationsInput | number
+    tueClose?: IntFieldUpdateOperationsInput | number
+    wedClose?: IntFieldUpdateOperationsInput | number
+    thursClose?: IntFieldUpdateOperationsInput | number
+    friClose?: IntFieldUpdateOperationsInput | number
+    satClose?: IntFieldUpdateOperationsInput | number
+    sunClose?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CloseUncheckedUpdateWithoutCoworkInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    monClose?: IntFieldUpdateOperationsInput | number
+    tueClose?: IntFieldUpdateOperationsInput | number
+    wedClose?: IntFieldUpdateOperationsInput | number
+    thursClose?: IntFieldUpdateOperationsInput | number
+    friClose?: IntFieldUpdateOperationsInput | number
+    satClose?: IntFieldUpdateOperationsInput | number
+    sunClose?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenUpsertWithoutCoworkInput = {
+    update: XOR<OpenUpdateWithoutCoworkInput, OpenUncheckedUpdateWithoutCoworkInput>
+    create: XOR<OpenCreateWithoutCoworkInput, OpenUncheckedCreateWithoutCoworkInput>
+  }
+
+  export type OpenUpdateWithoutCoworkInput = {
+    monOpen?: IntFieldUpdateOperationsInput | number
+    tueOpen?: IntFieldUpdateOperationsInput | number
+    wedOpen?: IntFieldUpdateOperationsInput | number
+    thursOpen?: IntFieldUpdateOperationsInput | number
+    friOpen?: IntFieldUpdateOperationsInput | number
+    satOpen?: IntFieldUpdateOperationsInput | number
+    sunOpen?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenUncheckedUpdateWithoutCoworkInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    monOpen?: IntFieldUpdateOperationsInput | number
+    tueOpen?: IntFieldUpdateOperationsInput | number
+    wedOpen?: IntFieldUpdateOperationsInput | number
+    thursOpen?: IntFieldUpdateOperationsInput | number
+    friOpen?: IntFieldUpdateOperationsInput | number
+    satOpen?: IntFieldUpdateOperationsInput | number
+    sunOpen?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenClose24HoursUpsertWithoutCoworkInput = {
+    update: XOR<OpenClose24HoursUpdateWithoutCoworkInput, OpenClose24HoursUncheckedUpdateWithoutCoworkInput>
+    create: XOR<OpenClose24HoursCreateWithoutCoworkInput, OpenClose24HoursUncheckedCreateWithoutCoworkInput>
+  }
+
+  export type OpenClose24HoursUpdateWithoutCoworkInput = {
+    mon24hours?: BoolFieldUpdateOperationsInput | boolean
+    tue24hours?: BoolFieldUpdateOperationsInput | boolean
+    wed24hours?: BoolFieldUpdateOperationsInput | boolean
+    thurs24hours?: BoolFieldUpdateOperationsInput | boolean
+    fri24hours?: BoolFieldUpdateOperationsInput | boolean
+    sat24hours?: BoolFieldUpdateOperationsInput | boolean
+    sun24hours?: BoolFieldUpdateOperationsInput | boolean
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenClose24HoursUncheckedUpdateWithoutCoworkInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mon24hours?: BoolFieldUpdateOperationsInput | boolean
+    tue24hours?: BoolFieldUpdateOperationsInput | boolean
+    wed24hours?: BoolFieldUpdateOperationsInput | boolean
+    thurs24hours?: BoolFieldUpdateOperationsInput | boolean
+    fri24hours?: BoolFieldUpdateOperationsInput | boolean
+    sat24hours?: BoolFieldUpdateOperationsInput | boolean
+    sun24hours?: BoolFieldUpdateOperationsInput | boolean
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CoWorkCreateWithoutUserInternalInput = {
     name: string
     description: string
@@ -17749,9 +19814,11 @@ export namespace Prisma {
     tel: string
     picture: string
     BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
-    OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
     FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
     bookRoom?: BookRoomCreateNestedManyWithoutCoworkInput
+    Close?: CloseCreateNestedOneWithoutCoworkInput
+    Open?: OpenCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursCreateNestedOneWithoutCoworkInput
   }
 
   export type CoWorkUncheckedCreateWithoutUserInternalInput = {
@@ -17762,9 +19829,11 @@ export namespace Prisma {
     tel: string
     picture: string
     BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
-    OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
     FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
     bookRoom?: BookRoomUncheckedCreateNestedManyWithoutCoworkInput
+    Close?: CloseUncheckedCreateNestedOneWithoutCoworkInput
+    Open?: OpenUncheckedCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedCreateNestedOneWithoutCoworkInput
   }
 
   export type CoWorkCreateOrConnectWithoutUserInternalInput = {
@@ -17784,9 +19853,11 @@ export namespace Prisma {
     tel?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
-    OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
     FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
     bookRoom?: BookRoomUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUpdateOneWithoutCoworkNestedInput
   }
 
   export type CoWorkUncheckedUpdateWithoutUserInternalInput = {
@@ -17797,9 +19868,11 @@ export namespace Prisma {
     tel?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
-    OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
     FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
     bookRoom?: BookRoomUncheckedUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUncheckedUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUncheckedUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedUpdateOneWithoutCoworkNestedInput
   }
 
   export type BranchToRoomCreateWithoutRoomInput = {
@@ -17928,15 +20001,15 @@ export namespace Prisma {
   }
 
   export type durationCategoryCreateWithoutRoomRateInput = {
-    duration?: number
+    duration: number
     createAt?: Date | string
     updateAt?: Date | string
-    openclose?: OpenCloseCreateNestedOneWithoutDurationCategoryInput
+    openCloseId?: number | null
   }
 
   export type durationCategoryUncheckedCreateWithoutRoomRateInput = {
     id?: number
-    duration?: number
+    duration: number
     createAt?: Date | string
     updateAt?: Date | string
     openCloseId?: number | null
@@ -17994,7 +20067,7 @@ export namespace Prisma {
     duration?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    openclose?: OpenCloseUpdateOneWithoutDurationCategoryNestedInput
+    openCloseId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type durationCategoryUncheckedUpdateWithoutRoomRateInput = {
@@ -18054,80 +20127,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type OpenCloseCreateWithoutDurationCategoryInput = {
-    openTimeMon: number
-    closeTimeMon: number
-    isOpen24hoursMon: boolean
-    isOpenMon: boolean
-    openTimeTue: number
-    closeTimeTue: number
-    isOpen24hoursTue: boolean
-    isOpenTue: boolean
-    openTimeWed: number
-    closeTimeWed: number
-    isOpen24hoursWed: boolean
-    isOpenWed: boolean
-    openTimeThurs: number
-    closeTimeThurs: number
-    isOpen24hoursThurs: boolean
-    isOpenThurs: boolean
-    openTimeFri: number
-    closeTimeFri: number
-    isOpen24hoursFri: boolean
-    isOpenFri: boolean
-    openTimeSat: number
-    closeTimeSat: number
-    isOpen24hoursSat: boolean
-    isOpenSat: boolean
-    openTimeSun: number
-    closeTimeSun: number
-    isOpen24hoursSun: boolean
-    isOpenSun: boolean
-    createAt?: Date | string
-    updateAt?: Date | string
-    coWork: CoWorkCreateNestedOneWithoutOpenCloseInput
-  }
-
-  export type OpenCloseUncheckedCreateWithoutDurationCategoryInput = {
-    id?: number
-    openTimeMon: number
-    closeTimeMon: number
-    isOpen24hoursMon: boolean
-    isOpenMon: boolean
-    openTimeTue: number
-    closeTimeTue: number
-    isOpen24hoursTue: boolean
-    isOpenTue: boolean
-    openTimeWed: number
-    closeTimeWed: number
-    isOpen24hoursWed: boolean
-    isOpenWed: boolean
-    openTimeThurs: number
-    closeTimeThurs: number
-    isOpen24hoursThurs: boolean
-    isOpenThurs: boolean
-    openTimeFri: number
-    closeTimeFri: number
-    isOpen24hoursFri: boolean
-    isOpenFri: boolean
-    openTimeSat: number
-    closeTimeSat: number
-    isOpen24hoursSat: boolean
-    isOpenSat: boolean
-    openTimeSun: number
-    closeTimeSun: number
-    isOpen24hoursSun: boolean
-    isOpenSun: boolean
-    coWorkId: number
-    createAt?: Date | string
-    updateAt?: Date | string
-  }
-
-  export type OpenCloseCreateOrConnectWithoutDurationCategoryInput = {
-    where: OpenCloseWhereUniqueInput
-    create: XOR<OpenCloseCreateWithoutDurationCategoryInput, OpenCloseUncheckedCreateWithoutDurationCategoryInput>
-  }
-
   export type RoomRateUpsertWithWhereUniqueWithoutDurationInput = {
     where: RoomRateWhereUniqueInput
     update: XOR<RoomRateUpdateWithoutDurationInput, RoomRateUncheckedUpdateWithoutDurationInput>
@@ -18142,80 +20141,6 @@ export namespace Prisma {
   export type RoomRateUpdateManyWithWhereWithoutDurationInput = {
     where: RoomRateScalarWhereInput
     data: XOR<RoomRateUpdateManyMutationInput, RoomRateUncheckedUpdateManyWithoutRoomRateInput>
-  }
-
-  export type OpenCloseUpsertWithoutDurationCategoryInput = {
-    update: XOR<OpenCloseUpdateWithoutDurationCategoryInput, OpenCloseUncheckedUpdateWithoutDurationCategoryInput>
-    create: XOR<OpenCloseCreateWithoutDurationCategoryInput, OpenCloseUncheckedCreateWithoutDurationCategoryInput>
-  }
-
-  export type OpenCloseUpdateWithoutDurationCategoryInput = {
-    openTimeMon?: IntFieldUpdateOperationsInput | number
-    closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
-    openTimeTue?: IntFieldUpdateOperationsInput | number
-    closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
-    openTimeWed?: IntFieldUpdateOperationsInput | number
-    closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
-    openTimeThurs?: IntFieldUpdateOperationsInput | number
-    closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
-    openTimeFri?: IntFieldUpdateOperationsInput | number
-    closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSat?: IntFieldUpdateOperationsInput | number
-    closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSun?: IntFieldUpdateOperationsInput | number
-    closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    coWork?: CoWorkUpdateOneRequiredWithoutOpenCloseNestedInput
-  }
-
-  export type OpenCloseUncheckedUpdateWithoutDurationCategoryInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    openTimeMon?: IntFieldUpdateOperationsInput | number
-    closeTimeMon?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursMon?: BoolFieldUpdateOperationsInput | boolean
-    isOpenMon?: BoolFieldUpdateOperationsInput | boolean
-    openTimeTue?: IntFieldUpdateOperationsInput | number
-    closeTimeTue?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursTue?: BoolFieldUpdateOperationsInput | boolean
-    isOpenTue?: BoolFieldUpdateOperationsInput | boolean
-    openTimeWed?: IntFieldUpdateOperationsInput | number
-    closeTimeWed?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursWed?: BoolFieldUpdateOperationsInput | boolean
-    isOpenWed?: BoolFieldUpdateOperationsInput | boolean
-    openTimeThurs?: IntFieldUpdateOperationsInput | number
-    closeTimeThurs?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursThurs?: BoolFieldUpdateOperationsInput | boolean
-    isOpenThurs?: BoolFieldUpdateOperationsInput | boolean
-    openTimeFri?: IntFieldUpdateOperationsInput | number
-    closeTimeFri?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursFri?: BoolFieldUpdateOperationsInput | boolean
-    isOpenFri?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSat?: IntFieldUpdateOperationsInput | number
-    closeTimeSat?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSat?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSat?: BoolFieldUpdateOperationsInput | boolean
-    openTimeSun?: IntFieldUpdateOperationsInput | number
-    closeTimeSun?: IntFieldUpdateOperationsInput | number
-    isOpen24hoursSun?: BoolFieldUpdateOperationsInput | boolean
-    isOpenSun?: BoolFieldUpdateOperationsInput | boolean
-    coWorkId?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FacilityToCoWorkCreateWithoutFacilityInput = {
@@ -18264,9 +20189,11 @@ export namespace Prisma {
     tel: string
     picture: string
     BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
-    OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
     userInternal?: UserInternalCreateNestedOneWithoutCoWorkInput
     bookRoom?: BookRoomCreateNestedManyWithoutCoworkInput
+    Close?: CloseCreateNestedOneWithoutCoworkInput
+    Open?: OpenCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursCreateNestedOneWithoutCoworkInput
   }
 
   export type CoWorkUncheckedCreateWithoutFacilityToCoWorkInput = {
@@ -18278,8 +20205,10 @@ export namespace Prisma {
     picture: string
     userInternalId?: number | null
     BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
-    OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
     bookRoom?: BookRoomUncheckedCreateNestedManyWithoutCoworkInput
+    Close?: CloseUncheckedCreateNestedOneWithoutCoworkInput
+    Open?: OpenUncheckedCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedCreateNestedOneWithoutCoworkInput
   }
 
   export type CoWorkCreateOrConnectWithoutFacilityToCoWorkInput = {
@@ -18317,9 +20246,11 @@ export namespace Prisma {
     tel?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
-    OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
     userInternal?: UserInternalUpdateOneWithoutCoWorkNestedInput
     bookRoom?: BookRoomUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUpdateOneWithoutCoworkNestedInput
   }
 
   export type CoWorkUncheckedUpdateWithoutFacilityToCoWorkInput = {
@@ -18331,8 +20262,10 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     userInternalId?: NullableIntFieldUpdateOperationsInput | number | null
     BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
-    OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
     bookRoom?: BookRoomUncheckedUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUncheckedUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUncheckedUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedUpdateOneWithoutCoworkNestedInput
   }
 
   export type FacilityUpsertWithoutFacilityToCoWorkInput = {
@@ -18359,10 +20292,12 @@ export namespace Prisma {
     location: string
     tel: string
     picture: string
-    OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
     FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
     userInternal?: UserInternalCreateNestedOneWithoutCoWorkInput
     bookRoom?: BookRoomCreateNestedManyWithoutCoworkInput
+    Close?: CloseCreateNestedOneWithoutCoworkInput
+    Open?: OpenCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursCreateNestedOneWithoutCoworkInput
   }
 
   export type CoWorkUncheckedCreateWithoutBranchToRoomInput = {
@@ -18373,9 +20308,11 @@ export namespace Prisma {
     tel: string
     picture: string
     userInternalId?: number | null
-    OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
     FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
     bookRoom?: BookRoomUncheckedCreateNestedManyWithoutCoworkInput
+    Close?: CloseUncheckedCreateNestedOneWithoutCoworkInput
+    Open?: OpenUncheckedCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedCreateNestedOneWithoutCoworkInput
   }
 
   export type CoWorkCreateOrConnectWithoutBranchToRoomInput = {
@@ -18416,10 +20353,12 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     tel?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
-    OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
     FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
     userInternal?: UserInternalUpdateOneWithoutCoWorkNestedInput
     bookRoom?: BookRoomUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUpdateOneWithoutCoworkNestedInput
   }
 
   export type CoWorkUncheckedUpdateWithoutBranchToRoomInput = {
@@ -18430,9 +20369,11 @@ export namespace Prisma {
     tel?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     userInternalId?: NullableIntFieldUpdateOperationsInput | number | null
-    OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
     FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
     bookRoom?: BookRoomUncheckedUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUncheckedUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUncheckedUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedUpdateOneWithoutCoworkNestedInput
   }
 
   export type RoomUpsertWithoutBranchToRoomInput = {
@@ -18464,9 +20405,11 @@ export namespace Prisma {
     tel: string
     picture: string
     BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
-    OpenClose?: OpenCloseCreateNestedOneWithoutCoWorkInput
     FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
     userInternal?: UserInternalCreateNestedOneWithoutCoWorkInput
+    Close?: CloseCreateNestedOneWithoutCoworkInput
+    Open?: OpenCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursCreateNestedOneWithoutCoworkInput
   }
 
   export type CoWorkUncheckedCreateWithoutBookRoomInput = {
@@ -18478,8 +20421,10 @@ export namespace Prisma {
     picture: string
     userInternalId?: number | null
     BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
-    OpenClose?: OpenCloseUncheckedCreateNestedOneWithoutCoWorkInput
     FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
+    Close?: CloseUncheckedCreateNestedOneWithoutCoworkInput
+    Open?: OpenUncheckedCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedCreateNestedOneWithoutCoworkInput
   }
 
   export type CoWorkCreateOrConnectWithoutBookRoomInput = {
@@ -18565,9 +20510,11 @@ export namespace Prisma {
     tel?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
-    OpenClose?: OpenCloseUpdateOneWithoutCoWorkNestedInput
     FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
     userInternal?: UserInternalUpdateOneWithoutCoWorkNestedInput
+    Close?: CloseUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUpdateOneWithoutCoworkNestedInput
   }
 
   export type CoWorkUncheckedUpdateWithoutBookRoomInput = {
@@ -18579,8 +20526,10 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     userInternalId?: NullableIntFieldUpdateOperationsInput | number | null
     BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
-    OpenClose?: OpenCloseUncheckedUpdateOneWithoutCoWorkNestedInput
     FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
+    Close?: CloseUncheckedUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUncheckedUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedUpdateOneWithoutCoworkNestedInput
   }
 
   export type RoomRateUpsertWithoutBookRoomInput = {
@@ -18649,118 +20598,6 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CoWorkCreateWithoutOpenCloseInput = {
-    name: string
-    description: string
-    location: string
-    tel: string
-    picture: string
-    BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
-    FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
-    userInternal?: UserInternalCreateNestedOneWithoutCoWorkInput
-    bookRoom?: BookRoomCreateNestedManyWithoutCoworkInput
-  }
-
-  export type CoWorkUncheckedCreateWithoutOpenCloseInput = {
-    id?: number
-    name: string
-    description: string
-    location: string
-    tel: string
-    picture: string
-    userInternalId?: number | null
-    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
-    FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
-    bookRoom?: BookRoomUncheckedCreateNestedManyWithoutCoworkInput
-  }
-
-  export type CoWorkCreateOrConnectWithoutOpenCloseInput = {
-    where: CoWorkWhereUniqueInput
-    create: XOR<CoWorkCreateWithoutOpenCloseInput, CoWorkUncheckedCreateWithoutOpenCloseInput>
-  }
-
-  export type durationCategoryCreateWithoutOpencloseInput = {
-    duration?: number
-    createAt?: Date | string
-    updateAt?: Date | string
-    RoomRate?: RoomRateCreateNestedManyWithoutDurationInput
-  }
-
-  export type durationCategoryUncheckedCreateWithoutOpencloseInput = {
-    id?: number
-    duration?: number
-    createAt?: Date | string
-    updateAt?: Date | string
-    RoomRate?: RoomRateUncheckedCreateNestedManyWithoutDurationInput
-  }
-
-  export type durationCategoryCreateOrConnectWithoutOpencloseInput = {
-    where: durationCategoryWhereUniqueInput
-    create: XOR<durationCategoryCreateWithoutOpencloseInput, durationCategoryUncheckedCreateWithoutOpencloseInput>
-  }
-
-  export type durationCategoryCreateManyOpencloseInputEnvelope = {
-    data: Enumerable<durationCategoryCreateManyOpencloseInput>
-    skipDuplicates?: boolean
-  }
-
-  export type CoWorkUpsertWithoutOpenCloseInput = {
-    update: XOR<CoWorkUpdateWithoutOpenCloseInput, CoWorkUncheckedUpdateWithoutOpenCloseInput>
-    create: XOR<CoWorkCreateWithoutOpenCloseInput, CoWorkUncheckedCreateWithoutOpenCloseInput>
-  }
-
-  export type CoWorkUpdateWithoutOpenCloseInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    location?: StringFieldUpdateOperationsInput | string
-    tel?: StringFieldUpdateOperationsInput | string
-    picture?: StringFieldUpdateOperationsInput | string
-    BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
-    FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
-    userInternal?: UserInternalUpdateOneWithoutCoWorkNestedInput
-    bookRoom?: BookRoomUpdateManyWithoutCoworkNestedInput
-  }
-
-  export type CoWorkUncheckedUpdateWithoutOpenCloseInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    location?: StringFieldUpdateOperationsInput | string
-    tel?: StringFieldUpdateOperationsInput | string
-    picture?: StringFieldUpdateOperationsInput | string
-    userInternalId?: NullableIntFieldUpdateOperationsInput | number | null
-    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
-    FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
-    bookRoom?: BookRoomUncheckedUpdateManyWithoutCoworkNestedInput
-  }
-
-  export type durationCategoryUpsertWithWhereUniqueWithoutOpencloseInput = {
-    where: durationCategoryWhereUniqueInput
-    update: XOR<durationCategoryUpdateWithoutOpencloseInput, durationCategoryUncheckedUpdateWithoutOpencloseInput>
-    create: XOR<durationCategoryCreateWithoutOpencloseInput, durationCategoryUncheckedCreateWithoutOpencloseInput>
-  }
-
-  export type durationCategoryUpdateWithWhereUniqueWithoutOpencloseInput = {
-    where: durationCategoryWhereUniqueInput
-    data: XOR<durationCategoryUpdateWithoutOpencloseInput, durationCategoryUncheckedUpdateWithoutOpencloseInput>
-  }
-
-  export type durationCategoryUpdateManyWithWhereWithoutOpencloseInput = {
-    where: durationCategoryScalarWhereInput
-    data: XOR<durationCategoryUpdateManyMutationInput, durationCategoryUncheckedUpdateManyWithoutDurationCategoryInput>
-  }
-
-  export type durationCategoryScalarWhereInput = {
-    AND?: Enumerable<durationCategoryScalarWhereInput>
-    OR?: Enumerable<durationCategoryScalarWhereInput>
-    NOT?: Enumerable<durationCategoryScalarWhereInput>
-    id?: IntFilter | number
-    duration?: IntFilter | number
-    createAt?: DateTimeFilter | Date | string
-    updateAt?: DateTimeFilter | Date | string
-    openCloseId?: IntNullableFilter | number | null
-  }
-
   export type BookRoomCreateWithoutVertifyCodeInput = {
     startTime: Date | string
     status: string
@@ -18806,6 +20643,210 @@ export namespace Prisma {
   export type BookRoomUpdateManyWithWhereWithoutVertifyCodeInput = {
     where: BookRoomScalarWhereInput
     data: XOR<BookRoomUpdateManyMutationInput, BookRoomUncheckedUpdateManyWithoutBookRoomInput>
+  }
+
+  export type CoWorkCreateWithoutOpenInput = {
+    name: string
+    description: string
+    location: string
+    tel: string
+    picture: string
+    BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
+    userInternal?: UserInternalCreateNestedOneWithoutCoWorkInput
+    bookRoom?: BookRoomCreateNestedManyWithoutCoworkInput
+    Close?: CloseCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursCreateNestedOneWithoutCoworkInput
+  }
+
+  export type CoWorkUncheckedCreateWithoutOpenInput = {
+    id?: number
+    name: string
+    description: string
+    location: string
+    tel: string
+    picture: string
+    userInternalId?: number | null
+    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
+    bookRoom?: BookRoomUncheckedCreateNestedManyWithoutCoworkInput
+    Close?: CloseUncheckedCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedCreateNestedOneWithoutCoworkInput
+  }
+
+  export type CoWorkCreateOrConnectWithoutOpenInput = {
+    where: CoWorkWhereUniqueInput
+    create: XOR<CoWorkCreateWithoutOpenInput, CoWorkUncheckedCreateWithoutOpenInput>
+  }
+
+  export type CoWorkUpsertWithoutOpenInput = {
+    update: XOR<CoWorkUpdateWithoutOpenInput, CoWorkUncheckedUpdateWithoutOpenInput>
+    create: XOR<CoWorkCreateWithoutOpenInput, CoWorkUncheckedCreateWithoutOpenInput>
+  }
+
+  export type CoWorkUpdateWithoutOpenInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    tel?: StringFieldUpdateOperationsInput | string
+    picture?: StringFieldUpdateOperationsInput | string
+    BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
+    userInternal?: UserInternalUpdateOneWithoutCoWorkNestedInput
+    bookRoom?: BookRoomUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUpdateOneWithoutCoworkNestedInput
+  }
+
+  export type CoWorkUncheckedUpdateWithoutOpenInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    tel?: StringFieldUpdateOperationsInput | string
+    picture?: StringFieldUpdateOperationsInput | string
+    userInternalId?: NullableIntFieldUpdateOperationsInput | number | null
+    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
+    bookRoom?: BookRoomUncheckedUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUncheckedUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedUpdateOneWithoutCoworkNestedInput
+  }
+
+  export type CoWorkCreateWithoutCloseInput = {
+    name: string
+    description: string
+    location: string
+    tel: string
+    picture: string
+    BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
+    userInternal?: UserInternalCreateNestedOneWithoutCoWorkInput
+    bookRoom?: BookRoomCreateNestedManyWithoutCoworkInput
+    Open?: OpenCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursCreateNestedOneWithoutCoworkInput
+  }
+
+  export type CoWorkUncheckedCreateWithoutCloseInput = {
+    id?: number
+    name: string
+    description: string
+    location: string
+    tel: string
+    picture: string
+    userInternalId?: number | null
+    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
+    bookRoom?: BookRoomUncheckedCreateNestedManyWithoutCoworkInput
+    Open?: OpenUncheckedCreateNestedOneWithoutCoworkInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedCreateNestedOneWithoutCoworkInput
+  }
+
+  export type CoWorkCreateOrConnectWithoutCloseInput = {
+    where: CoWorkWhereUniqueInput
+    create: XOR<CoWorkCreateWithoutCloseInput, CoWorkUncheckedCreateWithoutCloseInput>
+  }
+
+  export type CoWorkUpsertWithoutCloseInput = {
+    update: XOR<CoWorkUpdateWithoutCloseInput, CoWorkUncheckedUpdateWithoutCloseInput>
+    create: XOR<CoWorkCreateWithoutCloseInput, CoWorkUncheckedCreateWithoutCloseInput>
+  }
+
+  export type CoWorkUpdateWithoutCloseInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    tel?: StringFieldUpdateOperationsInput | string
+    picture?: StringFieldUpdateOperationsInput | string
+    BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
+    userInternal?: UserInternalUpdateOneWithoutCoWorkNestedInput
+    bookRoom?: BookRoomUpdateManyWithoutCoworkNestedInput
+    Open?: OpenUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUpdateOneWithoutCoworkNestedInput
+  }
+
+  export type CoWorkUncheckedUpdateWithoutCloseInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    tel?: StringFieldUpdateOperationsInput | string
+    picture?: StringFieldUpdateOperationsInput | string
+    userInternalId?: NullableIntFieldUpdateOperationsInput | number | null
+    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
+    bookRoom?: BookRoomUncheckedUpdateManyWithoutCoworkNestedInput
+    Open?: OpenUncheckedUpdateOneWithoutCoworkNestedInput
+    OpenClose24Hours?: OpenClose24HoursUncheckedUpdateOneWithoutCoworkNestedInput
+  }
+
+  export type CoWorkCreateWithoutOpenClose24HoursInput = {
+    name: string
+    description: string
+    location: string
+    tel: string
+    picture: string
+    BranchToRoom?: BranchToRoomCreateNestedManyWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkCreateNestedManyWithoutCoWorkInput
+    userInternal?: UserInternalCreateNestedOneWithoutCoWorkInput
+    bookRoom?: BookRoomCreateNestedManyWithoutCoworkInput
+    Close?: CloseCreateNestedOneWithoutCoworkInput
+    Open?: OpenCreateNestedOneWithoutCoworkInput
+  }
+
+  export type CoWorkUncheckedCreateWithoutOpenClose24HoursInput = {
+    id?: number
+    name: string
+    description: string
+    location: string
+    tel: string
+    picture: string
+    userInternalId?: number | null
+    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutCoWorkInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedCreateNestedManyWithoutCoWorkInput
+    bookRoom?: BookRoomUncheckedCreateNestedManyWithoutCoworkInput
+    Close?: CloseUncheckedCreateNestedOneWithoutCoworkInput
+    Open?: OpenUncheckedCreateNestedOneWithoutCoworkInput
+  }
+
+  export type CoWorkCreateOrConnectWithoutOpenClose24HoursInput = {
+    where: CoWorkWhereUniqueInput
+    create: XOR<CoWorkCreateWithoutOpenClose24HoursInput, CoWorkUncheckedCreateWithoutOpenClose24HoursInput>
+  }
+
+  export type CoWorkUpsertWithoutOpenClose24HoursInput = {
+    update: XOR<CoWorkUpdateWithoutOpenClose24HoursInput, CoWorkUncheckedUpdateWithoutOpenClose24HoursInput>
+    create: XOR<CoWorkCreateWithoutOpenClose24HoursInput, CoWorkUncheckedCreateWithoutOpenClose24HoursInput>
+  }
+
+  export type CoWorkUpdateWithoutOpenClose24HoursInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    tel?: StringFieldUpdateOperationsInput | string
+    picture?: StringFieldUpdateOperationsInput | string
+    BranchToRoom?: BranchToRoomUpdateManyWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUpdateManyWithoutCoWorkNestedInput
+    userInternal?: UserInternalUpdateOneWithoutCoWorkNestedInput
+    bookRoom?: BookRoomUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUpdateOneWithoutCoworkNestedInput
+  }
+
+  export type CoWorkUncheckedUpdateWithoutOpenClose24HoursInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    tel?: StringFieldUpdateOperationsInput | string
+    picture?: StringFieldUpdateOperationsInput | string
+    userInternalId?: NullableIntFieldUpdateOperationsInput | number | null
+    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutCoWorkNestedInput
+    FacilityToCoWork?: FacilityToCoWorkUncheckedUpdateManyWithoutCoWorkNestedInput
+    bookRoom?: BookRoomUncheckedUpdateManyWithoutCoworkNestedInput
+    Close?: CloseUncheckedUpdateOneWithoutCoworkNestedInput
+    Open?: OpenUncheckedUpdateOneWithoutCoworkNestedInput
   }
 
   export type BookRoomCreateManyUserExternalInput = {
@@ -19063,35 +21104,6 @@ export namespace Prisma {
   export type FacilityToCoWorkUncheckedUpdateWithoutFacilityInput = {
     id?: IntFieldUpdateOperationsInput | number
     coWorkId?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type durationCategoryCreateManyOpencloseInput = {
-    id?: number
-    duration?: number
-    createAt?: Date | string
-    updateAt?: Date | string
-  }
-
-  export type durationCategoryUpdateWithoutOpencloseInput = {
-    duration?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    RoomRate?: RoomRateUpdateManyWithoutDurationNestedInput
-  }
-
-  export type durationCategoryUncheckedUpdateWithoutOpencloseInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    duration?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    RoomRate?: RoomRateUncheckedUpdateManyWithoutDurationNestedInput
-  }
-
-  export type durationCategoryUncheckedUpdateManyWithoutDurationCategoryInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    duration?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

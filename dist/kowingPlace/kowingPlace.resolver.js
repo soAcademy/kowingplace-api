@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createFacility = exports.getStatusUserBookInternal = exports.updateCoWorkDetail = exports.createOpenClose = exports.createCoWorkDetail = exports.createFacilityIn = exports.updateRoomInternal = exports.createRoomInternal = exports.showBookDetailInternalByCoWork = exports.createUserInternal = exports.getVerifyCodeByUserConfirmBooking = exports.getCoWorkUserChoose = exports.getCoworkByUserId = exports.getRoomByCoWorkId = exports.getCoworks = exports.getCoWork24Hrs = exports.createUserExternal = exports.prisma = void 0;
+exports.createFacility = exports.getStatusUserBookInternal = exports.updateCoWorkDetail = exports.createTimeOpenClose = exports.createCoWorkDetail = exports.createFacilityIn = exports.updateRoomInternal = exports.createRoomInternal = exports.showBookDetailInternalByCoWork = exports.createUserInternal = exports.getVerifyCodeByUserConfirmBooking = exports.getCoWorkUserChoose = exports.getCoworkByUserId = exports.getRoomByCoWorkId = exports.getCoworks = exports.createUserExternal = exports.prisma = void 0;
 const client_1 = require("../../prisma/client");
 exports.prisma = new client_1.PrismaClient();
 const createUserExternal = (args) => exports.prisma.userExternal.create({
@@ -21,31 +21,30 @@ const createUserExternal = (args) => exports.prisma.userExternal.create({
     },
 });
 exports.createUserExternal = createUserExternal;
-const getCoWork24Hrs = () => __awaiter(void 0, void 0, void 0, function* () {
-    const getAllCoWork = yield exports.prisma.coWork.findMany({
-        include: {
-            OpenClose: true,
-            BranchToRoom: true,
-        },
-    });
-    const get24hrsOpen = getAllCoWork.filter((r) => {
-        var _a, _b, _c, _d, _e, _f, _g;
-        if (((_a = r.OpenClose) === null || _a === void 0 ? void 0 : _a.isOpen24hoursMon) === true ||
-            ((_b = r.OpenClose) === null || _b === void 0 ? void 0 : _b.isOpen24hoursTue) === true ||
-            ((_c = r.OpenClose) === null || _c === void 0 ? void 0 : _c.isOpen24hoursWed) === true ||
-            ((_d = r.OpenClose) === null || _d === void 0 ? void 0 : _d.isOpen24hoursThurs) === true ||
-            ((_e = r.OpenClose) === null || _e === void 0 ? void 0 : _e.isOpen24hoursFri) === true ||
-            ((_f = r.OpenClose) === null || _f === void 0 ? void 0 : _f.isOpen24hoursSat) === true ||
-            ((_g = r.OpenClose) === null || _g === void 0 ? void 0 : _g.isOpen24hoursSun) === true) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    });
-    return get24hrsOpen;
-});
-exports.getCoWork24Hrs = getCoWork24Hrs;
+// export const getCoWork24Hrs = async () => {
+//   const getAllCoWork = await prisma.coWork.findMany({
+//     include: {
+//       OpenClose: true,
+//       BranchToRoom: true,
+//     },
+//   });
+//   const get24hrsOpen = getAllCoWork.filter((r) => {
+//     if (
+//       r.OpenClose?.isOpen24hoursMon === true ||
+//       r.OpenClose?.isOpen24hoursTue === true ||
+//       r.OpenClose?.isOpen24hoursWed === true ||
+//       r.OpenClose?.isOpen24hoursThurs === true ||
+//       r.OpenClose?.isOpen24hoursFri === true ||
+//       r.OpenClose?.isOpen24hoursSat === true ||
+//       r.OpenClose?.isOpen24hoursSun === true
+//     ) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   });
+//   return get24hrsOpen;
+// };
 // export const getCoworks = async () => {
 //   const coWork = await prisma.coWork.findMany({});
 //   while (coWork.length < 10) {
@@ -257,6 +256,7 @@ const createFacilityIn = (args) => exports.prisma.facility.createMany({
     },
 });
 exports.createFacilityIn = createFacilityIn;
+//create cowork
 const createCoWorkDetail = (args) => __awaiter(void 0, void 0, void 0, function* () {
     const coWorkCreate = yield exports.prisma.coWork.create({
         data: {
@@ -266,49 +266,71 @@ const createCoWorkDetail = (args) => __awaiter(void 0, void 0, void 0, function*
             picture: args.picture,
             tel: args.tel,
             userInternalId: args.userInternalId,
+            FacilityToCoWork: {
+                connect: {
+                    id: args.facilityToCoworkId,
+                },
+            },
+            Close: {
+                connect: {
+                    id: args.closeId,
+                },
+            },
+            Open: {
+                connect: {
+                    id: args.openId,
+                },
+            },
+            OpenClose24Hours: {
+                connect: {
+                    id: args.openClose24HoursId,
+                },
+            },
         },
     });
     return coWorkCreate;
 });
 exports.createCoWorkDetail = createCoWorkDetail;
-const createOpenClose = (args) => exports.prisma.openClose.create({
-    data: {
-        openTimeMon: args.openTimeMon,
-        closeTimeMon: args.closeTimeMon,
-        isOpenMon: args.isOpenMon,
-        isOpen24hoursMon: args.isOpen24hoursMon,
-        openTimeTue: args.openTimeTue,
-        closeTimeTue: args.closeTimeTue,
-        isOpenTue: args.isOpenTue,
-        isOpen24hoursTue: args.isOpen24hoursTue,
-        openTimeWed: args.closeTimeWed,
-        closeTimeWed: args.closeTimeWed,
-        isOpenWed: args.isOpenWed,
-        isOpen24hoursWed: args.isOpen24hoursWed,
-        openTimeThurs: args.openTimeThurs,
-        closeTimeThurs: args.closeTimeThurs,
-        isOpenThurs: args.isOpen24hoursThurs,
-        isOpen24hoursThurs: args.isOpen24hoursThurs,
-        openTimeFri: args.openTimeFri,
-        closeTimeFri: args.closeTimeFri,
-        isOpenFri: args.isOpenFri,
-        isOpen24hoursFri: args.isOpen24hoursFri,
-        openTimeSat: args.openTimeSat,
-        closeTimeSat: args.closeTimeSat,
-        isOpenSat: args.isOpenSat,
-        isOpen24hoursSat: args.isOpen24hoursSat,
-        openTimeSun: args.openTimeSat,
-        closeTimeSun: args.closeTimeSun,
-        isOpenSun: args.isOpenSun,
-        isOpen24hoursSun: args.isOpen24hoursSun,
-        coWork: {
-            connect: {
-                id: args.coWorkId,
-            },
+const createTimeOpenClose = (args) => __awaiter(void 0, void 0, void 0, function* () {
+    const openCoWork = yield exports.prisma.open.create({
+        data: {
+            monOpen: args.open[0],
+            tueOpen: args.open[1],
+            wedOpen: args.open[2],
+            thursOpen: args.open[3],
+            friOpen: args.open[4],
+            satOpen: args.open[5],
+            sunOpen: args.open[6],
+            coWorkId: args.coWorkId,
         },
-    },
+    });
+    const closeCoWork = yield exports.prisma.close.create({
+        data: {
+            monClose: args.close[0],
+            tueClose: args.close[1],
+            wedClose: args.close[2],
+            thursClose: args.close[3],
+            friClose: args.close[4],
+            satClose: args.close[5],
+            sunClose: args.close[6],
+            coWorkId: args.coWorkId,
+        },
+    });
+    const openClose24Hours = yield exports.prisma.openClose24Hours.create({
+        data: {
+            mon24hours: args.openClose24hours[0],
+            tue24hours: args.openClose24hours[1],
+            wed24hours: args.openClose24hours[2],
+            thurs24hours: args.openClose24hours[3],
+            fri24hours: args.openClose24hours[4],
+            sat24hours: args.openClose24hours[5],
+            sun24hours: args.openClose24hours[6],
+            coWorkId: args.coWorkId,
+        },
+    });
+    return [openCoWork, closeCoWork, openClose24Hours];
 });
-exports.createOpenClose = createOpenClose;
+exports.createTimeOpenClose = createTimeOpenClose;
 const updateCoWorkDetail = (args) => __awaiter(void 0, void 0, void 0, function* () {
     const coWorkupdate = yield exports.prisma.coWork.update({
         where: {

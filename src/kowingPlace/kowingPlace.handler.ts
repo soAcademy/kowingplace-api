@@ -4,7 +4,6 @@ import {
   createRoomInternal,
   createUserExternal,
   createUserInternal,
-  getCoWork24Hrs,
   getCoWorkUserChoose,
   getCoworks,
   getCoworkByUserId,
@@ -15,8 +14,9 @@ import {
   showBookDetailInternalByCoWork,
   getStatusUserBookInternal,
   createFacility,
-  createOpenClose,
+  createTimeOpenClose,
 } from "./kowingPlace.resolver";
+import { createTimeOpenCloseCodec } from "./kowingPlace.interface";
 
 export const createUserExternalHandler = async (
   req: Request,
@@ -33,16 +33,16 @@ export const createUserExternalHandler = async (
   }
 };
 
-export const getCoWork24HrsHandler = async (req: Request, res: Response) => {
-  try {
-    const result = await getCoWork24Hrs();
-    res.status(200).json(result);
-  } catch (e) {
-    res.status(500).json({
-      error: String(e),
-    });
-  }
-};
+// export const getCoWork24HrsHandler = async (req: Request, res: Response) => {
+//   try {
+//     const result = await getCoWork24Hrs();
+//     res.status(200).json(result);
+//   } catch (e) {
+//     res.status(500).json({
+//       error: String(e),
+//     });
+//   }
+// };
 
 export const getCoworksHandler = async (req: Request, res: Response) => {
   try {
@@ -222,11 +222,23 @@ export const createFacilityHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const createOpenCloseHandler = async (req: Request, res: Response) => {
-  const args = req.body;
+// export const createTimeOpenCloseHandler2 = (req: Request, res: Response) => {
+//   const args = req.body;
+//   console.log(args);
+// createTimeOpenCloseCodec.decode(args)._tag === "Right" ? "OK" : "NO";
+// try {
+//   const result = await createTimeOpenClose(args);
+//   res.status(200).json(result);
+// } catch (e) {
+//   res.status(500).json({
+//     error: String(e),
+//   });
+// }
+// };
+
+export const createTimeOpenCloseHandler2 = (req: Request, res: Response) => {
   try {
-    const result = await createOpenClose(args);
-    res.status(200).json(result);
+    res.status(200).json({ result: 4 });
   } catch (e) {
     res.status(500).json({
       error: String(e),

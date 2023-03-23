@@ -3,7 +3,6 @@ import {
   createRoomInternalHandler,
   createUserExternalHandler,
   createUserInternalHandler,
-  getCoWork24HrsHandler,
   getCoWorkUserChooseHandler,
   getCoworkByUserIdHandler,
   getRoomByCoWorkIdHandler,
@@ -14,9 +13,9 @@ import {
   getStatusUserBookInternalHandler,
   createFacilityHandler,
   getCoworksHandler,
-  createOpenCloseHandler,
+  createTimeOpenCloseHandler2,
 } from "./kowingPlace/kowingPlace.handler";
-import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
+// import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
 
 export const AppRoutes = [
   {
@@ -25,14 +24,14 @@ export const AppRoutes = [
     action: (req: any, res: any) => res.send("hello 7470"),
   },
   {
+    path: "/vv/a2",
+    method: "post",
+    action: (req: any, res: any) => createTimeOpenCloseHandler2(req, res),
+  },
+  {
     path: "/kowing/createUserExternal",
     method: "post",
     action: createUserExternalHandler, //OK
-  },
-  {
-    path: "/kowing/getCoWork24Hrs",
-    method: "post",
-    action: getCoWork24HrsHandler, //OK
   },
 
   {
@@ -100,9 +99,9 @@ export const AppRoutes = [
     method: "post",
     action: getCoworksHandler, //OK  //with random
   },
-  {
-    path: "/kowing/createOpenClose",
-    method: "post",
-    action: createOpenCloseHandler,
-  },
+  // {
+  //   path: "/kowing/createTimeOpenClose",
+  //   method: "post",
+  //   action: createTimeOpenCloseHandler,
+  // },
 ];

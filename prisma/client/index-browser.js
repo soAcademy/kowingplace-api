@@ -109,6 +109,20 @@ exports.Prisma.BranchToRoomScalarFieldEnum = makeEnum({
   updateAt: 'updateAt'
 });
 
+exports.Prisma.CloseScalarFieldEnum = makeEnum({
+  id: 'id',
+  monClose: 'monClose',
+  tueClose: 'tueClose',
+  wedClose: 'wedClose',
+  thursClose: 'thursClose',
+  friClose: 'friClose',
+  satClose: 'satClose',
+  sunClose: 'sunClose',
+  coWorkId: 'coWorkId',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
 exports.Prisma.CoWorkScalarFieldEnum = makeEnum({
   id: 'id',
   name: 'name',
@@ -142,36 +156,29 @@ exports.Prisma.FacilityToCoWorkScalarFieldEnum = makeEnum({
   updateAt: 'updateAt'
 });
 
-exports.Prisma.OpenCloseScalarFieldEnum = makeEnum({
+exports.Prisma.OpenClose24HoursScalarFieldEnum = makeEnum({
   id: 'id',
-  openTimeMon: 'openTimeMon',
-  closeTimeMon: 'closeTimeMon',
-  isOpen24hoursMon: 'isOpen24hoursMon',
-  isOpenMon: 'isOpenMon',
-  openTimeTue: 'openTimeTue',
-  closeTimeTue: 'closeTimeTue',
-  isOpen24hoursTue: 'isOpen24hoursTue',
-  isOpenTue: 'isOpenTue',
-  openTimeWed: 'openTimeWed',
-  closeTimeWed: 'closeTimeWed',
-  isOpen24hoursWed: 'isOpen24hoursWed',
-  isOpenWed: 'isOpenWed',
-  openTimeThurs: 'openTimeThurs',
-  closeTimeThurs: 'closeTimeThurs',
-  isOpen24hoursThurs: 'isOpen24hoursThurs',
-  isOpenThurs: 'isOpenThurs',
-  openTimeFri: 'openTimeFri',
-  closeTimeFri: 'closeTimeFri',
-  isOpen24hoursFri: 'isOpen24hoursFri',
-  isOpenFri: 'isOpenFri',
-  openTimeSat: 'openTimeSat',
-  closeTimeSat: 'closeTimeSat',
-  isOpen24hoursSat: 'isOpen24hoursSat',
-  isOpenSat: 'isOpenSat',
-  openTimeSun: 'openTimeSun',
-  closeTimeSun: 'closeTimeSun',
-  isOpen24hoursSun: 'isOpen24hoursSun',
-  isOpenSun: 'isOpenSun',
+  mon24hours: 'mon24hours',
+  tue24hours: 'tue24hours',
+  wed24hours: 'wed24hours',
+  thurs24hours: 'thurs24hours',
+  fri24hours: 'fri24hours',
+  sat24hours: 'sat24hours',
+  sun24hours: 'sun24hours',
+  coWorkId: 'coWorkId',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
+exports.Prisma.OpenScalarFieldEnum = makeEnum({
+  id: 'id',
+  monOpen: 'monOpen',
+  tueOpen: 'tueOpen',
+  wedOpen: 'wedOpen',
+  thursOpen: 'thursOpen',
+  friOpen: 'friOpen',
+  satOpen: 'satOpen',
+  sunOpen: 'sunOpen',
   coWorkId: 'coWorkId',
   createAt: 'createAt',
   updateAt: 'updateAt'
@@ -251,8 +258,10 @@ exports.Prisma.ModelName = makeEnum({
   FacilityToCoWork: 'FacilityToCoWork',
   BranchToRoom: 'BranchToRoom',
   BookRoom: 'BookRoom',
-  OpenClose: 'OpenClose',
-  VertifyBookingCode: 'VertifyBookingCode'
+  VertifyBookingCode: 'VertifyBookingCode',
+  Open: 'Open',
+  Close: 'Close',
+  OpenClose24Hours: 'OpenClose24Hours'
 });
 
 /**

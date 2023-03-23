@@ -99,6 +99,10 @@ export const createCoWorkDetailCodec = t.type({
   tel: t.string,
   picture: t.string,
   userInternalId: t.number,
+  facilityToCoworkId: t.number,
+  closeId: t.number,
+  openId: t.number,
+  openClose24HoursId: t.number,
 });
 export interface ICreateCoWorkDetail
   extends t.TypeOf<typeof createCoWorkDetailCodec> {}
@@ -149,3 +153,35 @@ export interface IGetCoworkByUserId
   extends t.TypeOf<typeof getCoworkByUserIdCodec> {}
 
 //-------------------------------------------------
+
+export const createTimeOpenCloseCodec = t.type({
+  open: t.array(t.number),
+  close: t.array(t.number),
+  openClose24hours: t.array(t.boolean),
+  coWorkId: t.number,
+  // monOpen: t.number,
+  // tueOpen: t.number,
+  // wedOpen: t.number,
+  // thursOpen: t.number,
+  // friOpen: t.number,
+  // satOpen: t.number,
+  // sunOpen: t.number,
+
+  // monClose: t.number,
+  // tueClose: t.number,
+  // wedClose: t.number,
+  // thursClose: t.number,
+  // friClose: t.number,
+  // satClose: t.number,
+  // sunClose: t.number,
+
+  // mon24hours: t.boolean,
+  // tue24hours: t.boolean,
+  // wed24hours: t.boolean,
+  // thurs24hours: t.boolean,
+  // fri24hours: t.boolean,
+  // sat24hours: t.boolean,
+  // sun24hours: t.boolean,
+});
+export interface ICreateTimeOpenClose
+  extends t.TypeOf<typeof createTimeOpenCloseCodec> {}

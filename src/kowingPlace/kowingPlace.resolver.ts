@@ -1,10 +1,11 @@
-import { date, random } from "fp-ts";
+import { date, number, random } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
   ICreateCoWorkDetail,
   ICreateFacility,
   ICreateFacilityIn,
   ICreateRoomInternal,
+  ICreateTimeOpenClose,
   ICreateUserExternal,
   ICreateUserInternal,
   IGetCoWorkUserChoose,
@@ -27,30 +28,30 @@ export const createUserExternal = (args: ICreateUserExternal) =>
     },
   });
 
-export const getCoWork24Hrs = async () => {
-  const getAllCoWork = await prisma.coWork.findMany({
-    include: {
-      OpenClose: true,
-      BranchToRoom: true,
-    },
-  });
-  const get24hrsOpen = getAllCoWork.filter((r) => {
-    if (
-      r.OpenClose?.isOpen24hoursMon === true ||
-      r.OpenClose?.isOpen24hoursTue === true ||
-      r.OpenClose?.isOpen24hoursWed === true ||
-      r.OpenClose?.isOpen24hoursThurs === true ||
-      r.OpenClose?.isOpen24hoursFri === true ||
-      r.OpenClose?.isOpen24hoursSat === true ||
-      r.OpenClose?.isOpen24hoursSun === true
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  return get24hrsOpen;
-};
+// export const getCoWork24Hrs = async () => {
+//   const getAllCoWork = await prisma.coWork.findMany({
+//     include: {
+//       OpenClose: true,
+//       BranchToRoom: true,
+//     },
+//   });
+//   const get24hrsOpen = getAllCoWork.filter((r) => {
+//     if (
+//       r.OpenClose?.isOpen24hoursMon === true ||
+//       r.OpenClose?.isOpen24hoursTue === true ||
+//       r.OpenClose?.isOpen24hoursWed === true ||
+//       r.OpenClose?.isOpen24hoursThurs === true ||
+//       r.OpenClose?.isOpen24hoursFri === true ||
+//       r.OpenClose?.isOpen24hoursSat === true ||
+//       r.OpenClose?.isOpen24hoursSun === true
+//     ) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   });
+//   return get24hrsOpen;
+// };
 
 // export const getCoworks = async () => {
 //   const coWork = await prisma.coWork.findMany({});
@@ -284,6 +285,7 @@ export const createFacilityIn = (args: ICreateFacilityIn) =>
     },
   });
 
+//create cowork
 export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
   const coWorkCreate = await prisma.coWork.create({
     data: {
@@ -293,53 +295,71 @@ export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
       picture: args.picture,
       tel: args.tel,
       userInternalId: args.userInternalId,
+      FacilityToCoWork: {
+        connect: {
+          id: args.facilityToCoworkId,
+        },
+      },
+      Close: {
+        connect: {
+          id: args.closeId,
+        },
+      },
+      Open: {
+        connect: {
+          id: args.openId,
+        },
+      },
+      OpenClose24Hours: {
+        connect: {
+          id: args.openClose24HoursId,
+        },
+      },
     },
   });
   return coWorkCreate;
 };
 
-// export const createOpenClose = (args: {
-//   coWorkId: number;
-//   openTimeMon: number;
-//   closeTimeMon: number;
-//   openTimeTue: number;
-//   closeTimeTue: number;
-//   openTimeWed: number;
-//   closeTimeWed: number;
-//   openTimeThurs: number;
-//   closeTimeThurs: number;
-//   openTimeFri: number;
-//   closeTimeFri: number;
-//   openTimeSat: number;
-//   closeTimeSat: number;
-//   openTimeSun: number;
-//   closeTimeSun: number;
-//   isOpen24Hours: boolean;
-// }) =>
-//   prisma.openClose.create({
-//     data: {
-//       openTimeMon: args.openTimeMon,
-//       closeTimeMon: args.closeTimeMon,
-//       openTimeTue: args.openTimeTue,
-//       closeTimeTue: args.closeTimeTue,
-//       openTimeWed: args.closeTimeWed,
-//       closeTimeWed: args.closeTimeWed,
-//       openTimeThurs: args.openTimeThurs,
-//       closeTimeThurs: args.closeTimeThurs,
-//       openTimeFri: args.openTimeFri,
-//       closeTimeFri: args.closeTimeFri,
-//       openTimeSat: args.openTimeSat,
-//       closeTimeSat: args.closeTimeSat,
-//       openTimeSun: args.openTimeSat,
-//       closeTimeSun: args.closeTimeSun,
+export const createTimeOpenClose = async (args: ICreateTimeOpenClose) => {
+  const openCoWork = await prisma.open.create({
+    data: {
+      monOpen: args.open[0],
+      tueOpen: args.open[1],
+      wedOpen: args.open[2],
+      thursOpen: args.open[3],
+      friOpen: args.open[4],
+      satOpen: args.open[5],
+      sunOpen: args.open[6],
+      coWorkId: args.coWorkId,
+    },
+  });
+  const closeCoWork = await prisma.close.create({
+    data: {
+      monClose: args.close[0],
+      tueClose: args.close[1],
+      wedClose: args.close[2],
+      thursClose: args.close[3],
+      friClose: args.close[4],
+      satClose: args.close[5],
+      sunClose: args.close[6],
+      coWorkId: args.coWorkId,
+    },
+  });
 
-//       coWork: {
-//         connect: {
-//           id: args.coWorkId,
-//         },
-//       },
-//     },
-//   });
+  const openClose24Hours = await prisma.openClose24Hours.create({
+    data: {
+      mon24hours: args.openClose24hours[0],
+      tue24hours: args.openClose24hours[1],
+      wed24hours: args.openClose24hours[2],
+      thurs24hours: args.openClose24hours[3],
+      fri24hours: args.openClose24hours[4],
+      sat24hours: args.openClose24hours[5],
+      sun24hours: args.openClose24hours[6],
+      coWorkId: args.coWorkId,
+    },
+  });
+  return [openCoWork, closeCoWork, openClose24Hours];
+};
 
 export const updateCoWorkDetail = async (args: IUpdateCoWorkDetail) => {
   const coWorkupdate = await prisma.coWork.update({
