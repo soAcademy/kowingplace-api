@@ -8,6 +8,7 @@ generator client {
   binaryTargets = ["native", "darwin-arm64", "debian-openssl-1.1.x"]
   output        = "../prisma/client"
 }
+
 model UserExternal {
   id       Int        @id @default(autoincrement())
   name     String

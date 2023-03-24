@@ -80,7 +80,7 @@ const regularDirname = hasDirname && fs.existsSync(path.join(__dirname, 'schema.
 
 // if the client has been bundled, we need to look for the folders
 const foundDirname = !regularDirname && findSync(process.cwd(), [
-    "prisma/client",
+    "prisma\\client",
     "client",
 ], ['d'], ['d'], 1)[0]
 
@@ -274,7 +274,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/khunboeing/sprinttech/kowingplace-api/prisma/client",
+      "value": "C:\\Users\\Mag Azine\\sprinttech\\kowingplace-api\\prisma\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -283,7 +283,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin"
+        "value": "windows"
       },
       {
         "fromEnvVar": null,
@@ -298,8 +298,8 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../.env",
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": "..\\..\\.env",
+    "schemaEnvPath": "..\\..\\.env"
   },
   "relativePath": "..",
   "clientVersion": "4.11.0",
@@ -328,13 +328,13 @@ const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
-path.join(__dirname, "libquery_engine-darwin.dylib.node");
-path.join(process.cwd(), "prisma/client/libquery_engine-darwin.dylib.node")
+path.join(__dirname, "query_engine-windows.dll.node");
+path.join(process.cwd(), "prisma\\client\\query_engine-windows.dll.node")
 
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
-path.join(process.cwd(), "prisma/client/libquery_engine-darwin-arm64.dylib.node")
+path.join(process.cwd(), "prisma\\client\\libquery_engine-darwin-arm64.dylib.node")
 
 path.join(__dirname, "libquery_engine-debian-openssl-1.1.x.so.node");
-path.join(process.cwd(), "prisma/client/libquery_engine-debian-openssl-1.1.x.so.node")
+path.join(process.cwd(), "prisma\\client\\libquery_engine-debian-openssl-1.1.x.so.node")
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "prisma/client/schema.prisma")
+path.join(process.cwd(), "prisma\\client\\schema.prisma")
