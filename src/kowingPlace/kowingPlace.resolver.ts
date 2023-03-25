@@ -1,6 +1,8 @@
 import { date, number, random } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
+  ICheckUserExternalPasswordEmail,
+  ICheckUserInternalPasswordEmail,
   ICreateCoWorkDetail,
   ICreateFacility,
   ICreateFacilityIn,
@@ -8,6 +10,7 @@ import {
   ICreateTimeOpenClose,
   ICreateUserExternal,
   ICreateUserInternal,
+  IGetCalendarBookingByCoWorkId,
   IGetCoWorkUserChoose,
   IGetCoworkByUserId,
   IGetStatusUserBookInternal,
@@ -15,6 +18,8 @@ import {
   IGgetRoomByCoWorkIdCodec,
   IShowBookDetailInternalByCoWork,
   IUpdateCoWorkDetail,
+  IUpsertExternalToken,
+  IUpsertInternalToken,
 } from "./kowingPlace.interface";
 import { hashPassword } from "./kowingPlace.service";
 export const prisma = new PrismaClient();
@@ -54,17 +59,6 @@ export const createUserExternal = async (args: ICreateUserExternal) => {
 //     }
 //   });
 //   return get24hrsOpen;
-// };
-
-// export const getCoworks = async () => {
-//   const coWork = await prisma.coWork.findMany({});
-
-//   while (coWork.length < 10) {
-//     let randomCoWorkIndex = Math.floor(Math.random() * coWork.length);
-//     let randomCowork = coWork[randomCoWorkIndex];
-//     console.log(randomCowork);
-//     return randomCowork;
-//   }
 // };
 
 export const getCoworks = async () => {
@@ -404,7 +398,9 @@ export const createFacility = (args: ICreateFacility) =>
     },
   });
 
-export const getCalendarBookingByCoWorkId = (args: { coWorkId: number }) =>
+export const getCalendarBookingByCoWorkId = (
+  args: IGetCalendarBookingByCoWorkId
+) =>
   prisma.coWork.findMany({
     where: {
       id: args.coWorkId,
@@ -416,7 +412,9 @@ export const getCalendarBookingByCoWorkId = (args: { coWorkId: number }) =>
     },
   });
 
-export const checkUserExternalPasswordEmail = (args: { email: string }) =>
+export const checkUserExternalPasswordEmail = (
+  args: ICheckUserExternalPasswordEmail
+) =>
   prisma.userExternal.findUnique({
     where: {
       email: args.email,
@@ -429,7 +427,9 @@ export const checkUserExternalPasswordEmail = (args: { email: string }) =>
     },
   });
 
-export const checkUserInternalPasswordEmail = (args: { email: string }) =>
+export const checkUserInternalPasswordEmail = (
+  args: ICheckUserInternalPasswordEmail
+) =>
   prisma.userInternal.findUnique({
     where: {
       email: args.email,
@@ -442,7 +442,7 @@ export const checkUserInternalPasswordEmail = (args: { email: string }) =>
     },
   });
 
-export const upsertExternalToken = (args: { token: string; email: string }) =>
+export const upsertExternalToken = (args: IUpsertExternalToken) =>
   prisma.loginExternal.upsert({
     where: {
       token: args.token,
@@ -465,7 +465,7 @@ export const upsertExternalToken = (args: { token: string; email: string }) =>
     },
   });
 
-export const upsertInternalToken = (args: { token: string; email: string }) =>
+export const upsertInternalToken = (args: IUpsertInternalToken) =>
   prisma.loginInternal.upsert({
     where: {
       token: args.token,
