@@ -1,9 +1,20 @@
-import { date } from "fp-ts";
+import { date, number, random } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
+  ICreateCoWorkDetail,
+  ICreateFacility,
+  ICreateFacilityIn,
+  ICreateRoomInternal,
+  ICreateTimeOpenClose,
   ICreateUserExternal,
+  ICreateUserInternal,
   IGetCoWorkUserChoose,
+  IGetCoworkByUserId,
+  IGetStatusUserBookInternal,
   IGetUserConfirmBooking,
+  IGgetRoomByCoWorkIdCodec,
+  IShowBookDetailInternalByCoWork,
+  IUpdateCoWorkDetail,
 } from "./kowingPlace.interface";
 export const prisma = new PrismaClient();
 
@@ -17,35 +28,62 @@ export const createUserExternal = (args: ICreateUserExternal) =>
     },
   });
 
-export const getCoWork24Hrs = async () => {
-  const getAllCoWork = await prisma.coWork.findMany({
-    include: {
-      OpenClose: true,
-      BranchToRoom: true,
-    },
-  });
-  const get24hrsOpen = getAllCoWork.filter((r) => {
-    if (
-      r.OpenClose?.isOpen24hoursMon === true ||
-      r.OpenClose?.isOpen24hoursTue === true ||
-      r.OpenClose?.isOpen24hoursWed === true ||
-      r.OpenClose?.isOpen24hoursThurs === true ||
-      r.OpenClose?.isOpen24hoursFri === true ||
-      r.OpenClose?.isOpen24hoursSat === true ||
-      r.OpenClose?.isOpen24hoursSun === true
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  return get24hrsOpen;
+// export const getCoWork24Hrs = async () => {
+//   const getAllCoWork = await prisma.coWork.findMany({
+//     include: {
+//       OpenClose: true,
+//       BranchToRoom: true,
+//     },
+//   });
+//   const get24hrsOpen = getAllCoWork.filter((r) => {
+//     if (
+//       r.OpenClose?.isOpen24hoursMon === true ||
+//       r.OpenClose?.isOpen24hoursTue === true ||
+//       r.OpenClose?.isOpen24hoursWed === true ||
+//       r.OpenClose?.isOpen24hoursThurs === true ||
+//       r.OpenClose?.isOpen24hoursFri === true ||
+//       r.OpenClose?.isOpen24hoursSat === true ||
+//       r.OpenClose?.isOpen24hoursSun === true
+//     ) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   });
+//   return get24hrsOpen;
+// };
+
+// export const getCoworks = async () => {
+//   const coWork = await prisma.coWork.findMany({});
+
+//   while (coWork.length < 10) {
+//     let randomCoWorkIndex = Math.floor(Math.random() * coWork.length);
+//     let randomCowork = coWork[randomCoWorkIndex];
+//     console.log(randomCowork);
+//     return randomCowork;
+//   }
+// };
+
+export const getCoworks = async () => {
+  const coWork = await prisma.coWork.findMany({});
+
+  const numIndex = [];
+  for (let i = 0; i < coWork.length; i++) {
+    console.log(i);
+    numIndex.push(i);
+  }
+  numIndex.sort((a, b) => Math.random() - 0.5);
+
+  const recommendCowork = [];
+  for (let i = 0; i < numIndex.length; i++) {
+    console.log(i);
+    recommendCowork.push(coWork[numIndex[i]]);
+  }
+
+  return recommendCowork;
 };
 
-export const getCowork = () => prisma.coWork.findMany({});
-//let p'mac Math random at frontend
-
-export const getRoomByCoWorkId = (args: { coWorkId: number }) =>
+export const getRoomByCoWorkId = (args: IGgetRoomByCoWorkIdCodec) =>
   prisma.coWork.findUnique({
     where: {
       id: args.coWorkId,
@@ -62,7 +100,7 @@ export const getRoomByCoWorkId = (args: { coWorkId: number }) =>
     },
   });
 
-export const getCoworkByUserId = (args: { userInternalId: number }) =>
+export const getCoworkByUserId = (args: IGetCoworkByUserId) =>
   prisma.userInternal.findUnique({
     where: {
       id: args.userInternalId,
@@ -122,12 +160,7 @@ export const getVerifyCodeByUserConfirmBooking = async (
   return getBookData;
 };
 
-export const createUserInternal = (args: {
-  name: string;
-  email: string;
-  tel: string;
-  password: string;
-}) =>
+export const createUserInternal = (args: ICreateUserInternal) =>
   prisma.userInternal.create({
     data: {
       name: args.name,
@@ -138,15 +171,15 @@ export const createUserInternal = (args: {
   });
 
 //เส้นโชว์ ห้องประชุมทั้งหมด / ชื่อผู้ใช้ / booking detail
-export const showBookDetailInternalByCoWork = async (args: {
-  coWorkId: number;
-}) => {
+export const showBookDetailInternalByCoWork = async (
+  args: IShowBookDetailInternalByCoWork
+) => {
   const bookDetailData = await prisma.coWork.findUnique({
     where: {
       id: args.coWorkId,
     },
     select: {
-      BookRoom: {
+      bookRoom: {
         select: {
           startTime: true,
           status: true,
@@ -173,12 +206,7 @@ export const showBookDetailInternalByCoWork = async (args: {
   return bookDetailData;
 };
 
-export const createRoomInternal = async (args: {
-  name: string;
-  capacity: number;
-  rates: { price: number; durationId: number }[];
-  coworkId: number;
-}) => {
+export const createRoomInternal = async (args: ICreateRoomInternal) => {
   const createRoom = await prisma.branchToRoom.create({
     data: {
       coWork: {
@@ -250,25 +278,15 @@ export const updateRoomInternal = async (args: {
   return updateRoom;
 };
 
-//-------------------------------------------------------------
-
-export const createFacilityIn = (args: { name: string }) =>
+export const createFacilityIn = (args: ICreateFacilityIn) =>
   prisma.facility.createMany({
     data: {
       name: args.name,
     },
   });
 
-//-------------------------------------------------------------
-
-export const createCoWorkDetail = async (args: {
-  name: string;
-  description: string;
-  location: string;
-  tel: string;
-  picture: string;
-  userInternalId: number;
-}) => {
+//create cowork
+export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
   const coWorkCreate = await prisma.coWork.create({
     data: {
       name: args.name,
@@ -277,20 +295,73 @@ export const createCoWorkDetail = async (args: {
       picture: args.picture,
       tel: args.tel,
       userInternalId: args.userInternalId,
+      FacilityToCoWork: {
+        connect: {
+          id: args.facilityToCoworkId,
+        },
+      },
+      Close: {
+        connect: {
+          id: args.closeId,
+        },
+      },
+      Open: {
+        connect: {
+          id: args.openId,
+        },
+      },
+      OpenClose24Hours: {
+        connect: {
+          id: args.openClose24HoursId,
+        },
+      },
     },
   });
   return coWorkCreate;
 };
 
-export const updateCoWorkDetail = async (args: {
-  name: string;
-  description: string;
-  location: string;
-  tel: string;
-  picture: string;
-  userInternalId: number;
-  coWorkId: number;
-}) => {
+export const createTimeOpenClose = async (args: ICreateTimeOpenClose) => {
+  const openCoWork = await prisma.open.create({
+    data: {
+      monOpen: args.open[0],
+      tueOpen: args.open[1],
+      wedOpen: args.open[2],
+      thursOpen: args.open[3],
+      friOpen: args.open[4],
+      satOpen: args.open[5],
+      sunOpen: args.open[6],
+      coWorkId: args.coWorkId,
+    },
+  });
+  const closeCoWork = await prisma.close.create({
+    data: {
+      monClose: args.close[0],
+      tueClose: args.close[1],
+      wedClose: args.close[2],
+      thursClose: args.close[3],
+      friClose: args.close[4],
+      satClose: args.close[5],
+      sunClose: args.close[6],
+      coWorkId: args.coWorkId,
+    },
+  });
+
+  const openClose24Hours = await prisma.openClose24Hours.create({
+    data: {
+      mon24hours: args.openClose24hours[0],
+      tue24hours: args.openClose24hours[1],
+      wed24hours: args.openClose24hours[2],
+      thurs24hours: args.openClose24hours[3],
+      fri24hours: args.openClose24hours[4],
+      sat24hours: args.openClose24hours[5],
+      sun24hours: args.openClose24hours[6],
+      coWorkId: args.coWorkId,
+    },
+  });
+  return [openCoWork, closeCoWork, openClose24Hours];
+};
+
+export const updateCoWorkDetail = async (args: IUpdateCoWorkDetail) => {
   const coWorkupdate = await prisma.coWork.update({
     where: {
       id: args.coWorkId,
@@ -306,4 +377,19 @@ export const updateCoWorkDetail = async (args: {
   return coWorkupdate;
 };
 
-//-------------------------------------------------------------
+export const getStatusUserBookInternal = (args: IGetStatusUserBookInternal) =>
+  prisma.bookRoom.update({
+    where: {
+      id: args.bookRoomId,
+    },
+    data: {
+      status: "Arrived",
+    },
+  });
+
+export const createFacility = (args: ICreateFacility) =>
+  prisma.facility.create({
+    data: {
+      name: args.name,
+    },
+  });

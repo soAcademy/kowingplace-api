@@ -4,16 +4,19 @@ import {
   createRoomInternal,
   createUserExternal,
   createUserInternal,
-  getCoWork24Hrs,
   getCoWorkUserChoose,
-  getCowork,
+  getCoworks,
   getCoworkByUserId,
   getRoomByCoWorkId,
   updateCoWorkDetail,
   updateRoomInternal,
   getVerifyCodeByUserConfirmBooking,
   showBookDetailInternalByCoWork,
+  getStatusUserBookInternal,
+  createFacility,
+  createTimeOpenClose,
 } from "./kowingPlace.resolver";
+import { createTimeOpenCloseCodec } from "./kowingPlace.interface";
 
 export const createUserExternalHandler = async (
   req: Request,
@@ -30,20 +33,20 @@ export const createUserExternalHandler = async (
   }
 };
 
-export const getCoWork24HrsHandler = async (req: Request, res: Response) => {
-  try {
-    const result = await getCoWork24Hrs();
-    res.status(200).json(result);
-  } catch (e) {
-    res.status(500).json({
-      error: String(e),
-    });
-  }
-};
+// export const getCoWork24HrsHandler = async (req: Request, res: Response) => {
+//   try {
+//     const result = await getCoWork24Hrs();
+//     res.status(200).json(result);
+//   } catch (e) {
+//     res.status(500).json({
+//       error: String(e),
+//     });
+//   }
+// };
 
-export const getCoworkHandler = async (req: Request, res: Response) => {
+export const getCoworksHandler = async (req: Request, res: Response) => {
   try {
-    const result = await getCowork();
+    const result = await getCoworks();
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({
@@ -191,4 +194,44 @@ export const showBookDetailInternalByCoWorkHandler = async (
       error: String(e),
     });
   }
+};
+
+export const getStatusUserBookInternalHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await getStatusUserBookInternal(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const createFacilityHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  try {
+    const result = await createFacility(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+
+export const createTimeOpenCloseHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  console.log(args);
+createTimeOpenCloseCodec.decode(args)._tag === "Right" ? "OK" : "NO";
+try {
+  const result = await createTimeOpenClose(args);
+  res.status(200).json(result);
+} catch (e) {
+  res.status(500).json({
+    error: String(e),
+  });
+}
 };

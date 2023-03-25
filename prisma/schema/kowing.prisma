@@ -17,11 +17,14 @@ model CoWork {
   tel              String
   picture          String
   BranchToRoom     BranchToRoom[]
-  OpenClose        OpenClose?
+  //OpenClose        OpenClose?
   FacilityToCoWork FacilityToCoWork[]
   userInternal     UserInternal?      @relation(fields: [userInternalId], references: [id])
   userInternalId   Int?               @unique //make one to one
-  BookRoom         BookRoom[]
+  bookRoom         BookRoom[]
+  Close            Close?
+  Open             Open?
+  OpenClose24Hours OpenClose24Hours?
 }
 
 model UserInternal {
@@ -63,7 +66,7 @@ model durationCategory {
   createAt    DateTime   @default(now())
   updateAt    DateTime   @updatedAt
   RoomRate    RoomRate[]
-  openclose   OpenClose? @relation(fields: [openCloseId], references: [id])
+  //openclose   OpenClose? @relation(fields: [openCloseId], references: [id])
   openCloseId Int?
 }
 
@@ -120,44 +123,24 @@ model BookRoom {
   userExternalId       Int
   vertifyCode          VertifyBookingCode @relation(fields: [vertifyBookingCodeId], references: [id])
   vertifyBookingCodeId Int
+  //date
 }
 
-model OpenClose {
-  id                 Int                @id @default(autoincrement())
-  openTimeMon        Int
-  closeTimeMon       Int
-  isOpenMon          Boolean
-  isOpen24hoursMon   Boolean
-  openTimeTue        Int
-  closeTimeTue       Int
-  isOpenTue          Boolean
-  isOpen24hoursTue   Boolean
-  openTimeWed        Int
-  closeTimeWed       Int
-  isOpenWed          Boolean
-  isOpen24hoursWed   Boolean
-  openTimeThurs      Int
-  closeTimeThurs     Int
-  isOpenThurs        Boolean
-  isOpen24hoursThurs Boolean
-  openTimeFri        Int
-  closeTimeFri       Int
-  isOpenFri          Boolean
-  isOpen24hoursFri   Boolean
-  openTimeSat        Int
-  closeTimeSat       Int
-  isOpenSat          Boolean
-  isOpen24hoursSat   Boolean
-  openTimeSun        Int
-  closeTimeSun       Int
-  isOpenSun          Boolean
-  isOpen24hoursSun   Boolean
-  coWork             CoWork             @relation(fields: [coWorkId], references: [id])
-  coWorkId           Int                @unique
-  createAt           DateTime           @default(now())
-  updateAt           DateTime           @updatedAt
-  durationCategory   durationCategory[]
-}
+// model OpenClose {
+//   id               Int                @id @default(autoincrement())
+//   mon              Json
+//   tue              Json
+//   wed              Json
+//   thurs            Json
+//   fri              Json
+//   sat              Json
+//   sun              Json
+//   coWork           CoWork             @relation(fields: [coWorkId], references: [id])
+//   coWorkId         Int                @unique
+//   createAt         DateTime           @default(now())
+//   updateAt         DateTime           @updatedAt
+//   durationCategory durationCategory[]
+// }
 
 model VertifyBookingCode {
   id         Int        @id @default(autoincrement())
@@ -165,9 +148,50 @@ model VertifyBookingCode {
   bookdate   DateTime
   createAt   DateTime   @default(now())
   updateAt   DateTime   @updatedAt
-  BookRoom   BookRoom[]
+  bookRoom   BookRoom[]
 }
 
-//how do we should the data about 24 hours for filter in the frontend
-//check the many to many again 
-//should we have to focus on the Co-working can have many branch in this website
+model Open {
+  id        Int      @id @default(autoincrement())
+  monOpen   Int
+  tueOpen   Int
+  wedOpen   Int
+  thursOpen Int
+  friOpen   Int
+  satOpen   Int
+  sunOpen   Int
+  cowork    CoWork   @relation(fields: [coWorkId], references: [id])
+  coWorkId  Int      @unique
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
+
+model Close {
+  id         Int      @id @default(autoincrement())
+  monClose   Int
+  tueClose   Int
+  wedClose   Int
+  thursClose Int
+  friClose   Int
+  satClose   Int
+  sunClose   Int
+  cowork     CoWork   @relation(fields: [coWorkId], references: [id])
+  coWorkId   Int      @unique
+  createAt   DateTime @default(now())
+  updateAt   DateTime @updatedAt
+}
+
+model OpenClose24Hours {
+  id           Int      @id @default(autoincrement())
+  mon24hours   Boolean
+  tue24hours   Boolean
+  wed24hours   Boolean
+  thurs24hours Boolean
+  fri24hours   Boolean
+  sat24hours   Boolean
+  sun24hours   Boolean
+  cowork       CoWork   @relation(fields: [coWorkId], references: [id])
+  coWorkId     Int      @unique
+  createAt     DateTime @default(now())
+  updateAt     DateTime @updatedAt
+}

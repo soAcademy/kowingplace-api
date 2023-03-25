@@ -3,17 +3,19 @@ import {
   createRoomInternalHandler,
   createUserExternalHandler,
   createUserInternalHandler,
-  getCoWork24HrsHandler,
   getCoWorkUserChooseHandler,
   getCoworkByUserIdHandler,
-  getCoworkHandler,
   getRoomByCoWorkIdHandler,
   updateCoWorkDetailHandler,
   updateRoomInternalHandler,
   getVerifyCodeByUserConfirmBookingHandler,
   showBookDetailInternalByCoWorkHandler,
+  getStatusUserBookInternalHandler,
+  createFacilityHandler,
+  getCoworksHandler,
+  createTimeOpenCloseHandler,
 } from "./kowingPlace/kowingPlace.handler";
-import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
+// import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
 
 export const AppRoutes = [
   {
@@ -26,16 +28,7 @@ export const AppRoutes = [
     method: "post",
     action: createUserExternalHandler, //OK
   },
-  {
-    path: "/kowing/getCoWork24Hrs",
-    method: "post",
-    action: getCoWork24HrsHandler, //OK
-  },
-  {
-    path: "/kowing/getCowork",
-    method: "post",
-    action: getCoworkHandler, //OK
-  },
+
   {
     path: "/kowing/getCoWorkUserChoose",
     method: "post",
@@ -84,6 +77,26 @@ export const AppRoutes = [
   {
     path: "/kowing/showBookDetailInternalByCoWork",
     method: "post",
-    action: showBookDetailInternalByCoWorkHandler,
+    action: showBookDetailInternalByCoWorkHandler, //OK
+  },
+  {
+    path: "/kowing/createFacility",
+    method: "post",
+    action: createFacilityHandler, //OK
+  },
+  {
+    path: "/kowing/getStatusUserBookInternal",
+    method: "post",
+    action: getStatusUserBookInternalHandler, //Ok
+  },
+  {
+    path: "/kowing/getCoworks",
+    method: "post",
+    action: getCoworksHandler, //OK  //with random
+  },
+  {
+    path: "/kowing/createTimeOpenClose",
+    method: "post",
+    action: createTimeOpenCloseHandler,
   },
 ];
