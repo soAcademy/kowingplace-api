@@ -19,7 +19,7 @@ export type UserExternal = {
   name: string
   email: string
   tel: string
-  password: string
+  password: string | null
   createAt: Date
   updateAt: Date
 }
@@ -202,6 +202,30 @@ export type OpenClose24Hours = {
   sat24hours: boolean
   sun24hours: boolean
   coWorkId: number
+  createAt: Date
+  updateAt: Date
+}
+
+/**
+ * Model LoginExternal
+ * 
+ */
+export type LoginExternal = {
+  id: number
+  token: string
+  userExternalId: number
+  createAt: Date
+  updateAt: Date
+}
+
+/**
+ * Model LoginInternal
+ * 
+ */
+export type LoginInternal = {
+  id: number
+  token: string
+  userInternalId: number
   createAt: Date
   updateAt: Date
 }
@@ -463,6 +487,26 @@ export class PrismaClient<
     * ```
     */
   get openClose24Hours(): Prisma.OpenClose24HoursDelegate<GlobalReject>;
+
+  /**
+   * `prisma.loginExternal`: Exposes CRUD operations for the **LoginExternal** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LoginExternals
+    * const loginExternals = await prisma.loginExternal.findMany()
+    * ```
+    */
+  get loginExternal(): Prisma.LoginExternalDelegate<GlobalReject>;
+
+  /**
+   * `prisma.loginInternal`: Exposes CRUD operations for the **LoginInternal** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LoginInternals
+    * const loginInternals = await prisma.loginInternal.findMany()
+    * ```
+    */
+  get loginInternal(): Prisma.LoginInternalDelegate<GlobalReject>;
 }
 
 export namespace Prisma {
@@ -945,7 +989,9 @@ export namespace Prisma {
     VertifyBookingCode: 'VertifyBookingCode',
     Open: 'Open',
     Close: 'Close',
-    OpenClose24Hours: 'OpenClose24Hours'
+    OpenClose24Hours: 'OpenClose24Hours',
+    LoginExternal: 'LoginExternal',
+    LoginInternal: 'LoginInternal'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1113,10 +1159,12 @@ export namespace Prisma {
 
   export type UserExternalCountOutputType = {
     BookRoom: number
+    LoginExternal: number
   }
 
   export type UserExternalCountOutputTypeSelect = {
     BookRoom?: boolean
+    LoginExternal?: boolean
   }
 
   export type UserExternalCountOutputTypeGetPayload<S extends boolean | null | undefined | UserExternalCountOutputTypeArgs> =
@@ -1192,6 +1240,49 @@ export namespace Prisma {
      * Select specific fields to fetch from the CoWorkCountOutputType
      */
     select?: CoWorkCountOutputTypeSelect | null
+  }
+
+
+
+  /**
+   * Count Type UserInternalCountOutputType
+   */
+
+
+  export type UserInternalCountOutputType = {
+    LoginInternal: number
+  }
+
+  export type UserInternalCountOutputTypeSelect = {
+    LoginInternal?: boolean
+  }
+
+  export type UserInternalCountOutputTypeGetPayload<S extends boolean | null | undefined | UserInternalCountOutputTypeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? UserInternalCountOutputType :
+    S extends undefined ? never :
+    S extends { include: any } & (UserInternalCountOutputTypeArgs)
+    ? UserInternalCountOutputType 
+    : S extends { select: any } & (UserInternalCountOutputTypeArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof UserInternalCountOutputType ? UserInternalCountOutputType[P] : never
+  } 
+      : UserInternalCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * UserInternalCountOutputType without action
+   */
+  export type UserInternalCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the UserInternalCountOutputType
+     */
+    select?: UserInternalCountOutputTypeSelect | null
   }
 
 
@@ -1601,7 +1692,7 @@ export namespace Prisma {
     name: string
     email: string
     tel: string
-    password: string
+    password: string | null
     createAt: Date
     updateAt: Date
     _count: UserExternalCountAggregateOutputType | null
@@ -1634,12 +1725,14 @@ export namespace Prisma {
     createAt?: boolean
     updateAt?: boolean
     BookRoom?: boolean | UserExternal$BookRoomArgs
+    LoginExternal?: boolean | UserExternal$LoginExternalArgs
     _count?: boolean | UserExternalCountOutputTypeArgs
   }
 
 
   export type UserExternalInclude = {
     BookRoom?: boolean | UserExternal$BookRoomArgs
+    LoginExternal?: boolean | UserExternal$LoginExternalArgs
     _count?: boolean | UserExternalCountOutputTypeArgs
   }
 
@@ -1651,12 +1744,14 @@ export namespace Prisma {
     ? UserExternal  & {
     [P in TruthyKeys<S['include']>]:
         P extends 'BookRoom' ? Array < BookRoomGetPayload<S['include'][P]>>  :
+        P extends 'LoginExternal' ? Array < LoginExternalGetPayload<S['include'][P]>>  :
         P extends '_count' ? UserExternalCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (UserExternalArgs | UserExternalFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
         P extends 'BookRoom' ? Array < BookRoomGetPayload<S['select'][P]>>  :
+        P extends 'LoginExternal' ? Array < LoginExternalGetPayload<S['select'][P]>>  :
         P extends '_count' ? UserExternalCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof UserExternal ? UserExternal[P] : never
   } 
       : UserExternal
@@ -2031,6 +2126,8 @@ export namespace Prisma {
 
     BookRoom<T extends UserExternal$BookRoomArgs= {}>(args?: Subset<T, UserExternal$BookRoomArgs>): Prisma.PrismaPromise<Array<BookRoomGetPayload<T>>| Null>;
 
+    LoginExternal<T extends UserExternal$LoginExternalArgs= {}>(args?: Subset<T, UserExternal$LoginExternalArgs>): Prisma.PrismaPromise<Array<LoginExternalGetPayload<T>>| Null>;
+
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2404,6 +2501,27 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Enumerable<BookRoomScalarFieldEnum>
+  }
+
+
+  /**
+   * UserExternal.LoginExternal
+   */
+  export type UserExternal$LoginExternalArgs = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+    where?: LoginExternalWhereInput
+    orderBy?: Enumerable<LoginExternalOrderByWithRelationInput>
+    cursor?: LoginExternalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<LoginExternalScalarFieldEnum>
   }
 
 
@@ -3728,11 +3846,15 @@ export namespace Prisma {
     createAt?: boolean
     updateAt?: boolean
     coWork?: boolean | CoWorkArgs
+    LoginInternal?: boolean | UserInternal$LoginInternalArgs
+    _count?: boolean | UserInternalCountOutputTypeArgs
   }
 
 
   export type UserInternalInclude = {
     coWork?: boolean | CoWorkArgs
+    LoginInternal?: boolean | UserInternal$LoginInternalArgs
+    _count?: boolean | UserInternalCountOutputTypeArgs
   }
 
   export type UserInternalGetPayload<S extends boolean | null | undefined | UserInternalArgs> =
@@ -3742,12 +3864,16 @@ export namespace Prisma {
     S extends { include: any } & (UserInternalArgs | UserInternalFindManyArgs)
     ? UserInternal  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'coWork' ? CoWorkGetPayload<S['include'][P]> | null :  never
+        P extends 'coWork' ? CoWorkGetPayload<S['include'][P]> | null :
+        P extends 'LoginInternal' ? Array < LoginInternalGetPayload<S['include'][P]>>  :
+        P extends '_count' ? UserInternalCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (UserInternalArgs | UserInternalFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'coWork' ? CoWorkGetPayload<S['select'][P]> | null :  P extends keyof UserInternal ? UserInternal[P] : never
+        P extends 'coWork' ? CoWorkGetPayload<S['select'][P]> | null :
+        P extends 'LoginInternal' ? Array < LoginInternalGetPayload<S['select'][P]>>  :
+        P extends '_count' ? UserInternalCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof UserInternal ? UserInternal[P] : never
   } 
       : UserInternal
 
@@ -4121,6 +4247,8 @@ export namespace Prisma {
 
     coWork<T extends CoWorkArgs= {}>(args?: Subset<T, CoWorkArgs>): Prisma__CoWorkClient<CoWorkGetPayload<T> | Null>;
 
+    LoginInternal<T extends UserInternal$LoginInternalArgs= {}>(args?: Subset<T, UserInternal$LoginInternalArgs>): Prisma.PrismaPromise<Array<LoginInternalGetPayload<T>>| Null>;
+
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4473,6 +4601,27 @@ export namespace Prisma {
      * Filter which UserInternals to delete
      */
     where?: UserInternalWhereInput
+  }
+
+
+  /**
+   * UserInternal.LoginInternal
+   */
+  export type UserInternal$LoginInternalArgs = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+    where?: LoginInternalWhereInput
+    orderBy?: Enumerable<LoginInternalOrderByWithRelationInput>
+    cursor?: LoginInternalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<LoginInternalScalarFieldEnum>
   }
 
 
@@ -15602,6 +15751,1944 @@ export namespace Prisma {
 
 
   /**
+   * Model LoginExternal
+   */
+
+
+  export type AggregateLoginExternal = {
+    _count: LoginExternalCountAggregateOutputType | null
+    _avg: LoginExternalAvgAggregateOutputType | null
+    _sum: LoginExternalSumAggregateOutputType | null
+    _min: LoginExternalMinAggregateOutputType | null
+    _max: LoginExternalMaxAggregateOutputType | null
+  }
+
+  export type LoginExternalAvgAggregateOutputType = {
+    id: number | null
+    userExternalId: number | null
+  }
+
+  export type LoginExternalSumAggregateOutputType = {
+    id: number | null
+    userExternalId: number | null
+  }
+
+  export type LoginExternalMinAggregateOutputType = {
+    id: number | null
+    token: string | null
+    userExternalId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type LoginExternalMaxAggregateOutputType = {
+    id: number | null
+    token: string | null
+    userExternalId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type LoginExternalCountAggregateOutputType = {
+    id: number
+    token: number
+    userExternalId: number
+    createAt: number
+    updateAt: number
+    _all: number
+  }
+
+
+  export type LoginExternalAvgAggregateInputType = {
+    id?: true
+    userExternalId?: true
+  }
+
+  export type LoginExternalSumAggregateInputType = {
+    id?: true
+    userExternalId?: true
+  }
+
+  export type LoginExternalMinAggregateInputType = {
+    id?: true
+    token?: true
+    userExternalId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type LoginExternalMaxAggregateInputType = {
+    id?: true
+    token?: true
+    userExternalId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type LoginExternalCountAggregateInputType = {
+    id?: true
+    token?: true
+    userExternalId?: true
+    createAt?: true
+    updateAt?: true
+    _all?: true
+  }
+
+  export type LoginExternalAggregateArgs = {
+    /**
+     * Filter which LoginExternal to aggregate.
+     */
+    where?: LoginExternalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginExternals to fetch.
+     */
+    orderBy?: Enumerable<LoginExternalOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LoginExternalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginExternals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginExternals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LoginExternals
+    **/
+    _count?: true | LoginExternalCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LoginExternalAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LoginExternalSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LoginExternalMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LoginExternalMaxAggregateInputType
+  }
+
+  export type GetLoginExternalAggregateType<T extends LoginExternalAggregateArgs> = {
+        [P in keyof T & keyof AggregateLoginExternal]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLoginExternal[P]>
+      : GetScalarType<T[P], AggregateLoginExternal[P]>
+  }
+
+
+
+
+  export type LoginExternalGroupByArgs = {
+    where?: LoginExternalWhereInput
+    orderBy?: Enumerable<LoginExternalOrderByWithAggregationInput>
+    by: LoginExternalScalarFieldEnum[]
+    having?: LoginExternalScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LoginExternalCountAggregateInputType | true
+    _avg?: LoginExternalAvgAggregateInputType
+    _sum?: LoginExternalSumAggregateInputType
+    _min?: LoginExternalMinAggregateInputType
+    _max?: LoginExternalMaxAggregateInputType
+  }
+
+
+  export type LoginExternalGroupByOutputType = {
+    id: number
+    token: string
+    userExternalId: number
+    createAt: Date
+    updateAt: Date
+    _count: LoginExternalCountAggregateOutputType | null
+    _avg: LoginExternalAvgAggregateOutputType | null
+    _sum: LoginExternalSumAggregateOutputType | null
+    _min: LoginExternalMinAggregateOutputType | null
+    _max: LoginExternalMaxAggregateOutputType | null
+  }
+
+  type GetLoginExternalGroupByPayload<T extends LoginExternalGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<LoginExternalGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LoginExternalGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LoginExternalGroupByOutputType[P]>
+            : GetScalarType<T[P], LoginExternalGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LoginExternalSelect = {
+    id?: boolean
+    token?: boolean
+    userExternalId?: boolean
+    createAt?: boolean
+    updateAt?: boolean
+    userExternal?: boolean | UserExternalArgs
+  }
+
+
+  export type LoginExternalInclude = {
+    userExternal?: boolean | UserExternalArgs
+  }
+
+  export type LoginExternalGetPayload<S extends boolean | null | undefined | LoginExternalArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? LoginExternal :
+    S extends undefined ? never :
+    S extends { include: any } & (LoginExternalArgs | LoginExternalFindManyArgs)
+    ? LoginExternal  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'userExternal' ? UserExternalGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (LoginExternalArgs | LoginExternalFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'userExternal' ? UserExternalGetPayload<S['select'][P]> :  P extends keyof LoginExternal ? LoginExternal[P] : never
+  } 
+      : LoginExternal
+
+
+  type LoginExternalCountArgs = 
+    Omit<LoginExternalFindManyArgs, 'select' | 'include'> & {
+      select?: LoginExternalCountAggregateInputType | true
+    }
+
+  export interface LoginExternalDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one LoginExternal that matches the filter.
+     * @param {LoginExternalFindUniqueArgs} args - Arguments to find a LoginExternal
+     * @example
+     * // Get one LoginExternal
+     * const loginExternal = await prisma.loginExternal.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends LoginExternalFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, LoginExternalFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'LoginExternal'> extends True ? Prisma__LoginExternalClient<LoginExternalGetPayload<T>> : Prisma__LoginExternalClient<LoginExternalGetPayload<T> | null, null>
+
+    /**
+     * Find one LoginExternal that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {LoginExternalFindUniqueOrThrowArgs} args - Arguments to find a LoginExternal
+     * @example
+     * // Get one LoginExternal
+     * const loginExternal = await prisma.loginExternal.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends LoginExternalFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, LoginExternalFindUniqueOrThrowArgs>
+    ): Prisma__LoginExternalClient<LoginExternalGetPayload<T>>
+
+    /**
+     * Find the first LoginExternal that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginExternalFindFirstArgs} args - Arguments to find a LoginExternal
+     * @example
+     * // Get one LoginExternal
+     * const loginExternal = await prisma.loginExternal.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends LoginExternalFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, LoginExternalFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'LoginExternal'> extends True ? Prisma__LoginExternalClient<LoginExternalGetPayload<T>> : Prisma__LoginExternalClient<LoginExternalGetPayload<T> | null, null>
+
+    /**
+     * Find the first LoginExternal that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginExternalFindFirstOrThrowArgs} args - Arguments to find a LoginExternal
+     * @example
+     * // Get one LoginExternal
+     * const loginExternal = await prisma.loginExternal.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends LoginExternalFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, LoginExternalFindFirstOrThrowArgs>
+    ): Prisma__LoginExternalClient<LoginExternalGetPayload<T>>
+
+    /**
+     * Find zero or more LoginExternals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginExternalFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LoginExternals
+     * const loginExternals = await prisma.loginExternal.findMany()
+     * 
+     * // Get first 10 LoginExternals
+     * const loginExternals = await prisma.loginExternal.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const loginExternalWithIdOnly = await prisma.loginExternal.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends LoginExternalFindManyArgs>(
+      args?: SelectSubset<T, LoginExternalFindManyArgs>
+    ): Prisma.PrismaPromise<Array<LoginExternalGetPayload<T>>>
+
+    /**
+     * Create a LoginExternal.
+     * @param {LoginExternalCreateArgs} args - Arguments to create a LoginExternal.
+     * @example
+     * // Create one LoginExternal
+     * const LoginExternal = await prisma.loginExternal.create({
+     *   data: {
+     *     // ... data to create a LoginExternal
+     *   }
+     * })
+     * 
+    **/
+    create<T extends LoginExternalCreateArgs>(
+      args: SelectSubset<T, LoginExternalCreateArgs>
+    ): Prisma__LoginExternalClient<LoginExternalGetPayload<T>>
+
+    /**
+     * Create many LoginExternals.
+     *     @param {LoginExternalCreateManyArgs} args - Arguments to create many LoginExternals.
+     *     @example
+     *     // Create many LoginExternals
+     *     const loginExternal = await prisma.loginExternal.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends LoginExternalCreateManyArgs>(
+      args?: SelectSubset<T, LoginExternalCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a LoginExternal.
+     * @param {LoginExternalDeleteArgs} args - Arguments to delete one LoginExternal.
+     * @example
+     * // Delete one LoginExternal
+     * const LoginExternal = await prisma.loginExternal.delete({
+     *   where: {
+     *     // ... filter to delete one LoginExternal
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends LoginExternalDeleteArgs>(
+      args: SelectSubset<T, LoginExternalDeleteArgs>
+    ): Prisma__LoginExternalClient<LoginExternalGetPayload<T>>
+
+    /**
+     * Update one LoginExternal.
+     * @param {LoginExternalUpdateArgs} args - Arguments to update one LoginExternal.
+     * @example
+     * // Update one LoginExternal
+     * const loginExternal = await prisma.loginExternal.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends LoginExternalUpdateArgs>(
+      args: SelectSubset<T, LoginExternalUpdateArgs>
+    ): Prisma__LoginExternalClient<LoginExternalGetPayload<T>>
+
+    /**
+     * Delete zero or more LoginExternals.
+     * @param {LoginExternalDeleteManyArgs} args - Arguments to filter LoginExternals to delete.
+     * @example
+     * // Delete a few LoginExternals
+     * const { count } = await prisma.loginExternal.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends LoginExternalDeleteManyArgs>(
+      args?: SelectSubset<T, LoginExternalDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoginExternals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginExternalUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LoginExternals
+     * const loginExternal = await prisma.loginExternal.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends LoginExternalUpdateManyArgs>(
+      args: SelectSubset<T, LoginExternalUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one LoginExternal.
+     * @param {LoginExternalUpsertArgs} args - Arguments to update or create a LoginExternal.
+     * @example
+     * // Update or create a LoginExternal
+     * const loginExternal = await prisma.loginExternal.upsert({
+     *   create: {
+     *     // ... data to create a LoginExternal
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LoginExternal we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends LoginExternalUpsertArgs>(
+      args: SelectSubset<T, LoginExternalUpsertArgs>
+    ): Prisma__LoginExternalClient<LoginExternalGetPayload<T>>
+
+    /**
+     * Count the number of LoginExternals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginExternalCountArgs} args - Arguments to filter LoginExternals to count.
+     * @example
+     * // Count the number of LoginExternals
+     * const count = await prisma.loginExternal.count({
+     *   where: {
+     *     // ... the filter for the LoginExternals we want to count
+     *   }
+     * })
+    **/
+    count<T extends LoginExternalCountArgs>(
+      args?: Subset<T, LoginExternalCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LoginExternalCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LoginExternal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginExternalAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LoginExternalAggregateArgs>(args: Subset<T, LoginExternalAggregateArgs>): Prisma.PrismaPromise<GetLoginExternalAggregateType<T>>
+
+    /**
+     * Group by LoginExternal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginExternalGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LoginExternalGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LoginExternalGroupByArgs['orderBy'] }
+        : { orderBy?: LoginExternalGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LoginExternalGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLoginExternalGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LoginExternal.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__LoginExternalClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    userExternal<T extends UserExternalArgs= {}>(args?: Subset<T, UserExternalArgs>): Prisma__UserExternalClient<UserExternalGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * LoginExternal base type for findUnique actions
+   */
+  export type LoginExternalFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+    /**
+     * Filter, which LoginExternal to fetch.
+     */
+    where: LoginExternalWhereUniqueInput
+  }
+
+  /**
+   * LoginExternal findUnique
+   */
+  export interface LoginExternalFindUniqueArgs extends LoginExternalFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * LoginExternal findUniqueOrThrow
+   */
+  export type LoginExternalFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+    /**
+     * Filter, which LoginExternal to fetch.
+     */
+    where: LoginExternalWhereUniqueInput
+  }
+
+
+  /**
+   * LoginExternal base type for findFirst actions
+   */
+  export type LoginExternalFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+    /**
+     * Filter, which LoginExternal to fetch.
+     */
+    where?: LoginExternalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginExternals to fetch.
+     */
+    orderBy?: Enumerable<LoginExternalOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoginExternals.
+     */
+    cursor?: LoginExternalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginExternals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginExternals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoginExternals.
+     */
+    distinct?: Enumerable<LoginExternalScalarFieldEnum>
+  }
+
+  /**
+   * LoginExternal findFirst
+   */
+  export interface LoginExternalFindFirstArgs extends LoginExternalFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * LoginExternal findFirstOrThrow
+   */
+  export type LoginExternalFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+    /**
+     * Filter, which LoginExternal to fetch.
+     */
+    where?: LoginExternalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginExternals to fetch.
+     */
+    orderBy?: Enumerable<LoginExternalOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoginExternals.
+     */
+    cursor?: LoginExternalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginExternals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginExternals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoginExternals.
+     */
+    distinct?: Enumerable<LoginExternalScalarFieldEnum>
+  }
+
+
+  /**
+   * LoginExternal findMany
+   */
+  export type LoginExternalFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+    /**
+     * Filter, which LoginExternals to fetch.
+     */
+    where?: LoginExternalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginExternals to fetch.
+     */
+    orderBy?: Enumerable<LoginExternalOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LoginExternals.
+     */
+    cursor?: LoginExternalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginExternals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginExternals.
+     */
+    skip?: number
+    distinct?: Enumerable<LoginExternalScalarFieldEnum>
+  }
+
+
+  /**
+   * LoginExternal create
+   */
+  export type LoginExternalCreateArgs = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+    /**
+     * The data needed to create a LoginExternal.
+     */
+    data: XOR<LoginExternalCreateInput, LoginExternalUncheckedCreateInput>
+  }
+
+
+  /**
+   * LoginExternal createMany
+   */
+  export type LoginExternalCreateManyArgs = {
+    /**
+     * The data used to create many LoginExternals.
+     */
+    data: Enumerable<LoginExternalCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * LoginExternal update
+   */
+  export type LoginExternalUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+    /**
+     * The data needed to update a LoginExternal.
+     */
+    data: XOR<LoginExternalUpdateInput, LoginExternalUncheckedUpdateInput>
+    /**
+     * Choose, which LoginExternal to update.
+     */
+    where: LoginExternalWhereUniqueInput
+  }
+
+
+  /**
+   * LoginExternal updateMany
+   */
+  export type LoginExternalUpdateManyArgs = {
+    /**
+     * The data used to update LoginExternals.
+     */
+    data: XOR<LoginExternalUpdateManyMutationInput, LoginExternalUncheckedUpdateManyInput>
+    /**
+     * Filter which LoginExternals to update
+     */
+    where?: LoginExternalWhereInput
+  }
+
+
+  /**
+   * LoginExternal upsert
+   */
+  export type LoginExternalUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+    /**
+     * The filter to search for the LoginExternal to update in case it exists.
+     */
+    where: LoginExternalWhereUniqueInput
+    /**
+     * In case the LoginExternal found by the `where` argument doesn't exist, create a new LoginExternal with this data.
+     */
+    create: XOR<LoginExternalCreateInput, LoginExternalUncheckedCreateInput>
+    /**
+     * In case the LoginExternal was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LoginExternalUpdateInput, LoginExternalUncheckedUpdateInput>
+  }
+
+
+  /**
+   * LoginExternal delete
+   */
+  export type LoginExternalDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+    /**
+     * Filter which LoginExternal to delete.
+     */
+    where: LoginExternalWhereUniqueInput
+  }
+
+
+  /**
+   * LoginExternal deleteMany
+   */
+  export type LoginExternalDeleteManyArgs = {
+    /**
+     * Filter which LoginExternals to delete
+     */
+    where?: LoginExternalWhereInput
+  }
+
+
+  /**
+   * LoginExternal without action
+   */
+  export type LoginExternalArgs = {
+    /**
+     * Select specific fields to fetch from the LoginExternal
+     */
+    select?: LoginExternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginExternalInclude | null
+  }
+
+
+
+  /**
+   * Model LoginInternal
+   */
+
+
+  export type AggregateLoginInternal = {
+    _count: LoginInternalCountAggregateOutputType | null
+    _avg: LoginInternalAvgAggregateOutputType | null
+    _sum: LoginInternalSumAggregateOutputType | null
+    _min: LoginInternalMinAggregateOutputType | null
+    _max: LoginInternalMaxAggregateOutputType | null
+  }
+
+  export type LoginInternalAvgAggregateOutputType = {
+    id: number | null
+    userInternalId: number | null
+  }
+
+  export type LoginInternalSumAggregateOutputType = {
+    id: number | null
+    userInternalId: number | null
+  }
+
+  export type LoginInternalMinAggregateOutputType = {
+    id: number | null
+    token: string | null
+    userInternalId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type LoginInternalMaxAggregateOutputType = {
+    id: number | null
+    token: string | null
+    userInternalId: number | null
+    createAt: Date | null
+    updateAt: Date | null
+  }
+
+  export type LoginInternalCountAggregateOutputType = {
+    id: number
+    token: number
+    userInternalId: number
+    createAt: number
+    updateAt: number
+    _all: number
+  }
+
+
+  export type LoginInternalAvgAggregateInputType = {
+    id?: true
+    userInternalId?: true
+  }
+
+  export type LoginInternalSumAggregateInputType = {
+    id?: true
+    userInternalId?: true
+  }
+
+  export type LoginInternalMinAggregateInputType = {
+    id?: true
+    token?: true
+    userInternalId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type LoginInternalMaxAggregateInputType = {
+    id?: true
+    token?: true
+    userInternalId?: true
+    createAt?: true
+    updateAt?: true
+  }
+
+  export type LoginInternalCountAggregateInputType = {
+    id?: true
+    token?: true
+    userInternalId?: true
+    createAt?: true
+    updateAt?: true
+    _all?: true
+  }
+
+  export type LoginInternalAggregateArgs = {
+    /**
+     * Filter which LoginInternal to aggregate.
+     */
+    where?: LoginInternalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginInternals to fetch.
+     */
+    orderBy?: Enumerable<LoginInternalOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LoginInternalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginInternals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginInternals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LoginInternals
+    **/
+    _count?: true | LoginInternalCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LoginInternalAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LoginInternalSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LoginInternalMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LoginInternalMaxAggregateInputType
+  }
+
+  export type GetLoginInternalAggregateType<T extends LoginInternalAggregateArgs> = {
+        [P in keyof T & keyof AggregateLoginInternal]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLoginInternal[P]>
+      : GetScalarType<T[P], AggregateLoginInternal[P]>
+  }
+
+
+
+
+  export type LoginInternalGroupByArgs = {
+    where?: LoginInternalWhereInput
+    orderBy?: Enumerable<LoginInternalOrderByWithAggregationInput>
+    by: LoginInternalScalarFieldEnum[]
+    having?: LoginInternalScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LoginInternalCountAggregateInputType | true
+    _avg?: LoginInternalAvgAggregateInputType
+    _sum?: LoginInternalSumAggregateInputType
+    _min?: LoginInternalMinAggregateInputType
+    _max?: LoginInternalMaxAggregateInputType
+  }
+
+
+  export type LoginInternalGroupByOutputType = {
+    id: number
+    token: string
+    userInternalId: number
+    createAt: Date
+    updateAt: Date
+    _count: LoginInternalCountAggregateOutputType | null
+    _avg: LoginInternalAvgAggregateOutputType | null
+    _sum: LoginInternalSumAggregateOutputType | null
+    _min: LoginInternalMinAggregateOutputType | null
+    _max: LoginInternalMaxAggregateOutputType | null
+  }
+
+  type GetLoginInternalGroupByPayload<T extends LoginInternalGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<LoginInternalGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LoginInternalGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LoginInternalGroupByOutputType[P]>
+            : GetScalarType<T[P], LoginInternalGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LoginInternalSelect = {
+    id?: boolean
+    token?: boolean
+    userInternalId?: boolean
+    createAt?: boolean
+    updateAt?: boolean
+    userInternal?: boolean | UserInternalArgs
+  }
+
+
+  export type LoginInternalInclude = {
+    userInternal?: boolean | UserInternalArgs
+  }
+
+  export type LoginInternalGetPayload<S extends boolean | null | undefined | LoginInternalArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? LoginInternal :
+    S extends undefined ? never :
+    S extends { include: any } & (LoginInternalArgs | LoginInternalFindManyArgs)
+    ? LoginInternal  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'userInternal' ? UserInternalGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (LoginInternalArgs | LoginInternalFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'userInternal' ? UserInternalGetPayload<S['select'][P]> :  P extends keyof LoginInternal ? LoginInternal[P] : never
+  } 
+      : LoginInternal
+
+
+  type LoginInternalCountArgs = 
+    Omit<LoginInternalFindManyArgs, 'select' | 'include'> & {
+      select?: LoginInternalCountAggregateInputType | true
+    }
+
+  export interface LoginInternalDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one LoginInternal that matches the filter.
+     * @param {LoginInternalFindUniqueArgs} args - Arguments to find a LoginInternal
+     * @example
+     * // Get one LoginInternal
+     * const loginInternal = await prisma.loginInternal.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends LoginInternalFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, LoginInternalFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'LoginInternal'> extends True ? Prisma__LoginInternalClient<LoginInternalGetPayload<T>> : Prisma__LoginInternalClient<LoginInternalGetPayload<T> | null, null>
+
+    /**
+     * Find one LoginInternal that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {LoginInternalFindUniqueOrThrowArgs} args - Arguments to find a LoginInternal
+     * @example
+     * // Get one LoginInternal
+     * const loginInternal = await prisma.loginInternal.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends LoginInternalFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, LoginInternalFindUniqueOrThrowArgs>
+    ): Prisma__LoginInternalClient<LoginInternalGetPayload<T>>
+
+    /**
+     * Find the first LoginInternal that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginInternalFindFirstArgs} args - Arguments to find a LoginInternal
+     * @example
+     * // Get one LoginInternal
+     * const loginInternal = await prisma.loginInternal.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends LoginInternalFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, LoginInternalFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'LoginInternal'> extends True ? Prisma__LoginInternalClient<LoginInternalGetPayload<T>> : Prisma__LoginInternalClient<LoginInternalGetPayload<T> | null, null>
+
+    /**
+     * Find the first LoginInternal that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginInternalFindFirstOrThrowArgs} args - Arguments to find a LoginInternal
+     * @example
+     * // Get one LoginInternal
+     * const loginInternal = await prisma.loginInternal.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends LoginInternalFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, LoginInternalFindFirstOrThrowArgs>
+    ): Prisma__LoginInternalClient<LoginInternalGetPayload<T>>
+
+    /**
+     * Find zero or more LoginInternals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginInternalFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LoginInternals
+     * const loginInternals = await prisma.loginInternal.findMany()
+     * 
+     * // Get first 10 LoginInternals
+     * const loginInternals = await prisma.loginInternal.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const loginInternalWithIdOnly = await prisma.loginInternal.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends LoginInternalFindManyArgs>(
+      args?: SelectSubset<T, LoginInternalFindManyArgs>
+    ): Prisma.PrismaPromise<Array<LoginInternalGetPayload<T>>>
+
+    /**
+     * Create a LoginInternal.
+     * @param {LoginInternalCreateArgs} args - Arguments to create a LoginInternal.
+     * @example
+     * // Create one LoginInternal
+     * const LoginInternal = await prisma.loginInternal.create({
+     *   data: {
+     *     // ... data to create a LoginInternal
+     *   }
+     * })
+     * 
+    **/
+    create<T extends LoginInternalCreateArgs>(
+      args: SelectSubset<T, LoginInternalCreateArgs>
+    ): Prisma__LoginInternalClient<LoginInternalGetPayload<T>>
+
+    /**
+     * Create many LoginInternals.
+     *     @param {LoginInternalCreateManyArgs} args - Arguments to create many LoginInternals.
+     *     @example
+     *     // Create many LoginInternals
+     *     const loginInternal = await prisma.loginInternal.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends LoginInternalCreateManyArgs>(
+      args?: SelectSubset<T, LoginInternalCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a LoginInternal.
+     * @param {LoginInternalDeleteArgs} args - Arguments to delete one LoginInternal.
+     * @example
+     * // Delete one LoginInternal
+     * const LoginInternal = await prisma.loginInternal.delete({
+     *   where: {
+     *     // ... filter to delete one LoginInternal
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends LoginInternalDeleteArgs>(
+      args: SelectSubset<T, LoginInternalDeleteArgs>
+    ): Prisma__LoginInternalClient<LoginInternalGetPayload<T>>
+
+    /**
+     * Update one LoginInternal.
+     * @param {LoginInternalUpdateArgs} args - Arguments to update one LoginInternal.
+     * @example
+     * // Update one LoginInternal
+     * const loginInternal = await prisma.loginInternal.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends LoginInternalUpdateArgs>(
+      args: SelectSubset<T, LoginInternalUpdateArgs>
+    ): Prisma__LoginInternalClient<LoginInternalGetPayload<T>>
+
+    /**
+     * Delete zero or more LoginInternals.
+     * @param {LoginInternalDeleteManyArgs} args - Arguments to filter LoginInternals to delete.
+     * @example
+     * // Delete a few LoginInternals
+     * const { count } = await prisma.loginInternal.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends LoginInternalDeleteManyArgs>(
+      args?: SelectSubset<T, LoginInternalDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoginInternals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginInternalUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LoginInternals
+     * const loginInternal = await prisma.loginInternal.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends LoginInternalUpdateManyArgs>(
+      args: SelectSubset<T, LoginInternalUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one LoginInternal.
+     * @param {LoginInternalUpsertArgs} args - Arguments to update or create a LoginInternal.
+     * @example
+     * // Update or create a LoginInternal
+     * const loginInternal = await prisma.loginInternal.upsert({
+     *   create: {
+     *     // ... data to create a LoginInternal
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LoginInternal we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends LoginInternalUpsertArgs>(
+      args: SelectSubset<T, LoginInternalUpsertArgs>
+    ): Prisma__LoginInternalClient<LoginInternalGetPayload<T>>
+
+    /**
+     * Count the number of LoginInternals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginInternalCountArgs} args - Arguments to filter LoginInternals to count.
+     * @example
+     * // Count the number of LoginInternals
+     * const count = await prisma.loginInternal.count({
+     *   where: {
+     *     // ... the filter for the LoginInternals we want to count
+     *   }
+     * })
+    **/
+    count<T extends LoginInternalCountArgs>(
+      args?: Subset<T, LoginInternalCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LoginInternalCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LoginInternal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginInternalAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LoginInternalAggregateArgs>(args: Subset<T, LoginInternalAggregateArgs>): Prisma.PrismaPromise<GetLoginInternalAggregateType<T>>
+
+    /**
+     * Group by LoginInternal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginInternalGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LoginInternalGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LoginInternalGroupByArgs['orderBy'] }
+        : { orderBy?: LoginInternalGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LoginInternalGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLoginInternalGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LoginInternal.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__LoginInternalClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    userInternal<T extends UserInternalArgs= {}>(args?: Subset<T, UserInternalArgs>): Prisma__UserInternalClient<UserInternalGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * LoginInternal base type for findUnique actions
+   */
+  export type LoginInternalFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+    /**
+     * Filter, which LoginInternal to fetch.
+     */
+    where: LoginInternalWhereUniqueInput
+  }
+
+  /**
+   * LoginInternal findUnique
+   */
+  export interface LoginInternalFindUniqueArgs extends LoginInternalFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * LoginInternal findUniqueOrThrow
+   */
+  export type LoginInternalFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+    /**
+     * Filter, which LoginInternal to fetch.
+     */
+    where: LoginInternalWhereUniqueInput
+  }
+
+
+  /**
+   * LoginInternal base type for findFirst actions
+   */
+  export type LoginInternalFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+    /**
+     * Filter, which LoginInternal to fetch.
+     */
+    where?: LoginInternalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginInternals to fetch.
+     */
+    orderBy?: Enumerable<LoginInternalOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoginInternals.
+     */
+    cursor?: LoginInternalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginInternals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginInternals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoginInternals.
+     */
+    distinct?: Enumerable<LoginInternalScalarFieldEnum>
+  }
+
+  /**
+   * LoginInternal findFirst
+   */
+  export interface LoginInternalFindFirstArgs extends LoginInternalFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * LoginInternal findFirstOrThrow
+   */
+  export type LoginInternalFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+    /**
+     * Filter, which LoginInternal to fetch.
+     */
+    where?: LoginInternalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginInternals to fetch.
+     */
+    orderBy?: Enumerable<LoginInternalOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoginInternals.
+     */
+    cursor?: LoginInternalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginInternals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginInternals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoginInternals.
+     */
+    distinct?: Enumerable<LoginInternalScalarFieldEnum>
+  }
+
+
+  /**
+   * LoginInternal findMany
+   */
+  export type LoginInternalFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+    /**
+     * Filter, which LoginInternals to fetch.
+     */
+    where?: LoginInternalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginInternals to fetch.
+     */
+    orderBy?: Enumerable<LoginInternalOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LoginInternals.
+     */
+    cursor?: LoginInternalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginInternals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginInternals.
+     */
+    skip?: number
+    distinct?: Enumerable<LoginInternalScalarFieldEnum>
+  }
+
+
+  /**
+   * LoginInternal create
+   */
+  export type LoginInternalCreateArgs = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+    /**
+     * The data needed to create a LoginInternal.
+     */
+    data: XOR<LoginInternalCreateInput, LoginInternalUncheckedCreateInput>
+  }
+
+
+  /**
+   * LoginInternal createMany
+   */
+  export type LoginInternalCreateManyArgs = {
+    /**
+     * The data used to create many LoginInternals.
+     */
+    data: Enumerable<LoginInternalCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * LoginInternal update
+   */
+  export type LoginInternalUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+    /**
+     * The data needed to update a LoginInternal.
+     */
+    data: XOR<LoginInternalUpdateInput, LoginInternalUncheckedUpdateInput>
+    /**
+     * Choose, which LoginInternal to update.
+     */
+    where: LoginInternalWhereUniqueInput
+  }
+
+
+  /**
+   * LoginInternal updateMany
+   */
+  export type LoginInternalUpdateManyArgs = {
+    /**
+     * The data used to update LoginInternals.
+     */
+    data: XOR<LoginInternalUpdateManyMutationInput, LoginInternalUncheckedUpdateManyInput>
+    /**
+     * Filter which LoginInternals to update
+     */
+    where?: LoginInternalWhereInput
+  }
+
+
+  /**
+   * LoginInternal upsert
+   */
+  export type LoginInternalUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+    /**
+     * The filter to search for the LoginInternal to update in case it exists.
+     */
+    where: LoginInternalWhereUniqueInput
+    /**
+     * In case the LoginInternal found by the `where` argument doesn't exist, create a new LoginInternal with this data.
+     */
+    create: XOR<LoginInternalCreateInput, LoginInternalUncheckedCreateInput>
+    /**
+     * In case the LoginInternal was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LoginInternalUpdateInput, LoginInternalUncheckedUpdateInput>
+  }
+
+
+  /**
+   * LoginInternal delete
+   */
+  export type LoginInternalDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+    /**
+     * Filter which LoginInternal to delete.
+     */
+    where: LoginInternalWhereUniqueInput
+  }
+
+
+  /**
+   * LoginInternal deleteMany
+   */
+  export type LoginInternalDeleteManyArgs = {
+    /**
+     * Filter which LoginInternals to delete
+     */
+    where?: LoginInternalWhereInput
+  }
+
+
+  /**
+   * LoginInternal without action
+   */
+  export type LoginInternalArgs = {
+    /**
+     * Select specific fields to fetch from the LoginInternal
+     */
+    select?: LoginInternalSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LoginInternalInclude | null
+  }
+
+
+
+  /**
    * Enums
    */
 
@@ -15694,6 +17781,28 @@ export namespace Prisma {
   };
 
   export type FacilityToCoWorkScalarFieldEnum = (typeof FacilityToCoWorkScalarFieldEnum)[keyof typeof FacilityToCoWorkScalarFieldEnum]
+
+
+  export const LoginExternalScalarFieldEnum: {
+    id: 'id',
+    token: 'token',
+    userExternalId: 'userExternalId',
+    createAt: 'createAt',
+    updateAt: 'updateAt'
+  };
+
+  export type LoginExternalScalarFieldEnum = (typeof LoginExternalScalarFieldEnum)[keyof typeof LoginExternalScalarFieldEnum]
+
+
+  export const LoginInternalScalarFieldEnum: {
+    id: 'id',
+    token: 'token',
+    userInternalId: 'userInternalId',
+    createAt: 'createAt',
+    updateAt: 'updateAt'
+  };
+
+  export type LoginInternalScalarFieldEnum = (typeof LoginInternalScalarFieldEnum)[keyof typeof LoginInternalScalarFieldEnum]
 
 
   export const OpenClose24HoursScalarFieldEnum: {
@@ -15829,10 +17938,11 @@ export namespace Prisma {
     name?: StringFilter | string
     email?: StringFilter | string
     tel?: StringFilter | string
-    password?: StringFilter | string
+    password?: StringNullableFilter | string | null
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
     BookRoom?: BookRoomListRelationFilter
+    LoginExternal?: LoginExternalListRelationFilter
   }
 
   export type UserExternalOrderByWithRelationInput = {
@@ -15844,6 +17954,7 @@ export namespace Prisma {
     createAt?: SortOrder
     updateAt?: SortOrder
     BookRoom?: BookRoomOrderByRelationAggregateInput
+    LoginExternal?: LoginExternalOrderByRelationAggregateInput
   }
 
   export type UserExternalWhereUniqueInput = {
@@ -15874,7 +17985,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter | string
     email?: StringWithAggregatesFilter | string
     tel?: StringWithAggregatesFilter | string
-    password?: StringWithAggregatesFilter | string
+    password?: StringNullableWithAggregatesFilter | string | null
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
   }
@@ -15961,6 +18072,7 @@ export namespace Prisma {
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
     coWork?: XOR<CoWorkRelationFilter, CoWorkWhereInput> | null
+    LoginInternal?: LoginInternalListRelationFilter
   }
 
   export type UserInternalOrderByWithRelationInput = {
@@ -15972,6 +18084,7 @@ export namespace Prisma {
     createAt?: SortOrder
     updateAt?: SortOrder
     coWork?: CoWorkOrderByWithRelationInput
+    LoginInternal?: LoginInternalOrderByRelationAggregateInput
   }
 
   export type UserInternalWhereUniqueInput = {
@@ -16653,14 +18766,115 @@ export namespace Prisma {
     updateAt?: DateTimeWithAggregatesFilter | Date | string
   }
 
+  export type LoginExternalWhereInput = {
+    AND?: Enumerable<LoginExternalWhereInput>
+    OR?: Enumerable<LoginExternalWhereInput>
+    NOT?: Enumerable<LoginExternalWhereInput>
+    id?: IntFilter | number
+    token?: StringFilter | string
+    userExternalId?: IntFilter | number
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
+    userExternal?: XOR<UserExternalRelationFilter, UserExternalWhereInput>
+  }
+
+  export type LoginExternalOrderByWithRelationInput = {
+    id?: SortOrder
+    token?: SortOrder
+    userExternalId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    userExternal?: UserExternalOrderByWithRelationInput
+  }
+
+  export type LoginExternalWhereUniqueInput = {
+    id?: number
+    token?: string
+  }
+
+  export type LoginExternalOrderByWithAggregationInput = {
+    id?: SortOrder
+    token?: SortOrder
+    userExternalId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    _count?: LoginExternalCountOrderByAggregateInput
+    _avg?: LoginExternalAvgOrderByAggregateInput
+    _max?: LoginExternalMaxOrderByAggregateInput
+    _min?: LoginExternalMinOrderByAggregateInput
+    _sum?: LoginExternalSumOrderByAggregateInput
+  }
+
+  export type LoginExternalScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<LoginExternalScalarWhereWithAggregatesInput>
+    OR?: Enumerable<LoginExternalScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<LoginExternalScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    token?: StringWithAggregatesFilter | string
+    userExternalId?: IntWithAggregatesFilter | number
+    createAt?: DateTimeWithAggregatesFilter | Date | string
+    updateAt?: DateTimeWithAggregatesFilter | Date | string
+  }
+
+  export type LoginInternalWhereInput = {
+    AND?: Enumerable<LoginInternalWhereInput>
+    OR?: Enumerable<LoginInternalWhereInput>
+    NOT?: Enumerable<LoginInternalWhereInput>
+    id?: IntFilter | number
+    token?: StringFilter | string
+    userInternalId?: IntFilter | number
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
+    userInternal?: XOR<UserInternalRelationFilter, UserInternalWhereInput>
+  }
+
+  export type LoginInternalOrderByWithRelationInput = {
+    id?: SortOrder
+    token?: SortOrder
+    userInternalId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    userInternal?: UserInternalOrderByWithRelationInput
+  }
+
+  export type LoginInternalWhereUniqueInput = {
+    id?: number
+    token?: string
+  }
+
+  export type LoginInternalOrderByWithAggregationInput = {
+    id?: SortOrder
+    token?: SortOrder
+    userInternalId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+    _count?: LoginInternalCountOrderByAggregateInput
+    _avg?: LoginInternalAvgOrderByAggregateInput
+    _max?: LoginInternalMaxOrderByAggregateInput
+    _min?: LoginInternalMinOrderByAggregateInput
+    _sum?: LoginInternalSumOrderByAggregateInput
+  }
+
+  export type LoginInternalScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<LoginInternalScalarWhereWithAggregatesInput>
+    OR?: Enumerable<LoginInternalScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<LoginInternalScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    token?: StringWithAggregatesFilter | string
+    userInternalId?: IntWithAggregatesFilter | number
+    createAt?: DateTimeWithAggregatesFilter | Date | string
+    updateAt?: DateTimeWithAggregatesFilter | Date | string
+  }
+
   export type UserExternalCreateInput = {
     name: string
     email: string
     tel: string
-    password: string
+    password?: string | null
     createAt?: Date | string
     updateAt?: Date | string
     BookRoom?: BookRoomCreateNestedManyWithoutUserExternalInput
+    LoginExternal?: LoginExternalCreateNestedManyWithoutUserExternalInput
   }
 
   export type UserExternalUncheckedCreateInput = {
@@ -16668,20 +18882,22 @@ export namespace Prisma {
     name: string
     email: string
     tel: string
-    password: string
+    password?: string | null
     createAt?: Date | string
     updateAt?: Date | string
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutUserExternalInput
+    LoginExternal?: LoginExternalUncheckedCreateNestedManyWithoutUserExternalInput
   }
 
   export type UserExternalUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     tel?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     BookRoom?: BookRoomUpdateManyWithoutUserExternalNestedInput
+    LoginExternal?: LoginExternalUpdateManyWithoutUserExternalNestedInput
   }
 
   export type UserExternalUncheckedUpdateInput = {
@@ -16689,10 +18905,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     tel?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     BookRoom?: BookRoomUncheckedUpdateManyWithoutUserExternalNestedInput
+    LoginExternal?: LoginExternalUncheckedUpdateManyWithoutUserExternalNestedInput
   }
 
   export type UserExternalCreateManyInput = {
@@ -16700,7 +18917,7 @@ export namespace Prisma {
     name: string
     email: string
     tel: string
-    password: string
+    password?: string | null
     createAt?: Date | string
     updateAt?: Date | string
   }
@@ -16709,7 +18926,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     tel?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16719,7 +18936,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     tel?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16822,6 +19039,7 @@ export namespace Prisma {
     createAt?: Date | string
     updateAt?: Date | string
     coWork?: CoWorkCreateNestedOneWithoutUserInternalInput
+    LoginInternal?: LoginInternalCreateNestedManyWithoutUserInternalInput
   }
 
   export type UserInternalUncheckedCreateInput = {
@@ -16833,6 +19051,7 @@ export namespace Prisma {
     createAt?: Date | string
     updateAt?: Date | string
     coWork?: CoWorkUncheckedCreateNestedOneWithoutUserInternalInput
+    LoginInternal?: LoginInternalUncheckedCreateNestedManyWithoutUserInternalInput
   }
 
   export type UserInternalUpdateInput = {
@@ -16843,6 +19062,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     coWork?: CoWorkUpdateOneWithoutUserInternalNestedInput
+    LoginInternal?: LoginInternalUpdateManyWithoutUserInternalNestedInput
   }
 
   export type UserInternalUncheckedUpdateInput = {
@@ -16854,6 +19074,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     coWork?: CoWorkUncheckedUpdateOneWithoutUserInternalNestedInput
+    LoginInternal?: LoginInternalUncheckedUpdateManyWithoutUserInternalNestedInput
   }
 
   export type UserInternalCreateManyInput = {
@@ -17633,6 +19854,110 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LoginExternalCreateInput = {
+    token: string
+    createAt?: Date | string
+    updateAt?: Date | string
+    userExternal: UserExternalCreateNestedOneWithoutLoginExternalInput
+  }
+
+  export type LoginExternalUncheckedCreateInput = {
+    id?: number
+    token: string
+    userExternalId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type LoginExternalUpdateInput = {
+    token?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userExternal?: UserExternalUpdateOneRequiredWithoutLoginExternalNestedInput
+  }
+
+  export type LoginExternalUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    userExternalId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoginExternalCreateManyInput = {
+    id?: number
+    token: string
+    userExternalId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type LoginExternalUpdateManyMutationInput = {
+    token?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoginExternalUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    userExternalId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoginInternalCreateInput = {
+    token: string
+    createAt?: Date | string
+    updateAt?: Date | string
+    userInternal: UserInternalCreateNestedOneWithoutLoginInternalInput
+  }
+
+  export type LoginInternalUncheckedCreateInput = {
+    id?: number
+    token: string
+    userInternalId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type LoginInternalUpdateInput = {
+    token?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userInternal?: UserInternalUpdateOneRequiredWithoutLoginInternalNestedInput
+  }
+
+  export type LoginInternalUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    userInternalId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoginInternalCreateManyInput = {
+    id?: number
+    token: string
+    userInternalId: number
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type LoginInternalUpdateManyMutationInput = {
+    token?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoginInternalUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    userInternalId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter = {
     equals?: number
     in?: Enumerable<number>
@@ -17659,6 +19984,21 @@ export namespace Prisma {
     not?: NestedStringFilter | string
   }
 
+  export type StringNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    mode?: QueryMode
+    not?: NestedStringNullableFilter | string | null
+  }
+
   export type DateTimeFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -17676,7 +20016,17 @@ export namespace Prisma {
     none?: BookRoomWhereInput
   }
 
+  export type LoginExternalListRelationFilter = {
+    every?: LoginExternalWhereInput
+    some?: LoginExternalWhereInput
+    none?: LoginExternalWhereInput
+  }
+
   export type BookRoomOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LoginExternalOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17752,6 +20102,24 @@ export namespace Prisma {
     _max?: NestedStringFilter
   }
 
+  export type StringNullableWithAggregatesFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
+  }
+
   export type DateTimeWithAggregatesFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -17790,8 +20158,8 @@ export namespace Prisma {
   }
 
   export type UserInternalRelationFilter = {
-    is?: UserInternalWhereInput | null
-    isNot?: UserInternalWhereInput | null
+    is?: UserInternalWhereInput
+    isNot?: UserInternalWhereInput
   }
 
   export type CloseRelationFilter = {
@@ -17876,6 +20244,16 @@ export namespace Prisma {
   export type CoWorkRelationFilter = {
     is?: CoWorkWhereInput
     isNot?: CoWorkWhereInput
+  }
+
+  export type LoginInternalListRelationFilter = {
+    every?: LoginInternalWhereInput
+    some?: LoginInternalWhereInput
+    none?: LoginInternalWhereInput
+  }
+
+  export type LoginInternalOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserInternalCountOrderByAggregateInput = {
@@ -18449,11 +20827,86 @@ export namespace Prisma {
     _max?: NestedBoolFilter
   }
 
+  export type LoginExternalCountOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    userExternalId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type LoginExternalAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userExternalId?: SortOrder
+  }
+
+  export type LoginExternalMaxOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    userExternalId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type LoginExternalMinOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    userExternalId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type LoginExternalSumOrderByAggregateInput = {
+    id?: SortOrder
+    userExternalId?: SortOrder
+  }
+
+  export type LoginInternalCountOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    userInternalId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type LoginInternalAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userInternalId?: SortOrder
+  }
+
+  export type LoginInternalMaxOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    userInternalId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type LoginInternalMinOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    userInternalId?: SortOrder
+    createAt?: SortOrder
+    updateAt?: SortOrder
+  }
+
+  export type LoginInternalSumOrderByAggregateInput = {
+    id?: SortOrder
+    userInternalId?: SortOrder
+  }
+
   export type BookRoomCreateNestedManyWithoutUserExternalInput = {
     create?: XOR<Enumerable<BookRoomCreateWithoutUserExternalInput>, Enumerable<BookRoomUncheckedCreateWithoutUserExternalInput>>
     connectOrCreate?: Enumerable<BookRoomCreateOrConnectWithoutUserExternalInput>
     createMany?: BookRoomCreateManyUserExternalInputEnvelope
     connect?: Enumerable<BookRoomWhereUniqueInput>
+  }
+
+  export type LoginExternalCreateNestedManyWithoutUserExternalInput = {
+    create?: XOR<Enumerable<LoginExternalCreateWithoutUserExternalInput>, Enumerable<LoginExternalUncheckedCreateWithoutUserExternalInput>>
+    connectOrCreate?: Enumerable<LoginExternalCreateOrConnectWithoutUserExternalInput>
+    createMany?: LoginExternalCreateManyUserExternalInputEnvelope
+    connect?: Enumerable<LoginExternalWhereUniqueInput>
   }
 
   export type BookRoomUncheckedCreateNestedManyWithoutUserExternalInput = {
@@ -18463,8 +20916,19 @@ export namespace Prisma {
     connect?: Enumerable<BookRoomWhereUniqueInput>
   }
 
+  export type LoginExternalUncheckedCreateNestedManyWithoutUserExternalInput = {
+    create?: XOR<Enumerable<LoginExternalCreateWithoutUserExternalInput>, Enumerable<LoginExternalUncheckedCreateWithoutUserExternalInput>>
+    connectOrCreate?: Enumerable<LoginExternalCreateOrConnectWithoutUserExternalInput>
+    createMany?: LoginExternalCreateManyUserExternalInputEnvelope
+    connect?: Enumerable<LoginExternalWhereUniqueInput>
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -18483,6 +20947,20 @@ export namespace Prisma {
     update?: Enumerable<BookRoomUpdateWithWhereUniqueWithoutUserExternalInput>
     updateMany?: Enumerable<BookRoomUpdateManyWithWhereWithoutUserExternalInput>
     deleteMany?: Enumerable<BookRoomScalarWhereInput>
+  }
+
+  export type LoginExternalUpdateManyWithoutUserExternalNestedInput = {
+    create?: XOR<Enumerable<LoginExternalCreateWithoutUserExternalInput>, Enumerable<LoginExternalUncheckedCreateWithoutUserExternalInput>>
+    connectOrCreate?: Enumerable<LoginExternalCreateOrConnectWithoutUserExternalInput>
+    upsert?: Enumerable<LoginExternalUpsertWithWhereUniqueWithoutUserExternalInput>
+    createMany?: LoginExternalCreateManyUserExternalInputEnvelope
+    set?: Enumerable<LoginExternalWhereUniqueInput>
+    disconnect?: Enumerable<LoginExternalWhereUniqueInput>
+    delete?: Enumerable<LoginExternalWhereUniqueInput>
+    connect?: Enumerable<LoginExternalWhereUniqueInput>
+    update?: Enumerable<LoginExternalUpdateWithWhereUniqueWithoutUserExternalInput>
+    updateMany?: Enumerable<LoginExternalUpdateManyWithWhereWithoutUserExternalInput>
+    deleteMany?: Enumerable<LoginExternalScalarWhereInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -18505,6 +20983,20 @@ export namespace Prisma {
     update?: Enumerable<BookRoomUpdateWithWhereUniqueWithoutUserExternalInput>
     updateMany?: Enumerable<BookRoomUpdateManyWithWhereWithoutUserExternalInput>
     deleteMany?: Enumerable<BookRoomScalarWhereInput>
+  }
+
+  export type LoginExternalUncheckedUpdateManyWithoutUserExternalNestedInput = {
+    create?: XOR<Enumerable<LoginExternalCreateWithoutUserExternalInput>, Enumerable<LoginExternalUncheckedCreateWithoutUserExternalInput>>
+    connectOrCreate?: Enumerable<LoginExternalCreateOrConnectWithoutUserExternalInput>
+    upsert?: Enumerable<LoginExternalUpsertWithWhereUniqueWithoutUserExternalInput>
+    createMany?: LoginExternalCreateManyUserExternalInputEnvelope
+    set?: Enumerable<LoginExternalWhereUniqueInput>
+    disconnect?: Enumerable<LoginExternalWhereUniqueInput>
+    delete?: Enumerable<LoginExternalWhereUniqueInput>
+    connect?: Enumerable<LoginExternalWhereUniqueInput>
+    update?: Enumerable<LoginExternalUpdateWithWhereUniqueWithoutUserExternalInput>
+    updateMany?: Enumerable<LoginExternalUpdateManyWithWhereWithoutUserExternalInput>
+    deleteMany?: Enumerable<LoginExternalScalarWhereInput>
   }
 
   export type BranchToRoomCreateNestedManyWithoutCoWorkInput = {
@@ -18759,10 +21251,24 @@ export namespace Prisma {
     connect?: CoWorkWhereUniqueInput
   }
 
+  export type LoginInternalCreateNestedManyWithoutUserInternalInput = {
+    create?: XOR<Enumerable<LoginInternalCreateWithoutUserInternalInput>, Enumerable<LoginInternalUncheckedCreateWithoutUserInternalInput>>
+    connectOrCreate?: Enumerable<LoginInternalCreateOrConnectWithoutUserInternalInput>
+    createMany?: LoginInternalCreateManyUserInternalInputEnvelope
+    connect?: Enumerable<LoginInternalWhereUniqueInput>
+  }
+
   export type CoWorkUncheckedCreateNestedOneWithoutUserInternalInput = {
     create?: XOR<CoWorkCreateWithoutUserInternalInput, CoWorkUncheckedCreateWithoutUserInternalInput>
     connectOrCreate?: CoWorkCreateOrConnectWithoutUserInternalInput
     connect?: CoWorkWhereUniqueInput
+  }
+
+  export type LoginInternalUncheckedCreateNestedManyWithoutUserInternalInput = {
+    create?: XOR<Enumerable<LoginInternalCreateWithoutUserInternalInput>, Enumerable<LoginInternalUncheckedCreateWithoutUserInternalInput>>
+    connectOrCreate?: Enumerable<LoginInternalCreateOrConnectWithoutUserInternalInput>
+    createMany?: LoginInternalCreateManyUserInternalInputEnvelope
+    connect?: Enumerable<LoginInternalWhereUniqueInput>
   }
 
   export type CoWorkUpdateOneWithoutUserInternalNestedInput = {
@@ -18775,6 +21281,20 @@ export namespace Prisma {
     update?: XOR<CoWorkUpdateWithoutUserInternalInput, CoWorkUncheckedUpdateWithoutUserInternalInput>
   }
 
+  export type LoginInternalUpdateManyWithoutUserInternalNestedInput = {
+    create?: XOR<Enumerable<LoginInternalCreateWithoutUserInternalInput>, Enumerable<LoginInternalUncheckedCreateWithoutUserInternalInput>>
+    connectOrCreate?: Enumerable<LoginInternalCreateOrConnectWithoutUserInternalInput>
+    upsert?: Enumerable<LoginInternalUpsertWithWhereUniqueWithoutUserInternalInput>
+    createMany?: LoginInternalCreateManyUserInternalInputEnvelope
+    set?: Enumerable<LoginInternalWhereUniqueInput>
+    disconnect?: Enumerable<LoginInternalWhereUniqueInput>
+    delete?: Enumerable<LoginInternalWhereUniqueInput>
+    connect?: Enumerable<LoginInternalWhereUniqueInput>
+    update?: Enumerable<LoginInternalUpdateWithWhereUniqueWithoutUserInternalInput>
+    updateMany?: Enumerable<LoginInternalUpdateManyWithWhereWithoutUserInternalInput>
+    deleteMany?: Enumerable<LoginInternalScalarWhereInput>
+  }
+
   export type CoWorkUncheckedUpdateOneWithoutUserInternalNestedInput = {
     create?: XOR<CoWorkCreateWithoutUserInternalInput, CoWorkUncheckedCreateWithoutUserInternalInput>
     connectOrCreate?: CoWorkCreateOrConnectWithoutUserInternalInput
@@ -18783,6 +21303,20 @@ export namespace Prisma {
     delete?: boolean
     connect?: CoWorkWhereUniqueInput
     update?: XOR<CoWorkUpdateWithoutUserInternalInput, CoWorkUncheckedUpdateWithoutUserInternalInput>
+  }
+
+  export type LoginInternalUncheckedUpdateManyWithoutUserInternalNestedInput = {
+    create?: XOR<Enumerable<LoginInternalCreateWithoutUserInternalInput>, Enumerable<LoginInternalUncheckedCreateWithoutUserInternalInput>>
+    connectOrCreate?: Enumerable<LoginInternalCreateOrConnectWithoutUserInternalInput>
+    upsert?: Enumerable<LoginInternalUpsertWithWhereUniqueWithoutUserInternalInput>
+    createMany?: LoginInternalCreateManyUserInternalInputEnvelope
+    set?: Enumerable<LoginInternalWhereUniqueInput>
+    disconnect?: Enumerable<LoginInternalWhereUniqueInput>
+    delete?: Enumerable<LoginInternalWhereUniqueInput>
+    connect?: Enumerable<LoginInternalWhereUniqueInput>
+    update?: Enumerable<LoginInternalUpdateWithWhereUniqueWithoutUserInternalInput>
+    updateMany?: Enumerable<LoginInternalUpdateManyWithWhereWithoutUserInternalInput>
+    deleteMany?: Enumerable<LoginInternalScalarWhereInput>
   }
 
   export type BranchToRoomCreateNestedManyWithoutRoomInput = {
@@ -19225,6 +21759,34 @@ export namespace Prisma {
     update?: XOR<CoWorkUpdateWithoutOpenClose24HoursInput, CoWorkUncheckedUpdateWithoutOpenClose24HoursInput>
   }
 
+  export type UserExternalCreateNestedOneWithoutLoginExternalInput = {
+    create?: XOR<UserExternalCreateWithoutLoginExternalInput, UserExternalUncheckedCreateWithoutLoginExternalInput>
+    connectOrCreate?: UserExternalCreateOrConnectWithoutLoginExternalInput
+    connect?: UserExternalWhereUniqueInput
+  }
+
+  export type UserExternalUpdateOneRequiredWithoutLoginExternalNestedInput = {
+    create?: XOR<UserExternalCreateWithoutLoginExternalInput, UserExternalUncheckedCreateWithoutLoginExternalInput>
+    connectOrCreate?: UserExternalCreateOrConnectWithoutLoginExternalInput
+    upsert?: UserExternalUpsertWithoutLoginExternalInput
+    connect?: UserExternalWhereUniqueInput
+    update?: XOR<UserExternalUpdateWithoutLoginExternalInput, UserExternalUncheckedUpdateWithoutLoginExternalInput>
+  }
+
+  export type UserInternalCreateNestedOneWithoutLoginInternalInput = {
+    create?: XOR<UserInternalCreateWithoutLoginInternalInput, UserInternalUncheckedCreateWithoutLoginInternalInput>
+    connectOrCreate?: UserInternalCreateOrConnectWithoutLoginInternalInput
+    connect?: UserInternalWhereUniqueInput
+  }
+
+  export type UserInternalUpdateOneRequiredWithoutLoginInternalNestedInput = {
+    create?: XOR<UserInternalCreateWithoutLoginInternalInput, UserInternalUncheckedCreateWithoutLoginInternalInput>
+    connectOrCreate?: UserInternalCreateOrConnectWithoutLoginInternalInput
+    upsert?: UserInternalUpsertWithoutLoginInternalInput
+    connect?: UserInternalWhereUniqueInput
+    update?: XOR<UserInternalUpdateWithoutLoginInternalInput, UserInternalUncheckedUpdateWithoutLoginInternalInput>
+  }
+
   export type NestedIntFilter = {
     equals?: number
     in?: Enumerable<number>
@@ -19248,6 +21810,20 @@ export namespace Prisma {
     startsWith?: string
     endsWith?: string
     not?: NestedStringFilter | string
+  }
+
+  export type NestedStringNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableFilter | string | null
   }
 
   export type NestedDateTimeFilter = {
@@ -19305,6 +21881,34 @@ export namespace Prisma {
     _max?: NestedStringFilter
   }
 
+  export type NestedStringNullableWithAggregatesFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
+  }
+
+  export type NestedIntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
+  }
+
   export type NestedDateTimeWithAggregatesFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -19317,17 +21921,6 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedDateTimeFilter
     _max?: NestedDateTimeFilter
-  }
-
-  export type NestedIntNullableFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntNullableFilter | number | null
   }
 
   export type NestedIntNullableWithAggregatesFilter = {
@@ -19401,6 +21994,29 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LoginExternalCreateWithoutUserExternalInput = {
+    token: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type LoginExternalUncheckedCreateWithoutUserExternalInput = {
+    id?: number
+    token: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type LoginExternalCreateOrConnectWithoutUserExternalInput = {
+    where: LoginExternalWhereUniqueInput
+    create: XOR<LoginExternalCreateWithoutUserExternalInput, LoginExternalUncheckedCreateWithoutUserExternalInput>
+  }
+
+  export type LoginExternalCreateManyUserExternalInputEnvelope = {
+    data: Enumerable<LoginExternalCreateManyUserExternalInput>
+    skipDuplicates?: boolean
+  }
+
   export type BookRoomUpsertWithWhereUniqueWithoutUserExternalInput = {
     where: BookRoomWhereUniqueInput
     update: XOR<BookRoomUpdateWithoutUserExternalInput, BookRoomUncheckedUpdateWithoutUserExternalInput>
@@ -19430,6 +22046,33 @@ export namespace Prisma {
     updateAt?: DateTimeFilter | Date | string
     userExternalId?: IntFilter | number
     vertifyBookingCodeId?: IntFilter | number
+  }
+
+  export type LoginExternalUpsertWithWhereUniqueWithoutUserExternalInput = {
+    where: LoginExternalWhereUniqueInput
+    update: XOR<LoginExternalUpdateWithoutUserExternalInput, LoginExternalUncheckedUpdateWithoutUserExternalInput>
+    create: XOR<LoginExternalCreateWithoutUserExternalInput, LoginExternalUncheckedCreateWithoutUserExternalInput>
+  }
+
+  export type LoginExternalUpdateWithWhereUniqueWithoutUserExternalInput = {
+    where: LoginExternalWhereUniqueInput
+    data: XOR<LoginExternalUpdateWithoutUserExternalInput, LoginExternalUncheckedUpdateWithoutUserExternalInput>
+  }
+
+  export type LoginExternalUpdateManyWithWhereWithoutUserExternalInput = {
+    where: LoginExternalScalarWhereInput
+    data: XOR<LoginExternalUpdateManyMutationInput, LoginExternalUncheckedUpdateManyWithoutLoginExternalInput>
+  }
+
+  export type LoginExternalScalarWhereInput = {
+    AND?: Enumerable<LoginExternalScalarWhereInput>
+    OR?: Enumerable<LoginExternalScalarWhereInput>
+    NOT?: Enumerable<LoginExternalScalarWhereInput>
+    id?: IntFilter | number
+    token?: StringFilter | string
+    userExternalId?: IntFilter | number
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
   }
 
   export type BranchToRoomCreateWithoutCoWorkInput = {
@@ -19485,6 +22128,7 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
+    LoginInternal?: LoginInternalCreateNestedManyWithoutUserInternalInput
   }
 
   export type UserInternalUncheckedCreateWithoutCoWorkInput = {
@@ -19495,6 +22139,7 @@ export namespace Prisma {
     password: string
     createAt?: Date | string
     updateAt?: Date | string
+    LoginInternal?: LoginInternalUncheckedCreateNestedManyWithoutUserInternalInput
   }
 
   export type UserInternalCreateOrConnectWithoutCoWorkInput = {
@@ -19689,6 +22334,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LoginInternal?: LoginInternalUpdateManyWithoutUserInternalNestedInput
   }
 
   export type UserInternalUncheckedUpdateWithoutCoWorkInput = {
@@ -19699,6 +22345,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LoginInternal?: LoginInternalUncheckedUpdateManyWithoutUserInternalNestedInput
   }
 
   export type BookRoomUpsertWithWhereUniqueWithoutCoworkInput = {
@@ -19841,6 +22488,29 @@ export namespace Prisma {
     create: XOR<CoWorkCreateWithoutUserInternalInput, CoWorkUncheckedCreateWithoutUserInternalInput>
   }
 
+  export type LoginInternalCreateWithoutUserInternalInput = {
+    token: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type LoginInternalUncheckedCreateWithoutUserInternalInput = {
+    id?: number
+    token: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type LoginInternalCreateOrConnectWithoutUserInternalInput = {
+    where: LoginInternalWhereUniqueInput
+    create: XOR<LoginInternalCreateWithoutUserInternalInput, LoginInternalUncheckedCreateWithoutUserInternalInput>
+  }
+
+  export type LoginInternalCreateManyUserInternalInputEnvelope = {
+    data: Enumerable<LoginInternalCreateManyUserInternalInput>
+    skipDuplicates?: boolean
+  }
+
   export type CoWorkUpsertWithoutUserInternalInput = {
     update: XOR<CoWorkUpdateWithoutUserInternalInput, CoWorkUncheckedUpdateWithoutUserInternalInput>
     create: XOR<CoWorkCreateWithoutUserInternalInput, CoWorkUncheckedCreateWithoutUserInternalInput>
@@ -19873,6 +22543,33 @@ export namespace Prisma {
     Close?: CloseUncheckedUpdateOneWithoutCoworkNestedInput
     Open?: OpenUncheckedUpdateOneWithoutCoworkNestedInput
     OpenClose24Hours?: OpenClose24HoursUncheckedUpdateOneWithoutCoworkNestedInput
+  }
+
+  export type LoginInternalUpsertWithWhereUniqueWithoutUserInternalInput = {
+    where: LoginInternalWhereUniqueInput
+    update: XOR<LoginInternalUpdateWithoutUserInternalInput, LoginInternalUncheckedUpdateWithoutUserInternalInput>
+    create: XOR<LoginInternalCreateWithoutUserInternalInput, LoginInternalUncheckedCreateWithoutUserInternalInput>
+  }
+
+  export type LoginInternalUpdateWithWhereUniqueWithoutUserInternalInput = {
+    where: LoginInternalWhereUniqueInput
+    data: XOR<LoginInternalUpdateWithoutUserInternalInput, LoginInternalUncheckedUpdateWithoutUserInternalInput>
+  }
+
+  export type LoginInternalUpdateManyWithWhereWithoutUserInternalInput = {
+    where: LoginInternalScalarWhereInput
+    data: XOR<LoginInternalUpdateManyMutationInput, LoginInternalUncheckedUpdateManyWithoutLoginInternalInput>
+  }
+
+  export type LoginInternalScalarWhereInput = {
+    AND?: Enumerable<LoginInternalScalarWhereInput>
+    OR?: Enumerable<LoginInternalScalarWhereInput>
+    NOT?: Enumerable<LoginInternalScalarWhereInput>
+    id?: IntFilter | number
+    token?: StringFilter | string
+    userInternalId?: IntFilter | number
+    createAt?: DateTimeFilter | Date | string
+    updateAt?: DateTimeFilter | Date | string
   }
 
   export type BranchToRoomCreateWithoutRoomInput = {
@@ -20458,9 +23155,10 @@ export namespace Prisma {
     name: string
     email: string
     tel: string
-    password: string
+    password?: string | null
     createAt?: Date | string
     updateAt?: Date | string
+    LoginExternal?: LoginExternalCreateNestedManyWithoutUserExternalInput
   }
 
   export type UserExternalUncheckedCreateWithoutBookRoomInput = {
@@ -20468,9 +23166,10 @@ export namespace Prisma {
     name: string
     email: string
     tel: string
-    password: string
+    password?: string | null
     createAt?: Date | string
     updateAt?: Date | string
+    LoginExternal?: LoginExternalUncheckedCreateNestedManyWithoutUserExternalInput
   }
 
   export type UserExternalCreateOrConnectWithoutBookRoomInput = {
@@ -20563,9 +23262,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     tel?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LoginExternal?: LoginExternalUpdateManyWithoutUserExternalNestedInput
   }
 
   export type UserExternalUncheckedUpdateWithoutBookRoomInput = {
@@ -20573,9 +23273,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     tel?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LoginExternal?: LoginExternalUncheckedUpdateManyWithoutUserExternalNestedInput
   }
 
   export type VertifyBookingCodeUpsertWithoutBookRoomInput = {
@@ -20849,6 +23550,110 @@ export namespace Prisma {
     Open?: OpenUncheckedUpdateOneWithoutCoworkNestedInput
   }
 
+  export type UserExternalCreateWithoutLoginExternalInput = {
+    name: string
+    email: string
+    tel: string
+    password?: string | null
+    createAt?: Date | string
+    updateAt?: Date | string
+    BookRoom?: BookRoomCreateNestedManyWithoutUserExternalInput
+  }
+
+  export type UserExternalUncheckedCreateWithoutLoginExternalInput = {
+    id?: number
+    name: string
+    email: string
+    tel: string
+    password?: string | null
+    createAt?: Date | string
+    updateAt?: Date | string
+    BookRoom?: BookRoomUncheckedCreateNestedManyWithoutUserExternalInput
+  }
+
+  export type UserExternalCreateOrConnectWithoutLoginExternalInput = {
+    where: UserExternalWhereUniqueInput
+    create: XOR<UserExternalCreateWithoutLoginExternalInput, UserExternalUncheckedCreateWithoutLoginExternalInput>
+  }
+
+  export type UserExternalUpsertWithoutLoginExternalInput = {
+    update: XOR<UserExternalUpdateWithoutLoginExternalInput, UserExternalUncheckedUpdateWithoutLoginExternalInput>
+    create: XOR<UserExternalCreateWithoutLoginExternalInput, UserExternalUncheckedCreateWithoutLoginExternalInput>
+  }
+
+  export type UserExternalUpdateWithoutLoginExternalInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tel?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    BookRoom?: BookRoomUpdateManyWithoutUserExternalNestedInput
+  }
+
+  export type UserExternalUncheckedUpdateWithoutLoginExternalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tel?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    BookRoom?: BookRoomUncheckedUpdateManyWithoutUserExternalNestedInput
+  }
+
+  export type UserInternalCreateWithoutLoginInternalInput = {
+    name: string
+    email: string
+    tel: string
+    password: string
+    createAt?: Date | string
+    updateAt?: Date | string
+    coWork?: CoWorkCreateNestedOneWithoutUserInternalInput
+  }
+
+  export type UserInternalUncheckedCreateWithoutLoginInternalInput = {
+    id?: number
+    name: string
+    email: string
+    tel: string
+    password: string
+    createAt?: Date | string
+    updateAt?: Date | string
+    coWork?: CoWorkUncheckedCreateNestedOneWithoutUserInternalInput
+  }
+
+  export type UserInternalCreateOrConnectWithoutLoginInternalInput = {
+    where: UserInternalWhereUniqueInput
+    create: XOR<UserInternalCreateWithoutLoginInternalInput, UserInternalUncheckedCreateWithoutLoginInternalInput>
+  }
+
+  export type UserInternalUpsertWithoutLoginInternalInput = {
+    update: XOR<UserInternalUpdateWithoutLoginInternalInput, UserInternalUncheckedUpdateWithoutLoginInternalInput>
+    create: XOR<UserInternalCreateWithoutLoginInternalInput, UserInternalUncheckedCreateWithoutLoginInternalInput>
+  }
+
+  export type UserInternalUpdateWithoutLoginInternalInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tel?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coWork?: CoWorkUpdateOneWithoutUserInternalNestedInput
+  }
+
+  export type UserInternalUncheckedUpdateWithoutLoginInternalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tel?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coWork?: CoWorkUncheckedUpdateOneWithoutUserInternalNestedInput
+  }
+
   export type BookRoomCreateManyUserExternalInput = {
     id?: number
     coWorkId: number
@@ -20858,6 +23663,13 @@ export namespace Prisma {
     createAt?: Date | string
     updateAt?: Date | string
     vertifyBookingCodeId: number
+  }
+
+  export type LoginExternalCreateManyUserExternalInput = {
+    id?: number
+    token: string
+    createAt?: Date | string
+    updateAt?: Date | string
   }
 
   export type BookRoomUpdateWithoutUserExternalInput = {
@@ -20890,6 +23702,26 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type LoginExternalUpdateWithoutUserExternalInput = {
+    token?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoginExternalUncheckedUpdateWithoutUserExternalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoginExternalUncheckedUpdateManyWithoutLoginExternalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BranchToRoomCreateManyCoWorkInput = {
@@ -20976,6 +23808,33 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userExternalId?: IntFieldUpdateOperationsInput | number
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type LoginInternalCreateManyUserInternalInput = {
+    id?: number
+    token: string
+    createAt?: Date | string
+    updateAt?: Date | string
+  }
+
+  export type LoginInternalUpdateWithoutUserInternalInput = {
+    token?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoginInternalUncheckedUpdateWithoutUserInternalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoginInternalUncheckedUpdateManyWithoutLoginInternalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BranchToRoomCreateManyRoomInput = {

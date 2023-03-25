@@ -15,8 +15,10 @@ import {
   getStatusUserBookInternal,
   createFacility,
   createTimeOpenClose,
+  getCalendarBookingByCoWorkId,
 } from "./kowingPlace.resolver";
 import { createTimeOpenCloseCodec } from "./kowingPlace.interface";
+import { loginUserExternal, loginUserInternal } from "./kowingPlace.service";
 
 export const createUserExternalHandler = async (
   req: Request,
@@ -233,6 +235,44 @@ export const createTimeOpenCloseHandler = async (
     const result = await createTimeOpenClose(args);
     res.status(200).json(result);
   } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const getCalendarBookingByCoWorkIdHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await getCalendarBookingByCoWorkId(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const loginUserExternalHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  try {
+    const result = await loginUserExternal(args);
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const loginUserInternalHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  try {
+    const result = await loginUserInternal(args);
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
     res.status(500).json({
       error: String(e),
     });

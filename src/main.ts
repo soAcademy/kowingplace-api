@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import { AppRoutes } from "./routes";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -15,6 +15,8 @@ app.get("/", (req, res) => res.send("good health"));
 AppRoutes.map((route) => {
   app[route.method as keyof Application](
     route.path,
+    (req: Request, res: Response, next: NextFunction) =>
+      route.middleWare!(req, res, next),
     (request: Request, response: Response) => route.action(request, response)
   );
 });

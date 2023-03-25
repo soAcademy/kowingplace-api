@@ -156,6 +156,22 @@ exports.Prisma.FacilityToCoWorkScalarFieldEnum = makeEnum({
   updateAt: 'updateAt'
 });
 
+exports.Prisma.LoginExternalScalarFieldEnum = makeEnum({
+  id: 'id',
+  token: 'token',
+  userExternalId: 'userExternalId',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
+exports.Prisma.LoginInternalScalarFieldEnum = makeEnum({
+  id: 'id',
+  token: 'token',
+  userInternalId: 'userInternalId',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+});
+
 exports.Prisma.OpenClose24HoursScalarFieldEnum = makeEnum({
   id: 'id',
   mon24hours: 'mon24hours',
@@ -261,7 +277,9 @@ exports.Prisma.ModelName = makeEnum({
   VertifyBookingCode: 'VertifyBookingCode',
   Open: 'Open',
   Close: 'Close',
-  OpenClose24Hours: 'OpenClose24Hours'
+  OpenClose24Hours: 'OpenClose24Hours',
+  LoginExternal: 'LoginExternal',
+  LoginInternal: 'LoginInternal'
 });
 
 /**

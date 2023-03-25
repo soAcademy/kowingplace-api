@@ -16,17 +16,20 @@ import {
   IShowBookDetailInternalByCoWork,
   IUpdateCoWorkDetail,
 } from "./kowingPlace.interface";
+import { hashPassword } from "./kowingPlace.service";
 export const prisma = new PrismaClient();
 
-export const createUserExternal = (args: ICreateUserExternal) =>
-  prisma.userExternal.create({
+export const createUserExternal = async (args: ICreateUserExternal) => {
+  const createUser = await prisma.userExternal.create({
     data: {
       name: args.name,
       email: args.email,
       tel: args.tel,
-      password: args.password,
+      password: await hashPassword(args.password),
     },
   });
+  return createUser;
+};
 
 // export const getCoWork24Hrs = async () => {
 //   const getAllCoWork = await prisma.coWork.findMany({
@@ -69,36 +72,41 @@ export const getCoworks = async () => {
 
   const numIndex = [];
   for (let i = 0; i < coWork.length; i++) {
-    console.log(i);
     numIndex.push(i);
   }
   numIndex.sort((a, b) => Math.random() - 0.5);
 
   const recommendCowork = [];
   for (let i = 0; i < numIndex.length; i++) {
-    console.log(i);
     recommendCowork.push(coWork[numIndex[i]]);
   }
 
   return recommendCowork;
 };
 
-export const getRoomByCoWorkId = (args: IGgetRoomByCoWorkIdCodec) =>
-  prisma.coWork.findUnique({
-    where: {
-      id: args.coWorkId,
-    },
-    include: {
-      BranchToRoom: {
-        where: {
-          coWorkId: args.coWorkId,
-        },
-        include: {
-          room: true,
+export const getRoomByCoWorkId = async (args: IGgetRoomByCoWorkIdCodec) => {
+  try {
+    const getRoom = await prisma.coWork.findUnique({
+      where: {
+        id: args.coWorkId,
+      },
+      include: {
+        BranchToRoom: {
+          where: {
+            coWorkId: args.coWorkId,
+          },
+          include: {
+            room: true,
+          },
         },
       },
-    },
-  });
+    });
+    return getRoom;
+  } catch (err) {
+    console.log("err", err);
+    return err;
+  }
+};
 
 export const getCoworkByUserId = (args: IGetCoworkByUserId) =>
   prisma.userInternal.findUnique({
@@ -160,15 +168,17 @@ export const getVerifyCodeByUserConfirmBooking = async (
   return getBookData;
 };
 
-export const createUserInternal = (args: ICreateUserInternal) =>
-  prisma.userInternal.create({
+export const createUserInternal = async (args: ICreateUserInternal) => {
+  const createUser = await prisma.userInternal.create({
     data: {
       name: args.name,
       email: args.email,
       tel: args.tel,
-      password: args.password,
+      password: await hashPassword(args.password),
     },
   });
+  return createUser;
+};
 
 //เส้นโชว์ ห้องประชุมทั้งหมด / ชื่อผู้ใช้ / booking detail
 export const showBookDetailInternalByCoWork = async (
@@ -391,5 +401,89 @@ export const createFacility = (args: ICreateFacility) =>
   prisma.facility.create({
     data: {
       name: args.name,
+    },
+  });
+
+export const getCalendarBookingByCoWorkId = (args: { coWorkId: number }) =>
+  prisma.coWork.findMany({
+    where: {
+      id: args.coWorkId,
+    },
+    include: {
+      Open: true,
+      Close: true,
+      OpenClose24Hours: true,
+    },
+  });
+
+export const checkUserExternalPasswordEmail = (args: { email: string }) =>
+  prisma.userExternal.findUnique({
+    where: {
+      email: args.email,
+    },
+    select: {
+      email: true,
+      password: true,
+      name: true,
+      tel: true,
+    },
+  });
+
+export const checkUserInternalPasswordEmail = (args: { email: string }) =>
+  prisma.userInternal.findUnique({
+    where: {
+      email: args.email,
+    },
+    select: {
+      email: true,
+      password: true,
+      name: true,
+      tel: true,
+    },
+  });
+
+export const upsertExternalToken = (args: { token: string; email: string }) =>
+  prisma.loginExternal.upsert({
+    where: {
+      token: args.token,
+    },
+    update: {
+      token: args.token,
+      userExternal: {
+        connect: {
+          email: args.email,
+        },
+      },
+    },
+    create: {
+      token: args.token,
+      userExternal: {
+        connect: {
+          email: args.email,
+        },
+      },
+    },
+  });
+
+export const upsertInternalToken = (args: { token: string; email: string }) =>
+  prisma.loginInternal.upsert({
+    where: {
+      token: args.token,
+    },
+    update: {
+      token: args.token,
+      userInternal: {
+        connect: {
+          email: args.email,
+        },
+      },
+    },
+    create: {
+      token: args.token,
+      userInternal: {
+        connect: {
+          email: args.email,
+        },
+      },
     },
   });

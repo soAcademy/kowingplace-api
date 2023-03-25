@@ -14,10 +14,18 @@ import {
   createFacilityHandler,
   getCoworksHandler,
   createTimeOpenCloseHandler,
+  getCalendarBookingByCoWorkIdHandler,
+  loginUserExternalHandler,
+  loginUserInternalHandler,
 } from "./kowingPlace/kowingPlace.handler";
 // import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
-
-export const AppRoutes = [
+export interface IAppRoutes {
+  path: string;
+  method: string;
+  action: (req: any, res: any) => any;
+  middleWare?: (req: any, res: any, next: any) => any;
+}
+export const AppRoutes: IAppRoutes[] = [
   {
     path: "/server/boeing",
     method: "get",
@@ -98,5 +106,20 @@ export const AppRoutes = [
     path: "/kowing/createTimeOpenClose",
     method: "post",
     action: createTimeOpenCloseHandler,
+  },
+  {
+    path: "/kowing/getCalendarBookingByCoWorkId",
+    method: "post",
+    action: getCalendarBookingByCoWorkIdHandler,
+  },
+  {
+    path: "/kowing/loginUserExternal",
+    method: "post",
+    action: loginUserExternalHandler,
+  },
+  {
+    path: "/kowing/loginUserInternal",
+    method: "post",
+    action: loginUserInternalHandler,
   },
 ];
