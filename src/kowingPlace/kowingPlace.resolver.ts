@@ -1,6 +1,8 @@
 import { date, number, random } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
+  ICheckUserExternalPasswordEmail,
+  ICheckUserInternalPasswordEmail,
   ICreateCoWorkDetail,
   ICreateFacility,
   ICreateFacilityIn,
@@ -8,97 +10,73 @@ import {
   ICreateTimeOpenClose,
   ICreateUserExternal,
   ICreateUserInternal,
+  IGetCalendarBookingByCoWorkId,
   IGetCoWorkUserChoose,
   IGetCoworkByUserId,
   IGetStatusUserBookInternal,
   IGetUserConfirmBooking,
   IGgetRoomByCoWorkIdCodec,
   IShowBookDetailInternalByCoWork,
+  IUpdateCalendarBookingByCoWorkId,
   IUpdateCoWorkDetail,
+  IUpsertExternalToken,
+  IUpsertInternalToken,
 } from "./kowingPlace.interface";
+import { hashPassword } from "./kowingPlace.service";
 export const prisma = new PrismaClient();
 
-export const createUserExternal = (args: ICreateUserExternal) =>
-  prisma.userExternal.create({
+export const createUserExternal = async (args: ICreateUserExternal) => {
+  const createUser = await prisma.userExternal.create({
     data: {
       name: args.name,
       email: args.email,
       tel: args.tel,
-      password: args.password,
+      password: await hashPassword(args.password),
     },
   });
-
-// export const getCoWork24Hrs = async () => {
-//   const getAllCoWork = await prisma.coWork.findMany({
-//     include: {
-//       OpenClose: true,
-//       BranchToRoom: true,
-//     },
-//   });
-//   const get24hrsOpen = getAllCoWork.filter((r) => {
-//     if (
-//       r.OpenClose?.isOpen24hoursMon === true ||
-//       r.OpenClose?.isOpen24hoursTue === true ||
-//       r.OpenClose?.isOpen24hoursWed === true ||
-//       r.OpenClose?.isOpen24hoursThurs === true ||
-//       r.OpenClose?.isOpen24hoursFri === true ||
-//       r.OpenClose?.isOpen24hoursSat === true ||
-//       r.OpenClose?.isOpen24hoursSun === true
-//     ) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   });
-//   return get24hrsOpen;
-// };
-
-// export const getCoworks = async () => {
-//   const coWork = await prisma.coWork.findMany({});
-
-//   while (coWork.length < 10) {
-//     let randomCoWorkIndex = Math.floor(Math.random() * coWork.length);
-//     let randomCowork = coWork[randomCoWorkIndex];
-//     console.log(randomCowork);
-//     return randomCowork;
-//   }
-// };
+  return createUser;
+};
 
 export const getCoworks = async () => {
   const coWork = await prisma.coWork.findMany({});
 
   const numIndex = [];
   for (let i = 0; i < coWork.length; i++) {
-    console.log(i);
     numIndex.push(i);
   }
   numIndex.sort((a, b) => Math.random() - 0.5);
 
   const recommendCowork = [];
   for (let i = 0; i < numIndex.length; i++) {
-    console.log(i);
     recommendCowork.push(coWork[numIndex[i]]);
   }
 
   return recommendCowork;
 };
 
-export const getRoomByCoWorkId = (args: IGgetRoomByCoWorkIdCodec) =>
-  prisma.coWork.findUnique({
-    where: {
-      id: args.coWorkId,
-    },
-    include: {
-      BranchToRoom: {
-        where: {
-          coWorkId: args.coWorkId,
-        },
-        include: {
-          room: true,
+export const getRoomByCoWorkId = async (args: IGgetRoomByCoWorkIdCodec) => {
+  try {
+    const getRoom = await prisma.coWork.findUnique({
+      where: {
+        id: args.coWorkId,
+      },
+      include: {
+        BranchToRoom: {
+          where: {
+            coWorkId: args.coWorkId,
+          },
+          include: {
+            room: true,
+          },
         },
       },
-    },
-  });
+    });
+    return getRoom;
+  } catch (err) {
+    console.log("err", err);
+    return err;
+  }
+};
 
 export const getCoworkByUserId = (args: IGetCoworkByUserId) =>
   prisma.userInternal.findUnique({
@@ -160,15 +138,17 @@ export const getVerifyCodeByUserConfirmBooking = async (
   return getBookData;
 };
 
-export const createUserInternal = (args: ICreateUserInternal) =>
-  prisma.userInternal.create({
+export const createUserInternal = async (args: ICreateUserInternal) => {
+  const createUser = await prisma.userInternal.create({
     data: {
       name: args.name,
       email: args.email,
       tel: args.tel,
-      password: args.password,
+      password: await hashPassword(args.password),
     },
   });
+  return createUser;
+};
 
 //เส้นโชว์ ห้องประชุมทั้งหมด / ชื่อผู้ใช้ / booking detail
 export const showBookDetailInternalByCoWork = async (
@@ -393,3 +373,144 @@ export const createFacility = (args: ICreateFacility) =>
       name: args.name,
     },
   });
+
+export const getCalendarBookingByCoWorkId = (
+  args: IGetCalendarBookingByCoWorkId
+) =>
+  prisma.coWork.findUnique({
+    where: {
+      id: args.coWorkId,
+    },
+    include: {
+      Open: true,
+      Close: true,
+      OpenClose24Hours: true,
+    },
+  });
+
+export const updateCalendarBookingByCoWorkId = (
+  args: IUpdateCalendarBookingByCoWorkId
+) =>
+  prisma.coWork.update({
+    where: {
+      id: args.coWorkId,
+    },
+    data: {
+      Open: {
+        update: {
+          monOpen: args.open[0],
+          tueOpen: args.open[1],
+          wedOpen: args.open[2],
+          thursOpen: args.open[3],
+          friOpen: args.open[4],
+          satOpen: args.open[5],
+          sunOpen: args.open[6],
+        },
+      },
+      Close: {
+        update: {
+          monClose: args.close[0],
+          tueClose: args.close[1],
+          wedClose: args.close[2],
+          thursClose: args.close[3],
+          friClose: args.close[4],
+          satClose: args.close[5],
+          sunClose: args.close[6],
+        },
+      },
+      OpenClose24Hours: {
+        update: {
+          mon24hours: args.openClose24hours[0],
+          tue24hours: args.openClose24hours[1],
+          wed24hours: args.openClose24hours[2],
+          thurs24hours: args.openClose24hours[3],
+          fri24hours: args.openClose24hours[4],
+          sat24hours: args.openClose24hours[5],
+          sun24hours: args.openClose24hours[6],
+        },
+      },
+    },
+    include: {
+      Open: true,
+      Close: true,
+      OpenClose24Hours: true,
+    },
+  });
+
+export const getCoWorkOpen24Hours = () =>
+  prisma.coWork.findMany({
+    where: {
+      OpenClose24Hours: {
+        mon24hours: true,
+        tue24hours: true,
+        wed24hours: true,
+        thurs24hours: true,
+        fri24hours: true,
+        sat24hours: true,
+        sun24hours: true,
+      },
+    },
+    include: {
+      OpenClose24Hours: true,
+    },
+  });
+
+export const checkUserExternalPasswordEmail = (
+  args: ICheckUserExternalPasswordEmail
+) =>
+  prisma.userExternal.findUnique({
+    where: {
+      email: args.email,
+    },
+    select: {
+      email: true,
+      password: true,
+      name: true,
+      tel: true,
+    },
+  });
+
+export const checkUserInternalPasswordEmail = (
+  args: ICheckUserInternalPasswordEmail
+) =>
+  prisma.userInternal.findUnique({
+    where: {
+      email: args.email,
+    },
+    select: {
+      email: true,
+      password: true,
+      name: true,
+      tel: true,
+    },
+  });
+
+export const forgetPasswordUserExternal = async (args: {
+  email: string;
+  password: string;
+}) => {
+  const updateForgetPassword = await prisma.userExternal.update({
+    where: {
+      email: args.email,
+    },
+    data: {
+      password: await hashPassword(args.password),
+    },
+  });
+  return updateForgetPassword;
+};
+
+export const forgetPasswordUserInternal = async (args: {
+  email: string;
+  password: string;
+}) => {
+  const forgetPassword = prisma.userInternal.update({
+    where: {
+      email: args.email,
+    },
+    data: {
+      password: await hashPassword(args.password),
+    },
+  });
+  return forgetPassword;
+};

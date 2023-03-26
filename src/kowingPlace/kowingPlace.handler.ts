@@ -15,8 +15,14 @@ import {
   getStatusUserBookInternal,
   createFacility,
   createTimeOpenClose,
+  getCalendarBookingByCoWorkId,
+  updateCalendarBookingByCoWorkId,
+  getCoWorkOpen24Hours,
+  forgetPasswordUserExternal,
+  forgetPasswordUserInternal,
 } from "./kowingPlace.resolver";
 import { createTimeOpenCloseCodec } from "./kowingPlace.interface";
+import { loginUserExternal, loginUserInternal } from "./kowingPlace.service";
 
 export const createUserExternalHandler = async (
   req: Request,
@@ -222,16 +228,118 @@ export const createFacilityHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const createTimeOpenCloseHandler = async (req: Request, res: Response) => {
+export const createTimeOpenCloseHandler = async (
+  req: Request,
+  res: Response
+) => {
   const args = req.body;
   console.log(args);
-createTimeOpenCloseCodec.decode(args)._tag === "Right" ? "OK" : "NO";
-try {
-  const result = await createTimeOpenClose(args);
-  res.status(200).json(result);
-} catch (e) {
-  res.status(500).json({
-    error: String(e),
-  });
-}
+  createTimeOpenCloseCodec.decode(args)._tag === "Right" ? "OK" : "NO";
+  try {
+    const result = await createTimeOpenClose(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const getCalendarBookingByCoWorkIdHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await getCalendarBookingByCoWorkId(args);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const loginUserExternalHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  try {
+    const result = await loginUserExternal(args);
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const loginUserInternalHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  try {
+    const result = await loginUserInternal(args);
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+
+export const updateCalendarBookingByCoWorkIdHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await updateCalendarBookingByCoWorkId(args);
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const getCoWorkOpen24HoursHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const result = await getCoWorkOpen24Hours();
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const forgetPasswordUserExternalHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await forgetPasswordUserExternal(args);
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+
+export const forgetPasswordUserInternalHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await forgetPasswordUserInternal(args);
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
+    res.status(500).json({
+      error: String(e),
+    });
+  }
 };

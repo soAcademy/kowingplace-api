@@ -14,10 +14,23 @@ import {
   createFacilityHandler,
   getCoworksHandler,
   createTimeOpenCloseHandler,
+  getCalendarBookingByCoWorkIdHandler,
+  loginUserExternalHandler,
+  loginUserInternalHandler,
+  updateCalendarBookingByCoWorkIdHandler,
+  getCoWorkOpen24HoursHandler,
+  forgetPasswordUserExternalHandler,
+  forgetPasswordUserInternalHandler,
 } from "./kowingPlace/kowingPlace.handler";
+import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
 // import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
-
-export const AppRoutes = [
+export interface IAppRoutes {
+  path: string;
+  method: string;
+  action: (req: any, res: any) => any;
+  middleWare?: (req: any, res: any, next: any) => any;
+}
+export const AppRoutes: IAppRoutes[] = [
   {
     path: "/server/boeing",
     method: "get",
@@ -32,12 +45,12 @@ export const AppRoutes = [
   {
     path: "/kowing/getCoWorkUserChoose",
     method: "post",
-    action: getCoWorkUserChooseHandler, //Ok
+    action: getCoWorkUserChooseHandler, //OK
   },
   {
     path: "/kowing/getVerifyCodeByUserConfirmBooking",
     method: "post",
-    action: getVerifyCodeByUserConfirmBookingHandler,
+    action: getVerifyCodeByUserConfirmBookingHandler, //OK
   },
   {
     path: "/kowing/createUserInternal",
@@ -92,11 +105,42 @@ export const AppRoutes = [
   {
     path: "/kowing/getCoworks",
     method: "post",
-    action: getCoworksHandler, //OK  //with random
+    action: getCoworksHandler, //OK
+    middleWare: checkToken,
   },
   {
     path: "/kowing/createTimeOpenClose",
     method: "post",
-    action: createTimeOpenCloseHandler,
+    action: createTimeOpenCloseHandler, //OK
+  },
+  {
+    path: "/kowing/getCalendarBookingByCoWorkId",
+    method: "post",
+    action: getCalendarBookingByCoWorkIdHandler, //OK
+  },
+  {
+    path: "/kowing/loginUserExternal",
+    method: "post",
+    action: loginUserExternalHandler, //OK
+  },
+  {
+    path: "/kowing/updateCalendarBookingByCoWorkId",
+    method: "post",
+    action: updateCalendarBookingByCoWorkIdHandler, //OK
+  },
+  {
+    path: "/kowing/getCoWorkOpen24Hours",
+    method: "post",
+    action: getCoWorkOpen24HoursHandler, //OK
+  },
+  {
+    path: "/kowing/forgetPasswordUserExternal",
+    method: "post",
+    action: forgetPasswordUserExternalHandler, //OK
+  },
+  {
+    path: "/kowing/forgetPasswordUserInternal",
+    method: "post",
+    action: forgetPasswordUserInternalHandler, //OK
   },
 ];

@@ -185,3 +185,76 @@ export const createTimeOpenCloseCodec = t.type({
 });
 export interface ICreateTimeOpenClose
   extends t.TypeOf<typeof createTimeOpenCloseCodec> {}
+
+//-------------------------------------------------
+
+export const getCalendarBookingByCoWorkIdCodec = t.type({
+  coWorkId: t.number,
+});
+export interface IGetCalendarBookingByCoWorkId
+  extends t.TypeOf<typeof getCalendarBookingByCoWorkIdCodec> {}
+
+//-------------------------------------------------
+export const checkUserExternalPasswordEmailCodec = t.type({
+  email: t.string,
+});
+export interface ICheckUserExternalPasswordEmail
+  extends t.TypeOf<typeof checkUserExternalPasswordEmailCodec> {}
+
+//-------------------------------------------------
+export const checkUserInternalPasswordEmailCodec = t.type({
+  email: t.string,
+});
+export interface ICheckUserInternalPasswordEmail
+  extends t.TypeOf<typeof checkUserInternalPasswordEmailCodec> {}
+
+//-------------------------------------------------
+export const upsertExternalTokenCodec = t.type({
+  token: t.string,
+  email: t.string,
+});
+
+export interface IUpsertExternalToken
+  extends t.TypeOf<typeof upsertExternalTokenCodec> {}
+
+//-------------------------------------------------
+export const upsertInternalTokenCodec = t.type({
+  token: t.string,
+  email: t.string,
+});
+
+export interface IUpsertInternalToken
+  extends t.TypeOf<typeof upsertInternalTokenCodec> {}
+
+//-------------------------------------------------
+export const loginUserExternalCodec = t.type({
+  email: t.string,
+  password: t.string,
+});
+export interface ILoginUserExternal
+  extends t.TypeOf<typeof loginUserExternalCodec> {}
+
+//-------------------------------------------------
+export const loginUserInternalCodec = t.type({
+  email: t.string,
+  password: t.string,
+});
+
+export interface ILoginUserInternal
+  extends t.TypeOf<typeof loginUserInternalCodec> {}
+
+//-------------------------------------------------
+export const updateCalendarBookingByCoWorkIdCodec = t.type({
+  open: t.array(t.number),
+  close: t.array(t.number),
+  openClose24hours: t.array(t.boolean),
+  coWorkId: t.number,
+});
+export interface IUpdateCalendarBookingByCoWorkId
+  extends t.TypeOf<typeof updateCalendarBookingByCoWorkIdCodec> {}
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
