@@ -244,6 +244,14 @@ export interface ILoginUserInternal
   extends t.TypeOf<typeof loginUserInternalCodec> {}
 
 //-------------------------------------------------
+export const updateCalendarBookingByCoWorkIdCodec = t.type({
+  open: t.array(t.number),
+  close: t.array(t.number),
+  openClose24hours: t.array(t.boolean),
+  coWorkId: t.number,
+});
+export interface IUpdateCalendarBookingByCoWorkId
+  extends t.TypeOf<typeof updateCalendarBookingByCoWorkIdCodec> {}
 //-------------------------------------------------
 //-------------------------------------------------
 //-------------------------------------------------

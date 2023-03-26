@@ -17,6 +17,7 @@ import {
   getCalendarBookingByCoWorkIdHandler,
   loginUserExternalHandler,
   loginUserInternalHandler,
+  updateCalendarBookingByCoWorkIdHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
 // import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
@@ -120,8 +121,8 @@ export const AppRoutes: IAppRoutes[] = [
     action: loginUserExternalHandler,
   },
   {
-    path: "/kowing/loginUserInternal",
+    path: "/kowing/updateCalendarBookingByCoWorkId",
     method: "post",
-    action: loginUserInternalHandler,
+    action: updateCalendarBookingByCoWorkIdHandler,
   },
 ];
