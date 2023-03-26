@@ -15,8 +15,12 @@ app.get("/", (req, res) => res.send("good health"));
 AppRoutes.map((route) => {
   app[route.method as keyof Application](
     route.path,
-    (req: Request, res: Response, next: NextFunction) =>
-      route.middleWare!(req, res, next),
+    (req: Request, res: Response, next: NextFunction) => {
+      if (route.middleWare) {
+        return route.middleWare!(req, res, next);
+      }
+      return next();
+    },
     (request: Request, response: Response) => route.action(request, response)
   );
 });

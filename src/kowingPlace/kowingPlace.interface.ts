@@ -227,5 +227,26 @@ export interface IUpsertInternalToken
   extends t.TypeOf<typeof upsertInternalTokenCodec> {}
 
 //-------------------------------------------------
+export const loginUserExternalCodec = t.type({
+  email: t.string,
+  password: t.string,
+});
+export interface ILoginUserExternal
+  extends t.TypeOf<typeof loginUserExternalCodec> {}
+
+//-------------------------------------------------
+export const loginUserInternalCodec = t.type({
+  email: t.string,
+  password: t.string,
+});
+
+export interface ILoginUserInternal
+  extends t.TypeOf<typeof loginUserInternalCodec> {}
+
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
 //-------------------------------------------------
 //-------------------------------------------------

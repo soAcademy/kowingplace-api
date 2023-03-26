@@ -18,6 +18,7 @@ import {
   loginUserExternalHandler,
   loginUserInternalHandler,
 } from "./kowingPlace/kowingPlace.handler";
+import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
 // import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
 export interface IAppRoutes {
   path: string;
@@ -101,6 +102,7 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/getCoworks",
     method: "post",
     action: getCoworksHandler, //OK  //with random
+    middleWare: checkToken,
   },
   {
     path: "/kowing/createTimeOpenClose",
