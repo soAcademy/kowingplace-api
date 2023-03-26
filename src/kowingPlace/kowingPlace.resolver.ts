@@ -484,3 +484,18 @@ export const checkUserInternalPasswordEmail = (
       tel: true,
     },
   });
+
+export const forgetPasswordUserExternal = async (args: {
+  email: string;
+  password: string;
+}) => {
+  const updateForgetPassword = await prisma.userExternal.update({
+    where: {
+      email: args.email,
+    },
+    data: {
+      password: await hashPassword(args.password),
+    },
+  });
+  return updateForgetPassword;
+};
