@@ -18,6 +18,7 @@ import {
   loginUserExternalHandler,
   loginUserInternalHandler,
   updateCalendarBookingByCoWorkIdHandler,
+  getCoWorkOpen24HoursHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
 // import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
@@ -108,21 +109,26 @@ export const AppRoutes: IAppRoutes[] = [
   {
     path: "/kowing/createTimeOpenClose",
     method: "post",
-    action: createTimeOpenCloseHandler,
+    action: createTimeOpenCloseHandler, //OK
   },
   {
     path: "/kowing/getCalendarBookingByCoWorkId",
     method: "post",
-    action: getCalendarBookingByCoWorkIdHandler,
+    action: getCalendarBookingByCoWorkIdHandler, //OK
   },
   {
     path: "/kowing/loginUserExternal",
     method: "post",
-    action: loginUserExternalHandler,
+    action: loginUserExternalHandler, //OK
   },
   {
     path: "/kowing/updateCalendarBookingByCoWorkId",
     method: "post",
-    action: updateCalendarBookingByCoWorkIdHandler,
+    action: updateCalendarBookingByCoWorkIdHandler, //OK
+  },
+  {
+    path: "/kowing/getCoWorkOpen24Hours",
+    method: "post",
+    action: getCoWorkOpen24HoursHandler, //OK
   },
 ];

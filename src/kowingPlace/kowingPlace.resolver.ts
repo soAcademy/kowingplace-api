@@ -37,31 +37,6 @@ export const createUserExternal = async (args: ICreateUserExternal) => {
   return createUser;
 };
 
-// export const getCoWork24Hrs = async () => {
-//   const getAllCoWork = await prisma.coWork.findMany({
-//     include: {
-//       OpenClose: true,
-//       BranchToRoom: true,
-//     },
-//   });
-//   const get24hrsOpen = getAllCoWork.filter((r) => {
-//     if (
-//       r.OpenClose?.isOpen24hoursMon === true ||
-//       r.OpenClose?.isOpen24hoursTue === true ||
-//       r.OpenClose?.isOpen24hoursWed === true ||
-//       r.OpenClose?.isOpen24hoursThurs === true ||
-//       r.OpenClose?.isOpen24hoursFri === true ||
-//       r.OpenClose?.isOpen24hoursSat === true ||
-//       r.OpenClose?.isOpen24hoursSun === true
-//     ) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   });
-//   return get24hrsOpen;
-// };
-
 export const getCoworks = async () => {
   const coWork = await prisma.coWork.findMany({});
 
@@ -458,6 +433,24 @@ export const updateCalendarBookingByCoWorkId = (
     include: {
       Open: true,
       Close: true,
+      OpenClose24Hours: true,
+    },
+  });
+
+export const getCoWorkOpen24Hours = () =>
+  prisma.coWork.findMany({
+    where: {
+      OpenClose24Hours: {
+        mon24hours: true,
+        tue24hours: true,
+        wed24hours: true,
+        thurs24hours: true,
+        fri24hours: true,
+        sat24hours: true,
+        sun24hours: true,
+      },
+    },
+    include: {
       OpenClose24Hours: true,
     },
   });
