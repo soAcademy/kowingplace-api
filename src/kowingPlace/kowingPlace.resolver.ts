@@ -499,3 +499,18 @@ export const forgetPasswordUserExternal = async (args: {
   });
   return updateForgetPassword;
 };
+
+export const forgetPasswordUserInternal = async (args: {
+  email: string;
+  password: string;
+}) => {
+  const forgetPassword = prisma.userInternal.update({
+    where: {
+      email: args.email,
+    },
+    data: {
+      password: await hashPassword(args.password),
+    },
+  });
+  return forgetPassword;
+};

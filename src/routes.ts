@@ -20,6 +20,7 @@ import {
   updateCalendarBookingByCoWorkIdHandler,
   getCoWorkOpen24HoursHandler,
   forgetPasswordUserExternalHandler,
+  forgetPasswordUserInternalHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
 // import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
@@ -104,7 +105,7 @@ export const AppRoutes: IAppRoutes[] = [
   {
     path: "/kowing/getCoworks",
     method: "post",
-    action: getCoworksHandler, //OK  //with random
+    action: getCoworksHandler, //OK
     middleWare: checkToken,
   },
   {
@@ -136,5 +137,10 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/forgetPasswordUserExternal",
     method: "post",
     action: forgetPasswordUserExternalHandler, //OK
+  },
+  {
+    path: "/kowing/forgetPasswordUserInternal",
+    method: "post",
+    action: forgetPasswordUserInternalHandler, //OK
   },
 ];
