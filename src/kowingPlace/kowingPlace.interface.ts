@@ -249,6 +249,24 @@ export const updateCalendarBookingByCoWorkIdCodec = t.type({
 export interface IUpdateCalendarBookingByCoWorkId
   extends t.TypeOf<typeof updateCalendarBookingByCoWorkIdCodec> {}
 //-------------------------------------------------
+
+export const forgetPasswordUserInternalCodec = t.type({
+  email: t.string,
+  password: t.string,
+});
+export interface IForgetPasswordUserInternal
+  extends t.TypeOf<typeof forgetPasswordUserInternalCodec> {}
+
+//-------------------------------------------------
+
+export const forgetPasswordUserExternalCodec = t.type({
+  email: t.string,
+  password: t.string,
+});
+export interface IForgetPasswordUserExternal
+  extends t.TypeOf<typeof forgetPasswordUserExternalCodec> {}
+
+//-------------------------------------------------
 //-------------------------------------------------
 //-------------------------------------------------
 //-------------------------------------------------
