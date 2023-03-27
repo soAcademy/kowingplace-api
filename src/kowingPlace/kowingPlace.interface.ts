@@ -99,10 +99,6 @@ export const createCoWorkDetailCodec = t.type({
   tel: t.string,
   picture: t.string,
   userInternalId: t.number,
-  facilityToCoworkId: t.number,
-  closeId: t.number,
-  openId: t.number,
-  openClose24HoursId: t.number,
 });
 export interface ICreateCoWorkDetail
   extends t.TypeOf<typeof createCoWorkDetailCodec> {}

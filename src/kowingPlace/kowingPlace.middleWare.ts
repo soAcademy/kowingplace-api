@@ -14,7 +14,6 @@ export const checkToken = (req: Request, res: Response, next: NextFunction) => {
         process.env.SECRET_KEY as string
       );
     } catch (err) {
-      //หมดอายุ
       return res
         .status(401)
         .json({ message: "invalid token", isDeleteToken: true });
@@ -22,3 +21,5 @@ export const checkToken = (req: Request, res: Response, next: NextFunction) => {
   }
   return next();
 };
+
+//middleware should use in api about booking

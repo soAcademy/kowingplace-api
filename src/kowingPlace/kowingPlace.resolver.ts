@@ -282,6 +282,26 @@ export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
       picture: args.picture,
       tel: args.tel,
       userInternalId: args.userInternalId,
+      // FacilityToCoWork: {
+      //   connect: {
+      //     id: args.facilityToCoworkId,
+      //   },
+      // },
+      // Close: {
+      //   connect: {
+      //     id: args.closeId,
+      //   },
+      // },
+      // Open: {
+      //   connect: {
+      //     id: args.openId,
+      //   },
+      // },
+      // OpenClose24Hours: {
+      //   connect: {
+      //     id: args.openClose24HoursId,
+      //   },
+      // },
     },
   });
   return coWorkCreate;
@@ -525,3 +545,11 @@ export const forgetPasswordUserInternal = async (args: {
   });
   return forgetPassword;
 };
+
+// export const updateTokenUserExternal = (args:{email:string}) => prisma.userExternal.update({
+//   where:{
+//     email:args.email
+//   },
+//   data
+// })
+// the problem is how do we know user close the browser
