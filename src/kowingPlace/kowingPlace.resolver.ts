@@ -84,7 +84,13 @@ export const getCoworkByUserId = (args: IGetCoworkByUserId) =>
       id: args.userInternalId,
     },
     include: {
-      coWork: true,
+      coWork: {
+        include: {
+          Open: true,
+          Close: true,
+          OpenClose24Hours: true,
+        },
+      },
     },
   });
 

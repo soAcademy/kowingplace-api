@@ -91,3 +91,5 @@ export const loginUserInternal = async (args: ILoginUserInternal) => {
     return err;
   }
 };
+
+//export const updateToken = (args:{}) => prisma.
