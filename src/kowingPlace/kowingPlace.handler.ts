@@ -21,7 +21,10 @@ import {
   forgetPasswordUserExternal,
   forgetPasswordUserInternal,
 } from "./kowingPlace.resolver";
-import { createTimeOpenCloseCodec } from "./kowingPlace.interface";
+import {
+  createTimeOpenCloseCodec,
+  updateCoWorkDetailCodec,
+} from "./kowingPlace.interface";
 import { loginUserExternal, loginUserInternal } from "./kowingPlace.service";
 
 export const createUserExternalHandler = async (
@@ -139,10 +142,15 @@ export const updateCoWorkDetailHandler = async (
   req: Request,
   res: Response
 ) => {
-  const args = req.body;
+  const args = req?.body;
+  console.log("args", args);
+
   try {
-    const result = await updateCoWorkDetail(args);
-    res.status(200).json(result);
+    updateCoWorkDetailCodec.decode(args)._tag === "Right"
+      ? res.status(200).json(await updateCoWorkDetail(args))
+      : res.status(500).json({
+          error: "Invalid parameter codec",
+        });
   } catch (e) {
     res.status(500).json({
       error: String(e),
@@ -234,10 +242,12 @@ export const createTimeOpenCloseHandler = async (
 ) => {
   const args = req.body;
   console.log(args);
-  createTimeOpenCloseCodec.decode(args)._tag === "Right" ? "OK" : "NO";
   try {
-    const result = await createTimeOpenClose(args);
-    res.status(200).json(result);
+    createTimeOpenCloseCodec.decode(args)._tag === "Right"
+      ? res.status(200).json(await createTimeOpenClose(args))
+      : res.status(500).json({
+          error: "Invalid parameter codec",
+        });
   } catch (e) {
     res.status(500).json({
       error: String(e),

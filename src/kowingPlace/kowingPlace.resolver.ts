@@ -23,6 +23,7 @@ import {
   IUpsertInternalToken,
 } from "./kowingPlace.interface";
 import { hashPassword } from "./kowingPlace.service";
+import { id } from "fp-ts/lib/Refinement";
 export const prisma = new PrismaClient();
 
 export const createUserExternal = async (args: ICreateUserExternal) => {
@@ -84,7 +85,13 @@ export const getCoworkByUserId = (args: IGetCoworkByUserId) =>
       id: args.userInternalId,
     },
     include: {
-      coWork: true,
+      coWork: {
+        include: {
+          Open: true,
+          Close: true,
+          OpenClose24Hours: true,
+        },
+      },
     },
   });
 
@@ -275,70 +282,74 @@ export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
       picture: args.picture,
       tel: args.tel,
       userInternalId: args.userInternalId,
-      FacilityToCoWork: {
-        connect: {
-          id: args.facilityToCoworkId,
-        },
-      },
-      Close: {
-        connect: {
-          id: args.closeId,
-        },
-      },
-      Open: {
-        connect: {
-          id: args.openId,
-        },
-      },
-      OpenClose24Hours: {
-        connect: {
-          id: args.openClose24HoursId,
-        },
-      },
     },
   });
   return coWorkCreate;
 };
 
 export const createTimeOpenClose = async (args: ICreateTimeOpenClose) => {
-  const openCoWork = await prisma.open.create({
-    data: {
-      monOpen: args.open[0],
-      tueOpen: args.open[1],
-      wedOpen: args.open[2],
-      thursOpen: args.open[3],
-      friOpen: args.open[4],
-      satOpen: args.open[5],
-      sunOpen: args.open[6],
-      coWorkId: args.coWorkId,
+  const settingTime = await prisma.coWork.update({
+    where: {
+      id: args.coWorkId,
     },
-  });
-  const closeCoWork = await prisma.close.create({
     data: {
-      monClose: args.close[0],
-      tueClose: args.close[1],
-      wedClose: args.close[2],
-      thursClose: args.close[3],
-      friClose: args.close[4],
-      satClose: args.close[5],
-      sunClose: args.close[6],
-      coWorkId: args.coWorkId,
+      Open: {
+        create: {
+          monOpen: args.open[0],
+          tueOpen: args.open[1],
+          wedOpen: args.open[2],
+          thursOpen: args.open[3],
+          friOpen: args.open[4],
+          satOpen: args.open[5],
+          sunOpen: args.open[6],
+        },
+      },
     },
   });
 
-  const openClose24Hours = await prisma.openClose24Hours.create({
-    data: {
-      mon24hours: args.openClose24hours[0],
-      tue24hours: args.openClose24hours[1],
-      wed24hours: args.openClose24hours[2],
-      thurs24hours: args.openClose24hours[3],
-      fri24hours: args.openClose24hours[4],
-      sat24hours: args.openClose24hours[5],
-      sun24hours: args.openClose24hours[6],
-      coWorkId: args.coWorkId,
-    },
-  });
-  return [openCoWork, closeCoWork, openClose24Hours];
+  // const openCoWork = await prisma.open.create({
+  //   data: {
+  //     monOpen: args.open[0],
+  //     tueOpen: args.open[1],
+  //     wedOpen: args.open[2],
+  //     thursOpen: args.open[3],
+  //     friOpen: args.open[4],
+  //     satOpen: args.open[5],
+  //     sunOpen: args.open[6],
+  //     cowork: {
+  //       connect: {
+  //         id: args.coWorkId,
+  //       },
+  //     },
+  //   },
+  // });
+
+  // const closeCoWork = await prisma.close.create({
+  //   data: {
+  //     monClose: args.close[0],
+  //     tueClose: args.close[1],
+  //     wedClose: args.close[2],
+  //     thursClose: args.close[3],
+  //     friClose: args.close[4],
+  //     satClose: args.close[5],
+  //     sunClose: args.close[6],
+  //     cowork: { connect: { id: args.coWorkId } },
+  //   },
+  // });
+
+  // const openClose24Hours = await prisma.openClose24Hours.create({
+  //   data: {
+  //     mon24hours: args.openClose24hours[0],
+  //     tue24hours: args.openClose24hours[1],
+  //     wed24hours: args.openClose24hours[2],
+  //     thurs24hours: args.openClose24hours[3],
+  //     fri24hours: args.openClose24hours[4],
+  //     sat24hours: args.openClose24hours[5],
+  //     sun24hours: args.openClose24hours[6],
+  //     cowork: { connect: { id: args.coWorkId } },
+  //   },
+  // });
+  return settingTime;
 };
 
 export const updateCoWorkDetail = async (args: IUpdateCoWorkDetail) => {
