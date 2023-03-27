@@ -9,6 +9,7 @@ generator client {
   binaryTargets = ["native", "darwin-arm64", "debian-openssl-1.1.x", "rhel-openssl-1.0.x"]
   output        = "../prisma/client"
 }
+
 model UserExternal {
   id       Int        @id @default(autoincrement())
   name     String
@@ -37,6 +38,7 @@ model CoWork {
   Close            Close?
   Open             Open?
   OpenClose24Hours OpenClose24Hours?
+  OpenCloseBoolean OpenCloseBoolean?
 }
 
 model UserInternal {
@@ -207,6 +209,21 @@ model OpenClose24Hours {
   coWorkId     Int      @unique
   createAt     DateTime @default(now())
   updateAt     DateTime @updatedAt
+}
+
+model OpenCloseBoolean {
+  id         Int      @id @default(autoincrement())
+  monOnOff   Boolean
+  tueOnOff   Boolean
+  wedOnOff   Boolean
+  thursOnOff Boolean
+  friOnOff   Boolean
+  satOnOff   Boolean
+  sunOnOff   Boolean
+  cowork     CoWork   @relation(fields: [coWorkId], references: [id])
+  coWorkId   Int      @unique
+  createAt   DateTime @default(now())
+  updateAt   DateTime @updatedAt
 }
 
 // model LoginExternal {

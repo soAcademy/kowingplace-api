@@ -26,6 +26,7 @@ model CoWork {
   Close            Close?
   Open             Open?
   OpenClose24Hours OpenClose24Hours?
+  OpenCloseBoolean OpenCloseBoolean?
 }
 
 model UserInternal {
@@ -196,6 +197,21 @@ model OpenClose24Hours {
   coWorkId     Int      @unique
   createAt     DateTime @default(now())
   updateAt     DateTime @updatedAt
+}
+
+model OpenCloseBoolean {
+  id         Int      @id @default(autoincrement())
+  monOnOff   Boolean
+  tueOnOff   Boolean
+  wedOnOff   Boolean
+  thursOnOff Boolean
+  friOnOff   Boolean
+  satOnOff   Boolean
+  sunOnOff   Boolean
+  cowork     CoWork   @relation(fields: [coWorkId], references: [id])
+  coWorkId   Int      @unique
+  createAt   DateTime @default(now())
+  updateAt   DateTime @updatedAt
 }
 
 // model LoginExternal {
