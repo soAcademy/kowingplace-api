@@ -51,6 +51,7 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/getVerifyCodeByUserConfirmBooking",
     method: "post",
     action: getVerifyCodeByUserConfirmBookingHandler, //OK
+    middleWare: checkToken,
   },
   {
     path: "/kowing/createUserInternal",
@@ -106,7 +107,7 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/getCoworks",
     method: "post",
     action: getCoworksHandler, //OK
-    middleWare: checkToken,
+    //middleWare: checkToken,
   },
   {
     path: "/kowing/createTimeOpenClose",
