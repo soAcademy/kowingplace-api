@@ -22,3 +22,5 @@ export const checkToken = (req: Request, res: Response, next: NextFunction) => {
   }
   return next();
 };
+
+//middleware should use in api about booking

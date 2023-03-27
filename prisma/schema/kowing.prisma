@@ -1,13 +1,13 @@
 model UserExternal {
-  id            Int             @id @default(autoincrement())
-  name          String
-  email         String          @unique
-  tel           String
-  password      String?
-  BookRoom      BookRoom[]
-  LoginExternal LoginExternal[] //user 1 person can login in many times
-  createAt      DateTime        @default(now())
-  updateAt      DateTime        @updatedAt
+  id       Int        @id @default(autoincrement())
+  name     String
+  email    String     @unique
+  tel      String
+  password String?
+  BookRoom BookRoom[]
+  //LoginExternal LoginExternal[] //user 1 person can login in many times
+  createAt DateTime   @default(now())
+  updateAt DateTime   @updatedAt
 }
 
 model CoWork {
@@ -29,15 +29,15 @@ model CoWork {
 }
 
 model UserInternal {
-  id            Int             @id @default(autoincrement())
-  name          String
-  email         String          @unique
-  tel           String
-  password      String
-  createAt      DateTime        @default(now())
-  updateAt      DateTime        @updatedAt
-  coWork        CoWork?
-  LoginInternal LoginInternal[]
+  id       Int      @id @default(autoincrement())
+  name     String
+  email    String   @unique
+  tel      String
+  password String
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  coWork   CoWork?
+  //LoginInternal LoginInternal[]
 }
 
 model Room {
@@ -198,20 +198,20 @@ model OpenClose24Hours {
   updateAt     DateTime @updatedAt
 }
 
-model LoginExternal {
-  id             Int          @id @default(autoincrement())
-  token          String       @unique
-  userExternal   UserExternal @relation(fields: [userExternalId], references: [id])
-  userExternalId Int
-  createAt       DateTime     @default(now())
-  updateAt       DateTime     @updatedAt
-}
+// model LoginExternal {
+//   id             Int          @id @default(autoincrement())
+//   token          String       @unique
+//   userExternal   UserExternal @relation(fields: [userExternalId], references: [id])
+//   userExternalId Int
+//   createAt       DateTime     @default(now())
+//   updateAt       DateTime     @updatedAt
+// }
 
-model LoginInternal {
-  id             Int          @id @default(autoincrement())
-  token          String       @unique
-  userInternal   UserInternal @relation(fields: [userInternalId], references: [id])
-  userInternalId Int
-  createAt       DateTime     @default(now())
-  updateAt       DateTime     @updatedAt
-}
+// model LoginInternal {
+//   id             Int          @id @default(autoincrement())
+//   token          String       @unique
+//   userInternal   UserInternal @relation(fields: [userInternalId], references: [id])
+//   userInternalId Int
+//   createAt       DateTime     @default(now())
+//   updateAt       DateTime     @updatedAt
+// }
