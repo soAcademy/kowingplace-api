@@ -51,6 +51,7 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/getVerifyCodeByUserConfirmBooking",
     method: "post",
     action: getVerifyCodeByUserConfirmBookingHandler, //OK
+    middleWare: checkToken,
   },
   {
     path: "/kowing/createUserInternal",
@@ -71,11 +72,13 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/updateCoWorkDetail",
     method: "post",
     action: updateCoWorkDetailHandler, //Ok
+    middleWare: checkToken,
   },
   {
     path: "/kowing/updateRoomInternal",
     method: "post",
     action: updateRoomInternalHandler, //OK
+    middleWare: checkToken,
   },
   {
     path: "/kowing/getRoomByCoWorkId",
@@ -106,12 +109,13 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/getCoworks",
     method: "post",
     action: getCoworksHandler, //OK
-    middleWare: checkToken,
+    //middleWare: checkToken,
   },
   {
     path: "/kowing/createTimeOpenClose",
     method: "post",
     action: createTimeOpenCloseHandler, //OK
+    middleWare: checkToken,
   },
   {
     path: "/kowing/getCalendarBookingByCoWorkId",
@@ -127,6 +131,7 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/updateCalendarBookingByCoWorkId",
     method: "post",
     action: updateCalendarBookingByCoWorkIdHandler, //OK
+    middleWare: checkToken,
   },
   {
     path: "/kowing/getCoWorkOpen24Hours",

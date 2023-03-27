@@ -57,27 +57,22 @@ export const getCoworks = async () => {
 };
 
 export const getRoomByCoWorkId = async (args: IGgetRoomByCoWorkIdCodec) => {
-  try {
-    const getRoom = await prisma.coWork.findUnique({
-      where: {
-        id: args.coWorkId,
-      },
-      include: {
-        BranchToRoom: {
-          where: {
-            coWorkId: args.coWorkId,
-          },
-          include: {
-            room: true,
-          },
+  const getRoom = await prisma.coWork.findUnique({
+    where: {
+      id: args.coWorkId,
+    },
+    include: {
+      BranchToRoom: {
+        where: {
+          coWorkId: args.coWorkId,
+        },
+        include: {
+          room: true,
         },
       },
-    });
-    return getRoom;
-  } catch (err) {
-    console.log("err", err);
-    return err;
-  }
+    },
+  });
+  return getRoom;
 };
 
 export const getCoworkByUserId = (args: IGetCoworkByUserId) =>
@@ -283,26 +278,6 @@ export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
       picture: args.picture,
       tel: args.tel,
       userInternalId: args.userInternalId,
-      // FacilityToCoWork: {
-      //   connect: {
-      //     id: args.facilityToCoworkId,
-      //   },
-      // },
-      // Close: {
-      //   connect: {
-      //     id: args.closeId,
-      //   },
-      // },
-      // Open: {
-      //   connect: {
-      //     id: args.openId,
-      //   },
-      // },
-      // OpenClose24Hours: {
-      //   connect: {
-      //     id: args.openClose24HoursId,
-      //   },
-      // },
     },
   });
   return coWorkCreate;
