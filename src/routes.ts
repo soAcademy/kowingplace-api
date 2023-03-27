@@ -72,6 +72,7 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/updateCoWorkDetail",
     method: "post",
     action: updateCoWorkDetailHandler, //Ok
+    middleWare: checkToken,
   },
   {
     path: "/kowing/updateRoomInternal",
