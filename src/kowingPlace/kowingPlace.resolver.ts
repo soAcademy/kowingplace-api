@@ -520,3 +520,11 @@ export const forgetPasswordUserInternal = async (args: {
   });
   return forgetPassword;
 };
+
+// export const updateTokenUserExternal = (args:{email:string}) => prisma.userExternal.update({
+//   where:{
+//     email:args.email
+//   },
+//   data
+// })
+// the problem is how do we know user close the browser

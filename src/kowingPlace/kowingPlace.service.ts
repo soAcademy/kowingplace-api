@@ -15,7 +15,7 @@ const generateToken = (email: string, secretKey: string): string => {
     email: email,
   };
 
-  const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+  const token = jwt.sign(payload, secretKey, { expiresIn: "1d" });
   //const token = jwt.sign(payload, secretKey, { expiresIn: 15 });
   return token;
 };
@@ -91,5 +91,3 @@ export const loginUserInternal = async (args: ILoginUserInternal) => {
     return err;
   }
 };
-
-//export const updateToken = (args:{}) => prisma.
