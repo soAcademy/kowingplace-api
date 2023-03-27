@@ -10,6 +10,8 @@ import {
   ICreateTimeOpenClose,
   ICreateUserExternal,
   ICreateUserInternal,
+  IForgetPasswordUserExternal,
+  IForgetPasswordUserInternal,
   IGetCalendarBookingByCoWorkId,
   IGetCoWorkUserChoose,
   IGetCoworkByUserId,
@@ -491,10 +493,9 @@ export const checkUserInternalPasswordEmail = (
     },
   });
 
-export const forgetPasswordUserExternal = async (args: {
-  email: string;
-  password: string;
-}) => {
+export const forgetPasswordUserExternal = async (
+  args: IForgetPasswordUserExternal
+) => {
   const updateForgetPassword = await prisma.userExternal.update({
     where: {
       email: args.email,
@@ -506,10 +507,9 @@ export const forgetPasswordUserExternal = async (args: {
   return updateForgetPassword;
 };
 
-export const forgetPasswordUserInternal = async (args: {
-  email: string;
-  password: string;
-}) => {
+export const forgetPasswordUserInternal = async (
+  args: IForgetPasswordUserInternal
+) => {
   const forgetPassword = prisma.userInternal.update({
     where: {
       email: args.email,
