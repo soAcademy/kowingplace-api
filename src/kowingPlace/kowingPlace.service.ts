@@ -14,7 +14,7 @@ const generateToken = (email: string, secretKey: string): string => {
   const payload = {
     email: email,
   };
-  //gen token
+
   const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
   //const token = jwt.sign(payload, secretKey, { expiresIn: 15 });
   return token;
@@ -28,7 +28,7 @@ export const hashPassword = async (password: string) => {
 
 const verifyPassWord = async (password: string, hashedPassword: string) => {
   //เอา password ที่ยังไม่ได้ hash กับ passwordHash มาเทียบกัน
-  //จะได้เป็น true หรือ false ออกมา
+
   try {
     const isMatch = await bcrypt.compare(password, hashedPassword);
     return isMatch;
