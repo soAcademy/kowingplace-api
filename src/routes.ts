@@ -131,6 +131,7 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/updateCalendarBookingByCoWorkId",
     method: "post",
     action: updateCalendarBookingByCoWorkIdHandler, //OK
+    middleWare: checkToken,
   },
   {
     path: "/kowing/getCoWorkOpen24Hours",
