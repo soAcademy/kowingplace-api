@@ -28,20 +28,15 @@ import { hashPassword } from "./kowingPlace.service";
 export const prisma = new PrismaClient();
 
 export const createUserExternal = async (args: ICreateUserExternal) => {
-  try {
-    const createUser = await prisma.userExternal.create({
-      data: {
-        name: args.name,
-        email: args.email,
-        tel: args.tel,
-        password: await hashPassword(args.password),
-      },
-    });
-    return createUser;
-  } catch (err) {
-    console.log("err", err);
-    return err;
-  }
+  const createUser = await prisma.userExternal.create({
+    data: {
+      name: args.name,
+      email: args.email,
+      tel: args.tel,
+      password: await hashPassword(args.password),
+    },
+  });
+  return createUser;
 };
 
 export const getCoworks = async () => {
@@ -62,27 +57,22 @@ export const getCoworks = async () => {
 };
 
 export const getRoomByCoWorkId = async (args: IGgetRoomByCoWorkIdCodec) => {
-  try {
-    const getRoom = await prisma.coWork.findUnique({
-      where: {
-        id: args.coWorkId,
-      },
-      include: {
-        BranchToRoom: {
-          where: {
-            coWorkId: args.coWorkId,
-          },
-          include: {
-            room: true,
-          },
+  const getRoom = await prisma.coWork.findUnique({
+    where: {
+      id: args.coWorkId,
+    },
+    include: {
+      BranchToRoom: {
+        where: {
+          coWorkId: args.coWorkId,
+        },
+        include: {
+          room: true,
         },
       },
-    });
-    return getRoom;
-  } catch (err) {
-    console.log("err", err);
-    return err;
-  }
+    },
+  });
+  return getRoom;
 };
 
 export const getCoworkByUserId = (args: IGetCoworkByUserId) =>
