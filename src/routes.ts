@@ -115,6 +115,7 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/createTimeOpenClose",
     method: "post",
     action: createTimeOpenCloseHandler, //OK
+    middleWare: checkToken,
   },
   {
     path: "/kowing/getCalendarBookingByCoWorkId",
