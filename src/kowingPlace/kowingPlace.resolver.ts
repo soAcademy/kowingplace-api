@@ -28,15 +28,20 @@ import { hashPassword } from "./kowingPlace.service";
 export const prisma = new PrismaClient();
 
 export const createUserExternal = async (args: ICreateUserExternal) => {
-  const createUser = await prisma.userExternal.create({
-    data: {
-      name: args.name,
-      email: args.email,
-      tel: args.tel,
-      password: await hashPassword(args.password),
-    },
-  });
-  return createUser;
+  try {
+    const createUser = await prisma.userExternal.create({
+      data: {
+        name: args.name,
+        email: args.email,
+        tel: args.tel,
+        password: await hashPassword(args.password),
+      },
+    });
+    return createUser;
+  } catch (err) {
+    console.log("err", err);
+    return err;
+  }
 };
 
 export const getCoworks = async () => {
