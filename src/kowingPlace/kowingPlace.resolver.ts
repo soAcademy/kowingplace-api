@@ -283,26 +283,6 @@ export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
       picture: args.picture,
       tel: args.tel,
       userInternalId: args.userInternalId,
-      // FacilityToCoWork: {
-      //   connect: {
-      //     id: args.facilityToCoworkId,
-      //   },
-      // },
-      // Close: {
-      //   connect: {
-      //     id: args.closeId,
-      //   },
-      // },
-      // Open: {
-      //   connect: {
-      //     id: args.openId,
-      //   },
-      // },
-      // OpenClose24Hours: {
-      //   connect: {
-      //     id: args.openClose24HoursId,
-      //   },
-      // },
     },
   });
   return coWorkCreate;
