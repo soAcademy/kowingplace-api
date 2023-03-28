@@ -10,6 +10,7 @@ import {
   ICreateTimeOpenClose,
   ICreateUserExternal,
   ICreateUserInternal,
+  IDeleteCoWork,
   IForgetPasswordUserExternal,
   IForgetPasswordUserInternal,
   IGetCalendarBookingByCoWorkId,
@@ -21,8 +22,6 @@ import {
   IShowBookDetailInternalByCoWork,
   IUpdateCalendarBookingByCoWorkId,
   IUpdateCoWorkDetail,
-  IUpsertExternalToken,
-  IUpsertInternalToken,
 } from "./kowingPlace.interface";
 import { hashPassword } from "./kowingPlace.service";
 export const prisma = new PrismaClient();
@@ -113,7 +112,7 @@ export const getCoWorkUserChoose = (args: IGetCoWorkUserChoose) =>
     },
   });
 
-//vertify code
+//vertify code //bookingExternal
 export const getVerifyCodeByUserConfirmBooking = async (
   args: IGetUserConfirmBooking
 ) => {
@@ -127,7 +126,7 @@ export const getVerifyCodeByUserConfirmBooking = async (
           id: args.coWorkId,
         },
       },
-      status: "ON GOING",
+      status: "ON_GOING",
       roomRate: {
         connect: {
           id: args.roomId,
@@ -600,10 +599,9 @@ export const forgetPasswordUserInternal = async (
   return forgetPassword;
 };
 
-// export const updateTokenUserExternal = (args:{email:string}) => prisma.userExternal.update({
-//   where:{
-//     email:args.email
-//   },
-//   data
-// })
-// the problem is how do we know user close the browser
+export const deleteCoWork = (args: IDeleteCoWork) =>
+  prisma.coWork.delete({
+    where: {
+      id: args.coWorkId,
+    },
+  });
