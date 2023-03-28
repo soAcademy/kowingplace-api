@@ -58,6 +58,8 @@ export const loginUserExternal = async (args: ILoginUserExternal) => {
       process.env.SECRET_KEY as string
     );
 
+    console.log(genToken);
+
     return { token: genToken };
   } catch (err) {
     console.log("err", err);
