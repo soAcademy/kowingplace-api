@@ -56,7 +56,7 @@ export const createRoomInternalCodec = t.type({
   rates: t.array(
     t.type({
       price: t.number,
-      durationId: t.number,
+      duration: t.number,
     })
   ),
 });
