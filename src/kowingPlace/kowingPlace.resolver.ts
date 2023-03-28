@@ -604,4 +604,13 @@ export const deleteCoWork = (args: IDeleteCoWork) =>
     where: {
       id: args.coWorkId,
     },
+    include: {
+      bookRoom: true,
+      BranchToRoom: true,
+      FacilityToCoWork: true,
+      Open: true,
+      Close: true,
+      OpenClose24Hours: true,
+      OpenCloseBoolean: true,
+    },
   });
