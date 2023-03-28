@@ -1,8 +1,10 @@
 import {
   createCoWorkDetail,
   createFacility,
+  createTimeOpenClose,
   createUserExternal,
   createUserInternal,
+  getCalendarBookingByCoWorkId,
   getCoWorkUserChoose,
   getRoomByCoWorkId,
   updateCalendarBookingByCoWorkId,
@@ -174,5 +176,28 @@ describe("kowing", () => {
     // expect(output.Close === input.close).toBe(true);
     // expect(output.OpenClose24Hours === input.openClose24Hours).toBe(true);
     // expect(output.coWorkId === input.coWorkId).toBe(true);
+  });
+
+  test("should createTimeOpenClose correctly", async () => {
+    const input = {
+      monOpen: 11,
+      tueOpen: 11,
+      wedOpen: 11,
+      thursOpen: 11,
+      friOpen: 11,
+      satOpen: 0,
+      sunOpen: 0,
+      coWorkId: 23,
+    };
+    // const output = await createTimeOpenClose({
+    //   monOpen: input.monOpen,
+    //   tueOpen: input.tueOpen,
+    //   wedOpen: input.wedOpen,
+    //   thursOpen: input.thursOpen,
+    //   friOpen: input.friOpen,
+    //   satOpen: input.satOpen,
+    //   sunOpen: input.sunOpen,
+    //   coWorkId: input.coWorkId,
+    // })
   });
 });
