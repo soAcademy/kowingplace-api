@@ -247,3 +247,10 @@ export interface IForgetPasswordUserExternal
   extends t.TypeOf<typeof forgetPasswordUserExternalCodec> {}
 
 //-------------------------------------------------
+
+export const deleteCoWorkCodec = t.type({
+  coWorkId: t.number,
+});
+export interface IDeleteCoWork extends t.TypeOf<typeof deleteCoWorkCodec> {}
+
+//-------------------------------------------------

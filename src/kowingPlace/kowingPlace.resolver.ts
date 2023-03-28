@@ -10,6 +10,7 @@ import {
   ICreateTimeOpenClose,
   ICreateUserExternal,
   ICreateUserInternal,
+  IDeleteCoWork,
   IForgetPasswordUserExternal,
   IForgetPasswordUserInternal,
   IGetCalendarBookingByCoWorkId,
@@ -597,7 +598,7 @@ export const forgetPasswordUserInternal = async (
   return forgetPassword;
 };
 
-export const deleteCoWork = (args: { coWorkId: number }) =>
+export const deleteCoWork = (args: IDeleteCoWork) =>
   prisma.coWork.delete({
     where: {
       id: args.coWorkId,
