@@ -85,7 +85,22 @@ export const getCoworkByUserId = (args: IGetCoworkByUserId) =>
         include: {
           Open: true,
           Close: true,
+          OpenCloseBoolean: true,
           OpenClose24Hours: true,
+          FacilityToCoWork: true,
+          BranchToRoom: {
+            include: {
+              room: {
+                include: {
+                  RoomRate: {
+                    include: {
+                      duration: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -268,6 +283,8 @@ export const createFacilityIn = (args: ICreateFacilityIn) =>
     },
   });
 
+export const getFacilities = () => prisma.facility.findMany();
+
 //create cowork
 export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
   const coWorkCreate = await prisma.coWork.create({
@@ -278,9 +295,44 @@ export const createCoWorkDetail = async (args: ICreateCoWorkDetail) => {
       picture: args.picture,
       tel: args.tel,
       userInternalId: args.userInternalId,
+      FacilityToCoWork: {
+        createMany: {
+          data: args.facilities.map((r) => ({
+            facilityId: r,
+          })),
+        },
+      },
     },
   });
   return coWorkCreate;
+};
+
+export const updateCoWorkDetail = async (args: IUpdateCoWorkDetail) => {
+  const coWorkupdate = await prisma.coWork.update({
+    where: {
+      id: args.coWorkId,
+    },
+    data: {
+      name: args.name,
+      description: args.description,
+      location: args.location,
+      picture: args.picture,
+      tel: args.tel,
+      FacilityToCoWork: {
+        deleteMany: [
+          {
+            coWorkId: args.coWorkId,
+          },
+        ],
+        createMany: {
+          data: args.facilities.map((r) => ({
+            facilityId: r,
+          })),
+        },
+      },
+    },
+  });
+  return coWorkupdate;
 };
 
 export const createTimeOpenClose = async (args: ICreateTimeOpenClose) => {
@@ -358,27 +410,37 @@ export const createTimeOpenClose = async (args: ICreateTimeOpenClose) => {
       sun24hours: args.openClose24hours[6],
     },
   });
+
+  const openCloseBoolean = await prisma.openCloseBoolean.upsert({
+    where: {
+      coWorkId: args.coWorkId,
+    },
+    create: {
+      monOnOff: args.openCloseBoolean[0],
+      tueOnOff: args.openCloseBoolean[1],
+      wedOnOff: args.openCloseBoolean[2],
+      thursOnOff: args.openCloseBoolean[3],
+      friOnOff: args.openCloseBoolean[4],
+      satOnOff: args.openCloseBoolean[5],
+      sunOnOff: args.openCloseBoolean[6],
+      coWorkId: args.coWorkId,
+    },
+    update: {
+      monOnOff: args.openCloseBoolean[0],
+      tueOnOff: args.openCloseBoolean[1],
+      wedOnOff: args.openCloseBoolean[2],
+      thursOnOff: args.openCloseBoolean[3],
+      friOnOff: args.openCloseBoolean[4],
+      satOnOff: args.openCloseBoolean[5],
+      sunOnOff: args.openCloseBoolean[6],
+    },
+  });
   return [
+    { openCloseBoolean: openCloseBoolean },
     { open: openCoWork },
     { close: closeCoWork },
     { openClose24Hours: openClose24Hours },
   ];
-};
-
-export const updateCoWorkDetail = async (args: IUpdateCoWorkDetail) => {
-  const coWorkupdate = await prisma.coWork.update({
-    where: {
-      id: args.coWorkId,
-    },
-    data: {
-      name: args.name,
-      description: args.description,
-      location: args.location,
-      picture: args.picture,
-      tel: args.tel,
-    },
-  });
-  return coWorkupdate;
 };
 
 export const getStatusUserBookInternal = (args: IGetStatusUserBookInternal) =>
