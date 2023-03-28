@@ -68,19 +68,19 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/createCoWorkDetail",
     method: "post",
     action: createCoWorkDetailHandler, //Ok
-    // middleWare: checkToken,
+    middleWare: checkToken,
   },
   {
     path: "/kowing/updateCoWorkDetail",
     method: "post",
     action: updateCoWorkDetailHandler, //Ok
-    // middleWare: checkToken,
+    middleWare: checkToken,
   },
   {
     path: "/kowing/updateRoomInternal",
     method: "post",
     action: updateRoomInternalHandler, //OK
-    // middleWare: checkToken,
+    middleWare: checkToken,
   },
   {
     path: "/kowing/getRoomByCoWorkId",
@@ -116,13 +116,12 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/getCoworks",
     method: "post",
     action: getCoworksHandler, //OK
-    //middleWare: checkToken,
   },
   {
     path: "/kowing/createTimeOpenClose",
     method: "post",
     action: createTimeOpenCloseHandler, //OK
-    // middleWare: checkToken,
+    middleWare: checkToken,
   },
   {
     path: "/kowing/getCalendarBookingByCoWorkId",
