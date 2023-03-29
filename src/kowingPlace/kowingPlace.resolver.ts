@@ -624,6 +624,7 @@ export const bookDurationRoom = async (args: {
   day: number;
   startTime: string;
   coWorkId: number;
+  roomId: number;
 }) => {
   const bookRoom = await prisma.bookRoom.findMany({
     where: {
@@ -647,6 +648,19 @@ export const bookDurationRoom = async (args: {
       },
     },
   });
+
+  const findDuration = await prisma.roomRate.findMany({
+    where: {
+      roomId: args.roomId,
+    },
+    include: {
+      duration: true,
+    },
+  });
+  console.log("findDuration", findDuration);
+
+  const durations = findDuration.map((r) => r.duration.duration);
+
   const filterTimeBooking = bookRoom.map((items) => {
     const userStartTime = new Date(items?.startTime).getHours();
     const duration = items.roomRate.duration.duration;
@@ -654,7 +668,7 @@ export const bookDurationRoom = async (args: {
     const usedTime = [...Array(duration)].map((r, idx) => {
       return userStartTime + idx;
     });
-    console.log(usedTime);
+    // console.log(usedTime);
     return usedTime;
   });
 
@@ -669,9 +683,56 @@ export const bookDurationRoom = async (args: {
     "fri24hours",
     "sat24hours",
   ];
-  const openCloseShop = bookRoom[0].cowork.OpenClose24Hours;
 
-  console.log(openCloseShop);
+  const close = [
+    "sunClose",
+    "monClose",
+    "tueClose",
+    "wedClose",
+    "thursClose",
+    "friClose",
+    "satClose",
+  ];
 
-  return bookRoom;
+  const open = [
+    "sunOpen",
+    "monOpen",
+    "tueOpen",
+    "wedOpen",
+    "thursOpen",
+    "friOpen",
+    "satOpen",
+  ];
+
+  const openClose24hrs = { ...bookRoom[0].cowork.OpenClose24Hours }[
+    str24hrs[args.day]
+  ];
+  const openClose24hrs2 = { ...bookRoom[0].cowork.Close }[close[args.day]];
+  const openClose24hrs3 = { ...bookRoom[0].cowork.Open }[open[args.day]];
+
+  // console.log(openClose24hrs);
+  // console.log(openClose24hrs2);
+  // console.log(openClose24hrs3);
+
+  const slotTimeOpen = openClose24hrs
+    ? Object.keys([...Array(24)])
+    : Object.keys([
+        ...Array(Number(openClose24hrs2) - Number(openClose24hrs3)),
+      ]);
+  const availableTime = slotTimeOpen
+    .filter((r) => {
+      const findTime = usageTime.map((items) => items === Number(r));
+      console.log(findTime);
+
+      return findTime.every((r) => !r);
+    })
+    .map((r) => Number(r));
+
+  // console.log(availableTime);
+  return {
+    slotTime: availableTime,
+    open: openClose24hrs3,
+    close: openClose24hrs2,
+    duration: durations,
+  };
 };

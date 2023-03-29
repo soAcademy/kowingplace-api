@@ -59,8 +59,15 @@ export const loginUserExternal = async (args: ILoginUserExternal) => {
     );
 
     console.log(genToken);
+    const userData = {
+      email: checkEmail.email,
+      name: checkEmail.name,
+      tel: checkEmail.tel,
+      role: "external",
+    };
+    console.log("userData", userData);
 
-    return { token: genToken };
+    return { token: genToken, userData: userData };
   } catch (err) {
     console.log("err", err);
     return err;
