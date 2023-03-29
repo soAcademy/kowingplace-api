@@ -678,9 +678,9 @@ export const bookDurationRoom = async (args: {
     "fri24hours",
     "sat24hours",
   ];
-  const openCloseShop = bookRoom[0].cowork.OpenClose24Hours;
-
-  console.log(openCloseShop);
+  const openCloseShop = bookRoom[0].cowork.OpenClose24Hours
+  const ss = {...openCloseShop}[str24hrs[0]]
+  console.log(ss);
 
   return bookRoom;
 };
