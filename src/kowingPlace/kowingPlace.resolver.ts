@@ -110,6 +110,13 @@ export const getCoWorkUserChoose = (args: IGetCoWorkUserChoose) =>
     where: {
       id: args.id,
     },
+    include: {
+      FacilityToCoWork: {
+        include: {
+          facility: true,
+        },
+      },
+    },
   });
 
 //vertify code //bookingExternal
@@ -543,8 +550,8 @@ export const getCoWorkOpen24Hours = () =>
 
 export const checkUserExternalPasswordEmail = (
   args: ICheckUserExternalPasswordEmail
-) =>
-  prisma.userExternal.findUnique({
+) => {
+  const loginRes = prisma.userExternal.findUnique({
     where: {
       email: args.email,
     },
@@ -555,6 +562,8 @@ export const checkUserExternalPasswordEmail = (
       tel: true,
     },
   });
+  return loginRes;
+};
 
 export const checkUserInternalPasswordEmail = (
   args: ICheckUserInternalPasswordEmail

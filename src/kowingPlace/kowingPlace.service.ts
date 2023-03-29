@@ -43,22 +43,34 @@ export const loginUserExternal = async (args: ILoginUserExternal) => {
     const checkEmail = await checkUserExternalPasswordEmail({
       email: args.email,
     });
+    console.log("checkEmail", checkEmail);
+
     if (checkEmail === null) {
       return Promise.reject({ message: "email not found", status: 404 });
     }
+
     const checkPassword = await verifyPassWord(
       args.password,
       checkEmail.password as string
     );
+    console.log("checkPassword", checkPassword);
+
     if (checkPassword === false) {
       return Promise.reject({ message: "Wrong password", status: 404 });
     }
+
     const genToken = generateToken(
       args.email,
       process.env.SECRET_KEY as string
     );
 
-    return { token: genToken };
+    const userData = {
+      email: checkEmail.email,
+      name: checkEmail.name,
+      tel: checkEmail.tel,
+      role: 'external'
+    };
+    return { user: userData, token: genToken };
   } catch (err) {
     console.log("err", err);
     return err;
