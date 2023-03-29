@@ -114,13 +114,14 @@ model FacilityToCoWork {
 // }
 
 model BranchToRoom {
-  id       Int      @id @default(autoincrement())
-  coWork   CoWork   @relation(fields: [coWorkId], references: [id], onDelete: Cascade)
+  id       Int        @id @default(autoincrement())
+  coWork   CoWork     @relation(fields: [coWorkId], references: [id], onDelete: Cascade)
   coWorkId Int
-  room     Room     @relation(fields: [roomId], references: [id])
+  room     Room       @relation(fields: [roomId], references: [id])
   roomId   Int
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  createAt DateTime   @default(now())
+  updateAt DateTime   @updatedAt
+  BookRoom BookRoom[]
 }
 
 model BookRoom {
@@ -137,6 +138,8 @@ model BookRoom {
   userExternalId       Int
   vertifyCode          VertifyBookingCode @relation(fields: [vertifyBookingCodeId], references: [id])
   vertifyBookingCodeId Int
+  branchToroom         BranchToRoom?      @relation(fields: [branchToRoomId], references: [id])
+  branchToRoomId       Int?
   //date
 }
 

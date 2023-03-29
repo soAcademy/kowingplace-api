@@ -24,6 +24,7 @@ import {
   IUpdateCoWorkDetail,
 } from "./kowingPlace.interface";
 import { hashPassword } from "./kowingPlace.service";
+import { mock } from "node:test";
 export const prisma = new PrismaClient();
 
 export const createUserExternal = async (args: ICreateUserExternal) => {
@@ -623,3 +624,63 @@ export const deleteCoWork = (args: IDeleteCoWork) =>
       OpenCloseBoolean: true,
     },
   });
+// mockData = {
+//   startTime:123,
+//   brachToRoomId:12
+// }
+
+export const bookDurationRoom = async (args: {
+  day: number;
+  startTime: string;
+  coWorkId: number;
+}) => {
+  const bookRoom = await prisma.bookRoom.findMany({
+    where: {
+      coWorkId: args.coWorkId,
+      startTime: {
+        gte: new Date(args.startTime),
+      },
+    },
+    include: {
+      roomRate: {
+        include: {
+          duration: true,
+        },
+      },
+      cowork: {
+        include: {
+          Close: true,
+          Open: true,
+          OpenClose24Hours: true,
+        },
+      },
+    },
+  });
+  const filterTimeBooking = bookRoom.map((items) => {
+    const userStartTime = new Date(items?.startTime).getHours();
+    const duration = items.roomRate.duration.duration;
+
+    const usedTime = [...Array(duration)].map((r, idx) => {
+      return userStartTime + idx;
+    });
+    console.log(usedTime);
+    return usedTime;
+  });
+
+  const usageTime = filterTimeBooking.flat();
+
+  const str24hrs = [
+    "sun24hours",
+    "mon24hours",
+    "tue24hours",
+    "wed24hours",
+    "thurs24hours",
+    "fri24hours",
+    "sat24hours",
+  ];
+  const openCloseShop = bookRoom[0].cowork.OpenClose24Hours;
+
+  console.log(openCloseShop);
+
+  return bookRoom;
+};
