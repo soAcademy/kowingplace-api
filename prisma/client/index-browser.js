@@ -98,7 +98,8 @@ exports.Prisma.BookRoomScalarFieldEnum = makeEnum({
   createAt: 'createAt',
   updateAt: 'updateAt',
   userExternalId: 'userExternalId',
-  vertifyBookingCodeId: 'vertifyBookingCodeId'
+  vertifyBookingCodeId: 'vertifyBookingCodeId',
+  branchToRoomId: 'branchToRoomId'
 });
 
 exports.Prisma.BranchToRoomScalarFieldEnum = makeEnum({

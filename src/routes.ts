@@ -22,6 +22,7 @@ import {
   forgetPasswordUserInternalHandler,
   getFacilitiesHandler,
   deleteCoWorkHandler,
+  bookDurationRoomHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
 // import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
@@ -52,7 +53,7 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/getVerifyCodeByUserConfirmBooking",
     method: "post",
     action: getVerifyCodeByUserConfirmBookingHandler, //OK
-    middleWare: checkToken,
+    //middleWare: checkToken,
   },
   {
     path: "/kowing/createUserInternal",
@@ -158,5 +159,10 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/deleteCoWork",
     method: "post",
     action: deleteCoWorkHandler,
+  },
+  {
+    path: "/kowing/bookDurationRoom",
+    method: "post",
+    action: bookDurationRoomHandler,
   },
 ];
