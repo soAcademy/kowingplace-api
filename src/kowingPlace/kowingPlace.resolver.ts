@@ -1,6 +1,7 @@
 import { date, number, random } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
+  IBookDurationRoom,
   ICheckUserExternalPasswordEmail,
   ICheckUserInternalPasswordEmail,
   ICreateCoWorkDetail,
@@ -513,6 +514,13 @@ export const checkUserExternalPasswordEmail = (
     where: {
       email: args.email,
     },
+    select: {
+      email: true,
+      password: true,
+      name: true,
+      tel: true,
+      id: true,
+    },
   });
   return loginRes;
 };
@@ -576,12 +584,7 @@ export const deleteCoWork = (args: IDeleteCoWork) =>
     },
   });
 
-export const bookDurationRoom = async (args: {
-  day: number;
-  startTime: string;
-  coWorkId: number;
-  roomId: number;
-}) => {
+export const bookDurationRoom = async (args: IBookDurationRoom) => {
   console.log("args", args);
 
   const bookRoom = await prisma.bookRoom.findMany({
