@@ -23,6 +23,7 @@ export const getVerifyCodeByUserConfirmBookingCodec = t.type({
   startTime: t.string,
   roomId: t.number,
   coWorkId: t.number,
+  roomRateId: t.number,
   userExId: t.number,
 });
 export interface IGetUserConfirmBooking

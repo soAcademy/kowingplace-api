@@ -120,49 +120,6 @@ export const getCoWorkUserChoose = (args: IGetCoWorkUserChoose) =>
     },
   });
 
-//vertify code //bookingExternal
-export const getVerifyCodeByUserConfirmBooking = async (
-  args: IGetUserConfirmBooking
-) => {
-  const verifyCode = `KOWING${args.userExId}${args.coWorkId}${args.roomId}`;
-
-  const getBookData = await prisma.bookRoom.create({
-    data: {
-      startTime: new Date(args.startTime),
-      cowork: {
-        connect: {
-          id: args.coWorkId,
-        },
-      },
-      status: "ON_GOING",
-      roomRate: {
-        connect: {
-          id: args.roomId,
-        },
-      },
-      UserExternal: {
-        connect: {
-          id: args.userExId,
-        },
-      },
-      vertifyCode: {
-        create: {
-          bookdate: new Date(args.startTime),
-          verifyCode: verifyCode,
-        },
-      },
-    },
-    select: {
-      vertifyCode: {
-        select: {
-          verifyCode: true,
-        },
-      },
-    },
-  });
-  return getBookData;
-};
-
 export const createUserInternal = async (args: ICreateUserInternal) => {
   const createUser = await prisma.userInternal.create({
     data: {
@@ -618,10 +575,6 @@ export const deleteCoWork = (args: IDeleteCoWork) =>
       OpenCloseBoolean: true,
     },
   });
-// mockData = {
-//   startTime:123,
-//   brachToRoomId:12
-// }
 
 export const bookDurationRoom = async (args: {
   day: number;
@@ -679,7 +632,10 @@ export const bookDurationRoom = async (args: {
   });
   console.log("getOpen", getOpen);
 
-  const durations = findDuration.map((r) => r.duration.duration);
+  const durations = findDuration.map((r) => ({
+    roomRateId: r.id,
+    duration: r.duration.duration,
+  }));
 
   const filterTimeBooking = bookRoom.map((items) => {
     const userStartTime = new Date(items?.startTime).getHours();
@@ -759,4 +715,47 @@ export const bookDurationRoom = async (args: {
     close: openClose24hrs2,
     duration: durations,
   };
+};
+
+//vertify code //bookingExternal
+export const getVerifyCodeByUserConfirmBooking = async (
+  args: IGetUserConfirmBooking
+) => {
+  const verifyCode = `KOWING${args.userExId}${args.roomRateId}${args.roomId}`;
+
+  const getBookData = await prisma.bookRoom.create({
+    data: {
+      startTime: new Date(args.startTime),
+      cowork: {
+        connect: {
+          id: args.coWorkId,
+        },
+      },
+      status: "PENDING",
+      roomRate: {
+        connect: {
+          id: args.roomRateId,
+        },
+      },
+      UserExternal: {
+        connect: {
+          id: args.userExId,
+        },
+      },
+      vertifyCode: {
+        create: {
+          bookdate: new Date(args.startTime),
+          verifyCode: verifyCode,
+        },
+      },
+    },
+    select: {
+      vertifyCode: {
+        select: {
+          verifyCode: true,
+        },
+      },
+    },
+  });
+  return getBookData;
 };
