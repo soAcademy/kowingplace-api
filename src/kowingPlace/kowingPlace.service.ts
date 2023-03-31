@@ -63,6 +63,7 @@ export const loginUserExternal = async (args: ILoginUserExternal) => {
       email: checkEmail.email,
       name: checkEmail.name,
       tel: checkEmail.tel,
+      userId: checkEmail.id,
       role: "external",
     };
     console.log("userData", userData);

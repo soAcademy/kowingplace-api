@@ -23,6 +23,7 @@ import {
   getFacilitiesHandler,
   deleteCoWorkHandler,
   bookDurationRoomHandler,
+  loginUserInternalHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
 // import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
@@ -63,7 +64,7 @@ export const AppRoutes: IAppRoutes[] = [
   {
     path: "/kowing/createRoomInternal",
     method: "post",
-    action: createRoomInternalHandler, //Ok
+    action: createRoomInternalHandler,
   },
   {
     path: "/kowing/createCoWorkDetail",
@@ -158,11 +159,16 @@ export const AppRoutes: IAppRoutes[] = [
   {
     path: "/kowing/deleteCoWork",
     method: "post",
-    action: deleteCoWorkHandler,
+    action: deleteCoWorkHandler, //OK
   },
   {
     path: "/kowing/bookDurationRoom",
     method: "post",
-    action: bookDurationRoomHandler,
+    action: bookDurationRoomHandler, //OK
+  },
+  {
+    path: "/kowing/loginUserInternal",
+    method: "post",
+    action: loginUserInternalHandler, //OK
   },
 ];

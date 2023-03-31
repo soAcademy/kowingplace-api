@@ -554,6 +554,7 @@ export const checkUserExternalPasswordEmail = (
       password: true,
       name: true,
       tel: true,
+      id: true,
     },
   });
 
@@ -620,12 +621,7 @@ export const deleteCoWork = (args: IDeleteCoWork) =>
 //   brachToRoomId:12
 // }
 
-export const bookDurationRoom = async (args: {
-  day: number;
-  startTime: string;
-  coWorkId: number;
-  roomId: number;
-}) => {
+export const bookDurationRoom = async (args: IDeleteCoWork) => {
   const bookRoom = await prisma.bookRoom.findMany({
     where: {
       coWorkId: args.coWorkId,

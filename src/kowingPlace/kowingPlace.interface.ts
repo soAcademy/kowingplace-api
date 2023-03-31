@@ -254,3 +254,11 @@ export const deleteCoWorkCodec = t.type({
 export interface IDeleteCoWork extends t.TypeOf<typeof deleteCoWorkCodec> {}
 
 //-------------------------------------------------
+export const bookDurationRoomCodec = t.type({
+  day: t.number,
+  startTime: t.string,
+  coWorkId: t.number,
+  roomId: t.number,
+});
+
+export interface IDeleteCoWork extends t.TypeOf<typeof bookDurationRoomCodec> {}
