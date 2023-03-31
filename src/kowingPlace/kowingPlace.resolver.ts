@@ -1,6 +1,7 @@
 import { date, number, random } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
+  IBookDurationRoom,
   ICheckUserExternalPasswordEmail,
   ICheckUserInternalPasswordEmail,
   ICreateCoWorkDetail,
@@ -111,50 +112,14 @@ export const getCoWorkUserChoose = (args: IGetCoWorkUserChoose) =>
     where: {
       id: args.id,
     },
-  });
-
-//vertify code //bookingExternal
-export const getVerifyCodeByUserConfirmBooking = async (
-  args: IGetUserConfirmBooking
-) => {
-  const verifyCode = `KOWING${args.userExId}${args.coWorkId}${args.roomId}`;
-
-  const getBookData = await prisma.bookRoom.create({
-    data: {
-      startTime: new Date(args.startTime),
-      cowork: {
-        connect: {
-          id: args.coWorkId,
-        },
-      },
-      status: "ON_GOING",
-      roomRate: {
-        connect: {
-          id: args.roomId,
-        },
-      },
-      UserExternal: {
-        connect: {
-          id: args.userExId,
-        },
-      },
-      vertifyCode: {
-        create: {
-          bookdate: new Date(args.startTime),
-          verifyCode: verifyCode,
-        },
-      },
-    },
-    select: {
-      vertifyCode: {
-        select: {
-          verifyCode: true,
+    include: {
+      FacilityToCoWork: {
+        include: {
+          facility: true,
         },
       },
     },
   });
-  return getBookData;
-};
 
 export const createUserInternal = async (args: ICreateUserInternal) => {
   const createUser = await prisma.userInternal.create({
@@ -544,8 +509,8 @@ export const getCoWorkOpen24Hours = () =>
 
 export const checkUserExternalPasswordEmail = (
   args: ICheckUserExternalPasswordEmail
-) =>
-  prisma.userExternal.findUnique({
+) => {
+  const loginRes = prisma.userExternal.findUnique({
     where: {
       email: args.email,
     },
@@ -557,6 +522,8 @@ export const checkUserExternalPasswordEmail = (
       id: true,
     },
   });
+  return loginRes;
+};
 
 export const checkUserInternalPasswordEmail = (
   args: ICheckUserInternalPasswordEmail
@@ -616,17 +583,16 @@ export const deleteCoWork = (args: IDeleteCoWork) =>
       OpenCloseBoolean: true,
     },
   });
-// mockData = {
-//   startTime:123,
-//   brachToRoomId:12
-// }
 
-export const bookDurationRoom = async (args: IDeleteCoWork) => {
+export const bookDurationRoom = async (args: IBookDurationRoom) => {
+  console.log("args", args);
+
   const bookRoom = await prisma.bookRoom.findMany({
     where: {
       coWorkId: args.coWorkId,
       startTime: {
         gte: new Date(args.startTime),
+        lt: new Date(new Date(args.startTime).getTime() + 24 * 60 * 60 * 1000),
       },
     },
     include: {
@@ -644,6 +610,7 @@ export const bookDurationRoom = async (args: IDeleteCoWork) => {
       },
     },
   });
+  console.log("bookRoom", bookRoom);
 
   const findDuration = await prisma.roomRate.findMany({
     where: {
@@ -655,20 +622,38 @@ export const bookDurationRoom = async (args: IDeleteCoWork) => {
   });
   console.log("findDuration", findDuration);
 
-  const durations = findDuration.map((r) => r.duration.duration);
+  const getOpen = await prisma.coWork.findUnique({
+    where: {
+      id: args.coWorkId,
+    },
+    include: {
+      OpenCloseBoolean: true,
+      OpenClose24Hours: true,
+      Open: true,
+      Close: true,
+    },
+  });
+  console.log("getOpen", getOpen);
+
+  const durations = findDuration.map((r) => ({
+    roomRateId: r.id,
+    duration: r.duration.duration,
+  }));
 
   const filterTimeBooking = bookRoom.map((items) => {
     const userStartTime = new Date(items?.startTime).getHours();
     const duration = items.roomRate.duration.duration;
+    console.log("duration", duration);
 
     const usedTime = [...Array(duration)].map((r, idx) => {
       return userStartTime + idx;
     });
-    // console.log(usedTime);
+    console.log(usedTime);
     return usedTime;
   });
 
   const usageTime = filterTimeBooking.flat();
+  console.log("usageTime", usageTime);
 
   const str24hrs = [
     "sun24hours",
@@ -700,24 +685,26 @@ export const bookDurationRoom = async (args: IDeleteCoWork) => {
     "satOpen",
   ];
 
-  const openClose24hrs = { ...bookRoom[0].cowork.OpenClose24Hours }[
-    str24hrs[args.day]
-  ];
-  const openClose24hrs2 = { ...bookRoom[0].cowork.Close }[close[args.day]];
-  const openClose24hrs3 = { ...bookRoom[0].cowork.Open }[open[args.day]];
+  const openClose24hrs = { ...getOpen?.OpenClose24Hours }[str24hrs[args.day]];
+  const openClose24hrs2 = { ...getOpen?.Close }[close[args.day]];
+  const openClose24hrs3 = { ...getOpen?.Open }[open[args.day]];
 
-  // console.log(openClose24hrs);
-  // console.log(openClose24hrs2);
-  // console.log(openClose24hrs3);
+  console.log("openClose24hrs", openClose24hrs);
+  console.log("close", openClose24hrs2);
+  console.log("open", openClose24hrs3);
 
   const slotTimeOpen = openClose24hrs
-    ? Object.keys([...Array(24)])
-    : Object.keys([
-        ...Array(Number(openClose24hrs2) - Number(openClose24hrs3)),
-      ]);
+    ? [...Object.keys([...Array(24)])].map((r) => Number(r))
+    : [
+        ...Object.keys([
+          ...Array(Number(openClose24hrs2) - Number(openClose24hrs3)),
+        ]),
+      ].map((r) => Number(r) + Number(openClose24hrs3));
+  console.log("slotTimeOpen", slotTimeOpen);
+
   const availableTime = slotTimeOpen
     .filter((r) => {
-      const findTime = usageTime.map((items) => items === Number(r));
+      const findTime = usageTime.map((items) => items === r);
       console.log(findTime);
 
       return findTime.every((r) => !r);
@@ -731,4 +718,47 @@ export const bookDurationRoom = async (args: IDeleteCoWork) => {
     close: openClose24hrs2,
     duration: durations,
   };
+};
+
+//vertify code //bookingExternal
+export const getVerifyCodeByUserConfirmBooking = async (
+  args: IGetUserConfirmBooking
+) => {
+  const verifyCode = `KOWING${args.userExId}${args.roomRateId}${args.roomId}`;
+
+  const getBookData = await prisma.bookRoom.create({
+    data: {
+      startTime: new Date(args.startTime),
+      cowork: {
+        connect: {
+          id: args.coWorkId,
+        },
+      },
+      status: "PENDING",
+      roomRate: {
+        connect: {
+          id: args.roomRateId,
+        },
+      },
+      UserExternal: {
+        connect: {
+          id: args.userExId,
+        },
+      },
+      vertifyCode: {
+        create: {
+          bookdate: new Date(args.startTime),
+          verifyCode: verifyCode,
+        },
+      },
+    },
+    select: {
+      vertifyCode: {
+        select: {
+          verifyCode: true,
+        },
+      },
+    },
+  });
+  return getBookData;
 };

@@ -23,6 +23,7 @@ export const getVerifyCodeByUserConfirmBookingCodec = t.type({
   startTime: t.string,
   roomId: t.number,
   coWorkId: t.number,
+  roomRateId: t.number,
   userExId: t.number,
 });
 export interface IGetUserConfirmBooking
@@ -261,4 +262,4 @@ export const bookDurationRoomCodec = t.type({
   roomId: t.number,
 });
 
-export interface IDeleteCoWork extends t.TypeOf<typeof bookDurationRoomCodec> {}
+export interface IBookDurationRoom extends t.TypeOf<typeof bookDurationRoomCodec> {}
