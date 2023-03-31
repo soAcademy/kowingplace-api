@@ -64,13 +64,17 @@ export const loginUserExternal = async (args: ILoginUserExternal) => {
       process.env.SECRET_KEY as string
     );
 
+    console.log(genToken);
     const userData = {
+      userId: checkEmail.id,
       email: checkEmail.email,
       name: checkEmail.name,
       tel: checkEmail.tel,
-      role: 'external'
+      role: "external",
     };
-    return { user: userData, token: genToken };
+    console.log("userData", userData);
+
+    return { token: genToken, userData: userData };
   } catch (err) {
     console.log("err", err);
     return err;
