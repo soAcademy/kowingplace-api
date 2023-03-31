@@ -629,11 +629,14 @@ export const bookDurationRoom = async (args: {
   coWorkId: number;
   roomId: number;
 }) => {
+  console.log("args", args);
+
   const bookRoom = await prisma.bookRoom.findMany({
     where: {
       coWorkId: args.coWorkId,
       startTime: {
         gte: new Date(args.startTime),
+        lt: new Date(new Date(args.startTime).getTime() + 24 * 60 * 60 * 1000),
       },
     },
     include: {
@@ -651,6 +654,7 @@ export const bookDurationRoom = async (args: {
       },
     },
   });
+  console.log("bookRoom", bookRoom);
 
   const findDuration = await prisma.roomRate.findMany({
     where: {
@@ -662,20 +666,35 @@ export const bookDurationRoom = async (args: {
   });
   console.log("findDuration", findDuration);
 
+  const getOpen = await prisma.coWork.findUnique({
+    where: {
+      id: args.coWorkId,
+    },
+    include: {
+      OpenCloseBoolean: true,
+      OpenClose24Hours: true,
+      Open: true,
+      Close: true,
+    },
+  });
+  console.log("getOpen", getOpen);
+
   const durations = findDuration.map((r) => r.duration.duration);
 
   const filterTimeBooking = bookRoom.map((items) => {
     const userStartTime = new Date(items?.startTime).getHours();
     const duration = items.roomRate.duration.duration;
+    console.log("duration", duration);
 
     const usedTime = [...Array(duration)].map((r, idx) => {
       return userStartTime + idx;
     });
-    // console.log(usedTime);
+    console.log(usedTime);
     return usedTime;
   });
 
   const usageTime = filterTimeBooking.flat();
+  console.log("usageTime", usageTime);
 
   const str24hrs = [
     "sun24hours",
@@ -707,24 +726,26 @@ export const bookDurationRoom = async (args: {
     "satOpen",
   ];
 
-  const openClose24hrs = { ...bookRoom[0].cowork.OpenClose24Hours }[
-    str24hrs[args.day]
-  ];
-  const openClose24hrs2 = { ...bookRoom[0].cowork.Close }[close[args.day]];
-  const openClose24hrs3 = { ...bookRoom[0].cowork.Open }[open[args.day]];
+  const openClose24hrs = { ...getOpen?.OpenClose24Hours }[str24hrs[args.day]];
+  const openClose24hrs2 = { ...getOpen?.Close }[close[args.day]];
+  const openClose24hrs3 = { ...getOpen?.Open }[open[args.day]];
 
-  // console.log(openClose24hrs);
-  // console.log(openClose24hrs2);
-  // console.log(openClose24hrs3);
+  console.log("openClose24hrs", openClose24hrs);
+  console.log("close", openClose24hrs2);
+  console.log("open", openClose24hrs3);
 
   const slotTimeOpen = openClose24hrs
-    ? Object.keys([...Array(24)])
-    : Object.keys([
-        ...Array(Number(openClose24hrs2) - Number(openClose24hrs3)),
-      ]);
+    ? [...Object.keys([...Array(24)])].map((r) => Number(r))
+    : [
+        ...Object.keys([
+          ...Array(Number(openClose24hrs2) - Number(openClose24hrs3)),
+        ]),
+      ].map((r) => Number(r) + Number(openClose24hrs3));
+  console.log("slotTimeOpen", slotTimeOpen);
+
   const availableTime = slotTimeOpen
     .filter((r) => {
-      const findTime = usageTime.map((items) => items === Number(r));
+      const findTime = usageTime.map((items) => items === r);
       console.log(findTime);
 
       return findTime.every((r) => !r);
