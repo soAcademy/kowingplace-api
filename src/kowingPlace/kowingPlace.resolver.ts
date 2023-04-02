@@ -762,3 +762,37 @@ export const getVerifyCodeByUserConfirmBooking = async (
   });
   return getBookData;
 };
+
+export const showtheRoomBookedbyUserExternal = (args: { email: string }) =>
+  prisma.userExternal.findUnique({
+    where: {
+      email: args.email,
+    },
+    select: {
+      BookRoom: {
+        select: {
+          cowork: {
+            select: {
+              name: true,
+            },
+          },
+          startTime: true,
+          roomRate: {
+            select: {
+              room: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          vertifyCode: {
+            select: {
+              verifyCode: true,
+            },
+          },
+          status: true,
+        },
+      },
+    },
+  });

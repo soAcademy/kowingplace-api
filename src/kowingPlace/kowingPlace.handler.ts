@@ -23,6 +23,7 @@ import {
   getFacilities,
   deleteCoWork,
   bookDurationRoom,
+  showtheRoomBookedbyUserExternal,
 } from "./kowingPlace.resolver";
 import {
   createTimeOpenCloseCodec,
@@ -383,6 +384,21 @@ export const bookDurationRoomHandler = async (req: Request, res: Response) => {
   const args = req.body;
   try {
     const result = await bookDurationRoom(args);
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+export const showtheRoomBookedbyUserExternalHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const args = req.body;
+  try {
+    const result = await showtheRoomBookedbyUserExternal(args);
     res.status(200).json(result);
   } catch (e: any) {
     if (e.status === 404) return res.status(404).json(e.message);
