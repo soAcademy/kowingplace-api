@@ -9,51 +9,47 @@ To get started with KowingPlace API, you need to have Node.js and MongoDB instal
 npm install
 npm start
 
-The first command installs all the necessary dependencies for the project, and the second command starts the server. By default, the server runs on port 3000, so you can access it by navigating to `http://localhost:3000`.
+The first command installs all the necessary dependencies for the project, and the second command starts the server. By default, the server runs on port 7470, so you can access it by navigating to `http://localhost:7470`.
 
 ## API Endpoints
 
 The KowingPlace API provides the following endpoints:
 
-### Topics
+### Create
 
-- `GET /topics`: Returns a list of all the topics in the database.
-- `GET /topics/:id`: Returns the details of a specific topic, based on its ID.
-- `POST /topics`: Creates a new topic in the database.
-- `PUT /topics/:id`: Updates the details of a specific topic, based on its ID.
-- `DELETE /topics/:id`: Deletes a specific topic, based on its ID.
+- `/kowing/createUserExternal`: Create UserExternal in the database.
+- `/kowing/createUserInternal`: Create UserInternal in the databaase.
+- `/kowing/createRoomInternal`: Create meeting room for co-work in the database.
+- `/kowing/createFacility`: Create facilities for co-working in the database.
+- `/kowing/createTimeOpenClose`: Create time open and close for co-working in the database.
+- `/kowing/getVerifyCodeByUserConfirmBooking` : create the booking data from userExternal booking the room meeting. and then create verify the code for userExternal to show when they are arrive at co-working shop.
+- `/kowing/createTimeOpenClose` : create time open and close in the database.
 
-### Courses
+### Read
 
-- `GET /courses`: Returns a list of all the courses in the database.
-- `GET /courses/:id`: Returns the details of a specific course, based on its ID.
-- `POST /courses`: Creates a new course in the database.
-- `PUT /courses/:id`: Updates the details of a specific course, based on its ID.
-- `DELETE /courses/:id`: Deletes a specific course, based on its ID.
+- `/kowing/getCoWorkUserChoose`: show the unique co-working by userId.
+- `/kowing/getRoomByCoWorkId`: show the room meeting in the co-working space shop.
+- `/kowing/getCoworkByUserId`: show the co-working space by userInternal.
+- `/kowing/showBookDetailInternalByCoWork`: show the all booking from userExternal such as all booked meeting room, all booked user, all booked time and status of booking.
+- `/kowing/getFacilities`: show all the facilities in the data base.
+- `/kowing/getCoworks`: show all the coWorks in database.
+- `/kowing/getCalendarBookingByCoWorkId` : get time and open close in the database by coworking Id.
+- `/kowing/loginUserExternal` : for validate the email, password of user external and create the token.
+- `/kowing/loginUserInternal` : for validate the email, password of user external and create the token.
+- `/kowing/bookDurationRoom` : show the duration for bookinr the room meeting from database.
 
-### Lessons
+### Update
 
-- `GET /lessons`: Returns a list of all the lessons in the database.
-- `GET /lessons/:id`: Returns the details of a specific lesson, based on its ID.
-- `POST /lessons`: Creates a new lesson in the database.
-- `PUT /lessons/:id`: Updates the details of a specific lesson, based on its ID.
-- `DELETE /lessons/:id`: Deletes a specific lesson, based on its ID.
+- `/kowing/updateCoWorkDetail`: edit the information about c0-working detail such as name, description, location, picture, tel and facilities(can update in many) in database by coworkId
+- `/kowing/updateRoomInternal`: edit the room meeting datail in database by branchToRoomId, coWorkId, name, capacity, rate
+- `/kowing/getStatusUserBookInternal`: update the status of userExternal in database.
+- `/kowing/updateCalendarBookingByCoWorkId`: Updates the details time open - close by specific coworking space.
+- `/kowing/forgetPasswordUserExternal`: update the old password of user in database.
+- `/kowing/forgetPasswordUserInternal` : update the old password of user in database.
 
-### Quizzes
+### Delete
 
-- `GET /quizzes`: Returns a list of all the quizzes in the database.
-- `GET /quizzes/:id`: Returns the details of a specific quiz, based on its ID.
-- `POST /quizzes`: Creates a new quiz in the database.
-- `PUT /quizzes/:id`: Updates the details of a specific quiz, based on its ID.
-- `DELETE /quizzes/:id`: Deletes a specific quiz, based on its ID.
-
-### Resources
-
-- `GET /resources`: Returns a list of all the resources in the database.
-- `GET /resources/:id`: Returns the details of a specific resource, based on its ID.
-- `POST /resources`: Creates a new resource in the database.
-- `PUT /resources/:id`: Updates the details of a specific resource, based on its ID.
-- `DELETE /resources/:id`: Deletes a specific resource, based on its ID.
+- `/kowing/deleteCoWork`: delete coworking space from database by specific Id.
 
 ## Contributing
 
