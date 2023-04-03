@@ -838,3 +838,23 @@ export const updateStatus = async (args: {
     },
   });
 };
+
+export const showtheRoomBookedbyUserExternal = (args: { userId: number }) =>
+  prisma.bookRoom.findMany({
+    where: {
+      userExternalId: args.userId,
+    },
+    include: {
+      roomRate: {
+        include: {
+          duration: true,
+          room: true,
+        },
+      },
+      vertifyCode: true,
+      cowork: true,
+    },
+    orderBy: {
+      updateAt: "desc",
+    },
+  });
