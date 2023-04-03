@@ -534,6 +534,7 @@ export const checkUserInternalPasswordEmail = (
       email: args.email,
     },
     select: {
+      id: true,
       email: true,
       password: true,
       name: true,
@@ -653,7 +654,7 @@ export const bookDurationRoom = async (args: IBookDurationRoom) => {
     return usedTime;
   });
 
-  const usageTime = filterTimeBooking.flat();
+  const usageTime = [...new Set(filterTimeBooking.flat())];
   console.log("usageTime", usageTime);
 
   const str24hrs = [
@@ -712,7 +713,7 @@ export const bookDurationRoom = async (args: IBookDurationRoom) => {
     })
     .map((r) => Number(r));
 
-  // console.log(availableTime);
+  console.log("availableTime", availableTime);
   return {
     slotTime: availableTime,
     open: openClose24hrs3,
@@ -764,38 +765,76 @@ export const getVerifyCodeByUserConfirmBooking = async (
   return getBookData;
 };
 
-export const showtheRoomBookedbyUserExternal = (
-  args: IShowtheRoomBookedbyUserExternal
-) =>
-  prisma.userExternal.findUnique({
+//////////////////////
+// RESERVATION PAGE //
+//////////////////////
+export const getOpenDay = async (args: { coWorkId: number }) => {
+  const getOpen = prisma.openCloseBoolean.findUnique({
     where: {
-      email: args.email,
+      coWorkId: args.coWorkId,
     },
-    select: {
-      BookRoom: {
-        select: {
-          cowork: {
-            select: {
-              name: true,
+  });
+  return getOpen;
+};
+
+////////////////////////
+// INTERNAL MAIN PAGE //
+////////////////////////
+export const getBookRoomByPartnerId = async (args: {
+  userId: number;
+  status: string;
+}) => {
+  const getBookRoom = await prisma.userInternal.findUnique({
+    where: {
+      id: args.userId,
+    },
+    include: {
+      coWork: {
+        include: {
+          bookRoom: {
+            where: {
+              status: {
+                contains: args.status,
+              },
             },
-          },
-          startTime: true,
-          roomRate: {
-            select: {
-              room: {
+            include: {
+              roomRate: {
+                include: {
+                  room: true,
+                  duration: true,
+                },
+              },
+              UserExternal: {
                 select: {
                   name: true,
                 },
               },
+              vertifyCode: true,
+            },
+            orderBy: {
+              startTime: "asc",
             },
           },
-          vertifyCode: {
-            select: {
-              verifyCode: true,
-            },
-          },
-          status: true,
         },
       },
     },
   });
+  const newGetBookRoom = { ...getBookRoom };
+  delete newGetBookRoom.password;
+
+  return newGetBookRoom;
+};
+
+export const updateStatus = async (args: {
+  bookRoomId: number;
+  newStatus: string;
+}) => {
+  return prisma.bookRoom.update({
+    where: {
+      id: args.bookRoomId,
+    },
+    data: {
+      status: args.newStatus,
+    },
+  });
+};
