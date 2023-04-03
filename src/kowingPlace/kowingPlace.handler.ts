@@ -25,6 +25,7 @@ import {
   bookDurationRoom,
   getOpenDay,
   getBookRoomByPartnerId,
+  updateStatus,
   // showtheRoomBookedbyUserExternal,
 } from "./kowingPlace.resolver";
 import {
@@ -419,6 +420,21 @@ export const getBookRoomByPartnerIdHandler = async (
 
   try {
     const result = await getBookRoomByPartnerId(args);
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+
+export const updateStatusHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  console.log(args);
+
+  try {
+    const result = await updateStatus(args);
     res.status(200).json(result);
   } catch (e: any) {
     if (e.status === 404) return res.status(404).json(e.message);

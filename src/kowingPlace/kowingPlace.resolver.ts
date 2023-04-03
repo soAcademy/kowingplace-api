@@ -765,8 +765,6 @@ export const getVerifyCodeByUserConfirmBooking = async (
   return getBookData;
 };
 
-
-
 //////////////////////
 // RESERVATION PAGE //
 //////////////////////
@@ -825,4 +823,18 @@ export const getBookRoomByPartnerId = async (args: {
   delete newGetBookRoom.password;
 
   return newGetBookRoom;
+};
+
+export const updateStatus = async (args: {
+  bookRoomId: number;
+  newStatus: string;
+}) => {
+  return prisma.bookRoom.update({
+    where: {
+      id: args.bookRoomId,
+    },
+    data: {
+      status: args.newStatus,
+    },
+  });
 };
