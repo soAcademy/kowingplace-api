@@ -75,6 +75,7 @@ export type RoomRate = {
   updateAt: Date
   durationCategoryId: number
   roomId: number | null
+  active: boolean | null
 }
 
 /**
@@ -139,6 +140,7 @@ export type BookRoom = {
   userExternalId: number
   vertifyBookingCodeId: number
   branchToRoomId: number | null
+  price: number | null
 }
 
 /**
@@ -5626,6 +5628,7 @@ export namespace Prisma {
     updateAt: Date | null
     durationCategoryId: number | null
     roomId: number | null
+    active: boolean | null
   }
 
   export type RoomRateMaxAggregateOutputType = {
@@ -5635,6 +5638,7 @@ export namespace Prisma {
     updateAt: Date | null
     durationCategoryId: number | null
     roomId: number | null
+    active: boolean | null
   }
 
   export type RoomRateCountAggregateOutputType = {
@@ -5644,6 +5648,7 @@ export namespace Prisma {
     updateAt: number
     durationCategoryId: number
     roomId: number
+    active: number
     _all: number
   }
 
@@ -5669,6 +5674,7 @@ export namespace Prisma {
     updateAt?: true
     durationCategoryId?: true
     roomId?: true
+    active?: true
   }
 
   export type RoomRateMaxAggregateInputType = {
@@ -5678,6 +5684,7 @@ export namespace Prisma {
     updateAt?: true
     durationCategoryId?: true
     roomId?: true
+    active?: true
   }
 
   export type RoomRateCountAggregateInputType = {
@@ -5687,6 +5694,7 @@ export namespace Prisma {
     updateAt?: true
     durationCategoryId?: true
     roomId?: true
+    active?: true
     _all?: true
   }
 
@@ -5784,6 +5792,7 @@ export namespace Prisma {
     updateAt: Date
     durationCategoryId: number
     roomId: number | null
+    active: boolean | null
     _count: RoomRateCountAggregateOutputType | null
     _avg: RoomRateAvgAggregateOutputType | null
     _sum: RoomRateSumAggregateOutputType | null
@@ -5812,6 +5821,7 @@ export namespace Prisma {
     updateAt?: boolean
     durationCategoryId?: boolean
     roomId?: boolean
+    active?: boolean
     BookRoom?: boolean | RoomRate$BookRoomArgs
     duration?: boolean | durationCategoryArgs
     room?: boolean | RoomArgs
@@ -10603,6 +10613,7 @@ export namespace Prisma {
     userExternalId: number | null
     vertifyBookingCodeId: number | null
     branchToRoomId: number | null
+    price: number | null
   }
 
   export type BookRoomSumAggregateOutputType = {
@@ -10612,6 +10623,7 @@ export namespace Prisma {
     userExternalId: number | null
     vertifyBookingCodeId: number | null
     branchToRoomId: number | null
+    price: number | null
   }
 
   export type BookRoomMinAggregateOutputType = {
@@ -10625,6 +10637,7 @@ export namespace Prisma {
     userExternalId: number | null
     vertifyBookingCodeId: number | null
     branchToRoomId: number | null
+    price: number | null
   }
 
   export type BookRoomMaxAggregateOutputType = {
@@ -10638,6 +10651,7 @@ export namespace Prisma {
     userExternalId: number | null
     vertifyBookingCodeId: number | null
     branchToRoomId: number | null
+    price: number | null
   }
 
   export type BookRoomCountAggregateOutputType = {
@@ -10651,6 +10665,7 @@ export namespace Prisma {
     userExternalId: number
     vertifyBookingCodeId: number
     branchToRoomId: number
+    price: number
     _all: number
   }
 
@@ -10662,6 +10677,7 @@ export namespace Prisma {
     userExternalId?: true
     vertifyBookingCodeId?: true
     branchToRoomId?: true
+    price?: true
   }
 
   export type BookRoomSumAggregateInputType = {
@@ -10671,6 +10687,7 @@ export namespace Prisma {
     userExternalId?: true
     vertifyBookingCodeId?: true
     branchToRoomId?: true
+    price?: true
   }
 
   export type BookRoomMinAggregateInputType = {
@@ -10684,6 +10701,7 @@ export namespace Prisma {
     userExternalId?: true
     vertifyBookingCodeId?: true
     branchToRoomId?: true
+    price?: true
   }
 
   export type BookRoomMaxAggregateInputType = {
@@ -10697,6 +10715,7 @@ export namespace Prisma {
     userExternalId?: true
     vertifyBookingCodeId?: true
     branchToRoomId?: true
+    price?: true
   }
 
   export type BookRoomCountAggregateInputType = {
@@ -10710,6 +10729,7 @@ export namespace Prisma {
     userExternalId?: true
     vertifyBookingCodeId?: true
     branchToRoomId?: true
+    price?: true
     _all?: true
   }
 
@@ -10811,6 +10831,7 @@ export namespace Prisma {
     userExternalId: number
     vertifyBookingCodeId: number
     branchToRoomId: number | null
+    price: number | null
     _count: BookRoomCountAggregateOutputType | null
     _avg: BookRoomAvgAggregateOutputType | null
     _sum: BookRoomSumAggregateOutputType | null
@@ -10843,6 +10864,7 @@ export namespace Prisma {
     userExternalId?: boolean
     vertifyBookingCodeId?: boolean
     branchToRoomId?: boolean
+    price?: boolean
     cowork?: boolean | CoWorkArgs
     roomRate?: boolean | RoomRateArgs
     UserExternal?: boolean | UserExternalArgs
@@ -16763,7 +16785,8 @@ export namespace Prisma {
     updateAt: 'updateAt',
     userExternalId: 'userExternalId',
     vertifyBookingCodeId: 'vertifyBookingCodeId',
-    branchToRoomId: 'branchToRoomId'
+    branchToRoomId: 'branchToRoomId',
+    price: 'price'
   };
 
   export type BookRoomScalarFieldEnum = (typeof BookRoomScalarFieldEnum)[keyof typeof BookRoomScalarFieldEnum]
@@ -16907,7 +16930,8 @@ export namespace Prisma {
     createAt: 'createAt',
     updateAt: 'updateAt',
     durationCategoryId: 'durationCategoryId',
-    roomId: 'roomId'
+    roomId: 'roomId',
+    active: 'active'
   };
 
   export type RoomRateScalarFieldEnum = (typeof RoomRateScalarFieldEnum)[keyof typeof RoomRateScalarFieldEnum]
@@ -17233,6 +17257,7 @@ export namespace Prisma {
     updateAt?: DateTimeFilter | Date | string
     durationCategoryId?: IntFilter | number
     roomId?: IntNullableFilter | number | null
+    active?: BoolNullableFilter | boolean | null
     BookRoom?: BookRoomListRelationFilter
     duration?: XOR<DurationCategoryRelationFilter, durationCategoryWhereInput>
     room?: XOR<RoomRelationFilter, RoomWhereInput> | null
@@ -17245,6 +17270,7 @@ export namespace Prisma {
     updateAt?: SortOrder
     durationCategoryId?: SortOrder
     roomId?: SortOrder
+    active?: SortOrder
     BookRoom?: BookRoomOrderByRelationAggregateInput
     duration?: durationCategoryOrderByWithRelationInput
     room?: RoomOrderByWithRelationInput
@@ -17261,6 +17287,7 @@ export namespace Prisma {
     updateAt?: SortOrder
     durationCategoryId?: SortOrder
     roomId?: SortOrder
+    active?: SortOrder
     _count?: RoomRateCountOrderByAggregateInput
     _avg?: RoomRateAvgOrderByAggregateInput
     _max?: RoomRateMaxOrderByAggregateInput
@@ -17278,6 +17305,7 @@ export namespace Prisma {
     updateAt?: DateTimeWithAggregatesFilter | Date | string
     durationCategoryId?: IntWithAggregatesFilter | number
     roomId?: IntNullableWithAggregatesFilter | number | null
+    active?: BoolNullableWithAggregatesFilter | boolean | null
   }
 
   export type durationCategoryWhereInput = {
@@ -17493,6 +17521,7 @@ export namespace Prisma {
     userExternalId?: IntFilter | number
     vertifyBookingCodeId?: IntFilter | number
     branchToRoomId?: IntNullableFilter | number | null
+    price?: IntNullableFilter | number | null
     cowork?: XOR<CoWorkRelationFilter, CoWorkWhereInput>
     roomRate?: XOR<RoomRateRelationFilter, RoomRateWhereInput>
     UserExternal?: XOR<UserExternalRelationFilter, UserExternalWhereInput>
@@ -17511,6 +17540,7 @@ export namespace Prisma {
     userExternalId?: SortOrder
     vertifyBookingCodeId?: SortOrder
     branchToRoomId?: SortOrder
+    price?: SortOrder
     cowork?: CoWorkOrderByWithRelationInput
     roomRate?: RoomRateOrderByWithRelationInput
     UserExternal?: UserExternalOrderByWithRelationInput
@@ -17533,6 +17563,7 @@ export namespace Prisma {
     userExternalId?: SortOrder
     vertifyBookingCodeId?: SortOrder
     branchToRoomId?: SortOrder
+    price?: SortOrder
     _count?: BookRoomCountOrderByAggregateInput
     _avg?: BookRoomAvgOrderByAggregateInput
     _max?: BookRoomMaxOrderByAggregateInput
@@ -17554,6 +17585,7 @@ export namespace Prisma {
     userExternalId?: IntWithAggregatesFilter | number
     vertifyBookingCodeId?: IntWithAggregatesFilter | number
     branchToRoomId?: IntNullableWithAggregatesFilter | number | null
+    price?: IntNullableWithAggregatesFilter | number | null
   }
 
   export type VertifyBookingCodeWhereInput = {
@@ -18202,6 +18234,7 @@ export namespace Prisma {
     price?: number | null
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     BookRoom?: BookRoomCreateNestedManyWithoutRoomRateInput
     duration: durationCategoryCreateNestedOneWithoutRoomRateInput
     room?: RoomCreateNestedOneWithoutRoomRateInput
@@ -18214,6 +18247,7 @@ export namespace Prisma {
     updateAt?: Date | string
     durationCategoryId: number
     roomId?: number | null
+    active?: boolean | null
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutRoomRateInput
   }
 
@@ -18221,6 +18255,7 @@ export namespace Prisma {
     price?: NullableIntFieldUpdateOperationsInput | number | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     BookRoom?: BookRoomUpdateManyWithoutRoomRateNestedInput
     duration?: durationCategoryUpdateOneRequiredWithoutRoomRateNestedInput
     room?: RoomUpdateOneWithoutRoomRateNestedInput
@@ -18233,6 +18268,7 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationCategoryId?: IntFieldUpdateOperationsInput | number
     roomId?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     BookRoom?: BookRoomUncheckedUpdateManyWithoutRoomRateNestedInput
   }
 
@@ -18243,12 +18279,14 @@ export namespace Prisma {
     updateAt?: Date | string
     durationCategoryId: number
     roomId?: number | null
+    active?: boolean | null
   }
 
   export type RoomRateUpdateManyMutationInput = {
     price?: NullableIntFieldUpdateOperationsInput | number | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type RoomRateUncheckedUpdateManyInput = {
@@ -18258,6 +18296,7 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationCategoryId?: IntFieldUpdateOperationsInput | number
     roomId?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type durationCategoryCreateInput = {
@@ -18478,6 +18517,7 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
+    price?: number | null
     cowork: CoWorkCreateNestedOneWithoutBookRoomInput
     roomRate: RoomRateCreateNestedOneWithoutBookRoomInput
     UserExternal: UserExternalCreateNestedOneWithoutBookRoomInput
@@ -18496,6 +18536,7 @@ export namespace Prisma {
     userExternalId: number
     vertifyBookingCodeId: number
     branchToRoomId?: number | null
+    price?: number | null
   }
 
   export type BookRoomUpdateInput = {
@@ -18503,6 +18544,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableIntFieldUpdateOperationsInput | number | null
     cowork?: CoWorkUpdateOneRequiredWithoutBookRoomNestedInput
     roomRate?: RoomRateUpdateOneRequiredWithoutBookRoomNestedInput
     UserExternal?: UserExternalUpdateOneRequiredWithoutBookRoomNestedInput
@@ -18521,6 +18563,7 @@ export namespace Prisma {
     userExternalId?: IntFieldUpdateOperationsInput | number
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
     branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BookRoomCreateManyInput = {
@@ -18534,6 +18577,7 @@ export namespace Prisma {
     userExternalId: number
     vertifyBookingCodeId: number
     branchToRoomId?: number | null
+    price?: number | null
   }
 
   export type BookRoomUpdateManyMutationInput = {
@@ -18541,6 +18585,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BookRoomUncheckedUpdateManyInput = {
@@ -18554,6 +18599,7 @@ export namespace Prisma {
     userExternalId?: IntFieldUpdateOperationsInput | number
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
     branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type VertifyBookingCodeCreateInput = {
@@ -19354,6 +19400,11 @@ export namespace Prisma {
     capacity?: SortOrder
   }
 
+  export type BoolNullableFilter = {
+    equals?: boolean | null
+    not?: NestedBoolNullableFilter | boolean | null
+  }
+
   export type DurationCategoryRelationFilter = {
     is?: durationCategoryWhereInput
     isNot?: durationCategoryWhereInput
@@ -19371,6 +19422,7 @@ export namespace Prisma {
     updateAt?: SortOrder
     durationCategoryId?: SortOrder
     roomId?: SortOrder
+    active?: SortOrder
   }
 
   export type RoomRateAvgOrderByAggregateInput = {
@@ -19387,6 +19439,7 @@ export namespace Prisma {
     updateAt?: SortOrder
     durationCategoryId?: SortOrder
     roomId?: SortOrder
+    active?: SortOrder
   }
 
   export type RoomRateMinOrderByAggregateInput = {
@@ -19396,6 +19449,7 @@ export namespace Prisma {
     updateAt?: SortOrder
     durationCategoryId?: SortOrder
     roomId?: SortOrder
+    active?: SortOrder
   }
 
   export type RoomRateSumOrderByAggregateInput = {
@@ -19403,6 +19457,14 @@ export namespace Prisma {
     price?: SortOrder
     durationCategoryId?: SortOrder
     roomId?: SortOrder
+  }
+
+  export type BoolNullableWithAggregatesFilter = {
+    equals?: boolean | null
+    not?: NestedBoolNullableWithAggregatesFilter | boolean | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedBoolNullableFilter
+    _max?: NestedBoolNullableFilter
   }
 
   export type durationCategoryCountOrderByAggregateInput = {
@@ -19578,6 +19640,7 @@ export namespace Prisma {
     userExternalId?: SortOrder
     vertifyBookingCodeId?: SortOrder
     branchToRoomId?: SortOrder
+    price?: SortOrder
   }
 
   export type BookRoomAvgOrderByAggregateInput = {
@@ -19587,6 +19650,7 @@ export namespace Prisma {
     userExternalId?: SortOrder
     vertifyBookingCodeId?: SortOrder
     branchToRoomId?: SortOrder
+    price?: SortOrder
   }
 
   export type BookRoomMaxOrderByAggregateInput = {
@@ -19600,6 +19664,7 @@ export namespace Prisma {
     userExternalId?: SortOrder
     vertifyBookingCodeId?: SortOrder
     branchToRoomId?: SortOrder
+    price?: SortOrder
   }
 
   export type BookRoomMinOrderByAggregateInput = {
@@ -19613,6 +19678,7 @@ export namespace Prisma {
     userExternalId?: SortOrder
     vertifyBookingCodeId?: SortOrder
     branchToRoomId?: SortOrder
+    price?: SortOrder
   }
 
   export type BookRoomSumOrderByAggregateInput = {
@@ -19622,6 +19688,7 @@ export namespace Prisma {
     userExternalId?: SortOrder
     vertifyBookingCodeId?: SortOrder
     branchToRoomId?: SortOrder
+    price?: SortOrder
   }
 
   export type VertifyBookingCodeCountOrderByAggregateInput = {
@@ -20387,6 +20454,10 @@ export namespace Prisma {
     connect?: Enumerable<BookRoomWhereUniqueInput>
   }
 
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
   export type BookRoomUpdateManyWithoutRoomRateNestedInput = {
     create?: XOR<Enumerable<BookRoomCreateWithoutRoomRateInput>, Enumerable<BookRoomUncheckedCreateWithoutRoomRateInput>>
     connectOrCreate?: Enumerable<BookRoomCreateOrConnectWithoutRoomRateInput>
@@ -20952,6 +21023,19 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter | number | null
   }
 
+  export type NestedBoolNullableFilter = {
+    equals?: boolean | null
+    not?: NestedBoolNullableFilter | boolean | null
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter = {
+    equals?: boolean | null
+    not?: NestedBoolNullableWithAggregatesFilter | boolean | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedBoolNullableFilter
+    _max?: NestedBoolNullableFilter
+  }
+
   export type NestedBoolFilter = {
     equals?: boolean
     not?: NestedBoolFilter | boolean
@@ -20970,6 +21054,7 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
+    price?: number | null
     cowork: CoWorkCreateNestedOneWithoutBookRoomInput
     roomRate: RoomRateCreateNestedOneWithoutBookRoomInput
     vertifyCode: VertifyBookingCodeCreateNestedOneWithoutBookRoomInput
@@ -20986,6 +21071,7 @@ export namespace Prisma {
     updateAt?: Date | string
     vertifyBookingCodeId: number
     branchToRoomId?: number | null
+    price?: number | null
   }
 
   export type BookRoomCreateOrConnectWithoutUserExternalInput = {
@@ -21028,6 +21114,7 @@ export namespace Prisma {
     userExternalId?: IntFilter | number
     vertifyBookingCodeId?: IntFilter | number
     branchToRoomId?: IntNullableFilter | number | null
+    price?: IntNullableFilter | number | null
   }
 
   export type BranchToRoomCreateWithoutCoWorkInput = {
@@ -21107,6 +21194,7 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
+    price?: number | null
     roomRate: RoomRateCreateNestedOneWithoutBookRoomInput
     UserExternal: UserExternalCreateNestedOneWithoutBookRoomInput
     vertifyCode: VertifyBookingCodeCreateNestedOneWithoutBookRoomInput
@@ -21123,6 +21211,7 @@ export namespace Prisma {
     userExternalId: number
     vertifyBookingCodeId: number
     branchToRoomId?: number | null
+    price?: number | null
   }
 
   export type BookRoomCreateOrConnectWithoutCoworkInput = {
@@ -21570,6 +21659,7 @@ export namespace Prisma {
     price?: number | null
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     BookRoom?: BookRoomCreateNestedManyWithoutRoomRateInput
     duration: durationCategoryCreateNestedOneWithoutRoomRateInput
   }
@@ -21580,6 +21670,7 @@ export namespace Prisma {
     createAt?: Date | string
     updateAt?: Date | string
     durationCategoryId: number
+    active?: boolean | null
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutRoomRateInput
   }
 
@@ -21635,6 +21726,7 @@ export namespace Prisma {
     updateAt?: DateTimeFilter | Date | string
     durationCategoryId?: IntFilter | number
     roomId?: IntNullableFilter | number | null
+    active?: BoolNullableFilter | boolean | null
   }
 
   export type BookRoomCreateWithoutRoomRateInput = {
@@ -21642,6 +21734,7 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
+    price?: number | null
     cowork: CoWorkCreateNestedOneWithoutBookRoomInput
     UserExternal: UserExternalCreateNestedOneWithoutBookRoomInput
     vertifyCode: VertifyBookingCodeCreateNestedOneWithoutBookRoomInput
@@ -21658,6 +21751,7 @@ export namespace Prisma {
     userExternalId: number
     vertifyBookingCodeId: number
     branchToRoomId?: number | null
+    price?: number | null
   }
 
   export type BookRoomCreateOrConnectWithoutRoomRateInput = {
@@ -21774,6 +21868,7 @@ export namespace Prisma {
     price?: number | null
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     BookRoom?: BookRoomCreateNestedManyWithoutRoomRateInput
     room?: RoomCreateNestedOneWithoutRoomRateInput
   }
@@ -21784,6 +21879,7 @@ export namespace Prisma {
     createAt?: Date | string
     updateAt?: Date | string
     roomId?: number | null
+    active?: boolean | null
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutRoomRateInput
   }
 
@@ -22023,6 +22119,7 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
+    price?: number | null
     cowork: CoWorkCreateNestedOneWithoutBookRoomInput
     roomRate: RoomRateCreateNestedOneWithoutBookRoomInput
     UserExternal: UserExternalCreateNestedOneWithoutBookRoomInput
@@ -22039,6 +22136,7 @@ export namespace Prisma {
     updateAt?: Date | string
     userExternalId: number
     vertifyBookingCodeId: number
+    price?: number | null
   }
 
   export type BookRoomCreateOrConnectWithoutBranchToRoomInput = {
@@ -22165,6 +22263,7 @@ export namespace Prisma {
     price?: number | null
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     duration: durationCategoryCreateNestedOneWithoutRoomRateInput
     room?: RoomCreateNestedOneWithoutRoomRateInput
   }
@@ -22176,6 +22275,7 @@ export namespace Prisma {
     updateAt?: Date | string
     durationCategoryId: number
     roomId?: number | null
+    active?: boolean | null
   }
 
   export type RoomRateCreateOrConnectWithoutBookRoomInput = {
@@ -22292,6 +22392,7 @@ export namespace Prisma {
     price?: NullableIntFieldUpdateOperationsInput | number | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     duration?: durationCategoryUpdateOneRequiredWithoutRoomRateNestedInput
     room?: RoomUpdateOneWithoutRoomRateNestedInput
   }
@@ -22303,6 +22404,7 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationCategoryId?: IntFieldUpdateOperationsInput | number
     roomId?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type UserExternalUpsertWithoutBookRoomInput = {
@@ -22374,6 +22476,7 @@ export namespace Prisma {
     status: string
     createAt?: Date | string
     updateAt?: Date | string
+    price?: number | null
     cowork: CoWorkCreateNestedOneWithoutBookRoomInput
     roomRate: RoomRateCreateNestedOneWithoutBookRoomInput
     UserExternal: UserExternalCreateNestedOneWithoutBookRoomInput
@@ -22390,6 +22493,7 @@ export namespace Prisma {
     updateAt?: Date | string
     userExternalId: number
     branchToRoomId?: number | null
+    price?: number | null
   }
 
   export type BookRoomCreateOrConnectWithoutVertifyCodeInput = {
@@ -22716,6 +22820,7 @@ export namespace Prisma {
     updateAt?: Date | string
     vertifyBookingCodeId: number
     branchToRoomId?: number | null
+    price?: number | null
   }
 
   export type BookRoomUpdateWithoutUserExternalInput = {
@@ -22723,6 +22828,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableIntFieldUpdateOperationsInput | number | null
     cowork?: CoWorkUpdateOneRequiredWithoutBookRoomNestedInput
     roomRate?: RoomRateUpdateOneRequiredWithoutBookRoomNestedInput
     vertifyCode?: VertifyBookingCodeUpdateOneRequiredWithoutBookRoomNestedInput
@@ -22739,6 +22845,7 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
     branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BookRoomUncheckedUpdateManyWithoutBookRoomInput = {
@@ -22751,6 +22858,7 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
     branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BranchToRoomCreateManyCoWorkInput = {
@@ -22777,6 +22885,7 @@ export namespace Prisma {
     userExternalId: number
     vertifyBookingCodeId: number
     branchToRoomId?: number | null
+    price?: number | null
   }
 
   export type BranchToRoomUpdateWithoutCoWorkInput = {
@@ -22826,6 +22935,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableIntFieldUpdateOperationsInput | number | null
     roomRate?: RoomRateUpdateOneRequiredWithoutBookRoomNestedInput
     UserExternal?: UserExternalUpdateOneRequiredWithoutBookRoomNestedInput
     vertifyCode?: VertifyBookingCodeUpdateOneRequiredWithoutBookRoomNestedInput
@@ -22842,6 +22952,7 @@ export namespace Prisma {
     userExternalId?: IntFieldUpdateOperationsInput | number
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
     branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BranchToRoomCreateManyRoomInput = {
@@ -22857,6 +22968,7 @@ export namespace Prisma {
     createAt?: Date | string
     updateAt?: Date | string
     durationCategoryId: number
+    active?: boolean | null
   }
 
   export type BranchToRoomUpdateWithoutRoomInput = {
@@ -22878,6 +22990,7 @@ export namespace Prisma {
     price?: NullableIntFieldUpdateOperationsInput | number | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     BookRoom?: BookRoomUpdateManyWithoutRoomRateNestedInput
     duration?: durationCategoryUpdateOneRequiredWithoutRoomRateNestedInput
   }
@@ -22888,6 +23001,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationCategoryId?: IntFieldUpdateOperationsInput | number
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     BookRoom?: BookRoomUncheckedUpdateManyWithoutRoomRateNestedInput
   }
 
@@ -22897,6 +23011,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationCategoryId?: IntFieldUpdateOperationsInput | number
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type BookRoomCreateManyRoomRateInput = {
@@ -22909,6 +23024,7 @@ export namespace Prisma {
     userExternalId: number
     vertifyBookingCodeId: number
     branchToRoomId?: number | null
+    price?: number | null
   }
 
   export type BookRoomUpdateWithoutRoomRateInput = {
@@ -22916,6 +23032,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableIntFieldUpdateOperationsInput | number | null
     cowork?: CoWorkUpdateOneRequiredWithoutBookRoomNestedInput
     UserExternal?: UserExternalUpdateOneRequiredWithoutBookRoomNestedInput
     vertifyCode?: VertifyBookingCodeUpdateOneRequiredWithoutBookRoomNestedInput
@@ -22932,6 +23049,7 @@ export namespace Prisma {
     userExternalId?: IntFieldUpdateOperationsInput | number
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
     branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type RoomRateCreateManyDurationInput = {
@@ -22940,12 +23058,14 @@ export namespace Prisma {
     createAt?: Date | string
     updateAt?: Date | string
     roomId?: number | null
+    active?: boolean | null
   }
 
   export type RoomRateUpdateWithoutDurationInput = {
     price?: NullableIntFieldUpdateOperationsInput | number | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     BookRoom?: BookRoomUpdateManyWithoutRoomRateNestedInput
     room?: RoomUpdateOneWithoutRoomRateNestedInput
   }
@@ -22956,6 +23076,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     roomId?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     BookRoom?: BookRoomUncheckedUpdateManyWithoutRoomRateNestedInput
   }
 
@@ -22989,6 +23110,7 @@ export namespace Prisma {
     updateAt?: Date | string
     userExternalId: number
     vertifyBookingCodeId: number
+    price?: number | null
   }
 
   export type BookRoomUpdateWithoutBranchToRoomInput = {
@@ -22996,6 +23118,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableIntFieldUpdateOperationsInput | number | null
     cowork?: CoWorkUpdateOneRequiredWithoutBookRoomNestedInput
     roomRate?: RoomRateUpdateOneRequiredWithoutBookRoomNestedInput
     UserExternal?: UserExternalUpdateOneRequiredWithoutBookRoomNestedInput
@@ -23012,6 +23135,7 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userExternalId?: IntFieldUpdateOperationsInput | number
     vertifyBookingCodeId?: IntFieldUpdateOperationsInput | number
+    price?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BookRoomCreateManyVertifyCodeInput = {
@@ -23024,6 +23148,7 @@ export namespace Prisma {
     updateAt?: Date | string
     userExternalId: number
     branchToRoomId?: number | null
+    price?: number | null
   }
 
   export type BookRoomUpdateWithoutVertifyCodeInput = {
@@ -23031,6 +23156,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableIntFieldUpdateOperationsInput | number | null
     cowork?: CoWorkUpdateOneRequiredWithoutBookRoomNestedInput
     roomRate?: RoomRateUpdateOneRequiredWithoutBookRoomNestedInput
     UserExternal?: UserExternalUpdateOneRequiredWithoutBookRoomNestedInput
@@ -23047,6 +23173,7 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userExternalId?: IntFieldUpdateOperationsInput | number
     branchToRoomId?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
 

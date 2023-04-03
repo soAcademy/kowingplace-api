@@ -25,6 +25,7 @@ export const getVerifyCodeByUserConfirmBookingCodec = t.type({
   coWorkId: t.number,
   roomRateId: t.number,
   userExId: t.number,
+  price: t.number,
 });
 export interface IGetUserConfirmBooking
   extends t.TypeOf<typeof getVerifyCodeByUserConfirmBookingCodec> {}
@@ -58,6 +59,8 @@ export const createRoomInternalCodec = t.type({
     t.type({
       price: t.number,
       duration: t.number,
+      roomRateId: t.number,
+      roomId: t.number,
     })
   ),
 });
@@ -75,10 +78,10 @@ export const updateRoomInternalCodec = t.type({
     t.type({
       price: t.number,
       duration: t.number,
-      // roomRateId:number
+      roomRateId: t.number,
+      roomId: t.number,
     })
   ),
-  //{ price: number; durationId: number; roomRateId: number }[]
 });
 export interface IUpdateRoomInternal
   extends t.TypeOf<typeof updateRoomInternalCodec> {}

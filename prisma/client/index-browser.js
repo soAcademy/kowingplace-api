@@ -99,7 +99,8 @@ exports.Prisma.BookRoomScalarFieldEnum = makeEnum({
   updateAt: 'updateAt',
   userExternalId: 'userExternalId',
   vertifyBookingCodeId: 'vertifyBookingCodeId',
-  branchToRoomId: 'branchToRoomId'
+  branchToRoomId: 'branchToRoomId',
+  price: 'price'
 });
 
 exports.Prisma.BranchToRoomScalarFieldEnum = makeEnum({
@@ -210,7 +211,8 @@ exports.Prisma.RoomRateScalarFieldEnum = makeEnum({
   createAt: 'createAt',
   updateAt: 'updateAt',
   durationCategoryId: 'durationCategoryId',
-  roomId: 'roomId'
+  roomId: 'roomId',
+  active: 'active'
 });
 
 exports.Prisma.RoomScalarFieldEnum = makeEnum({

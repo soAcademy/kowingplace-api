@@ -61,6 +61,7 @@ model RoomRate {
   durationCategoryId Int
   room               Room?            @relation(fields: [roomId], references: [id])
   roomId             Int?
+  active             Boolean?         @default(true)
 }
 
 model durationCategory {
@@ -129,7 +130,7 @@ model BookRoom {
   vertifyBookingCodeId Int
   branchToRoom         BranchToRoom?      @relation(fields: [branchToRoomId], references: [id])
   branchToRoomId       Int?
-  //date
+  price                Int?               @default(0)
 }
 
 // model OpenClose {

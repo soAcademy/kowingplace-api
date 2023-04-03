@@ -103,6 +103,9 @@ export const getCoworkByUserId = (args: IGetCoworkByUserId) =>
               room: {
                 include: {
                   RoomRate: {
+                    where: {
+                      active: true,
+                    },
                     include: {
                       duration: true,
                     },
@@ -217,38 +220,74 @@ export const updateRoomInternal = async (args: {
   coWorkId: number;
   name: string;
   capacity: number;
-  rates: { price: number; duration: number; roomId: number }[];
+  rates: {
+    price: number;
+    duration: number;
+    roomId: number;
+    roomRateId: number;
+  }[];
 }) => {
-  const updateRoom = await prisma.branchToRoom.update({
-    where: {
-      id: args.branchToRoomId,
-    },
-    data: {
-      room: {
-        update: {
-          name: args.name,
-          capacity: args.capacity,
-          RoomRate: {
-            deleteMany: args.rates.map((r) => ({ roomId: r.roomId })),
-            create: args.rates.map((r) => ({
-              price: r.price,
-              duration: {
-                connectOrCreate: {
-                  where: {
-                    duration: r.duration,
-                  },
-                  create: {
-                    duration: r.duration,
+  try {
+    //set active false
+    const setRoomIdActiveFalse = await prisma.roomRate.updateMany({
+      where: {
+        roomId: args.rates[0].roomId,
+      },
+      data: {
+        active: false,
+      },
+    });
+    //update and reset active true by roomrateid
+    const updateRoom = await prisma.branchToRoom.update({
+      where: {
+        id: args.branchToRoomId,
+      },
+      data: {
+        room: {
+          update: {
+            name: args.name,
+            capacity: args.capacity,
+            RoomRate: {
+              upsert: args.rates.map((r) => ({
+                where: { id: r.roomRateId },
+                update: {
+                  price: r.price,
+                  active: true,
+                  duration: {
+                    connectOrCreate: {
+                      where: {
+                        duration: r.duration,
+                      },
+                      create: {
+                        duration: r.duration,
+                      },
+                    },
                   },
                 },
-              },
-            })),
+                create: {
+                  price: r.price,
+                  active: true,
+                  duration: {
+                    connectOrCreate: {
+                      where: {
+                        duration: r.duration,
+                      },
+                      create: {
+                        duration: r.duration,
+                      },
+                    },
+                  },
+                },
+              })),
+            },
           },
         },
       },
-    },
-  });
-  return updateRoom;
+    });
+    return updateRoom;
+  } catch (e) {
+    console.log("error", e);
+  }
 };
 
 export const createFacilityIn = (args: ICreateFacilityIn) =>
@@ -763,6 +802,7 @@ export const getVerifyCodeByUserConfirmBooking = async (
           verifyCode: verifyCode,
         },
       },
+      price: args.price,
     },
     select: {
       vertifyCode: {
@@ -790,10 +830,7 @@ export const getOpenDay = async (args: { coWorkId: number }) => {
 ////////////////////////
 // INTERNAL MAIN PAGE //
 ////////////////////////
-export const getBookRoomByPartnerId = async (args: {
-  userId: number;
-  status: string;
-}) => {
+export const getBookRoomByPartnerId = async (args: { userId: number }) => {
   const getBookRoom = await prisma.userInternal.findUnique({
     where: {
       id: args.userId,
@@ -802,11 +839,6 @@ export const getBookRoomByPartnerId = async (args: {
       coWork: {
         include: {
           bookRoom: {
-            where: {
-              status: {
-                contains: args.status,
-              },
-            },
             include: {
               roomRate: {
                 include: {
