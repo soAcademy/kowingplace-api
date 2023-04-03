@@ -21,6 +21,7 @@ import {
   IGetUserConfirmBooking,
   IGgetRoomByCoWorkIdCodec,
   IShowBookDetailInternalByCoWork,
+  IShowtheRoomBookedbyUserExternal,
   IUpdateCalendarBookingByCoWorkId,
   IUpdateCoWorkDetail,
 } from "./kowingPlace.interface";
@@ -763,7 +764,9 @@ export const getVerifyCodeByUserConfirmBooking = async (
   return getBookData;
 };
 
-export const showtheRoomBookedbyUserExternal = (args: { email: string }) =>
+export const showtheRoomBookedbyUserExternal = (
+  args: IShowtheRoomBookedbyUserExternal
+) =>
   prisma.userExternal.findUnique({
     where: {
       email: args.email,
