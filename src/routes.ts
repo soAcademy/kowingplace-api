@@ -24,6 +24,9 @@ import {
   deleteCoWorkHandler,
   bookDurationRoomHandler,
   loginUserInternalHandler,
+  getOpenDayHandler,
+  getBookRoomByPartnerIdHandler,
+  updateStatusHandler,
   showtheRoomBookedbyUserExternalHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
@@ -55,7 +58,7 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/getVerifyCodeByUserConfirmBooking",
     method: "post",
     action: getVerifyCodeByUserConfirmBookingHandler, //OK
-    //middleWare: checkToken,
+    middleWare: checkToken,
   },
   {
     path: "/kowing/createUserInternal",
@@ -171,6 +174,21 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/loginUserInternal",
     method: "post",
     action: loginUserInternalHandler, //OK
+  },
+  {
+    path: "/kowing/getOpenDay",
+    method: "post",
+    action: getOpenDayHandler,
+  },
+  {
+    path: "/kowing/getBookRoomByPartnerId",
+    method: "post",
+    action: getBookRoomByPartnerIdHandler,
+  },
+  {
+    path: "/kowing/updateStatus",
+    method: "post",
+    action: updateStatusHandler,
   },
   {
     path: "/kowing/showtheRoomBookedbyUserExternal",

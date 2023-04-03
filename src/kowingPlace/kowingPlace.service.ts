@@ -70,7 +70,7 @@ export const loginUserExternal = async (args: ILoginUserExternal) => {
       email: checkEmail.email,
       name: checkEmail.name,
       tel: checkEmail.tel,
-      role: "external",
+      role: "user",
     };
     console.log("userData", userData);
 
@@ -101,7 +101,17 @@ export const loginUserInternal = async (args: ILoginUserInternal) => {
       process.env.SECRET_KEY as string
     );
 
-    return { token: genToken };
+    console.log(genToken);
+    const userData = {
+      userId: checkEmail.id,
+      email: checkEmail.email,
+      name: checkEmail.name,
+      tel: checkEmail.tel,
+      role: "partner",
+    };
+    console.log("userData", userData);
+
+    return { token: genToken, userData: userData };
   } catch (err) {
     console.log("err", err);
     return err;

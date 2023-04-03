@@ -765,46 +765,23 @@ export const getVerifyCodeByUserConfirmBooking = async (
   return getBookData;
 };
 
-//////////////////////
-// RESERVATION PAGE //
-//////////////////////
-export const getOpenDay = async (args: { coWorkId: number }) => {
-  const getOpen = prisma.openCloseBoolean.findUnique({
+export const showtheRoomBookedbyUserExternal = (args: { userId: number }) =>
+  prisma.bookRoom.findMany({
     where: {
-      coWorkId: args.coWorkId,
+      email: args.email,
     },
-  });
-  return getOpen;
-};
-
-////////////////////////
-// INTERNAL MAIN PAGE //
-////////////////////////
-export const getBookRoomByPartnerId = async (args: {
-  userId: number;
-  status: string;
-}) => {
-  const getBookRoom = await prisma.userInternal.findUnique({
-    where: {
-      id: args.userId,
-    },
-    include: {
-      coWork: {
-        include: {
-          bookRoom: {
-            where: {
-              status: {
-                contains: args.status,
-              },
+    select: {
+      BookRoom: {
+        select: {
+          cowork: {
+            select: {
+              name: true,
             },
-            include: {
-              roomRate: {
-                include: {
-                  room: true,
-                  duration: true,
-                },
-              },
-              UserExternal: {
+          },
+          startTime: true,
+          roomRate: {
+            select: {
+              room: {
                 select: {
                   name: true,
                 },
