@@ -69,7 +69,15 @@ export const getRoomByCoWorkId = async (args: IGgetRoomByCoWorkIdCodec) => {
           coWorkId: args.coWorkId,
         },
         include: {
-          room: true,
+          room: {
+            include: {
+              RoomRate: {
+                include: {
+                  duration: true,
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -726,7 +734,9 @@ export const bookDurationRoom = async (args: IBookDurationRoom) => {
 export const getVerifyCodeByUserConfirmBooking = async (
   args: IGetUserConfirmBooking
 ) => {
-  const verifyCode = `KOWING${args.userExId}${args.roomRateId}${args.roomId}`;
+  const verifyCode = `KOWING${args.userExId}${args.roomRateId}${args.roomId}${
+    new Date(args.startTime).getTime() / 1000
+  }`;
 
   const getBookData = await prisma.bookRoom.create({
     data: {
@@ -839,7 +849,9 @@ export const updateStatus = async (args: {
   });
 };
 
-export const showtheRoomBookedbyUserExternal = (args: { userId: number }) =>
+export const showtheRoomBookedbyUserExternal = async (args: {
+  userId: number;
+}) =>
   prisma.bookRoom.findMany({
     where: {
       userExternalId: args.userId,

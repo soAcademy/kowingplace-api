@@ -450,6 +450,8 @@ export const showtheRoomBookedbyUserExternalHandler = async (
   res: Response
 ) => {
   const args = req.body;
+  console.log("args", args);
+
   try {
     const result = await showtheRoomBookedbyUserExternal(args);
     res.status(200).json(result);
