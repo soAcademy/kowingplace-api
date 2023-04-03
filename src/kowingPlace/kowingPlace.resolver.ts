@@ -723,65 +723,31 @@ export const bookDurationRoom = async (args: IBookDurationRoom) => {
 };
 
 //vertify code //bookingExternal
-export const getVerifyCodeByUserConfirmBooking = async (
-  args: IGetUserConfirmBooking
-) => {
-  const verifyCode = `KOWING${args.userExId}${args.roomRateId}${args.roomId}`;
-
-  const getBookData = await prisma.bookRoom.create({
-    data: {
-      startTime: new Date(args.startTime),
-      cowork: {
-        connect: {
-          id: args.coWorkId,
-        },
-      },
-      status: "PENDING",
-      roomRate: {
-        connect: {
-          id: args.roomRateId,
-        },
-      },
-      UserExternal: {
-        connect: {
-          id: args.userExId,
-        },
-      },
-      vertifyCode: {
-        create: {
-          bookdate: new Date(args.startTime),
-          verifyCode: verifyCode,
-        },
-      },
-    },
-    select: {
-      vertifyCode: {
-        select: {
-          verifyCode: true,
-        },
-      },
-    },
-  });
-  return getBookData;
-};
-
-export const showtheRoomBookedbyUserExternal = (args: { userId: number }) =>
-  prisma.bookRoom.findMany({
+export const getBookRoomByPartnerId = async (args: {
+  userId: number;
+  status: string;
+}) => {
+  const getBookRoom = await prisma.userInternal.findUnique({
     where: {
-      email: args.email,
+      id: args.userId,
     },
-    select: {
-      BookRoom: {
-        select: {
-          cowork: {
-            select: {
-              name: true,
+    include: {
+      coWork: {
+        include: {
+          bookRoom: {
+            where: {
+              status: {
+                contains: args.status,
+              },
             },
-          },
-          startTime: true,
-          roomRate: {
-            select: {
-              room: {
+            include: {
+              roomRate: {
+                include: {
+                  room: true,
+                  duration: true,
+                },
+              },
+              UserExternal: {
                 select: {
                   name: true,
                 },
