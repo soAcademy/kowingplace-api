@@ -764,6 +764,26 @@ export const getVerifyCodeByUserConfirmBooking = async (
   return getBookData;
 };
 
+export const showtheRoomBookedbyUserExternal = (args: { userId: number }) =>
+  prisma.bookRoom.findMany({
+    where: {
+      userExternalId: args.userId,
+    },
+    include: {
+      roomRate: {
+        include: {
+          duration: true,
+          room: true,
+        },
+      },
+      vertifyCode: true,
+      cowork: true,
+    },
+    orderBy: {
+      updateAt: "desc",
+    },
+  });
+
 //////////////////////
 // RESERVATION PAGE //
 //////////////////////
@@ -822,4 +842,18 @@ export const getBookRoomByPartnerId = async (args: {
   delete newGetBookRoom.password;
 
   return newGetBookRoom;
+};
+
+export const updateStatus = async (args: {
+  bookRoomId: number;
+  newStatus: string;
+}) => {
+  return prisma.bookRoom.update({
+    where: {
+      id: args.bookRoomId,
+    },
+    data: {
+      status: args.newStatus,
+    },
+  });
 };
