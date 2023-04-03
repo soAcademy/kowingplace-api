@@ -723,6 +723,65 @@ export const bookDurationRoom = async (args: IBookDurationRoom) => {
 };
 
 //vertify code //bookingExternal
+export const getVerifyCodeByUserConfirmBooking = async (
+  args: IGetUserConfirmBooking
+) => {
+  const verifyCode = `KOWING${args.userExId}${args.roomRateId}${args.roomId}`;
+
+  const getBookData = await prisma.bookRoom.create({
+    data: {
+      startTime: new Date(args.startTime),
+      cowork: {
+        connect: {
+          id: args.coWorkId,
+        },
+      },
+      status: "PENDING",
+      roomRate: {
+        connect: {
+          id: args.roomRateId,
+        },
+      },
+      UserExternal: {
+        connect: {
+          id: args.userExId,
+        },
+      },
+      vertifyCode: {
+        create: {
+          bookdate: new Date(args.startTime),
+          verifyCode: verifyCode,
+        },
+      },
+    },
+    select: {
+      vertifyCode: {
+        select: {
+          verifyCode: true,
+        },
+      },
+    },
+  });
+  return getBookData;
+};
+
+
+
+//////////////////////
+// RESERVATION PAGE //
+//////////////////////
+export const getOpenDay = async (args: { coWorkId: number }) => {
+  const getOpen = prisma.openCloseBoolean.findUnique({
+    where: {
+      coWorkId: args.coWorkId,
+    },
+  });
+  return getOpen;
+};
+
+////////////////////////
+// INTERNAL MAIN PAGE //
+////////////////////////
 export const getBookRoomByPartnerId = async (args: {
   userId: number;
   status: string;
@@ -766,18 +825,4 @@ export const getBookRoomByPartnerId = async (args: {
   delete newGetBookRoom.password;
 
   return newGetBookRoom;
-};
-
-export const updateStatus = async (args: {
-  bookRoomId: number;
-  newStatus: string;
-}) => {
-  return prisma.bookRoom.update({
-    where: {
-      id: args.bookRoomId,
-    },
-    data: {
-      status: args.newStatus,
-    },
-  });
 };
