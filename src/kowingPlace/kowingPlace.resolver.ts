@@ -823,3 +823,17 @@ export const getBookRoomByPartnerId = async (args: {
 
   return newGetBookRoom;
 };
+
+export const updateStatus = async (args: {
+  bookRoomId: number;
+  newStatus: string;
+}) => {
+  return prisma.bookRoom.update({
+    where: {
+      id: args.bookRoomId,
+    },
+    data: {
+      status: args.newStatus,
+    },
+  });
+};
