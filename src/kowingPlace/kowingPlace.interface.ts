@@ -1,4 +1,3 @@
-import { number } from "fp-ts";
 import * as t from "io-ts";
 
 export const createUserExternalCodec = t.type({

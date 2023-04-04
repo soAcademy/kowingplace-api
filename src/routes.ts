@@ -32,7 +32,7 @@ import {
   deleteRoomHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
-// import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
+
 export interface IAppRoutes {
   path: string;
   method: string;
