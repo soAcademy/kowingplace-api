@@ -29,6 +29,7 @@ import {
   showtheRoomBookedbyUserExternalHandler,
   updateStatusHandler,
   getBookRoomByPartnerIdAndStatusHandler,
+  deleteRoomHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
 // import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
@@ -200,5 +201,10 @@ export const AppRoutes: IAppRoutes[] = [
     path: "/kowing/getReserveByStat",
     method: "post",
     action: getBookRoomByPartnerIdAndStatusHandler, //OK
+  },
+  {
+    path: "/kowing/deleteRoom",
+    method: "post",
+    action: deleteRoomHandler,
   },
 ];

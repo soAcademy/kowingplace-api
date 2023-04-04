@@ -67,6 +67,7 @@ export const getRoomByCoWorkId = async (args: IGgetRoomByCoWorkIdCodec) => {
       BranchToRoom: {
         where: {
           coWorkId: args.coWorkId,
+          active: true,
         },
         include: {
           room: {
@@ -99,6 +100,9 @@ export const getCoworkByUserId = async (args: IGetCoworkByUserId) => {
           OpenClose24Hours: true,
           FacilityToCoWork: true,
           BranchToRoom: {
+            where: {
+              active: true,
+            },
             include: {
               room: {
                 include: {
@@ -986,5 +990,15 @@ export const showtheRoomBookedbyUserExternal = async (args: {
     },
     orderBy: {
       updateAt: "desc",
+    },
+  });
+
+export const deleteRoom = (args: { roomId: number }) =>
+  prisma.branchToRoom.update({
+    where: {
+      roomId: args.roomId,
+    },
+    data: {
+      active: false,
     },
   });

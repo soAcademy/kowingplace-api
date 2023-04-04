@@ -123,6 +123,7 @@ export type BranchToRoom = {
   roomId: number
   createAt: Date
   updateAt: Date
+  active: boolean | null
 }
 
 /**
@@ -1234,12 +1235,10 @@ export namespace Prisma {
 
 
   export type RoomCountOutputType = {
-    BranchToRoom: number
     RoomRate: number
   }
 
   export type RoomCountOutputTypeSelect = {
-    BranchToRoom?: boolean
     RoomRate?: boolean
   }
 
@@ -4777,14 +4776,14 @@ export namespace Prisma {
     capacity?: boolean
     createAt?: boolean
     updateAt?: boolean
-    BranchToRoom?: boolean | Room$BranchToRoomArgs
+    BranchToRoom?: boolean | BranchToRoomArgs
     RoomRate?: boolean | Room$RoomRateArgs
     _count?: boolean | RoomCountOutputTypeArgs
   }
 
 
   export type RoomInclude = {
-    BranchToRoom?: boolean | Room$BranchToRoomArgs
+    BranchToRoom?: boolean | BranchToRoomArgs
     RoomRate?: boolean | Room$RoomRateArgs
     _count?: boolean | RoomCountOutputTypeArgs
   }
@@ -4796,14 +4795,14 @@ export namespace Prisma {
     S extends { include: any } & (RoomArgs | RoomFindManyArgs)
     ? Room  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'BranchToRoom' ? Array < BranchToRoomGetPayload<S['include'][P]>>  :
+        P extends 'BranchToRoom' ? BranchToRoomGetPayload<S['include'][P]> | null :
         P extends 'RoomRate' ? Array < RoomRateGetPayload<S['include'][P]>>  :
         P extends '_count' ? RoomCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (RoomArgs | RoomFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'BranchToRoom' ? Array < BranchToRoomGetPayload<S['select'][P]>>  :
+        P extends 'BranchToRoom' ? BranchToRoomGetPayload<S['select'][P]> | null :
         P extends 'RoomRate' ? Array < RoomRateGetPayload<S['select'][P]>>  :
         P extends '_count' ? RoomCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Room ? Room[P] : never
   } 
@@ -5177,7 +5176,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    BranchToRoom<T extends Room$BranchToRoomArgs= {}>(args?: Subset<T, Room$BranchToRoomArgs>): Prisma.PrismaPromise<Array<BranchToRoomGetPayload<T>>| Null>;
+    BranchToRoom<T extends BranchToRoomArgs= {}>(args?: Subset<T, BranchToRoomArgs>): Prisma__BranchToRoomClient<BranchToRoomGetPayload<T> | Null>;
 
     RoomRate<T extends Room$RoomRateArgs= {}>(args?: Subset<T, Room$RoomRateArgs>): Prisma.PrismaPromise<Array<RoomRateGetPayload<T>>| Null>;
 
@@ -5533,27 +5532,6 @@ export namespace Prisma {
      * Filter which Rooms to delete
      */
     where?: RoomWhereInput
-  }
-
-
-  /**
-   * Room.BranchToRoom
-   */
-  export type Room$BranchToRoomArgs = {
-    /**
-     * Select specific fields to fetch from the BranchToRoom
-     */
-    select?: BranchToRoomSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: BranchToRoomInclude | null
-    where?: BranchToRoomWhereInput
-    orderBy?: Enumerable<BranchToRoomOrderByWithRelationInput>
-    cursor?: BranchToRoomWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Enumerable<BranchToRoomScalarFieldEnum>
   }
 
 
@@ -9614,6 +9592,7 @@ export namespace Prisma {
     roomId: number | null
     createAt: Date | null
     updateAt: Date | null
+    active: boolean | null
   }
 
   export type BranchToRoomMaxAggregateOutputType = {
@@ -9622,6 +9601,7 @@ export namespace Prisma {
     roomId: number | null
     createAt: Date | null
     updateAt: Date | null
+    active: boolean | null
   }
 
   export type BranchToRoomCountAggregateOutputType = {
@@ -9630,6 +9610,7 @@ export namespace Prisma {
     roomId: number
     createAt: number
     updateAt: number
+    active: number
     _all: number
   }
 
@@ -9652,6 +9633,7 @@ export namespace Prisma {
     roomId?: true
     createAt?: true
     updateAt?: true
+    active?: true
   }
 
   export type BranchToRoomMaxAggregateInputType = {
@@ -9660,6 +9642,7 @@ export namespace Prisma {
     roomId?: true
     createAt?: true
     updateAt?: true
+    active?: true
   }
 
   export type BranchToRoomCountAggregateInputType = {
@@ -9668,6 +9651,7 @@ export namespace Prisma {
     roomId?: true
     createAt?: true
     updateAt?: true
+    active?: true
     _all?: true
   }
 
@@ -9764,6 +9748,7 @@ export namespace Prisma {
     roomId: number
     createAt: Date
     updateAt: Date
+    active: boolean | null
     _count: BranchToRoomCountAggregateOutputType | null
     _avg: BranchToRoomAvgAggregateOutputType | null
     _sum: BranchToRoomSumAggregateOutputType | null
@@ -9791,6 +9776,7 @@ export namespace Prisma {
     roomId?: boolean
     createAt?: boolean
     updateAt?: boolean
+    active?: boolean
     coWork?: boolean | CoWorkArgs
     room?: boolean | RoomArgs
     BookRoom?: boolean | BranchToRoom$BookRoomArgs
@@ -16797,7 +16783,8 @@ export namespace Prisma {
     coWorkId: 'coWorkId',
     roomId: 'roomId',
     createAt: 'createAt',
-    updateAt: 'updateAt'
+    updateAt: 'updateAt',
+    active: 'active'
   };
 
   export type BranchToRoomScalarFieldEnum = (typeof BranchToRoomScalarFieldEnum)[keyof typeof BranchToRoomScalarFieldEnum]
@@ -17205,7 +17192,7 @@ export namespace Prisma {
     capacity?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
-    BranchToRoom?: BranchToRoomListRelationFilter
+    BranchToRoom?: XOR<BranchToRoomRelationFilter, BranchToRoomWhereInput> | null
     RoomRate?: RoomRateListRelationFilter
   }
 
@@ -17215,7 +17202,7 @@ export namespace Prisma {
     capacity?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
-    BranchToRoom?: BranchToRoomOrderByRelationAggregateInput
+    BranchToRoom?: BranchToRoomOrderByWithRelationInput
     RoomRate?: RoomRateOrderByRelationAggregateInput
   }
 
@@ -17463,6 +17450,7 @@ export namespace Prisma {
     roomId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
+    active?: BoolNullableFilter | boolean | null
     coWork?: XOR<CoWorkRelationFilter, CoWorkWhereInput>
     room?: XOR<RoomRelationFilter, RoomWhereInput>
     BookRoom?: BookRoomListRelationFilter
@@ -17474,6 +17462,7 @@ export namespace Prisma {
     roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    active?: SortOrder
     coWork?: CoWorkOrderByWithRelationInput
     room?: RoomOrderByWithRelationInput
     BookRoom?: BookRoomOrderByRelationAggregateInput
@@ -17481,6 +17470,7 @@ export namespace Prisma {
 
   export type BranchToRoomWhereUniqueInput = {
     id?: number
+    roomId?: number
   }
 
   export type BranchToRoomOrderByWithAggregationInput = {
@@ -17489,6 +17479,7 @@ export namespace Prisma {
     roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    active?: SortOrder
     _count?: BranchToRoomCountOrderByAggregateInput
     _avg?: BranchToRoomAvgOrderByAggregateInput
     _max?: BranchToRoomMaxOrderByAggregateInput
@@ -17505,6 +17496,7 @@ export namespace Prisma {
     roomId?: IntWithAggregatesFilter | number
     createAt?: DateTimeWithAggregatesFilter | Date | string
     updateAt?: DateTimeWithAggregatesFilter | Date | string
+    active?: BoolNullableWithAggregatesFilter | boolean | null
   }
 
   export type BookRoomWhereInput = {
@@ -18174,7 +18166,7 @@ export namespace Prisma {
     capacity: number
     createAt?: Date | string
     updateAt?: Date | string
-    BranchToRoom?: BranchToRoomCreateNestedManyWithoutRoomInput
+    BranchToRoom?: BranchToRoomCreateNestedOneWithoutRoomInput
     RoomRate?: RoomRateCreateNestedManyWithoutRoomInput
   }
 
@@ -18184,7 +18176,7 @@ export namespace Prisma {
     capacity: number
     createAt?: Date | string
     updateAt?: Date | string
-    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutRoomInput
+    BranchToRoom?: BranchToRoomUncheckedCreateNestedOneWithoutRoomInput
     RoomRate?: RoomRateUncheckedCreateNestedManyWithoutRoomInput
   }
 
@@ -18193,7 +18185,7 @@ export namespace Prisma {
     capacity?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    BranchToRoom?: BranchToRoomUpdateManyWithoutRoomNestedInput
+    BranchToRoom?: BranchToRoomUpdateOneWithoutRoomNestedInput
     RoomRate?: RoomRateUpdateManyWithoutRoomNestedInput
   }
 
@@ -18203,7 +18195,7 @@ export namespace Prisma {
     capacity?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutRoomNestedInput
+    BranchToRoom?: BranchToRoomUncheckedUpdateOneWithoutRoomNestedInput
     RoomRate?: RoomRateUncheckedUpdateManyWithoutRoomNestedInput
   }
 
@@ -18460,6 +18452,7 @@ export namespace Prisma {
   export type BranchToRoomCreateInput = {
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     coWork: CoWorkCreateNestedOneWithoutBranchToRoomInput
     room: RoomCreateNestedOneWithoutBranchToRoomInput
     BookRoom?: BookRoomCreateNestedManyWithoutBranchToRoomInput
@@ -18471,12 +18464,14 @@ export namespace Prisma {
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutBranchToRoomInput
   }
 
   export type BranchToRoomUpdateInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coWork?: CoWorkUpdateOneRequiredWithoutBranchToRoomNestedInput
     room?: RoomUpdateOneRequiredWithoutBranchToRoomNestedInput
     BookRoom?: BookRoomUpdateManyWithoutBranchToRoomNestedInput
@@ -18488,6 +18483,7 @@ export namespace Prisma {
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     BookRoom?: BookRoomUncheckedUpdateManyWithoutBranchToRoomNestedInput
   }
 
@@ -18497,11 +18493,13 @@ export namespace Prisma {
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
   }
 
   export type BranchToRoomUpdateManyMutationInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type BranchToRoomUncheckedUpdateManyInput = {
@@ -18510,6 +18508,7 @@ export namespace Prisma {
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type BookRoomCreateInput = {
@@ -19356,6 +19355,11 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type BranchToRoomRelationFilter = {
+    is?: BranchToRoomWhereInput | null
+    isNot?: BranchToRoomWhereInput | null
+  }
+
   export type RoomRateListRelationFilter = {
     every?: RoomRateWhereInput
     some?: RoomRateWhereInput
@@ -19579,6 +19583,7 @@ export namespace Prisma {
     roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    active?: SortOrder
   }
 
   export type BranchToRoomAvgOrderByAggregateInput = {
@@ -19593,6 +19598,7 @@ export namespace Prisma {
     roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    active?: SortOrder
   }
 
   export type BranchToRoomMinOrderByAggregateInput = {
@@ -19601,6 +19607,7 @@ export namespace Prisma {
     roomId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+    active?: SortOrder
   }
 
   export type BranchToRoomSumOrderByAggregateInput = {
@@ -19622,11 +19629,6 @@ export namespace Prisma {
   export type VertifyBookingCodeRelationFilter = {
     is?: VertifyBookingCodeWhereInput
     isNot?: VertifyBookingCodeWhereInput
-  }
-
-  export type BranchToRoomRelationFilter = {
-    is?: BranchToRoomWhereInput | null
-    isNot?: BranchToRoomWhereInput | null
   }
 
   export type BookRoomCountOrderByAggregateInput = {
@@ -20344,11 +20346,10 @@ export namespace Prisma {
     update?: XOR<CoWorkUpdateWithoutUserInternalInput, CoWorkUncheckedUpdateWithoutUserInternalInput>
   }
 
-  export type BranchToRoomCreateNestedManyWithoutRoomInput = {
-    create?: XOR<Enumerable<BranchToRoomCreateWithoutRoomInput>, Enumerable<BranchToRoomUncheckedCreateWithoutRoomInput>>
-    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutRoomInput>
-    createMany?: BranchToRoomCreateManyRoomInputEnvelope
-    connect?: Enumerable<BranchToRoomWhereUniqueInput>
+  export type BranchToRoomCreateNestedOneWithoutRoomInput = {
+    create?: XOR<BranchToRoomCreateWithoutRoomInput, BranchToRoomUncheckedCreateWithoutRoomInput>
+    connectOrCreate?: BranchToRoomCreateOrConnectWithoutRoomInput
+    connect?: BranchToRoomWhereUniqueInput
   }
 
   export type RoomRateCreateNestedManyWithoutRoomInput = {
@@ -20358,11 +20359,10 @@ export namespace Prisma {
     connect?: Enumerable<RoomRateWhereUniqueInput>
   }
 
-  export type BranchToRoomUncheckedCreateNestedManyWithoutRoomInput = {
-    create?: XOR<Enumerable<BranchToRoomCreateWithoutRoomInput>, Enumerable<BranchToRoomUncheckedCreateWithoutRoomInput>>
-    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutRoomInput>
-    createMany?: BranchToRoomCreateManyRoomInputEnvelope
-    connect?: Enumerable<BranchToRoomWhereUniqueInput>
+  export type BranchToRoomUncheckedCreateNestedOneWithoutRoomInput = {
+    create?: XOR<BranchToRoomCreateWithoutRoomInput, BranchToRoomUncheckedCreateWithoutRoomInput>
+    connectOrCreate?: BranchToRoomCreateOrConnectWithoutRoomInput
+    connect?: BranchToRoomWhereUniqueInput
   }
 
   export type RoomRateUncheckedCreateNestedManyWithoutRoomInput = {
@@ -20372,18 +20372,14 @@ export namespace Prisma {
     connect?: Enumerable<RoomRateWhereUniqueInput>
   }
 
-  export type BranchToRoomUpdateManyWithoutRoomNestedInput = {
-    create?: XOR<Enumerable<BranchToRoomCreateWithoutRoomInput>, Enumerable<BranchToRoomUncheckedCreateWithoutRoomInput>>
-    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutRoomInput>
-    upsert?: Enumerable<BranchToRoomUpsertWithWhereUniqueWithoutRoomInput>
-    createMany?: BranchToRoomCreateManyRoomInputEnvelope
-    set?: Enumerable<BranchToRoomWhereUniqueInput>
-    disconnect?: Enumerable<BranchToRoomWhereUniqueInput>
-    delete?: Enumerable<BranchToRoomWhereUniqueInput>
-    connect?: Enumerable<BranchToRoomWhereUniqueInput>
-    update?: Enumerable<BranchToRoomUpdateWithWhereUniqueWithoutRoomInput>
-    updateMany?: Enumerable<BranchToRoomUpdateManyWithWhereWithoutRoomInput>
-    deleteMany?: Enumerable<BranchToRoomScalarWhereInput>
+  export type BranchToRoomUpdateOneWithoutRoomNestedInput = {
+    create?: XOR<BranchToRoomCreateWithoutRoomInput, BranchToRoomUncheckedCreateWithoutRoomInput>
+    connectOrCreate?: BranchToRoomCreateOrConnectWithoutRoomInput
+    upsert?: BranchToRoomUpsertWithoutRoomInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: BranchToRoomWhereUniqueInput
+    update?: XOR<BranchToRoomUpdateWithoutRoomInput, BranchToRoomUncheckedUpdateWithoutRoomInput>
   }
 
   export type RoomRateUpdateManyWithoutRoomNestedInput = {
@@ -20400,18 +20396,14 @@ export namespace Prisma {
     deleteMany?: Enumerable<RoomRateScalarWhereInput>
   }
 
-  export type BranchToRoomUncheckedUpdateManyWithoutRoomNestedInput = {
-    create?: XOR<Enumerable<BranchToRoomCreateWithoutRoomInput>, Enumerable<BranchToRoomUncheckedCreateWithoutRoomInput>>
-    connectOrCreate?: Enumerable<BranchToRoomCreateOrConnectWithoutRoomInput>
-    upsert?: Enumerable<BranchToRoomUpsertWithWhereUniqueWithoutRoomInput>
-    createMany?: BranchToRoomCreateManyRoomInputEnvelope
-    set?: Enumerable<BranchToRoomWhereUniqueInput>
-    disconnect?: Enumerable<BranchToRoomWhereUniqueInput>
-    delete?: Enumerable<BranchToRoomWhereUniqueInput>
-    connect?: Enumerable<BranchToRoomWhereUniqueInput>
-    update?: Enumerable<BranchToRoomUpdateWithWhereUniqueWithoutRoomInput>
-    updateMany?: Enumerable<BranchToRoomUpdateManyWithWhereWithoutRoomInput>
-    deleteMany?: Enumerable<BranchToRoomScalarWhereInput>
+  export type BranchToRoomUncheckedUpdateOneWithoutRoomNestedInput = {
+    create?: XOR<BranchToRoomCreateWithoutRoomInput, BranchToRoomUncheckedCreateWithoutRoomInput>
+    connectOrCreate?: BranchToRoomCreateOrConnectWithoutRoomInput
+    upsert?: BranchToRoomUpsertWithoutRoomInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: BranchToRoomWhereUniqueInput
+    update?: XOR<BranchToRoomUpdateWithoutRoomInput, BranchToRoomUncheckedUpdateWithoutRoomInput>
   }
 
   export type RoomRateUncheckedUpdateManyWithoutRoomNestedInput = {
@@ -21120,6 +21112,7 @@ export namespace Prisma {
   export type BranchToRoomCreateWithoutCoWorkInput = {
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     room: RoomCreateNestedOneWithoutBranchToRoomInput
     BookRoom?: BookRoomCreateNestedManyWithoutBranchToRoomInput
   }
@@ -21129,6 +21122,7 @@ export namespace Prisma {
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutBranchToRoomInput
   }
 
@@ -21369,6 +21363,7 @@ export namespace Prisma {
     roomId?: IntFilter | number
     createAt?: DateTimeFilter | Date | string
     updateAt?: DateTimeFilter | Date | string
+    active?: BoolNullableFilter | boolean | null
   }
 
   export type FacilityToCoWorkUpsertWithWhereUniqueWithoutCoWorkInput = {
@@ -21633,6 +21628,7 @@ export namespace Prisma {
   export type BranchToRoomCreateWithoutRoomInput = {
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     coWork: CoWorkCreateNestedOneWithoutBranchToRoomInput
     BookRoom?: BookRoomCreateNestedManyWithoutBranchToRoomInput
   }
@@ -21642,17 +21638,13 @@ export namespace Prisma {
     coWorkId: number
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     BookRoom?: BookRoomUncheckedCreateNestedManyWithoutBranchToRoomInput
   }
 
   export type BranchToRoomCreateOrConnectWithoutRoomInput = {
     where: BranchToRoomWhereUniqueInput
     create: XOR<BranchToRoomCreateWithoutRoomInput, BranchToRoomUncheckedCreateWithoutRoomInput>
-  }
-
-  export type BranchToRoomCreateManyRoomInputEnvelope = {
-    data: Enumerable<BranchToRoomCreateManyRoomInput>
-    skipDuplicates?: boolean
   }
 
   export type RoomRateCreateWithoutRoomInput = {
@@ -21684,20 +21676,26 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type BranchToRoomUpsertWithWhereUniqueWithoutRoomInput = {
-    where: BranchToRoomWhereUniqueInput
+  export type BranchToRoomUpsertWithoutRoomInput = {
     update: XOR<BranchToRoomUpdateWithoutRoomInput, BranchToRoomUncheckedUpdateWithoutRoomInput>
     create: XOR<BranchToRoomCreateWithoutRoomInput, BranchToRoomUncheckedCreateWithoutRoomInput>
   }
 
-  export type BranchToRoomUpdateWithWhereUniqueWithoutRoomInput = {
-    where: BranchToRoomWhereUniqueInput
-    data: XOR<BranchToRoomUpdateWithoutRoomInput, BranchToRoomUncheckedUpdateWithoutRoomInput>
+  export type BranchToRoomUpdateWithoutRoomInput = {
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    coWork?: CoWorkUpdateOneRequiredWithoutBranchToRoomNestedInput
+    BookRoom?: BookRoomUpdateManyWithoutBranchToRoomNestedInput
   }
 
-  export type BranchToRoomUpdateManyWithWhereWithoutRoomInput = {
-    where: BranchToRoomScalarWhereInput
-    data: XOR<BranchToRoomUpdateManyMutationInput, BranchToRoomUncheckedUpdateManyWithoutBranchToRoomInput>
+  export type BranchToRoomUncheckedUpdateWithoutRoomInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    coWorkId?: IntFieldUpdateOperationsInput | number
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    BookRoom?: BookRoomUncheckedUpdateManyWithoutBranchToRoomNestedInput
   }
 
   export type RoomRateUpsertWithWhereUniqueWithoutRoomInput = {
@@ -21789,7 +21787,7 @@ export namespace Prisma {
     capacity: number
     createAt?: Date | string
     updateAt?: Date | string
-    BranchToRoom?: BranchToRoomCreateNestedManyWithoutRoomInput
+    BranchToRoom?: BranchToRoomCreateNestedOneWithoutRoomInput
   }
 
   export type RoomUncheckedCreateWithoutRoomRateInput = {
@@ -21798,7 +21796,7 @@ export namespace Prisma {
     capacity: number
     createAt?: Date | string
     updateAt?: Date | string
-    BranchToRoom?: BranchToRoomUncheckedCreateNestedManyWithoutRoomInput
+    BranchToRoom?: BranchToRoomUncheckedCreateNestedOneWithoutRoomInput
   }
 
   export type RoomCreateOrConnectWithoutRoomRateInput = {
@@ -21852,7 +21850,7 @@ export namespace Prisma {
     capacity?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    BranchToRoom?: BranchToRoomUpdateManyWithoutRoomNestedInput
+    BranchToRoom?: BranchToRoomUpdateOneWithoutRoomNestedInput
   }
 
   export type RoomUncheckedUpdateWithoutRoomRateInput = {
@@ -21861,7 +21859,7 @@ export namespace Prisma {
     capacity?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    BranchToRoom?: BranchToRoomUncheckedUpdateManyWithoutRoomNestedInput
+    BranchToRoom?: BranchToRoomUncheckedUpdateOneWithoutRoomNestedInput
   }
 
   export type RoomRateCreateWithoutDurationInput = {
@@ -22330,6 +22328,7 @@ export namespace Prisma {
   export type BranchToRoomCreateWithoutBookRoomInput = {
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
     coWork: CoWorkCreateNestedOneWithoutBranchToRoomInput
     room: RoomCreateNestedOneWithoutBranchToRoomInput
   }
@@ -22340,6 +22339,7 @@ export namespace Prisma {
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
   }
 
   export type BranchToRoomCreateOrConnectWithoutBookRoomInput = {
@@ -22459,6 +22459,7 @@ export namespace Prisma {
   export type BranchToRoomUpdateWithoutBookRoomInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     coWork?: CoWorkUpdateOneRequiredWithoutBranchToRoomNestedInput
     room?: RoomUpdateOneRequiredWithoutBranchToRoomNestedInput
   }
@@ -22469,6 +22470,7 @@ export namespace Prisma {
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type BookRoomCreateWithoutVertifyCodeInput = {
@@ -22866,6 +22868,7 @@ export namespace Prisma {
     roomId: number
     createAt?: Date | string
     updateAt?: Date | string
+    active?: boolean | null
   }
 
   export type FacilityToCoWorkCreateManyCoWorkInput = {
@@ -22891,6 +22894,7 @@ export namespace Prisma {
   export type BranchToRoomUpdateWithoutCoWorkInput = {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     room?: RoomUpdateOneRequiredWithoutBranchToRoomNestedInput
     BookRoom?: BookRoomUpdateManyWithoutBranchToRoomNestedInput
   }
@@ -22900,6 +22904,7 @@ export namespace Prisma {
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     BookRoom?: BookRoomUncheckedUpdateManyWithoutBranchToRoomNestedInput
   }
 
@@ -22908,6 +22913,7 @@ export namespace Prisma {
     roomId?: IntFieldUpdateOperationsInput | number
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type FacilityToCoWorkUpdateWithoutCoWorkInput = {
@@ -22955,13 +22961,6 @@ export namespace Prisma {
     price?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
-  export type BranchToRoomCreateManyRoomInput = {
-    id?: number
-    coWorkId: number
-    createAt?: Date | string
-    updateAt?: Date | string
-  }
-
   export type RoomRateCreateManyRoomInput = {
     id?: number
     price?: number | null
@@ -22969,21 +22968,6 @@ export namespace Prisma {
     updateAt?: Date | string
     durationCategoryId: number
     active?: boolean | null
-  }
-
-  export type BranchToRoomUpdateWithoutRoomInput = {
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    coWork?: CoWorkUpdateOneRequiredWithoutBranchToRoomNestedInput
-    BookRoom?: BookRoomUpdateManyWithoutBranchToRoomNestedInput
-  }
-
-  export type BranchToRoomUncheckedUpdateWithoutRoomInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    coWorkId?: IntFieldUpdateOperationsInput | number
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    BookRoom?: BookRoomUncheckedUpdateManyWithoutBranchToRoomNestedInput
   }
 
   export type RoomRateUpdateWithoutRoomInput = {
