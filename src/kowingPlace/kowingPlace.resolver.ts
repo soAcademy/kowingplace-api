@@ -880,6 +880,7 @@ export const getBookRoomByPartnerId = async (args: { userId: number }) => {
       coWork: {
         include: {
           bookRoom: {
+            where: {},
             include: {
               roomRate: {
                 include: {
@@ -895,7 +896,7 @@ export const getBookRoomByPartnerId = async (args: { userId: number }) => {
               vertifyCode: true,
             },
             orderBy: {
-              startTime: "asc",
+              updateAt: "desc",
             },
           },
         },
@@ -906,6 +907,50 @@ export const getBookRoomByPartnerId = async (args: { userId: number }) => {
   delete newGetBookRoom.password;
 
   return newGetBookRoom;
+};
+
+export const getBookRoomByPartnerIdAndStatus = async (args: {
+  userId: number;
+  status: string;
+  orderBy: string;
+  inDeCrease: string;
+}) => {
+  const getBookRoom = await prisma.userInternal.findUnique({
+    where: {
+      id: args.userId,
+    },
+    include: {
+      coWork: {
+        include: {
+          bookRoom: {
+            where: { status: args.status },
+            include: {
+              roomRate: {
+                include: {
+                  room: true,
+                  duration: true,
+                },
+              },
+              UserExternal: {
+                select: {
+                  name: true,
+                },
+              },
+              vertifyCode: true,
+            },
+            orderBy: {
+              [args.orderBy]: args.inDeCrease,
+            },
+          },
+        },
+      },
+    },
+  });
+  // const newGetBookRoom = { ...getBookRoom };
+  // delete newGetBookRoom.password;
+
+  // return newGetBookRoom;
+  return getBookRoom;
 };
 
 export const updateStatus = async (args: {
