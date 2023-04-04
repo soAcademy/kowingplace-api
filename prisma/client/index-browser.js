@@ -108,7 +108,8 @@ exports.Prisma.BranchToRoomScalarFieldEnum = makeEnum({
   coWorkId: 'coWorkId',
   roomId: 'roomId',
   createAt: 'createAt',
-  updateAt: 'updateAt'
+  updateAt: 'updateAt',
+  active: 'active'
 });
 
 exports.Prisma.CloseScalarFieldEnum = makeEnum({

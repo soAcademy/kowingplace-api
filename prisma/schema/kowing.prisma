@@ -42,12 +42,12 @@ model UserInternal {
 }
 
 model Room {
-  id           Int            @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   name         String
   capacity     Int
-  createAt     DateTime       @default(now())
-  updateAt     DateTime       @updatedAt
-  BranchToRoom BranchToRoom[]
+  createAt     DateTime      @default(now())
+  updateAt     DateTime      @updatedAt
+  BranchToRoom BranchToRoom?
   RoomRate     RoomRate[]
 }
 
@@ -107,11 +107,12 @@ model BranchToRoom {
   id       Int        @id @default(autoincrement())
   coWork   CoWork     @relation(fields: [coWorkId], references: [id], onDelete: Cascade)
   coWorkId Int
-  room     Room       @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  roomId   Int
+  room     Room       @relation(fields: [roomId], references: [id])
+  roomId   Int        @unique
   createAt DateTime   @default(now())
   updateAt DateTime   @updatedAt
   BookRoom BookRoom[]
+  active   Boolean?   @default(true)
 }
 
 model BookRoom {

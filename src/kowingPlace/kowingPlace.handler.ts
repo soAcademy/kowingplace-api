@@ -28,6 +28,7 @@ import {
   updateStatus,
   showtheRoomBookedbyUserExternal,
   getBookRoomByPartnerIdAndStatus,
+  deleteRoom,
   // showtheRoomBookedbyUserExternal,
 } from "./kowingPlace.resolver";
 import {
@@ -472,9 +473,22 @@ export const getBookRoomByPartnerIdAndStatusHandler = async (
 ) => {
   const args = req.body;
   console.log("args", args);
-
   try {
     const result = await getBookRoomByPartnerIdAndStatus(args);
+    res.status(200).json(result);
+  } catch (e: any) {
+    if (e.status === 404) return res.status(404).json(e.message);
+    res.status(500).json({
+      error: String(e),
+    });
+  }
+};
+
+export const deleteRoomHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  console.log("args", args);
+  try {
+    const result = await deleteRoom(args);
     res.status(200).json(result);
   } catch (e: any) {
     if (e.status === 404) return res.status(404).json(e.message);
