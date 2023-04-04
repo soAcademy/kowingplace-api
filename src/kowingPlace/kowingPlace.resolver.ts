@@ -944,4 +944,13 @@ export const showtheRoomBookedbyUserExternal = async (args: {
     },
   });
 
-// export const deleteRoom = () => prisma.room.
+export const deleteRoom = (args: { roomId: number }) =>
+  prisma.room.delete({
+    where: {
+      id: args.roomId,
+    },
+    include: {
+      BranchToRoom: true,
+      RoomRate: true,
+    },
+  });
