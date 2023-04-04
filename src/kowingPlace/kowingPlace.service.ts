@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import {
   checkUserExternalPasswordEmail,
@@ -16,7 +15,6 @@ const generateToken = (email: string, secretKey: string): string => {
   };
 
   const token = jwt.sign(payload, secretKey, { expiresIn: "30d" });
-  //const token = jwt.sign(payload, secretKey, { expiresIn: 15 });
   return token;
 };
 

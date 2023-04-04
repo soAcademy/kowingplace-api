@@ -275,9 +275,17 @@ export interface IBookDurationRoom
 //-------------------------------------------------
 
 export const showtheRoomBookedbyUserExternalCodec = t.type({
-  email: t.string,
+  userId: t.number,
 });
 export interface IShowtheRoomBookedbyUserExternal
   extends t.TypeOf<typeof showtheRoomBookedbyUserExternalCodec> {}
+
+//-------------------------------------------------
+
+export const deleteRoomCodec = t.type({
+  roomId: t.number,
+});
+
+export interface IDeleteRoomCodec extends t.TypeOf<typeof deleteRoomCodec> {}
 
 //-------------------------------------------------

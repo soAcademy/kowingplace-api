@@ -12,6 +12,7 @@ import {
   ICreateUserExternal,
   ICreateUserInternal,
   IDeleteCoWork,
+  IDeleteRoomCodec,
   IForgetPasswordUserExternal,
   IForgetPasswordUserInternal,
   IGetCalendarBookingByCoWorkId,
@@ -950,10 +951,7 @@ export const getBookRoomByPartnerIdAndStatus = async (args: {
       },
     },
   });
-  // const newGetBookRoom = { ...getBookRoom };
-  // delete newGetBookRoom.password;
 
-  // return newGetBookRoom;
   return getBookRoom;
 };
 
@@ -971,9 +969,9 @@ export const updateStatus = async (args: {
   });
 };
 
-export const showtheRoomBookedbyUserExternal = async (args: {
-  userId: number;
-}) =>
+export const showtheRoomBookedbyUserExternal = async (
+  args: IShowtheRoomBookedbyUserExternal
+) =>
   prisma.bookRoom.findMany({
     where: {
       userExternalId: args.userId,
@@ -993,7 +991,7 @@ export const showtheRoomBookedbyUserExternal = async (args: {
     },
   });
 
-export const deleteRoom = (args: { roomId: number }) =>
+export const deleteRoom = (args: IDeleteRoomCodec) =>
   prisma.branchToRoom.update({
     where: {
       roomId: args.roomId,
