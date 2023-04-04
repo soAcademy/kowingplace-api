@@ -1,4 +1,3 @@
-import { date, number, random } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
   IBookDurationRoom,
@@ -31,7 +30,6 @@ import {
   IUpdateStatus,
 } from "./kowingPlace.interface";
 import { hashPassword } from "./kowingPlace.service";
-import { mock } from "node:test";
 export const prisma = new PrismaClient();
 
 export const createUserExternal = async (args: ICreateUserExternal) => {
@@ -661,8 +659,6 @@ export const forgetPasswordUserExternal = async (
       email: args.email,
     },
   });
-  // console.log(queryDataCheck);
-
   const check =
     queryDataCheck?.name === args.name && queryDataCheck?.tel === args.phone;
 

@@ -41,7 +41,6 @@ export const loginUserExternal = async (args: ILoginUserExternal) => {
     const checkEmail = await checkUserExternalPasswordEmail({
       email: args.email,
     });
-    console.log("checkEmail", checkEmail);
 
     if (checkEmail === null) {
       return Promise.reject({ message: "email not found", status: 404 });
@@ -51,7 +50,6 @@ export const loginUserExternal = async (args: ILoginUserExternal) => {
       args.password,
       checkEmail.password as string
     );
-    console.log("checkPassword", checkPassword);
 
     if (checkPassword === false) {
       return Promise.reject({ message: "Wrong password", status: 404 });
@@ -70,8 +68,6 @@ export const loginUserExternal = async (args: ILoginUserExternal) => {
       tel: checkEmail.tel,
       role: "user",
     };
-    console.log("userData", userData);
-
     return { token: genToken, userData: userData };
   } catch (err) {
     console.log("err", err);
@@ -99,7 +95,6 @@ export const loginUserInternal = async (args: ILoginUserInternal) => {
       process.env.SECRET_KEY as string
     );
 
-    console.log(genToken);
     const userData = {
       userId: checkEmail.id,
       email: checkEmail.email,
@@ -107,7 +102,6 @@ export const loginUserInternal = async (args: ILoginUserInternal) => {
       tel: checkEmail.tel,
       role: "partner",
     };
-    console.log("userData", userData);
 
     return { token: genToken, userData: userData };
   } catch (err) {
