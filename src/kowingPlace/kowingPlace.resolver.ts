@@ -943,3 +943,5 @@ export const showtheRoomBookedbyUserExternal = async (args: {
       updateAt: "desc",
     },
   });
+
+// export const deleteRoom = () => prisma.room.
