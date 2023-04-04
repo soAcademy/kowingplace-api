@@ -59,7 +59,7 @@ model RoomRate {
   BookRoom           BookRoom[]
   duration           durationCategory @relation(fields: [durationCategoryId], references: [id])
   durationCategoryId Int
-  room               Room?            @relation(fields: [roomId], references: [id])
+  room               Room?            @relation(fields: [roomId], references: [id], onDelete: Cascade)
   roomId             Int?
   active             Boolean?         @default(true)
 }
@@ -107,7 +107,7 @@ model BranchToRoom {
   id       Int        @id @default(autoincrement())
   coWork   CoWork     @relation(fields: [coWorkId], references: [id], onDelete: Cascade)
   coWorkId Int
-  room     Room       @relation(fields: [roomId], references: [id])
+  room     Room       @relation(fields: [roomId], references: [id], onDelete: Cascade)
   roomId   Int
   createAt DateTime   @default(now())
   updateAt DateTime   @updatedAt
@@ -132,22 +132,6 @@ model BookRoom {
   branchToRoomId       Int?
   price                Int?               @default(0)
 }
-
-// model OpenClose {
-//   id               Int                @id @default(autoincrement())
-//   mon              Json
-//   tue              Json
-//   wed              Json
-//   thurs            Json
-//   fri              Json
-//   sat              Json
-//   sun              Json
-//   coWork           CoWork             @relation(fields: [coWorkId], references: [id])
-//   coWorkId         Int                @unique
-//   createAt         DateTime           @default(now())
-//   updateAt         DateTime           @updatedAt
-//   durationCategory durationCategory[]
-// }
 
 model VertifyBookingCode {
   id         Int        @id @default(autoincrement())
@@ -217,21 +201,3 @@ model OpenCloseBoolean {
   createAt   DateTime @default(now())
   updateAt   DateTime @updatedAt
 }
-
-// model LoginExternal {
-//   id             Int          @id @default(autoincrement())
-//   token          String       @unique
-//   userExternal   UserExternal @relation(fields: [userExternalId], references: [id])
-//   userExternalId Int
-//   createAt       DateTime     @default(now())
-//   updateAt       DateTime     @updatedAt
-// }
-
-// model LoginInternal {
-//   id             Int          @id @default(autoincrement())
-//   token          String       @unique
-//   userInternal   UserInternal @relation(fields: [userInternalId], references: [id])
-//   userInternalId Int
-//   createAt       DateTime     @default(now())
-//   updateAt       DateTime     @updatedAt
-// }
