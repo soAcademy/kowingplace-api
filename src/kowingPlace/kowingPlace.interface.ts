@@ -235,7 +235,9 @@ export interface IUpdateCalendarBookingByCoWorkId
 //-------------------------------------------------
 
 export const forgetPasswordUserInternalCodec = t.type({
+  name: t.string,
   email: t.string,
+  phone: t.string,
   password: t.string,
 });
 export interface IForgetPasswordUserInternal
@@ -244,7 +246,9 @@ export interface IForgetPasswordUserInternal
 //-------------------------------------------------
 
 export const forgetPasswordUserExternalCodec = t.type({
+  name: t.string,
   email: t.string,
+  phone: t.string,
   password: t.string,
 });
 export interface IForgetPasswordUserExternal

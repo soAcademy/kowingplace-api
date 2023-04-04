@@ -589,34 +589,6 @@ export const checkUserInternalPasswordEmail = (
     },
   });
 
-export const forgetPasswordUserExternal = async (
-  args: IForgetPasswordUserExternal
-) => {
-  const updateForgetPassword = await prisma.userExternal.update({
-    where: {
-      email: args.email,
-    },
-    data: {
-      password: await hashPassword(args.password),
-    },
-  });
-  return updateForgetPassword;
-};
-
-export const forgetPasswordUserInternal = async (
-  args: IForgetPasswordUserInternal
-) => {
-  const forgetPassword = prisma.userInternal.update({
-    where: {
-      email: args.email,
-    },
-    data: {
-      password: await hashPassword(args.password),
-    },
-  });
-  return forgetPassword;
-};
-
 export const deleteCoWork = (args: IDeleteCoWork) =>
   prisma.coWork.delete({
     where: {
@@ -633,6 +605,79 @@ export const deleteCoWork = (args: IDeleteCoWork) =>
     },
   });
 
+//////////////////////
+// LOGIN REGIS PAGE //
+//////////////////////
+export const forgetPasswordUserExternal = async (
+  args: IForgetPasswordUserExternal
+) => {
+  const queryDataCheck = await prisma.userExternal.findUnique({
+    where: {
+      email: args.email,
+    },
+  });
+  // console.log(queryDataCheck);
+
+  const check =
+    queryDataCheck?.name === args.name && queryDataCheck?.tel === args.phone;
+
+  if (check) {
+    const updateForgetPassword = await prisma.userExternal.update({
+      where: {
+        email: args.email,
+      },
+      data: {
+        password: await hashPassword(args.password),
+      },
+    });
+    return updateForgetPassword;
+  } else {
+    return { error: "Name, Email or Phone incorrect!" };
+  }
+};
+
+export const forgetPasswordUserInternal = async (
+  args: IForgetPasswordUserInternal
+) => {
+  const queryDataCheck = await prisma.userInternal.findUnique({
+    where: {
+      email: args.email,
+    },
+  });
+  console.log(queryDataCheck);
+
+  const check =
+    queryDataCheck?.name === args.name && queryDataCheck?.tel === args.phone;
+
+  if (check) {
+    const updateForgetPassword = await prisma.userInternal.update({
+      where: {
+        email: args.email,
+      },
+      data: {
+        password: await hashPassword(args.password),
+      },
+    });
+    return updateForgetPassword;
+  } else {
+    return { error: "Name, Email or Phone incorrect!" };
+  }
+};
+
+//////////////////////
+// RESERVATION PAGE //
+//////////////////////
+//get day open on calendar
+export const getOpenDay = async (args: { coWorkId: number }) => {
+  const getOpen = prisma.openCloseBoolean.findUnique({
+    where: {
+      coWorkId: args.coWorkId,
+    },
+  });
+  return getOpen;
+};
+
+//get time available
 export const bookDurationRoom = async (args: IBookDurationRoom) => {
   console.log("args", args);
 
@@ -815,21 +860,9 @@ export const getVerifyCodeByUserConfirmBooking = async (
   return getBookData;
 };
 
-//////////////////////
-// RESERVATION PAGE //
-//////////////////////
-export const getOpenDay = async (args: { coWorkId: number }) => {
-  const getOpen = prisma.openCloseBoolean.findUnique({
-    where: {
-      coWorkId: args.coWorkId,
-    },
-  });
-  return getOpen;
-};
-
-////////////////////////
-// INTERNAL MAIN PAGE //
-////////////////////////
+///////////////////////
+// PARTNER MAIN PAGE //
+///////////////////////
 export const getBookRoomByPartnerId = async (args: { userId: number }) => {
   const getBookRoom = await prisma.userInternal.findUnique({
     where: {
