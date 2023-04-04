@@ -15,9 +15,12 @@ import {
   IDeleteRoomCodec,
   IForgetPasswordUserExternal,
   IForgetPasswordUserInternal,
+  IGetBookRoomByPartnerId,
+  IGetBookRoomByPartnerIdAndStatus,
   IGetCalendarBookingByCoWorkId,
   IGetCoWorkUserChoose,
   IGetCoworkByUserId,
+  IGetOpenDay,
   IGetStatusUserBookInternal,
   IGetUserConfirmBooking,
   IGgetRoomByCoWorkIdCodec,
@@ -25,6 +28,7 @@ import {
   IShowtheRoomBookedbyUserExternal,
   IUpdateCalendarBookingByCoWorkId,
   IUpdateCoWorkDetail,
+  IUpdateStatus,
 } from "./kowingPlace.interface";
 import { hashPassword } from "./kowingPlace.service";
 import { mock } from "node:test";
@@ -681,7 +685,7 @@ export const forgetPasswordUserExternal = async (
 // RESERVATION PAGE //
 //////////////////////
 //get day open on calendar
-export const getOpenDay = async (args: { coWorkId: number }) => {
+export const getOpenDay = async (args: IGetOpenDay) => {
   const getOpen = prisma.openCloseBoolean.findUnique({
     where: {
       coWorkId: args.coWorkId,
@@ -876,7 +880,7 @@ export const getVerifyCodeByUserConfirmBooking = async (
 ///////////////////////
 // PARTNER MAIN PAGE //
 ///////////////////////
-export const getBookRoomByPartnerId = async (args: { userId: number }) => {
+export const getBookRoomByPartnerId = async (args: IGetBookRoomByPartnerId) => {
   const getBookRoom = await prisma.userInternal.findUnique({
     where: {
       id: args.userId,
@@ -914,12 +918,9 @@ export const getBookRoomByPartnerId = async (args: { userId: number }) => {
   return newGetBookRoom;
 };
 
-export const getBookRoomByPartnerIdAndStatus = async (args: {
-  userId: number;
-  status: string;
-  orderBy: string;
-  inDeCrease: string;
-}) => {
+export const getBookRoomByPartnerIdAndStatus = async (
+  args: IGetBookRoomByPartnerIdAndStatus
+) => {
   const getBookRoom = await prisma.userInternal.findUnique({
     where: {
       id: args.userId,
@@ -955,10 +956,7 @@ export const getBookRoomByPartnerIdAndStatus = async (args: {
   return getBookRoom;
 };
 
-export const updateStatus = async (args: {
-  bookRoomId: number;
-  newStatus: string;
-}) => {
+export const updateStatus = async (args: IUpdateStatus) => {
   return prisma.bookRoom.update({
     where: {
       id: args.bookRoomId,
