@@ -29,7 +29,6 @@ import {
   showtheRoomBookedbyUserExternal,
   getBookRoomByPartnerIdAndStatus,
   deleteRoom,
-  // showtheRoomBookedbyUserExternal,
 } from "./kowingPlace.resolver";
 import {
   createTimeOpenCloseCodec,
@@ -51,17 +50,6 @@ export const createUserExternalHandler = async (
     });
   }
 };
-
-// export const getCoWork24HrsHandler = async (req: Request, res: Response) => {
-//   try {
-//     const result = await getCoWork24Hrs();
-//     res.status(200).json(result);
-//   } catch (e) {
-//     res.status(500).json({
-//       error: String(e),
-//     });
-//   }
-// };
 
 export const getCoworksHandler = async (req: Request, res: Response) => {
   try {
@@ -88,6 +76,7 @@ export const getCoWorkUserChooseHandler = async (
     });
   }
 };
+
 export const getVerifyCodeByUserConfirmBookingHandler = async (
   req: Request,
   res: Response
@@ -207,6 +196,7 @@ export const getRoomByCoWorkIdHandler = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const getCoworkByUserIdHandler = async (req: Request, res: Response) => {
   const args = req.body;
   try {
@@ -218,6 +208,7 @@ export const getCoworkByUserIdHandler = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const showBookDetailInternalByCoWorkHandler = async (
   req: Request,
   res: Response
@@ -247,6 +238,7 @@ export const getStatusUserBookInternalHandler = async (
     });
   }
 };
+
 export const createFacilityHandler = async (req: Request, res: Response) => {
   const args = req.body;
   try {
@@ -277,6 +269,7 @@ export const createTimeOpenCloseHandler = async (
     });
   }
 };
+
 export const getCalendarBookingByCoWorkIdHandler = async (
   req: Request,
   res: Response
@@ -291,6 +284,7 @@ export const getCalendarBookingByCoWorkIdHandler = async (
     });
   }
 };
+
 export const loginUserExternalHandler = async (req: Request, res: Response) => {
   const args = req.body;
   try {
@@ -303,6 +297,7 @@ export const loginUserExternalHandler = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const loginUserInternalHandler = async (req: Request, res: Response) => {
   const args = req.body;
   try {
@@ -331,6 +326,7 @@ export const updateCalendarBookingByCoWorkIdHandler = async (
     });
   }
 };
+
 export const getCoWorkOpen24HoursHandler = async (
   req: Request,
   res: Response
@@ -345,6 +341,7 @@ export const getCoWorkOpen24HoursHandler = async (
     });
   }
 };
+
 export const forgetPasswordUserExternalHandler = async (
   req: Request,
   res: Response
@@ -376,6 +373,7 @@ export const forgetPasswordUserInternalHandler = async (
     });
   }
 };
+
 export const deleteCoWorkHandler = async (req: Request, res: Response) => {
   const args = req.body;
   try {
@@ -388,6 +386,7 @@ export const deleteCoWorkHandler = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const bookDurationRoomHandler = async (req: Request, res: Response) => {
   const args = req.body;
   try {
