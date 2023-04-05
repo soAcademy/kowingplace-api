@@ -32,7 +32,7 @@ import {
   deleteRoomHandler,
 } from "./kowingPlace/kowingPlace.handler";
 import { checkToken } from "./kowingPlace/kowingPlace.middleWare";
-// import { createCoWorkDetail } from "./kowingPlace/kowingPlace.resolver";
+
 export interface IAppRoutes {
   path: string;
   method: string;
@@ -48,24 +48,24 @@ export const AppRoutes: IAppRoutes[] = [
   {
     path: "/kowing/createUserExternal",
     method: "post",
-    action: createUserExternalHandler, //OK
+    action: createUserExternalHandler,
   },
 
   {
     path: "/kowing/getCoWorkUserChoose",
     method: "post",
-    action: getCoWorkUserChooseHandler, //OK
+    action: getCoWorkUserChooseHandler,
   },
   {
     path: "/kowing/getVerifyCodeByUserConfirmBooking",
     method: "post",
-    action: getVerifyCodeByUserConfirmBookingHandler, //OK
+    action: getVerifyCodeByUserConfirmBookingHandler,
     middleWare: checkToken,
   },
   {
     path: "/kowing/createUserInternal",
     method: "post",
-    action: createUserInternalHandler, //OK
+    action: createUserInternalHandler,
   },
   {
     path: "/kowing/createRoomInternal",
@@ -75,107 +75,107 @@ export const AppRoutes: IAppRoutes[] = [
   {
     path: "/kowing/createCoWorkDetail",
     method: "post",
-    action: createCoWorkDetailHandler, //Ok
+    action: createCoWorkDetailHandler,
     middleWare: checkToken,
   },
   {
     path: "/kowing/updateCoWorkDetail",
     method: "post",
-    action: updateCoWorkDetailHandler, //Ok
+    action: updateCoWorkDetailHandler,
     middleWare: checkToken,
   },
   {
     path: "/kowing/updateRoomInternal",
     method: "post",
-    action: updateRoomInternalHandler, //OK
+    action: updateRoomInternalHandler,
     middleWare: checkToken,
   },
   {
     path: "/kowing/getRoomByCoWorkId",
     method: "post",
-    action: getRoomByCoWorkIdHandler, //Ok
+    action: getRoomByCoWorkIdHandler,
   },
   {
     path: "/kowing/getCoworkByUserId",
     method: "post",
-    action: getCoworkByUserIdHandler, //OK
+    action: getCoworkByUserIdHandler,
   },
   {
     path: "/kowing/showBookDetailInternalByCoWork",
     method: "post",
-    action: showBookDetailInternalByCoWorkHandler, //OK
+    action: showBookDetailInternalByCoWorkHandler,
   },
   {
     path: "/kowing/createFacility",
     method: "post",
-    action: createFacilityHandler, //OK
+    action: createFacilityHandler,
   },
   {
     path: "/kowing/getFacilities",
     method: "post",
-    action: getFacilitiesHandler, //OK
+    action: getFacilitiesHandler,
   },
   {
     path: "/kowing/getStatusUserBookInternal",
     method: "post",
-    action: getStatusUserBookInternalHandler, //Ok
+    action: getStatusUserBookInternalHandler,
   },
   {
     path: "/kowing/getCoworks",
     method: "post",
-    action: getCoworksHandler, //OK
+    action: getCoworksHandler,
   },
   {
     path: "/kowing/createTimeOpenClose",
     method: "post",
-    action: createTimeOpenCloseHandler, //OK
+    action: createTimeOpenCloseHandler,
     middleWare: checkToken,
   },
   {
     path: "/kowing/getCalendarBookingByCoWorkId",
     method: "post",
-    action: getCalendarBookingByCoWorkIdHandler, //OK
+    action: getCalendarBookingByCoWorkIdHandler,
   },
   {
     path: "/kowing/loginUserExternal",
     method: "post",
-    action: loginUserExternalHandler, //OK
+    action: loginUserExternalHandler,
   },
   {
     path: "/kowing/updateCalendarBookingByCoWorkId",
     method: "post",
-    action: updateCalendarBookingByCoWorkIdHandler, //OK
+    action: updateCalendarBookingByCoWorkIdHandler,
     middleWare: checkToken,
   },
   {
     path: "/kowing/getCoWorkOpen24Hours",
     method: "post",
-    action: getCoWorkOpen24HoursHandler, //OK
+    action: getCoWorkOpen24HoursHandler,
   },
   {
     path: "/kowing/forgetPasswordUserExternal",
     method: "post",
-    action: forgetPasswordUserExternalHandler, //OK
+    action: forgetPasswordUserExternalHandler,
   },
   {
     path: "/kowing/forgetPasswordUserInternal",
     method: "post",
-    action: forgetPasswordUserInternalHandler, //OK
+    action: forgetPasswordUserInternalHandler,
   },
   {
     path: "/kowing/deleteCoWork",
     method: "post",
-    action: deleteCoWorkHandler, //OK
+    action: deleteCoWorkHandler,
   },
   {
     path: "/kowing/bookDurationRoom",
     method: "post",
-    action: bookDurationRoomHandler, //OK
+    action: bookDurationRoomHandler,
   },
   {
     path: "/kowing/loginUserInternal",
     method: "post",
-    action: loginUserInternalHandler, //OK
+    action: loginUserInternalHandler,
   },
   {
     path: "/kowing/getOpenDay",
@@ -190,17 +190,17 @@ export const AppRoutes: IAppRoutes[] = [
   {
     path: "/kowing/showtheRoomBookedbyUserExternal",
     method: "post",
-    action: showtheRoomBookedbyUserExternalHandler, //OK
+    action: showtheRoomBookedbyUserExternalHandler,
   },
   {
     path: "/kowing/updateStatus",
     method: "post",
-    action: updateStatusHandler, //OK
+    action: updateStatusHandler,
   },
   {
     path: "/kowing/getReserveByStat",
     method: "post",
-    action: getBookRoomByPartnerIdAndStatusHandler, //OK
+    action: getBookRoomByPartnerIdAndStatusHandler,
   },
   {
     path: "/kowing/deleteRoom",

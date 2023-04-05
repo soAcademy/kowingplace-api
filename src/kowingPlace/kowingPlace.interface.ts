@@ -1,4 +1,3 @@
-import { number } from "fp-ts";
 import * as t from "io-ts";
 
 export const createUserExternalCodec = t.type({
@@ -275,9 +274,52 @@ export interface IBookDurationRoom
 //-------------------------------------------------
 
 export const showtheRoomBookedbyUserExternalCodec = t.type({
-  email: t.string,
+  userId: t.number,
 });
 export interface IShowtheRoomBookedbyUserExternal
   extends t.TypeOf<typeof showtheRoomBookedbyUserExternalCodec> {}
+
+//-------------------------------------------------
+
+export const deleteRoomCodec = t.type({
+  roomId: t.number,
+});
+
+export interface IDeleteRoomCodec extends t.TypeOf<typeof deleteRoomCodec> {}
+
+//-------------------------------------------------
+
+export const updateStatusCodec = t.type({
+  bookRoomId: t.number,
+  newStatus: t.string,
+});
+
+export interface IUpdateStatus extends t.TypeOf<typeof updateStatusCodec> {}
+
+//-------------------------------------------------
+export const getBookRoomByPartnerIdAndStatusCodec = t.type({
+  userId: t.number,
+  status: t.string,
+  orderBy: t.string,
+  inDeCrease: t.string,
+});
+
+export interface IGetBookRoomByPartnerIdAndStatus
+  extends t.TypeOf<typeof getBookRoomByPartnerIdAndStatusCodec> {}
+
+//-------------------------------------------------
+export const getBookRoomByPartnerIdCodec = t.type({
+  userId: t.number,
+});
+
+export interface IGetBookRoomByPartnerId
+  extends t.TypeOf<typeof getBookRoomByPartnerIdCodec> {}
+
+//-------------------------------------------------
+export const getOpenDayCodec = t.type({
+  coWorkId: t.number,
+});
+
+export interface IGetOpenDay extends t.TypeOf<typeof getOpenDayCodec> {}
 
 //-------------------------------------------------

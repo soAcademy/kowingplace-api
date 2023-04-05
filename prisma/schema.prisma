@@ -9,7 +9,6 @@ generator client {
   binaryTargets = ["native", "darwin-arm64", "debian-openssl-1.1.x", "rhel-openssl-1.0.x"]
   output        = "../prisma/client"
 }
-
 model UserExternal {
   id       Int        @id @default(autoincrement())
   name     String
@@ -17,7 +16,6 @@ model UserExternal {
   tel      String
   password String?
   BookRoom BookRoom[]
-  //LoginExternal LoginExternal[] //user 1 person can login in many times
   createAt DateTime   @default(now())
   updateAt DateTime   @updatedAt
 }
@@ -30,7 +28,6 @@ model CoWork {
   tel              String
   picture          String
   BranchToRoom     BranchToRoom[]
-  //OpenClose        OpenClose?
   FacilityToCoWork FacilityToCoWork[]
   userInternal     UserInternal?      @relation(fields: [userInternalId], references: [id])
   userInternalId   Int?               @unique //make one to one
@@ -50,7 +47,6 @@ model UserInternal {
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
   coWork   CoWork?
-  //LoginInternal LoginInternal[]
 }
 
 model Room {
@@ -82,7 +78,6 @@ model durationCategory {
   createAt    DateTime   @default(now())
   updateAt    DateTime   @updatedAt
   RoomRate    RoomRate[]
-  //openclose   OpenClose? @relation(fields: [openCloseId], references: [id])
   openCloseId Int?
 }
 
@@ -91,7 +86,6 @@ model Facility {
   name             String
   createAt         DateTime           @default(now())
   updateAt         DateTime           @updatedAt
-  //FacilityToRoom FacilityToRoom[]
   FacilityToCoWork FacilityToCoWork[]
 }
 
@@ -104,16 +98,6 @@ model FacilityToCoWork {
   createAt   DateTime @default(now())
   updateAt   DateTime @updatedAt
 }
-
-// model FacilityToRoom {
-//   id         Int      @id @default(autoincrement())
-//   room       Room     @relation(fields: [roomId], references: [id])
-//   roomId     Int
-//   facilities Facility @relation(fields: [facilityId], references: [id])
-//   facilityId Int
-//   createAt   DateTime @default(now())
-//   updateAt   DateTime @updatedAt
-// }
 
 model BranchToRoom {
   id       Int        @id @default(autoincrement())

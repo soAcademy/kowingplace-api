@@ -1,4 +1,3 @@
-import { date, number, random } from "fp-ts";
 import { Prisma, PrismaClient } from "../../prisma/client";
 import {
   IBookDurationRoom,
@@ -12,11 +11,15 @@ import {
   ICreateUserExternal,
   ICreateUserInternal,
   IDeleteCoWork,
+  IDeleteRoomCodec,
   IForgetPasswordUserExternal,
   IForgetPasswordUserInternal,
+  IGetBookRoomByPartnerId,
+  IGetBookRoomByPartnerIdAndStatus,
   IGetCalendarBookingByCoWorkId,
   IGetCoWorkUserChoose,
   IGetCoworkByUserId,
+  IGetOpenDay,
   IGetStatusUserBookInternal,
   IGetUserConfirmBooking,
   IGgetRoomByCoWorkIdCodec,
@@ -24,9 +27,9 @@ import {
   IShowtheRoomBookedbyUserExternal,
   IUpdateCalendarBookingByCoWorkId,
   IUpdateCoWorkDetail,
+  IUpdateStatus,
 } from "./kowingPlace.interface";
 import { hashPassword } from "./kowingPlace.service";
-import { mock } from "node:test";
 export const prisma = new PrismaClient();
 
 export const createUserExternal = async (args: ICreateUserExternal) => {
@@ -656,8 +659,6 @@ export const forgetPasswordUserExternal = async (
       email: args.email,
     },
   });
-  // console.log(queryDataCheck);
-
   const check =
     queryDataCheck?.name === args.name && queryDataCheck?.tel === args.phone;
 
@@ -680,7 +681,7 @@ export const forgetPasswordUserExternal = async (
 // RESERVATION PAGE //
 //////////////////////
 //get day open on calendar
-export const getOpenDay = async (args: { coWorkId: number }) => {
+export const getOpenDay = async (args: IGetOpenDay) => {
   const getOpen = prisma.openCloseBoolean.findUnique({
     where: {
       coWorkId: args.coWorkId,
@@ -876,7 +877,7 @@ export const getVerifyCodeByUserConfirmBooking = async (
 ///////////////////////
 // PARTNER MAIN PAGE //
 ///////////////////////
-export const getBookRoomByPartnerId = async (args: { userId: number }) => {
+export const getBookRoomByPartnerId = async (args: IGetBookRoomByPartnerId) => {
   const getBookRoom = await prisma.userInternal.findUnique({
     where: {
       id: args.userId,
@@ -914,12 +915,9 @@ export const getBookRoomByPartnerId = async (args: { userId: number }) => {
   return newGetBookRoom;
 };
 
-export const getBookRoomByPartnerIdAndStatus = async (args: {
-  userId: number;
-  status: string;
-  orderBy: string;
-  inDeCrease: string;
-}) => {
+export const getBookRoomByPartnerIdAndStatus = async (
+  args: IGetBookRoomByPartnerIdAndStatus
+) => {
   const getBookRoom = await prisma.userInternal.findUnique({
     where: {
       id: args.userId,
@@ -951,17 +949,11 @@ export const getBookRoomByPartnerIdAndStatus = async (args: {
       },
     },
   });
-  // const newGetBookRoom = { ...getBookRoom };
-  // delete newGetBookRoom.password;
 
-  // return newGetBookRoom;
   return getBookRoom;
 };
 
-export const updateStatus = async (args: {
-  bookRoomId: number;
-  newStatus: string;
-}) => {
+export const updateStatus = async (args: IUpdateStatus) => {
   return prisma.bookRoom.update({
     where: {
       id: args.bookRoomId,
@@ -972,9 +964,9 @@ export const updateStatus = async (args: {
   });
 };
 
-export const showtheRoomBookedbyUserExternal = async (args: {
-  userId: number;
-}) =>
+export const showtheRoomBookedbyUserExternal = async (
+  args: IShowtheRoomBookedbyUserExternal
+) =>
   prisma.bookRoom.findMany({
     where: {
       userExternalId: args.userId,
@@ -994,7 +986,7 @@ export const showtheRoomBookedbyUserExternal = async (args: {
     },
   });
 
-export const deleteRoom = (args: { roomId: number }) =>
+export const deleteRoom = (args: IDeleteRoomCodec) =>
   prisma.branchToRoom.update({
     where: {
       roomId: args.roomId,

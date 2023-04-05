@@ -7,7 +7,9 @@ import {
   getCalendarBookingByCoWorkId,
   getCoWorkUserChoose,
   getRoomByCoWorkId,
+  getVerifyCodeByUserConfirmBooking,
   updateCalendarBookingByCoWorkId,
+  updateStatus,
 } from "./kowingPlace.resolver";
 
 describe("kowing", () => {
@@ -140,22 +142,12 @@ describe("kowing", () => {
         "https://uploads-ssl.webflow.com/5c3aef15e76e088efcf1e0ea/5d7e6c7506acdbeb57b48056_OgQqoCDLbojDPanW8-CPNo5pHIgAb6gVWBFeBhqlPbkxLdfr_XAJxubd1z5x6q8IsfS7hBQrU6oINgQ1Z1oWacYYXivbDmuO_U_0Mo27Z3hlxRTnlamw9KisAmYPXq-MdK7sN0-k.jpeg",
       tel: "02 089 1651",
     };
-    // const output = await updateCoWorkDetail({
-    //   name:input.name,
-    //   description:input.description,
-    //   location:input.location,
-    //   picture:input.picture,
-    //   tel:input.tel
-    // })
   });
 
   test("should getStatusUserBookInternal correctly", async () => {
     const input = {
       status: "Arrived",
     };
-    // const output = await getStatusUserBookInternal({
-    //   status:String(input.status)
-    // })
   });
 
   test("should updateCalendarBookingByCoWorkId correctly", async () => {
@@ -189,15 +181,40 @@ describe("kowing", () => {
       sunOpen: 0,
       coWorkId: 23,
     };
-    // const output = await createTimeOpenClose({
-    //   monOpen: input.monOpen,
-    //   tueOpen: input.tueOpen,
-    //   wedOpen: input.wedOpen,
-    //   thursOpen: input.thursOpen,
-    //   friOpen: input.friOpen,
-    //   satOpen: input.satOpen,
-    //   sunOpen: input.sunOpen,
-    //   coWorkId: input.coWorkId,
-    // })
   });
+
+  test("should updateStatus correctly", async () => {
+    const input = {
+      bookRoomId: 11,
+      newStatus: "Arrived",
+    };
+    const output = await updateStatus({
+      bookRoomId: input.bookRoomId,
+      newStatus: input.newStatus,
+    });
+    expect(output.status === "Arrived").toBe(true);
+  });
+
+  test("should getVerifyCodeByUserConfirmBooking correctly", async () => {
+    const input = {
+      startTime: "2023-03-23 08:41:51.119",
+      roomId: 9,
+      coWorkId: 11,
+      roomRateId: 3,
+      userExId: 11,
+      price: 2000,
+    };
+    const output = await getVerifyCodeByUserConfirmBooking({
+      coWorkId: input.coWorkId,
+      roomId: input.roomId,
+      startTime: input.startTime,
+      roomRateId: input.roomRateId,
+      userExId: input.userExId,
+      price: input.price,
+    });
+
+    // expect(output.vertifyCode === `KOWING${input.userExId}${input.roomRateId}${input.roomId}`).toBe(true);
+  });
+
+  test("");
 });
