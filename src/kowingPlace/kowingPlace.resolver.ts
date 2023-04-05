@@ -508,35 +508,35 @@ export const updateCalendarBookingByCoWorkId = (
     data: {
       Open: {
         update: {
-          monOpen: args.open[0],
-          tueOpen: args.open[1],
-          wedOpen: args.open[2],
-          thursOpen: args.open[3],
-          friOpen: args.open[4],
-          satOpen: args.open[5],
-          sunOpen: args.open[6],
+          sunOpen: args.open[0],
+          monOpen: args.open[1],
+          tueOpen: args.open[2],
+          wedOpen: args.open[3],
+          thursOpen: args.open[4],
+          friOpen: args.open[5],
+          satOpen: args.open[6],
         },
       },
       Close: {
         update: {
-          monClose: args.close[0],
-          tueClose: args.close[1],
-          wedClose: args.close[2],
-          thursClose: args.close[3],
-          friClose: args.close[4],
-          satClose: args.close[5],
-          sunClose: args.close[6],
+          sunClose: args.close[0],
+          monClose: args.close[1],
+          tueClose: args.close[2],
+          wedClose: args.close[3],
+          thursClose: args.close[4],
+          friClose: args.close[5],
+          satClose: args.close[6],
         },
       },
       OpenClose24Hours: {
         update: {
-          mon24hours: args.openClose24hours[0],
-          tue24hours: args.openClose24hours[1],
-          wed24hours: args.openClose24hours[2],
-          thurs24hours: args.openClose24hours[3],
-          fri24hours: args.openClose24hours[4],
-          sat24hours: args.openClose24hours[5],
-          sun24hours: args.openClose24hours[6],
+          sun24hours: args.openClose24hours[0],
+          mon24hours: args.openClose24hours[1],
+          tue24hours: args.openClose24hours[2],
+          wed24hours: args.openClose24hours[3],
+          thurs24hours: args.openClose24hours[4],
+          fri24hours: args.openClose24hours[5],
+          sat24hours: args.openClose24hours[6],
         },
       },
     },
@@ -790,10 +790,11 @@ export const bookDurationRoom = async (args: IBookDurationRoom) => {
     "friOpen",
     "satOpen",
   ];
+  console.log("args.day-1", args.day-1);
 
-  const openClose24hrs = { ...getOpen?.OpenClose24Hours }[str24hrs[args.day]];
-  const openClose24hrs2 = { ...getOpen?.Close }[close[args.day]];
-  const openClose24hrs3 = { ...getOpen?.Open }[open[args.day]];
+  const openClose24hrs = { ...getOpen?.OpenClose24Hours }[str24hrs[args.day-1]];
+  const openClose24hrs2 = { ...getOpen?.Close }[close[args.day-1]];
+  const openClose24hrs3 = { ...getOpen?.Open }[open[args.day-1]];
 
   console.log("openClose24hrs", openClose24hrs);
   console.log("close", openClose24hrs2);
